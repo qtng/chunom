@@ -17,6 +17,34 @@
   <div class="alert">
     <tt>ch,y,,4 n,o,m</tt>
   </div>
-  
+
+  <script>
+const parser = new VietnameseParser();
+let renderer;
+window.addEventListener("load", function(){
+  renderer = new SvgGlyphRenderer({});
+  const chars = [];
+  Array.from(document.querySelectorAll("tt")).forEach(el => {
+    let t = el.innerText;
+    const type = Number(el.dataset.type || 0);
+    el.innerHTML = "";
+    el.dataset.codes = t;
+    renderer.renderText(t, el, type);
+    chars.push(el);
+  });
+  window.changetype = (type) => {
+  	document.querySelector("body").setAttribute("data-type", (type || "0").toString());
+  	localStorage.qattType = type;
+  	chars.forEach((el) => {
+  		const tp = Number((el.dataset.type == null ? type : el.dataset.type) || 0);
+  		renderer.renderText(
+  			tp?el.dataset.codes.replace(/\+/g,""):el.dataset.codes,
+  			el,
+  			tp
+  		);
+  	});
+  };
+});
+  </script>
 </body>
 </html>
