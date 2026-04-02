@@ -12,7 +12,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://qtng.github.io/qatt-dc/js/supabase.js"></script>
   <style>
-
+    body {
+		background: #3a445c;
+	}
     svg {
 	    stroke: currentColor;
         stroke-width:5.75px;
@@ -21,16 +23,15 @@
 	    fill: transparent;
 	    vertical-align: middle;
 	    display: inline-block;
-        height: 1em;
+        height: 2.5em;
     }
   </style>
 </head>
 <body>
-
-  <div class="alert">
+  <div class="container">
+	字喃
     <tt>ch,y,,4 n,o,m</tt>
   </div>
-
   <script>
 const parser = new VietnameseParser();
 let renderer;
