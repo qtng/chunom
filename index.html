@@ -3,20 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>Chunom.org</title>
-  <base href="https://qtng.github.io">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/0ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="/qatt-dc/js/navigation.js"></script>
-  <script src="/qatt-dc/js/renderer.js"></script>
-  <script src="/qatt-dc/js/parser.js"></script>
-  <script src="/qatt-dc/js/supabase.js"></script>
+  <script src="https://qtng.github.io/qatt-dc/js/navigation.js"></script>
+  <script src="https://qtng.github.io/qatt-dc/js/renderer.js?2"></script>
+  <script src="https://qtng.github.io/qatt-dc/js/parser.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://qtng.github.io/qatt-dc/js/supabase.js"></script>
   <style>
-    body {
-      background: #3a445c;
-      color: #eee;
-    }
+    /* Styling for the QATT SVG rendering */
     svg {
       stroke: currentColor;
       stroke-width: 5.75px;
@@ -36,36 +32,53 @@
       font-size: 1.5em;
       color: inherit;
     }
-    /* Necessary layout classes for the glyph container */
+    /* Fixed dimensions for the glyph container in the details view */
     .glyph-box {
       width: 120px;
       height: 120px;
       flex-shrink: 0;
     }
-    /* Keep serif for Nom characters as they are best represented this way */
     .font-serif {
       font-family: serif;
     }
+    /* Interaction feedback */
+    .active-scale:active {
+      transform: scale(0.95);
+      transition: transform 0.1s;
+    }
   </style>
 </head>
-<body data-bs-theme="dark">
+<body data-bs-theme="dark" class="bg-dark text-light">
   <div class="container mt-4">
     <div class="mb-4 d-flex align-items-center justify-content-between">
-      <div>
+      <div class="text-secondary">
         Chữ Nôm
-        <code>字喃</code>
-        <tt>ch,y,,4 n,o,m</tt>
+        <code class="text-white">字喃</code>
+        <tt class="text-info">ch,y,,4 n,o,m</tt>
       </div>
     </div>
 
-    <!-- Dictionary Search Interface -->
     <div class="input-group mb-3">
       <span class="input-group-text bg-secondary text-white border-secondary">Search</span>
-      <input type="text" id="search" class="form-control bg-dark text-white border-secondary" placeholder="Type Quốc Ngữ or Chữ Nôm..." disabled>
+      <input type="search" id="search" class="form-control bg-dark text-white border-secondary" placeholder="Type Quốc Ngữ or Chữ Nôm..." disabled>
       <div id="dict-status" class="input-group-text bg-dark border-secondary">
         <div class="spinner-border spinner-border-sm text-info" role="status"></div>
       </div>
     </div>
+
+    <!-- Discovery View: Visible when search is empty -->
+    <div id="discovery" class="mt-4">
+      <div class="mb-5">
+        <h6 class="text-secondary border-bottom border-secondary pb-2 mb-3 text-uppercase small fw-bold">Top 85 Frequent Words</h6>
+        <div id="list-top-85" class="row row-cols-4 row-cols-sm-5 row-cols-md-8 row-cols-lg-10 g-2"></div>
+      </div>
+      <div class="mb-5">
+        <h6 class="text-secondary border-bottom border-secondary pb-2 mb-3 text-uppercase small fw-bold">Next Frequent Words (up to Rank 500)</h6>
+        <div id="list-next-350" class="row row-cols-4 row-cols-sm-5 row-cols-md-8 row-cols-lg-10 g-2"></div>
+      </div>
+    </div>
+
+    <!-- Search Results View -->
     <div id="results" class="list-group w-100"></div>
   </div>
 
@@ -77,9 +90,7 @@
           <h5 class="modal-title" id="modalTitle">Detail View</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body" id="modalBody">
-          <!-- Content will be injected here -->
-        </div>
+        <div class="modal-body" id="modalBody"></div>
         <div class="modal-footer border-secondary">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
@@ -88,15 +99,12 @@
   </div>
 
   <script>
-/**
- * Class to handle dictionary fetching from CSV, searching, and local caching.
- * Includes History API support for the detail modal.
- */
 class ChunomDict {
   constructor(apiUrl, searchInputId, resultsContainerId, statusId) {
     this.apiUrl = apiUrl;
     this.searchInput = document.getElementById(searchInputId);
     this.resultsContainer = document.getElementById(resultsContainerId);
+    this.discoveryContainer = document.getElementById('discovery');
     this.statusContainer = document.getElementById(statusId);
     
     const modalEl = document.getElementById('detailModal');
@@ -114,13 +122,11 @@ class ChunomDict {
   }
 
   /**
-   * Syncs Modal state with Browser History.
+   * Manages browser history to allow "back" to close the modal
    */
   initHistoryHandler(modalEl) {
-    window.addEventListener('popstate', (event) => {
-      if (this.modal) {
-        this.modal.hide();
-      }
+    window.addEventListener('popstate', () => {
+      if (this.modal) this.modal.hide();
     });
 
     modalEl.addEventListener('hidden.bs.modal', () => {
@@ -131,13 +137,7 @@ class ChunomDict {
   }
 
   async init() {
-    let cachedData = null;
-    try {
-      cachedData = localStorage.getItem(this.cacheKey);
-    } catch (e) {
-      console.warn("Storage access denied.");
-    }
-    
+    let cachedData = localStorage.getItem(this.cacheKey);
     const cachedTime = localStorage.getItem(this.cacheTimeKey);
     const now = Date.now();
 
@@ -146,26 +146,18 @@ class ChunomDict {
         this.data = JSON.parse(cachedData);
         this.finishLoading();
         return;
-      } catch (e) {
-        console.warn("Cache corrupted.");
-      }
+      } catch (e) {}
     }
 
     try {
       const response = await fetch(this.apiUrl);
-      if (!response.ok) throw new Error("Network error");
-      
       const text = await response.text();
       this.data = this.parseCSV(text);
-      
-      try {
-        localStorage.setItem(this.cacheKey, JSON.stringify(this.data));
-        localStorage.setItem(this.cacheTimeKey, now.toString());
-      } catch (e) {}
-
+      localStorage.setItem(this.cacheKey, JSON.stringify(this.data));
+      localStorage.setItem(this.cacheTimeKey, now.toString());
       this.finishLoading();
     } catch (err) {
-      this.showError("Loading Error.");
+      this.showError("Loading error.");
     }
   }
 
@@ -175,10 +167,8 @@ class ChunomDict {
     for (let line of lines) {
       if (!line.trim()) continue;
       const row = [];
-      let cell = '';
-      let inQuotes = false;
-      for (let i = 0; i < line.length; i++) {
-        const char = line[i];
+      let cell = '', inQuotes = false;
+      for (let char of line) {
         if (char === '"') inQuotes = !inQuotes;
         else if (char === ',' && !inQuotes) {
           row.push(cell.trim().replace(/^"|"$/g, '').replace(/""/g, '"'));
@@ -195,144 +185,255 @@ class ChunomDict {
     this.statusContainer.classList.add('d-none');
     this.searchInput.removeAttribute('disabled');
     this.searchInput.placeholder = "Type Quốc Ngữ or Chữ Nôm...";
-    this.setupSearch();
+    this.searchInput.addEventListener('input', (e) => this.search(e.target.value));
+    this.renderDiscoveryLists();
+  }
+
+  /**
+   * Renders the frequency grids for initial discovery
+   */
+  renderDiscoveryLists() {
+    const list85 = document.getElementById('list-top-85');
+    const listNext = document.getElementById('list-next-350');
+    
+    const sorted = [...this.data]
+      .filter(r => !isNaN(parseInt(r[5])))
+      .sort((a, b) => parseInt(a[5]) - parseInt(b[5]));
+
+    const uniqueByNom = [];
+    const seen = new Set();
+    for (const r of sorted) {
+      if (!seen.has(r[1])) {
+        seen.add(r[1]);
+        uniqueByNom.push(r);
+      }
+    }
+
+    const renderGrid = (items, container) => {
+      const frag = document.createDocumentFragment();
+      items.forEach(r => {
+        const col = document.createElement('div');
+        col.className = 'col';
+        const qattObj = parser.parse(r[0]);
+        col.innerHTML = `
+          <div class="bg-dark p-2 rounded text-center h-100 d-flex flex-column justify-content-center border border-secondary border-opacity-25 position-relative shadow-sm opacity-hover-75" style="cursor: pointer;">
+            <span class="position-absolute top-0 start-0 m-1 opacity-25" style="font-size: 0.6rem;">#${r[5]}</span>
+            <div class="h3 font-serif text-white mb-0">${r[1]}</div>
+            <div class="d-flex align-items-center justify-content-center gap-1 mt-1 overflow-hidden">
+              <div class="text-secondary small opacity-75 text-truncate" style="max-width: 100%;">${r[0]}</div>
+              ${qattObj ? `<tt class="text-info small" style="font-size: 0.7rem;">${qattObj.code}</tt>` : ''}
+            </div>
+          </div>
+        `;
+        col.onclick = () => this.showDetails(r[5], r[1]);
+        frag.appendChild(col);
+      });
+      container.innerHTML = "";
+      container.appendChild(frag);
+    };
+
+    renderGrid(uniqueByNom.slice(0, 85), list85);
+    renderGrid(uniqueByNom.slice(85, 500), listNext);
   }
 
   showError(msg) {
     this.statusContainer.innerHTML = `<span class="text-danger small">${msg}</span>`;
-    this.searchInput.placeholder = msg;
-  }
-
-  setupSearch() {
-    this.searchInput.addEventListener('input', (e) => this.search(e.target.value));
   }
 
   search(term) {
     const query = term.trim().toLowerCase();
     this.resultsContainer.innerHTML = '';
-    if (query.length === 0) return;
+    
+    if (!query) {
+      this.discoveryContainer.classList.remove('d-none');
+      return;
+    }
+
+    this.discoveryContainer.classList.add('d-none');
 
     let count = 0;
     const fragment = document.createDocumentFragment();
     for (const row of this.data) {
-      const quocNgu = row[0] || "";
-      const nom = row[1] || "";
-      if (quocNgu.includes(' ')) continue;
-
-      if (quocNgu.toLowerCase().includes(query) || nom.includes(query)) {
+      if (row[0].includes(' ')) continue;
+      if (row[0].toLowerCase().includes(query) || row[1].includes(query)) {
         fragment.appendChild(this.createResultItem(row));
-        count++;
+        if (++count > 40) break;
       }
-      if (count > 40) break;
     }
     this.resultsContainer.appendChild(fragment);
   }
 
   createResultItem(row) {
-    const [quocNgu, nom, meaning, type, strokes, id, hex] = row;
+    const [quocNgu, nom, meaning, , strokes, id, hex] = row;
+    const qattObj = parser.parse(quocNgu);
     const div = document.createElement('div');
     div.className = 'list-group-item list-group-item-action bg-dark text-light border-secondary py-3';
-    
-    let badges = '';
-    if (strokes) badges += `<span class="badge bg-secondary me-1 text-uppercase small">${strokes} Strokes</span>`;
-    if (hex) badges += `<span class="badge border border-secondary text-secondary small">U+${hex}</span>`;
-
     div.innerHTML = `
       <div class="d-flex w-100 align-items-center mb-1">
-        <span class="text-info fw-bold me-2">${quocNgu}</span>
+        <span class="text-secondary fw-bold me-2">${quocNgu}</span>
         <span class="fs-2 text-white font-monospace me-auto">${nom}</span>
-        <div class="text-end">${badges}</div>
+        <div class="text-end d-flex align-items-center">
+          ${qattObj ? `<tt class="text-info me-2">${qattObj.code}</tt>` : ''}
+          ${id ? `<span class="badge bg-info text-dark small">Rank ${id}</span>` : ''}
+        </div>
       </div>
       <p class="mb-0 text-secondary small text-truncate">${meaning}</p>
     `;
-
     div.addEventListener('click', () => this.showDetails(id, nom));
     return div;
   }
 
-  showDetails(targetId, mainNom) {
-    if (!targetId && !mainNom) return;
+  /**
+   * Helper for clipboard operations in iframe environments
+   */
+  async copyText(text, btn) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      const original = btn.innerHTML;
+      btn.innerHTML = '✓';
+      setTimeout(() => btn.innerHTML = original, 1000);
+    } catch (err) {
+      console.error('Copy failed', err);
+    }
+    document.body.removeChild(textArea);
+  }
 
-    const related = this.data.filter(row => 
-      (targetId && row[5] === targetId) || 
-      (mainNom && row[1] && row[1].includes(mainNom))
-    );
-    
-    if (related.length === 0) return;
+  /**
+   * Makes CJK characters inside text clickable to navigate details
+   */
+  wrapNomChars(text) {
+    return text.replace(/[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}]/gu, (match) => {
+      return `<span class="link-light link-underline-opacity-0 link-underline-opacity-100-hover" style="cursor: pointer;" onclick="event.stopPropagation(); dict.showDetails(null, '${match}')">${match}</span>`;
+    });
+  }
 
-    history.pushState({ modalOpen: true }, "");
+  showDetails(clickedId, mainNom) {
+    let related = this.data.filter(row => row[1] && row[1].includes(mainNom));
+
+    // Deduplicate entries by unique combination of QuocNgu, Nom and Meaning
+    const seenEntries = new Set();
+    related = related.filter(r => {
+      const key = `${r[0].trim().toLowerCase()}|${r[1].trim()}|${r[2].trim()}`;
+      if (seenEntries.has(key)) return false;
+      seenEntries.add(key);
+      return true;
+    });
+
+    // Sorting: Singles first, exact matches higher, then by rank
+    const sortedRelated = related.sort((a, b) => {
+        const aIsExact = (a[1] === mainNom);
+        const bIsExact = (b[1] === mainNom);
+        if (aIsExact !== bIsExact) return aIsExact ? -1 : 1;
+        const aIsCompound = a[0].trim().includes(' ');
+        const bIsCompound = b[0].trim().includes(' ');
+        if (aIsCompound !== bIsCompound) return aIsCompound ? 1 : -1;
+        const aRank = parseInt(a[5]) || Infinity;
+        const bRank = parseInt(b[5]) || Infinity;
+        return aRank - bRank;
+    });
+
+    // History management
+    if (!history.state || !history.state.modalOpen) {
+      history.pushState({ modalOpen: true }, "");
+    }
 
     this.modalTitle.innerText = `Details: ${mainNom}`;
+    const hex = related.find(r => r[6])?.[6];
+    const strokes = related.find(r => r[4])?.[4];
     
-    const firstHex = related.find(r => r[6])?.[6];
-    const uniqueReadings = [...new Set(related.filter(r => r[1] === mainNom).map(r => r[0]))];
-    const primaryReading = uniqueReadings[0] || '';
-    const pronunciations = uniqueReadings.join(', ');
-    const qattResult = parser.parse(primaryReading);
+    const exactMatches = sortedRelated.filter(r => r[1] === mainNom && !r[0].trim().includes(' '));
+    const uniqueReadings = [...new Set(exactMatches.map(r => r[0]))];
+
+    const readingsHtml = uniqueReadings.map(read => {
+      const qattObj = parser.parse(read);
+      return `
+        <div class="mb-2 d-flex align-items-center gap-2">
+          <span class="text-secondary fs-2 fw-bold">${read}</span>
+          <tt class="text-info">${qattObj ? qattObj.code : ''}</tt>
+          <button class="btn btn-sm btn-outline-secondary border-0 opacity-50 py-0 px-1" 
+                  onclick="dict.copyText('${read}', this)" title="Copy Quoc Ngu">📋</button>
+        </div>
+      `;
+    }).join('');
 
     this.modalBody.innerHTML = `
       <div class="d-flex align-items-center gap-4 mb-4 p-2">
-        <div class="border border-secondary d-flex align-items-center justify-content-center p-3 rounded bg-black glyph-box">
-          <span class="display-1 font-serif m-0">${mainNom}</span>
+        <div class="border border-secondary d-flex align-items-center justify-content-center p-3 rounded bg-black glyph-box active-scale" 
+             onclick="dict.copyText('${mainNom}', this)" title="Click to copy">
+          <span class="display-1 font-serif m-0 text-white">${this.wrapNomChars(mainNom)}</span>
         </div>
         <div class="flex-grow-1">
-          <div class="text-info fs-2 fw-bold mb-1">${pronunciations}</div>
-          <div class="d-flex align-items-center">
-            <tt id="modal-qatt" class="text-warning"></tt>
+          <div class="d-flex flex-column">${readingsHtml || '<span class="text-secondary fst-italic">Part of compound words</span>'}</div>
+          <div class="d-flex gap-2 mt-2 opacity-75 small">
+             ${hex ? `<span class="text-secondary">Unicode: U+${hex}</span>` : ''}
+             ${strokes ? `<span class="text-secondary">• ${strokes} Strokes</span>` : ''}
           </div>
-          ${firstHex ? `<div class="text-secondary small mt-2 opacity-75">Unicode: U+${firstHex}</div>` : ''}
         </div>
       </div>
-      
       <div class="list-group list-group-flush border-top border-secondary">
-        ${related.map(row => {
-          const rank = row[5];
-          const charset = row[7];
-          return `
-            <div class="list-group-item bg-transparent text-light border-secondary py-3 px-0">
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <span class="text-info fw-bold fs-5">${row[0]}</span>
-                  <span class="ms-2 font-monospace fs-3">${row[1]}</span>
-                </div>
-                <div class="text-end">
-                  ${row[4] ? `<span class="badge bg-secondary me-1 small">${row[4]} Strokes</span>` : ''}
-                  ${rank ? `<span class="badge bg-info text-dark me-1 small">Rank ${rank}</span>` : ''}
-                  ${charset ? `<span class="badge bg-dark border border-secondary text-uppercase small">${charset}</span>` : ''}
-                  ${row[6] ? `<div class="mt-1"><span class="badge border border-secondary text-secondary small">U+${row[6]}</span></div>` : ''}
-                </div>
+        ${sortedRelated.map(r => `
+          <div class="list-group-item bg-transparent text-light border-secondary py-3 px-0">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <span class="text-secondary fw-bold fs-5">${r[0]}</span> 
+                <span class="ms-2 font-monospace fs-3 text-white">${this.wrapNomChars(r[1])}</span>
               </div>
-              <div class="text-secondary mt-2">${row[2] || '<span class="fst-italic opacity-50">No description</span>'}</div>
+              <div class="text-end">
+                ${r[7] ? `<span class="badge bg-dark border border-secondary text-uppercase small">${r[7]}</span>` : ''}
+                ${r[5] ? `<span class="badge bg-info text-dark ms-1 small">Rank ${r[5]}</span>` : ''}
+              </div>
             </div>
-          `;
-        }).join('')}
+            <div class="text-secondary mt-2 small">${r[2] || 'No description'}</div>
+          </div>`).join('')}
       </div>
-    `;
-
-    const qattEl = document.getElementById('modal-qatt');
-    if (qattEl && qattResult && qattResult.code) {
-      renderer.renderText(qattResult.code, qattEl, 0);
-    }
-
+      <!-- Debug Raw CSV Section -->
+      <div class="mt-4 pt-3 border-top border-secondary opacity-50">
+        <small class="text-uppercase d-block mb-2 fw-bold" style="font-size: 0.65rem;">Raw Data:</small>
+        <pre class="bg-black p-2 rounded text-info border border-secondary" style="font-size: 0.65rem; white-space: pre-wrap;">${sortedRelated.map(r => r.join(',')).join('\n')}</pre>
+      </div>`;
     this.modal.show();
   }
 }
 
-let renderer;
-let parser;
-let dict;
+let renderer, parser, dict;
 
-window.addEventListener("load", function(){
+/**
+ * Global renderer function for <tt> nodes
+ */
+function renderQatt(el) {
+  if (el.dataset.rendered) return;
+  const qattType = localStorage.getItem('qattType') || "0";
+  let code = el.innerText.trim();
+  if (qattType === "0" && code.includes(",")) code = code.replace(",", ",+");
+  el.innerHTML = "";
+  el.dataset.rendered = "true";
+  renderer.renderText(code, el, parseInt(qattType));
+}
+
+/**
+ * Automatically detects and renders new <tt> elements
+ */
+function initObserver() {
+  const observer = new MutationObserver(mutations => {
+    for (let m of mutations) {
+      for (let n of m.addedNodes) {
+        if (n.nodeName === "TT") renderQatt(n);
+        else if (n.nodeType === 1) n.querySelectorAll("tt").forEach(renderQatt);
+      }
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+  document.querySelectorAll("tt").forEach(renderQatt);
+}
+
+window.addEventListener("load", () => {
   renderer = new SvgGlyphRenderer({});
   parser = new VietnameseParser();
-  
-  Array.from(document.querySelectorAll("tt")).forEach(el => {
-    let t = el.innerText;
-    el.innerHTML = "";
-    el.dataset.codes = t;
-    renderer.renderText(t, el, 0);
-  });
-
+  initObserver();
   dict = new ChunomDict('https://qtng.github.io/chunom/dict.csv', 'search', 'results', 'dict-status');
 });
   </script>
