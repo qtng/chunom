@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <title>Chunom.org</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
-  <script src="https://cdnjs.cloudflare.com/0ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://chunom.org/media/css/fonts/all.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://qtng.github.io/qatt-dc/js/navigation.js"></script>
   <script src="https://qtng.github.io/qatt-dc/js/renderer.js?2"></script>
@@ -12,7 +13,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://qtng.github.io/qatt-dc/js/supabase.js"></script>
   <style>
-    /* Styling for the QATT SVG rendering */
+    /* Styling for QATT SVG rendering */
     svg {
       stroke: currentColor;
       stroke-width: 5.75px;
@@ -32,29 +33,74 @@
       font-size: 1.5em;
       color: inherit;
     }
-    /* Fixed dimensions for the glyph container in the details view */
     .glyph-box {
       width: 120px;
       height: 120px;
       flex-shrink: 0;
     }
     .font-serif {
-      font-family: serif;
+      font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif;
     }
-    /* Interaction feedback */
+    .font-monospace {
+      font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', monospace;
+    }
     .active-scale:active {
       transform: scale(0.95);
       transition: transform 0.1s;
     }
+    .lh-sm {
+      line-height: 1.1;
+    }
+    .badge-rank {
+      font-weight: 400;
+      border: 1px solid rgba(108, 117, 125, 0.5);
+      color: #6c757d;
+      font-size: 0.65rem;
+      background: transparent;
+    }
+    #copy-toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      z-index: 9999;
+      display: none;
+      border: 1px solid #444;
+    }
+    .clickable-meta {
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .clickable-meta:hover {
+      opacity: 1 !important;
+      text-decoration: underline;
+    }
+    #detailModal tt {
+      cursor: pointer;
+      transition: filter 0.2s;
+    }
+    #detailModal tt:hover {
+      filter: brightness(1.3);
+    }
+    tt {
+      cursor: default;
+    }
   </style>
 </head>
 <body data-bs-theme="dark" class="bg-dark text-light">
+  <div id="copy-toast">Copied to clipboard</div>
+
   <div class="container mt-4">
     <div class="mb-4 d-flex align-items-center justify-content-between">
       <div class="text-secondary">
         Chữ Nôm
         <code class="text-white">字喃</code>
-        <tt class="text-info">ch,y,,4 n,o,m</tt>
+        <tt class="text-info" title="chữ nôm">ch,y,,4 n,o,m</tt>
       </div>
     </div>
 
@@ -66,7 +112,6 @@
       </div>
     </div>
 
-    <!-- Discovery View: Visible when search is empty -->
     <div id="discovery" class="mt-4">
       <div class="mb-5">
         <h6 class="text-secondary border-bottom border-secondary pb-2 mb-3 text-uppercase small fw-bold">Top 85 Frequent Words</h6>
@@ -78,16 +123,14 @@
       </div>
     </div>
 
-    <!-- Search Results View -->
     <div id="results" class="list-group w-100"></div>
   </div>
 
-  <!-- Detail View Modal -->
   <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content bg-dark text-light border-secondary shadow-lg">
         <div class="modal-header border-secondary">
-          <h5 class="modal-title" id="modalTitle">Detail View</h5>
+          <h5 class="modal-title" id="modalTitle">Details</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" id="modalBody"></div>
@@ -106,9 +149,12 @@ class ChunomDict {
     this.resultsContainer = document.getElementById(resultsContainerId);
     this.discoveryContainer = document.getElementById('discovery');
     this.statusContainer = document.getElementById(statusId);
+    this.toast = document.getElementById('copy-toast');
     
     const modalEl = document.getElementById('detailModal');
-    this.modal = new bootstrap.Modal(modalEl);
+    if (typeof bootstrap !== 'undefined') {
+      this.modal = new bootstrap.Modal(modalEl);
+    }
     this.modalBody = document.getElementById('modalBody');
     this.modalTitle = document.getElementById('modalTitle');
     
@@ -119,19 +165,30 @@ class ChunomDict {
     
     this.initHistoryHandler(modalEl);
     this.init();
+    this.initGlobalClickHandlers();
   }
 
-  /**
-   * Manages browser history to allow "back" to close the modal
-   */
   initHistoryHandler(modalEl) {
     window.addEventListener('popstate', () => {
       if (this.modal) this.modal.hide();
     });
-
     modalEl.addEventListener('hidden.bs.modal', () => {
       if (history.state && history.state.modalOpen) {
         history.back();
+      }
+    });
+  }
+
+  initGlobalClickHandlers() {
+    document.addEventListener('click', (e) => {
+      const tt = e.target.closest('tt');
+      if (tt && tt.title && e.target.closest('#detailModal')) {
+        e.stopPropagation();
+        const query = tt.title.toLowerCase();
+        this.searchInput.value = query;
+        this.search(query);
+        if (this.modal) this.modal.hide();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
   }
@@ -146,18 +203,22 @@ class ChunomDict {
         this.data = JSON.parse(cachedData);
         this.finishLoading();
         return;
-      } catch (e) {}
+      } catch (e) {
+        console.error("Cache parse error", e);
+      }
     }
 
     try {
       const response = await fetch(this.apiUrl);
+      if (!response.ok) throw new Error("Network error");
       const text = await response.text();
       this.data = this.parseCSV(text);
       localStorage.setItem(this.cacheKey, JSON.stringify(this.data));
       localStorage.setItem(this.cacheTimeKey, now.toString());
       this.finishLoading();
     } catch (err) {
-      this.showError("Loading error.");
+      console.error("Fetch error", err);
+      this.showError("Error loading data.");
     }
   }
 
@@ -189,40 +250,48 @@ class ChunomDict {
     this.renderDiscoveryLists();
   }
 
-  /**
-   * Renders the frequency grids for initial discovery
-   */
+  getQattHtml(quocNgu, fontSize = 'inherit') {
+    if (!quocNgu || !parser) return '';
+    return quocNgu.split(/\s+/).map(word => {
+      const parsed = parser.parse(word);
+      const cleanWord = word.replace(/"/g, '&quot;');
+      return parsed ? `<tt class="text-info" style="font-size: ${fontSize};" title="${cleanWord}">${parsed.code}</tt>` : '';
+    }).join(' ');
+  }
+
   renderDiscoveryLists() {
     const list85 = document.getElementById('list-top-85');
     const listNext = document.getElementById('list-next-350');
-    
-    const sorted = [...this.data]
-      .filter(r => !isNaN(parseInt(r[5])))
-      .sort((a, b) => parseInt(a[5]) - parseInt(b[5]));
+    if (!list85 || !listNext) return;
 
-    const uniqueByNom = [];
-    const seen = new Set();
-    for (const r of sorted) {
-      if (!seen.has(r[1])) {
-        seen.add(r[1]);
-        uniqueByNom.push(r);
+    // First deduplicate using a Map, prioritizing variant '1' for any given rank
+    const uniqueRanksMap = new Map();
+    this.data.forEach(r => {
+      const rank = parseInt(r[5]);
+      if (!isNaN(rank)) {
+        if (!uniqueRanksMap.has(rank) || r[3] === '1') {
+          uniqueRanksMap.set(rank, r);
+        }
       }
-    }
+    });
+
+    // Create sorted array from deduplicated entries
+    const allUnique = Array.from(uniqueRanksMap.values())
+      .sort((a, b) => parseInt(a[5]) - parseInt(b[5]));
 
     const renderGrid = (items, container) => {
       const frag = document.createDocumentFragment();
       items.forEach(r => {
         const col = document.createElement('div');
         col.className = 'col';
-        const qattObj = parser.parse(r[0]);
         col.innerHTML = `
-          <div class="bg-dark p-2 rounded text-center h-100 d-flex flex-column justify-content-center border border-secondary border-opacity-25 position-relative shadow-sm opacity-hover-75" style="cursor: pointer;">
-            <span class="position-absolute top-0 start-0 m-1 opacity-25" style="font-size: 0.6rem;">#${r[5]}</span>
-            <div class="h3 font-serif text-white mb-0">${r[1]}</div>
-            <div class="d-flex align-items-center justify-content-center gap-1 mt-1 overflow-hidden">
-              <div class="text-secondary small opacity-75 text-truncate" style="max-width: 100%;">${r[0]}</div>
-              ${qattObj ? `<tt class="text-info small" style="font-size: 0.7rem;">${qattObj.code}</tt>` : ''}
+          <div class="bg-dark pt-4 p-2 rounded text-center h-100 d-flex flex-column justify-content-center border border-secondary border-opacity-25 position-relative shadow-sm opacity-hover-75" style="cursor: pointer;">
+            <span class="position-absolute top-0 start-0 m-1 badge badge-rank" style="opacity: 0.8;">#${r[5]}</span>
+            <div class="h3 font-serif text-white mb-0">${this.wrapNomChars(r[1])}</div>
+            <div class="d-flex align-items-center justify-content-center gap-1 mt-1 overflow-hidden flex-wrap">
+              ${this.getQattHtml(r[0], '0.7rem')}
             </div>
+            <div class="text-secondary small opacity-75 text-truncate w-100">${r[0]}</div>
           </div>
         `;
         col.onclick = () => this.showDetails(r[5], r[1]);
@@ -232,8 +301,12 @@ class ChunomDict {
       container.appendChild(frag);
     };
 
-    renderGrid(uniqueByNom.slice(0, 85), list85);
-    renderGrid(uniqueByNom.slice(85, 500), listNext);
+    // Semantic filtering based on rank value instead of array slice
+    const top85Items = allUnique.filter(r => parseInt(r[5]) <= 85);
+    const nextItems = allUnique.filter(r => parseInt(r[5]) > 85 && parseInt(r[5]) <= 500);
+
+    renderGrid(top85Items, list85);
+    renderGrid(nextItems, listNext);
   }
 
   showError(msg) {
@@ -254,7 +327,7 @@ class ChunomDict {
     let count = 0;
     const fragment = document.createDocumentFragment();
     for (const row of this.data) {
-      if (row[0].includes(' ')) continue;
+      if (row[0].includes(' ') && !row[1].includes(query) && !row[0].toLowerCase().includes(query)) continue;
       if (row[0].toLowerCase().includes(query) || row[1].includes(query)) {
         fragment.appendChild(this.createResultItem(row));
         if (++count > 40) break;
@@ -264,57 +337,57 @@ class ChunomDict {
   }
 
   createResultItem(row) {
-    const [quocNgu, nom, meaning, , strokes, id, hex] = row;
-    const qattObj = parser.parse(quocNgu);
+    const [quocNgu, nom, meaning, flag, strokes, id, hex] = row;
     const div = document.createElement('div');
     div.className = 'list-group-item list-group-item-action bg-dark text-light border-secondary py-3';
     div.innerHTML = `
       <div class="d-flex w-100 align-items-center mb-1">
-        <span class="text-secondary fw-bold me-2">${quocNgu}</span>
-        <span class="fs-2 text-white font-monospace me-auto">${nom}</span>
-        <div class="text-end d-flex align-items-center">
-          ${qattObj ? `<tt class="text-info me-2">${qattObj.code}</tt>` : ''}
-          ${id ? `<span class="badge bg-info text-dark small">Rank ${id}</span>` : ''}
+        <div class="me-auto d-flex align-items-center">
+          <span class="fs-2 text-white me-2">${this.wrapNomChars(nom)}</span>
+          <span class="text-secondary fw-bold">${quocNgu}</span>
+        </div>
+        <div class="text-end d-flex align-items-center gap-2 flex-wrap justify-content-end">
+          ${this.getQattHtml(quocNgu)}
         </div>
       </div>
-      <p class="mb-0 text-secondary small text-truncate">${meaning}</p>
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <p class="mb-0 text-secondary small text-truncate flex-grow-1">${meaning}</p>
+        ${id ? `<span class="badge badge-rank ms-2">#${id}</span>` : ''}
+      </div>
     `;
     div.addEventListener('click', () => this.showDetails(id, nom));
     return div;
   }
 
-  /**
-   * Helper for clipboard operations in iframe environments
-   */
-  async copyText(text, btn) {
+  async copyText(text, el) {
     const textArea = document.createElement("textarea");
     textArea.value = text;
     document.body.appendChild(textArea);
     textArea.select();
     try {
       document.execCommand('copy');
-      const original = btn.innerHTML;
-      btn.innerHTML = '✓';
-      setTimeout(() => btn.innerHTML = original, 1000);
+      if (el && el.classList.contains('glyph-box')) {
+        el.classList.add('border-info');
+        setTimeout(() => el.classList.remove('border-info'), 1000);
+      }
+      this.toast.innerText = `Copied: ${text}`;
+      this.toast.style.display = 'block';
+      setTimeout(() => { this.toast.style.display = 'none'; }, 2000);
     } catch (err) {
       console.error('Copy failed', err);
     }
     document.body.removeChild(textArea);
   }
 
-  /**
-   * Makes CJK characters inside text clickable to navigate details
-   */
   wrapNomChars(text) {
+    if (!text) return '';
     return text.replace(/[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}]/gu, (match) => {
-      return `<span class="link-light link-underline-opacity-0 link-underline-opacity-100-hover" style="cursor: pointer;" onclick="event.stopPropagation(); dict.showDetails(null, '${match}')">${match}</span>`;
+      return `<span class="font-serif link-light link-underline-opacity-0 link-underline-opacity-100-hover" style="cursor: pointer;" onclick="event.stopPropagation(); dict.showDetails(null, '${match}')">${match}</span>`;
     });
   }
 
   showDetails(clickedId, mainNom) {
     let related = this.data.filter(row => row[1] && row[1].includes(mainNom));
-
-    // Deduplicate entries by unique combination of QuocNgu, Nom and Meaning
     const seenEntries = new Set();
     related = related.filter(r => {
       const key = `${r[0].trim().toLowerCase()}|${r[1].trim()}|${r[2].trim()}`;
@@ -323,7 +396,6 @@ class ChunomDict {
       return true;
     });
 
-    // Sorting: Singles first, exact matches higher, then by rank
     const sortedRelated = related.sort((a, b) => {
         const aIsExact = (a[1] === mainNom);
         const bIsExact = (b[1] === mainNom);
@@ -336,64 +408,77 @@ class ChunomDict {
         return aRank - bRank;
     });
 
-    // History management
     if (!history.state || !history.state.modalOpen) {
       history.pushState({ modalOpen: true }, "");
     }
 
-    this.modalTitle.innerText = `Details: ${mainNom}`;
-    const hex = related.find(r => r[6])?.[6];
-    const strokes = related.find(r => r[4])?.[4];
-    
+    this.modalTitle.innerText = 'Details';
+    const mainEntry = sortedRelated.find(r => r[1] === mainNom && !r[0].trim().includes(' '));
+    const hex = mainEntry ? mainEntry[6] : (related.find(r => r[6])?.[6] || '');
+    const strokes = mainEntry ? mainEntry[4] : (related.find(r => r[4])?.[4] || '');
+    const rank = clickedId || (mainEntry ? mainEntry[5] : null);
+
     const exactMatches = sortedRelated.filter(r => r[1] === mainNom && !r[0].trim().includes(' '));
     const uniqueReadings = [...new Set(exactMatches.map(r => r[0]))];
 
     const readingsHtml = uniqueReadings.map(read => {
-      const qattObj = parser.parse(read);
       return `
-        <div class="mb-2 d-flex align-items-center gap-2">
+        <div class="d-flex justify-content-between align-items-center w-100 lh-sm">
           <span class="text-secondary fs-2 fw-bold">${read}</span>
-          <tt class="text-info">${qattObj ? qattObj.code : ''}</tt>
-          <button class="btn btn-sm btn-outline-secondary border-0 opacity-50 py-0 px-1" 
-                  onclick="dict.copyText('${read}', this)" title="Copy Quoc Ngu">📋</button>
+          <div class="d-flex align-items-center gap-1">
+            ${this.getQattHtml(read, '0.8rem')}
+          </div>
         </div>
       `;
     }).join('');
 
+    const rawDataStr = sortedRelated.map(r => r.join(',')).join('\n');
+
     this.modalBody.innerHTML = `
-      <div class="d-flex align-items-center gap-4 mb-4 p-2">
-        <div class="border border-secondary d-flex align-items-center justify-content-center p-3 rounded bg-black glyph-box active-scale" 
-             onclick="dict.copyText('${mainNom}', this)" title="Click to copy">
-          <span class="display-1 font-serif m-0 text-white">${this.wrapNomChars(mainNom)}</span>
+      <div class="d-flex align-items-start gap-4 mb-4 p-2">
+        <div class="d-flex flex-column align-items-center">
+          <div class="border border-secondary d-flex align-items-center justify-content-center p-3 rounded bg-black glyph-box active-scale" 
+               onclick="dict.copyText('${mainNom}', this)" title="Click to copy glyph">
+            <span class="display-1 font-serif m-0 text-white">${this.wrapNomChars(mainNom)}</span>
+          </div>
         </div>
         <div class="flex-grow-1">
-          <div class="d-flex flex-column">${readingsHtml || '<span class="text-secondary fst-italic">Part of compound words</span>'}</div>
-          <div class="d-flex gap-2 mt-2 opacity-75 small">
-             ${hex ? `<span class="text-secondary">Unicode: U+${hex}</span>` : ''}
-             ${strokes ? `<span class="text-secondary">• ${strokes} Strokes</span>` : ''}
+          <div class="d-flex flex-column w-100">${readingsHtml || '<span class="text-secondary fst-italic">Part of compound words</span>'}</div>
+          <div class="d-flex flex-column gap-1 mt-3 opacity-75 small text-secondary">
+             ${hex ? `<div class="clickable-meta" onclick="dict.copyText('${hex}', this)" title="Click to copy Hex code">Unicode: U+${hex}</div>` : ''}
+             ${strokes ? `<div>Strokes: ${strokes}</div>` : ''}
+             ${rank ? `<div>Rank: <span class="badge badge-rank">#${rank}</span></div>` : ''}
           </div>
         </div>
       </div>
       <div class="list-group list-group-flush border-top border-secondary">
-        ${sortedRelated.map(r => `
+        ${sortedRelated.map(r => {
+          return `
           <div class="list-group-item bg-transparent text-light border-secondary py-3 px-0">
-            <div class="d-flex justify-content-between align-items-start">
-              <div>
+            <div class="d-flex align-items-center justify-content-between mb-1">
+              <div class="d-flex align-items-center flex-wrap">
+                <span class="fs-3 text-white me-2">${this.wrapNomChars(r[1])}</span>
                 <span class="text-secondary fw-bold fs-5">${r[0]}</span> 
-                <span class="ms-2 font-monospace fs-3 text-white">${this.wrapNomChars(r[1])}</span>
               </div>
-              <div class="text-end">
-                ${r[7] ? `<span class="badge bg-dark border border-secondary text-uppercase small">${r[7]}</span>` : ''}
-                ${r[5] ? `<span class="badge bg-info text-dark ms-1 small">Rank ${r[5]}</span>` : ''}
+              <div class="text-end d-flex align-items-center gap-2 flex-wrap justify-content-end">
+                ${this.getQattHtml(r[0], '0.8rem')}
               </div>
             </div>
-            <div class="text-secondary mt-2 small">${r[2] || 'No description'}</div>
-          </div>`).join('')}
+            <div class="d-flex justify-content-between align-items-center w-100">
+              <div class="text-secondary small text-truncate flex-grow-1">${r[2] || 'No description'}</div>
+              ${r[5] ? `<span class="badge badge-rank ms-2">#${r[5]}</span>` : ''}
+            </div>
+          </div>`;
+        }).join('')}
       </div>
-      <!-- Debug Raw CSV Section -->
       <div class="mt-4 pt-3 border-top border-secondary opacity-50">
-        <small class="text-uppercase d-block mb-2 fw-bold" style="font-size: 0.65rem;">Raw Data:</small>
-        <pre class="bg-black p-2 rounded text-info border border-secondary" style="font-size: 0.65rem; white-space: pre-wrap;">${sortedRelated.map(r => r.join(',')).join('\n')}</pre>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <small class="text-uppercase fw-bold" style="font-size: 0.65rem;">Raw Data:</small>
+          <button class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.6rem;" onclick="dict.copyText(decodeURIComponent('${encodeURIComponent(rawDataStr)}'), this)">Copy All</button>
+        </div>
+        <pre class="bg-black p-2 rounded text-info border border-secondary font-monospace" 
+             style="font-size: 0.65rem; white-space: pre-wrap; cursor: pointer;" 
+             onclick="dict.copyText(this.innerText, this)" title="Click to copy raw content">${rawDataStr}</pre>
       </div>`;
     this.modal.show();
   }
@@ -401,9 +486,6 @@ class ChunomDict {
 
 let renderer, parser, dict;
 
-/**
- * Global renderer function for <tt> nodes
- */
 function renderQatt(el) {
   if (el.dataset.rendered) return;
   const qattType = localStorage.getItem('qattType') || "0";
@@ -414,9 +496,6 @@ function renderQatt(el) {
   renderer.renderText(code, el, parseInt(qattType));
 }
 
-/**
- * Automatically detects and renders new <tt> elements
- */
 function initObserver() {
   const observer = new MutationObserver(mutations => {
     for (let m of mutations) {
@@ -431,10 +510,14 @@ function initObserver() {
 }
 
 window.addEventListener("load", () => {
-  renderer = new SvgGlyphRenderer({});
-  parser = new VietnameseParser();
-  initObserver();
-  dict = new ChunomDict('https://qtng.github.io/chunom/dict.csv', 'search', 'results', 'dict-status');
+  try {
+    renderer = new SvgGlyphRenderer({});
+    parser = new VietnameseParser();
+    initObserver();
+    dict = new ChunomDict('https://qtng.github.io/chunom/dict.csv', 'search', 'results', 'dict-status');
+  } catch (e) {
+    console.error("Initialization error", e);
+  }
 });
   </script>
 </body>
