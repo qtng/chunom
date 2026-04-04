@@ -592,7 +592,7 @@
             const parts = parser.parse(word.q);
             if (parts) {
                 let code = parts.code;
-                if ((localStorage.getItem('qattType') || "1") === "0") code = code.replace(",", ",+");
+                if ((localStorage.getItem('qattType') || "0") === "0") code = code.replace(",", ",+");
                 renderer.renderText(code, qattDisplay, localStorage.getItem('qattType') || "1");
             }
         }
