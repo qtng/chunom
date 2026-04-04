@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nom & QATT Deck Creator</title>
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Chữ Nôm Fonts -->
+    <link rel="stylesheet" href="https://chunom.org/media/css/fonts/all.css">
+    
+    <style>
+        :root { 
+            --bg-darker: #0a0a0a;
+            --editor-bg: #161616;
+            --card-text: #121212;
+            --accent-info: #0dcaf0;
+            --nom-stack: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', 'Radicals Supplement', 'pa', 'HanaMinA', 'HanaMinB', serif;
+        }
+        
+        body { 
+            background-color: #0f0f0f; 
+            color: #f0f0f0; 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            overflow-x: hidden;
+        }
+        
+        /* Color palette for the cards */
+        .card-color-0 { --card-bg-color: #0dcaf0; }
+        .card-color-1 { --card-bg-color: #ff4d94; }
+        .card-color-2 { --card-bg-color: #a366ff; }
+        .card-color-3 { --card-bg-color: #ffc107; }
+        .card-color-4 { --card-bg-color: #2ecc71; }
+
+        /* Grid Layout for Preview */
+        .deck-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(2, 1fr);
+            align-items: start;
+        }
+
+        @media (min-width: 768px) {
+            .deck-grid { grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+        }
+
+        @media (min-width: 1200px) {
+            .deck-grid { grid-template-columns: repeat(8, 1fr); }
+        }
+
+        @media (min-width: 1600px) {
+            .deck-grid { grid-template-columns: repeat(12, 1fr); }
+        }
+
+        /* QATT Glyphs: Bold lines (6px) */
+        .qatt-glyph svg { 
+            height: clamp(2.5em, 5vw, 4em); 
+            width: auto; 
+            stroke: var(--card-text) !important; 
+            fill: none; 
+            stroke-width: 6; 
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            display: inline-block;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+        }
+        
+        .nom-font, #display-title, #deck-title, .input-nom { 
+            font-family: var(--nom-stack);
+        }
+
+        .nom-font {
+            font-size: clamp(2rem, 6vw, 4rem); 
+            line-height: 1;
+            margin-bottom: 0.25rem;
+            color: var(--card-text);
+        }
+        
+        .card-preview {
+            background-color: var(--card-bg-color);
+            border: none;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+            min-height: clamp(180px, 25vh, 280px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            padding: 1rem;
+            position: relative;
+        }
+        
+        .card-preview:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+
+        .qn-label {
+            color: var(--card-text);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: lowercase;
+            opacity: 0.8;
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            border-top: 1.5px solid rgba(0,0,0,0.1);
+            padding-top: 0.25rem;
+            width: 80%;
+            text-align: center;
+        }
+        
+        .sticky-editor {
+            position: sticky;
+            top: 1rem;
+            max-height: calc(100vh - 2rem);
+            overflow-y: auto;
+            border-radius: 1rem;
+            background-color: var(--editor-bg) !important;
+            border: 1px solid #333;
+        }
+
+        .sticky-editor::-webkit-scrollbar { width: 4px; }
+        .sticky-editor::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
+
+        /* --- IMMERSIVE 3D PLAYER STYLES --- */
+        #immersive-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+            z-index: 20000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            perspective: 2000px;
+        }
+
+        #immersive-progress-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            z-index: 20005;
+        }
+
+        #immersive-progress-bar {
+            width: 0%;
+            height: 100%;
+            background: var(--card-bg-color);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            transition: background-color 0.5s ease;
+        }
+
+        #immersive-card-scene {
+            width: 90vw;
+            height: 80vh;
+            max-width: 800px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #immersive-card-scene.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 3rem;
+            padding: 3rem;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            transition: background-color 0.5s ease;
+        }
+
+        .card-face-back {
+            transform: rotateY(180deg);
+        }
+
+        .player-nom-big {
+            font-size: clamp(10rem, 30vw, 20rem) !important;
+            margin: 0;
+            font-family: var(--nom-stack);
+        }
+
+        .player-nom-small {
+            font-size: clamp(5rem, 12vw, 8rem) !important;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+            font-family: var(--nom-stack);
+        }
+
+        .player-qatt-big svg {
+            height: clamp(6em, 18vw, 12em) !important;
+            stroke-width: 6 !important;
+        }
+
+        .player-qn-big {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            color: var(--card-text);
+            margin-bottom: 1rem;
+            border-top: 4px solid rgba(0,0,0,0.15);
+            padding-top: 1rem;
+            width: 50%;
+            text-align: center;
+        }
+
+        .player-controls-top {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 20001;
+        }
+
+        .player-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 1rem;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+            transition: all 0.2s;
+        }
+
+        .player-btn:hover { background: rgba(255,255,255,0.2); }
+
+        @keyframes cardExit {
+            0% { transform: scale(1) translateX(0); opacity: 1; }
+            100% { transform: scale(0.8) translateX(-100vw); opacity: 0; }
+        }
+        .card-exit { animation: cardExit 0.5s forwards ease-in; }
+
+        @keyframes cardEnter {
+            0% { transform: scale(0.8) translateX(100vw); opacity: 0; }
+            100% { transform: scale(1) translateX(0); opacity: 1; }
+        }
+        .card-enter { animation: cardEnter 0.5s forwards ease-out; }
+        .x-small { font-size: 0.75rem; }
+    </style>
+</head>
+<body>
+
+<!-- Immersive Overlay -->
+<div id="immersive-overlay" onclick="advanceImmersive()">
+    <div id="immersive-progress-container">
+        <div id="immersive-progress-bar"></div>
+    </div>
+
+    <div class="player-controls-top">
+        <button class="player-btn" onclick="toggleAutoplay(event)" id="btn-autoplay-toggle">
+            <i class="bi bi-pause-fill"></i> Pause
+        </button>
+        <button class="player-btn" onclick="exitImmersive(event)">Close [ESC]</button>
+    </div>
+    
+    <div id="immersive-card-container">
+        <div id="immersive-card-scene">
+            <!-- Front Face (Nom Only) -->
+            <div class="card-face card-face-front" id="player-front-bg">
+                <div id="player-nom-front" class="nom-font player-nom-big"></div>
+            </div>
+            <!-- Back Face (Details) -->
+            <div class="card-face card-face-back" id="player-back-bg">
+                <div id="player-nom-back" class="nom-font player-nom-small"></div>
+                <div id="player-qn-display" class="player-qn-big font-monospace"></div>
+                <div id="player-qatt-display" class="qatt-glyph player-qatt-big"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5 text-white-50 small opacity-75">Click or Space to flip/advance</div>
+</div>
+
+<div id="nav-container">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-secondary mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold small text-uppercase tracking-wider" href="#">
+                <span class="text-info">QATT</span> Deck Maker
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="container-fluid py-2">
+    <div class="row g-3">
+        <!-- Editor Sidebar -->
+        <div class="col-xl-3 col-lg-4">
+            <div class="card border-0 sticky-editor shadow-lg">
+                <div class="card-header bg-transparent border-secondary py-2 d-flex justify-content-between align-items-center">
+                    <span class="small fw-bold text-muted text-uppercase">Editor</span>
+                    <div class="btn-group">
+                        <button class="btn btn-primary btn-sm fw-bold px-2" onclick="startImmersive(false)" title="Play Deck">
+                            <i class="bi bi-play-fill"></i> Play
+                        </button>
+                        <button class="btn btn-warning btn-sm fw-bold px-2 text-dark" onclick="startImmersive(true)" title="Auto Play">
+                            <i class="bi bi-collection-play-fill"></i> Auto
+                        </button>
+                        <button class="btn btn-info btn-sm fw-bold text-dark" onclick="shareDeck()" title="Share Deck">
+                            <i class="bi bi-share-fill"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-3">
+                    <div class="mb-3">
+                        <label class="form-label text-info x-small fw-bold text-uppercase tracking-wider">Deck Title</label>
+                        <input type="text" id="deck-title" class="form-control form-control-sm bg-black border-secondary text-white" placeholder="My Custom Deck" oninput="updateDeck()">
+                    </div>
+                    <div id="word-inputs"></div>
+                    <button class="btn btn-outline-info btn-sm w-100 mt-2 border-dashed fw-bold" onclick="addWordRow()">
+                        <i class="bi bi-plus-lg"></i> Add Word
+                    </button>
+                </div>
+                <div class="card-footer bg-transparent border-secondary py-2">
+                    <div class="form-check form-switch mb-1">
+                        <input class="form-check-input" type="checkbox" id="show-qn" checked onchange="renderDeck()">
+                        <label class="form-check-label x-small text-muted" for="show-qn">Show QN</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="show-qatt" checked onchange="renderDeck()">
+                        <label class="form-check-label x-small text-muted" for="show-qatt">Show QATT</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preview Area -->
+        <div class="col-xl-9 col-lg-8">
+            <div class="d-flex justify-content-between align-items-end mb-3 px-2">
+                <div>
+                    <h2 id="display-title" class="h4 fw-bold text-white mb-0">My Custom Deck</h2>
+                    <span class="badge bg-dark border border-secondary text-info mt-1" id="count-label">0 Words</span>
+                </div>
+            </div>
+            <div id="deck-display" class="deck-grid"></div>
+        </div>
+    </div>
+</div>
+
+<div id="share-alert" class="alert alert-info border-0 shadow-lg animate__animated" style="position: fixed; bottom: 20px; right: 20px; z-index: 10000; display: none;">
+    <div class="d-flex align-items-center small">
+        <i class="bi bi-clipboard-check-fill fs-5 me-2"></i>
+        <strong>Link Copied!</strong>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://qtng.github.io/qatt-dc/js/parser.js"></script>
+<script src="https://qtng.github.io/qatt-dc/js/renderer.js"></script>
+<script src="https://qtng.github.io/qatt-dc/js/navigation.js"></script>
+
+<script>
+    const parser = new VietnameseParser();
+    const renderer = new SvgGlyphRenderer();
+    let deckData = {
+        title: "Introduction to Nôm",
+        words: [
+            { n: "𠀧", q: "ba" }, { n: "𠊛", q: "người" }, { n: "𡨸", q: "chữ" },
+            { n: "𠊚", q: "ta" }, { n: "𡗶", q: "trời" }, { n: "𣎃", q: "tháng" }
+        ]
+    };
+
+    // PLAYER STATE
+    let immersiveActive = false;
+    let autoplayActive = false;
+    let currentIdx = 0;
+    let playerStep = 0; // 0: Front (Nom), 1: Back (Info)
+    
+    // TIMING
+    const PHASE_DURATION = 3000; // 3 seconds per phase
+    let autoplayStartTime = 0;
+    let autoplayTimer = null;
+
+    function init() {
+        const hash = window.location.hash;
+        if (hash.length > 1) {
+            try {
+                const decoded = JSON.parse(decodeURIComponent(escape(atob(hash.substring(1)))));
+                if (decoded.words) deckData = decoded;
+            } catch (e) { console.warn("URL data corrupt."); }
+        }
+        document.getElementById('deck-title').value = deckData.title;
+        refreshInputList();
+        updateDeck();
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === "Escape" && immersiveActive) exitImmersive();
+            if (e.key === " " && immersiveActive) {
+                e.preventDefault();
+                advanceImmersive();
+            }
+        });
+    }
+
+    function addWordRow(n = "", q = "") {
+        const container = document.getElementById('word-inputs');
+        const div = document.createElement('div');
+        div.className = "row g-1 mb-1 word-row align-items-center animate__animated animate__fadeIn";
+        div.innerHTML = `
+            <div class="col-5"><input type="text" class="form-control form-control-sm bg-black border-secondary text-white input-nom" value="${n}" oninput="updateDeck()"></div>
+            <div class="col-5"><input type="text" class="form-control form-control-sm bg-black border-secondary text-white input-qn" value="${q}" oninput="updateDeck()"></div>
+            <div class="col-2 text-end"><button class="btn btn-link btn-sm text-danger p-0" onclick="removeRow(this)"><i class="bi bi-trash-fill"></i></button></div>
+        `;
+        container.appendChild(div);
+        updateDeck();
+    }
+
+    function removeRow(btn) { btn.closest('.word-row').remove(); updateDeck(); }
+    function refreshInputList() { document.getElementById('word-inputs').innerHTML = ''; deckData.words.forEach(w => addWordRow(w.n, w.q)); }
+    
+    function updateDeck() {
+        const titleInput = document.getElementById('deck-title');
+        deckData.title = titleInput.value.trim() || "My Custom Deck";
+        
+        const rows = document.querySelectorAll('.word-row');
+        deckData.words = Array.from(rows).map(row => ({
+            n: row.querySelector('.input-nom').value.trim(),
+            q: row.querySelector('.input-qn').value.trim().toLowerCase()
+        })).filter(w => w.n || w.q);
+        
+        document.getElementById('count-label').innerText = `${deckData.words.length} Words`;
+        renderDeck();
+    }
+
+    function renderDeck() {
+        const container = document.getElementById('deck-display');
+        const qattType = localStorage.getItem('qattType') || "1";
+        const showQatt = document.getElementById('show-qatt').checked;
+        const showQn = document.getElementById('show-qn').checked;
+        
+        document.getElementById('display-title').innerText = deckData.title;
+        document.title = deckData.title + " | Nom & QATT Deck Creator";
+        
+        container.innerHTML = '';
+        deckData.words.forEach((word, idx) => {
+            const colorIdx = idx % 5;
+            const card = document.createElement('div');
+            card.className = `card-preview animate__animated animate__fadeIn card-color-${colorIdx}`;
+            const qattHtml = showQatt ? `<div class="qatt-glyph mt-1" id="qatt-${idx}"></div>` : '';
+            const qnHtml = showQn ? `<div class="qn-label font-monospace">${word.q || '...'}</div>` : '';
+            card.innerHTML = `<div class="nom-font">${word.n || '?'}</div>${qnHtml}${qattHtml}`;
+            container.appendChild(card);
+            if (showQatt && word.q) {
+                requestAnimationFrame(() => {
+                    const parts = parser.parse(word.q);
+                    if (parts) {
+                        let code = parts.code;
+                        if (qattType === "0") code = code.replace(",", ",+");
+                        renderer.renderText(code, document.getElementById(`qatt-${idx}`), qattType);
+                    }
+                });
+            }
+        });
+    }
+
+    // --- IMMERSIVE PLAYER LOGIC ---
+    function startImmersive(auto = false) {
+        if (deckData.words.length === 0) return;
+        immersiveActive = true;
+        autoplayActive = auto;
+        currentIdx = 0;
+        playerStep = 0;
+        document.getElementById('immersive-overlay').style.display = 'flex';
+        updateAutoplayUI();
+        resetAutoplayTimer();
+        renderPlayerCard();
+        if (autoplayActive) startAutoplayLoop();
+    }
+
+    function exitImmersive(event) {
+        if (event) event.stopPropagation();
+        immersiveActive = false;
+        autoplayActive = false;
+        clearInterval(autoplayTimer);
+        document.getElementById('immersive-overlay').style.display = 'none';
+    }
+
+    function toggleAutoplay(event) {
+        if (event) event.stopPropagation();
+        autoplayActive = !autoplayActive;
+        updateAutoplayUI();
+        if (autoplayActive) {
+            resetAutoplayTimer();
+            startAutoplayLoop();
+        } else {
+            clearInterval(autoplayTimer);
+            document.getElementById('immersive-progress-bar').style.width = '0%';
+        }
+    }
+
+    function updateAutoplayUI() {
+        const btn = document.getElementById('btn-autoplay-toggle');
+        btn.innerHTML = autoplayActive ? '<i class="bi bi-pause-fill"></i> Pause' : '<i class="bi bi-play-fill"></i> Auto';
+        document.getElementById('immersive-progress-container').style.display = autoplayActive ? 'block' : 'none';
+    }
+
+    function resetAutoplayTimer() {
+        autoplayStartTime = Date.now();
+    }
+
+    function startAutoplayLoop() {
+        clearInterval(autoplayTimer);
+        autoplayTimer = setInterval(() => {
+            if (!autoplayActive) return;
+            
+            const elapsed = Date.now() - autoplayStartTime;
+            let percent;
+            
+            if (playerStep === 0) {
+                percent = (elapsed / PHASE_DURATION) * 50;
+            } else {
+                percent = 50 + (elapsed / PHASE_DURATION) * 50;
+            }
+            
+            document.getElementById('immersive-progress-bar').style.width = `${Math.min(100, Math.max(0, percent))}%`;
+
+            if (elapsed >= PHASE_DURATION) {
+                advanceImmersive(true);
+            }
+        }, 30);
+    }
+
+    function advanceImmersive(isAuto = false) {
+        const scene = document.getElementById('immersive-card-scene');
+        resetAutoplayTimer(); 
+
+        if (playerStep === 0) {
+            playerStep = 1;
+            scene.classList.add('is-flipped');
+        } else {
+            currentIdx++;
+            if (currentIdx >= deckData.words.length) {
+                exitImmersive();
+            } else {
+                playerStep = 0;
+                scene.classList.add('card-exit');
+                setTimeout(() => {
+                    scene.classList.remove('is-flipped', 'card-exit');
+                    scene.classList.add('card-enter');
+                    renderPlayerCard();
+                    setTimeout(() => scene.classList.remove('card-enter'), 500);
+                }, 500);
+            }
+        }
+        if (!isAuto) resetAutoplayTimer();
+    }
+
+    function renderPlayerCard() {
+        const word = deckData.words[currentIdx];
+        const frontBg = document.getElementById('player-front-bg');
+        const backBg = document.getElementById('player-back-bg');
+        const progressBar = document.getElementById('immersive-progress-bar');
+        const colorIdx = currentIdx % 5;
+        const colorClass = `card-color-${colorIdx}`;
+        
+        frontBg.className = `card-face card-face-front ${colorClass}`;
+        backBg.className = `card-face card-face-back ${colorClass}`;
+        
+        const color = getComputedStyle(frontBg).getPropertyValue('--card-bg-color');
+        progressBar.style.backgroundColor = color;
+        frontBg.style.backgroundColor = color;
+        backBg.style.backgroundColor = color;
+
+        document.getElementById('player-nom-front').innerText = word.n || '?';
+        document.getElementById('player-nom-back').innerText = word.n || '?';
+        document.getElementById('player-qn-display').innerText = word.q || '';
+        
+        const qattDisplay = document.getElementById('player-qatt-display');
+        qattDisplay.innerHTML = '';
+        if (word.q) {
+            const parts = parser.parse(word.q);
+            if (parts) {
+                let code = parts.code;
+                if ((localStorage.getItem('qattType') || "1") === "0") code = code.replace(",", ",+");
+                renderer.renderText(code, qattDisplay, localStorage.getItem('qattType') || "1");
+            }
+        }
+    }
+
+    function shareDeck() {
+        try {
+            const payload = btoa(unescape(encodeURIComponent(JSON.stringify(deckData))));
+            const url = window.location.origin + window.location.pathname + '#' + payload;
+            const dummy = document.createElement('input');
+            document.body.appendChild(dummy);
+            dummy.value = url;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+            const alert = document.getElementById('share-alert');
+            alert.style.display = 'block';
+            alert.classList.add('animate__fadeInUp');
+            window.location.hash = payload;
+            setTimeout(() => {
+                alert.classList.replace('animate__fadeInUp', 'animate__fadeOutDown');
+                setTimeout(() => { alert.style.display = 'none'; alert.classList.remove('animate__fadeOutDown'); }, 500);
+            }, 2500);
+        } catch (e) { console.error(e); }
+    }
+
+    window.onload = init;
+</script>
+
+</body>
+</html>
