@@ -10,10 +10,8 @@
   <script src="https://qtng.github.io/qatt-dc/js/navigation.js"></script>
   <script src="https://qtng.github.io/qatt-dc/js/renderer.js?2"></script>
   <script src="https://qtng.github.io/qatt-dc/js/parser.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://qtng.github.io/qatt-dc/js/supabase.js"></script>
   <style>
-    /* Styling for QATT SVG rendering */
+    /* Globales SVG Styling */
     svg {
       stroke: currentColor;
       stroke-width: 5.75px;
@@ -90,11 +88,17 @@
     tt {
       cursor: default;
     }
-    /* Real-time search preview styling */
+
+    /* Logik zum Ausblenden von Quốc Ngữ */
+    body.hide-qn .qn-text {
+      display: none !important;
+    }
+
+    /* Styling für die Echtzeit-Suchvorschau */
     #search-preview {
       display: none;
-      align-items: center;
-      justify-content: flex-start;
+      align-items: center; 
+      justify-content: flex-start; 
       border-left: none;
       min-width: 0;
       white-space: nowrap;
@@ -107,15 +111,17 @@
       max-width: 30vw;
       overflow-x: auto;
     }
-    /* Vertical alignment for SVGs in search preview */
     #search-preview svg {
       height: 1.4em;
     }
-    /* Remove Bootstrap focus outline/glow */
     #search:focus {
       box-shadow: none;
       outline: none;
       border-color: #6c757d;
+    }
+    .form-check-input:checked {
+        background-color: #0dcaf0;
+        border-color: #0dcaf0;
     }
   </style>
 </head>
@@ -123,11 +129,18 @@
   <div id="copy-toast">Copied</div>
 
   <div class="container mt-4">
-    <div class="mb-4 d-flex align-items-center justify-content-between">
-      <div class="text-secondary">
-        Chữ Nôm
-        <code class="text-white">字喃</code>
-        <tt class="text-info" title="chữ nôm">ch,y,,4 n,o,m</tt>
+    <div class="mb-4 d-flex align-items-center justify-content-end">
+      <div class="d-flex gap-3 align-items-center">
+        <!-- Toggle für Quốc Ngữ ausblenden -->
+        <div class="form-check form-switch small">
+          <input class="form-check-input" type="checkbox" role="switch" id="toggle-qn">
+          <label class="form-check-label text-secondary" for="toggle-qn">Hide QN</label>
+        </div>
+        <!-- Simplified QATT Toggle -->
+        <div class="form-check form-switch small">
+          <input class="form-check-input" type="checkbox" role="switch" id="toggle-qatt">
+          <label class="form-check-label text-secondary" for="toggle-qatt">Simplified QATT</label>
+        </div>
       </div>
     </div>
 
@@ -179,6 +192,8 @@ class ChunomDict {
     this.discoveryContainer = document.getElementById('discovery');
     this.statusContainer = document.getElementById(statusId);
     this.toast = document.getElementById('copy-toast');
+    this.qnToggle = document.getElementById('toggle-qn');
+    this.qattToggle = document.getElementById('toggle-qatt');
     
     const modalEl = document.getElementById('detailModal');
     if (typeof bootstrap !== 'undefined') {
@@ -189,12 +204,50 @@ class ChunomDict {
     
     this.cacheKey = 'chunom_dict_data';
     this.cacheTimeKey = 'chunom_dict_timestamp';
+    this.qnHiddenKey = 'chunom_qn_hidden';
+    this.qattTypeKey = 'qattType'; 
     this.expirationMs = 24 * 60 * 60 * 1000; 
     this.data = [];
     
+    this.initSettings();
     this.initHistoryHandler(modalEl);
     this.init();
     this.initGlobalClickHandlers();
+  }
+
+  initSettings() {
+    const qnHidden = localStorage.getItem(this.qnHiddenKey) === 'true';
+    this.qnToggle.checked = qnHidden;
+    if (qnHidden) document.body.classList.add('hide-qn');
+
+    this.qnToggle.addEventListener('change', (e) => {
+      const hidden = e.target.checked;
+      localStorage.setItem(this.qnHiddenKey, hidden);
+      document.body.classList.toggle('hide-qn', hidden);
+    });
+
+    const qattSimplified = localStorage.getItem(this.qattTypeKey) === '1';
+    this.qattToggle.checked = qattSimplified;
+
+    this.qattToggle.addEventListener('change', (e) => {
+      const simplified = e.target.checked ? "1" : "0";
+      localStorage.setItem(this.qattTypeKey, simplified);
+      this.triggerReRender();
+    });
+  }
+
+  triggerReRender() {
+    document.querySelectorAll('tt').forEach(tt => {
+      tt.removeAttribute('data-rendered');
+      if (!tt.dataset.originalCode) {
+        tt.dataset.originalCode = tt.title || tt.innerText;
+      }
+      tt.innerText = tt.dataset.originalCode; 
+      renderQatt(tt);
+    });
+    if (this.searchInput.value) {
+      this.search(this.searchInput.value);
+    }
   }
 
   initHistoryHandler(modalEl) {
@@ -284,7 +337,7 @@ class ChunomDict {
     return quocNgu.split(/\s+/).map(word => {
       const parsed = parser.parse(word);
       const cleanWord = word.replace(/"/g, '&quot;');
-      return parsed ? `<tt class="text-info" style="font-size: ${fontSize};" title="${cleanWord}">${parsed.code}</tt>` : '';
+      return parsed ? `<tt class="text-info" style="font-size: ${fontSize};" title="${cleanWord}" data-original-code="${parsed.code}">${parsed.code}</tt>` : '';
     }).join(' ');
   }
 
@@ -318,7 +371,7 @@ class ChunomDict {
             <div class="d-flex align-items-center justify-content-center gap-1 mt-1 overflow-hidden flex-wrap">
               ${this.getQattHtml(r[0], '0.7rem')}
             </div>
-            <div class="text-secondary small opacity-75 text-truncate w-100">${r[0]}</div>
+            <div class="text-secondary small opacity-75 text-truncate w-100 qn-text">${r[0]}</div>
           </div>
         `;
         col.onclick = () => this.showDetails(r[5], r[1]);
@@ -346,11 +399,7 @@ class ChunomDict {
       if (query && !/[\u4e00-\u9fff]/.test(query)) {
         const html = this.getQattHtml(query, '1.4em');
         this.searchPreview.innerHTML = html;
-        if (html) {
-          this.searchInput.style.borderRight = 'none';
-        } else {
-          this.searchInput.style.borderRight = '';
-        }
+        this.searchInput.style.borderRight = html ? 'none' : '';
       } else {
         this.searchPreview.innerHTML = '';
         this.searchInput.style.borderRight = '';
@@ -379,14 +428,14 @@ class ChunomDict {
   }
 
   createResultItem(row) {
-    const [quocNgu, nom, meaning, flag, strokes, id, hex] = row;
+    const [quocNgu, nom, meaning, id] = [row[0], row[1], row[2], row[5]];
     const div = document.createElement('div');
     div.className = 'list-group-item list-group-item-action bg-dark text-light border-secondary py-3';
     div.innerHTML = `
       <div class="d-flex w-100 align-items-center mb-1">
         <div class="me-auto d-flex align-items-center">
           <span class="fs-2 text-white me-2">${this.wrapNomChars(nom)}</span>
-          <span class="text-secondary fw-bold">${quocNgu}</span>
+          <span class="text-secondary fw-bold qn-text">${quocNgu}</span>
         </div>
         <div class="text-end d-flex align-items-center gap-2 flex-wrap justify-content-end">
           ${this.getQattHtml(quocNgu)}
@@ -466,7 +515,7 @@ class ChunomDict {
     const readingsHtml = uniqueReadings.map(read => {
       return `
         <div class="d-flex justify-content-between align-items-center w-100 lh-sm">
-          <span class="text-secondary fs-2 fw-bold">${read}</span>
+          <span class="text-secondary fs-2 fw-bold qn-text">${read}</span>
           <div class="d-flex align-items-center gap-1">
             ${this.getQattHtml(read)}
           </div>
@@ -500,7 +549,7 @@ class ChunomDict {
             <div class="d-flex align-items-center justify-content-between mb-1">
               <div class="d-flex align-items-center flex-wrap">
                 <span class="fs-3 text-white me-2">${this.wrapNomChars(r[1])}</span>
-                <span class="text-secondary fw-bold fs-5">${r[0]}</span> 
+                <span class="text-secondary fw-bold fs-5 qn-text">${r[0]}</span> 
               </div>
               <div class="text-end d-flex align-items-center gap-2 flex-wrap justify-content-end">
                 ${this.getQattHtml(r[0])}
@@ -532,7 +581,12 @@ function renderQatt(el) {
   if (el.dataset.rendered) return;
   const qattType = localStorage.getItem('qattType') || "0";
   let code = el.innerText.trim();
+  if (!el.dataset.originalCode) {
+    el.dataset.originalCode = code;
+  }
+  
   if (qattType === "0" && code.includes(",")) code = code.replace(",", ",+");
+  
   el.innerHTML = "";
   el.dataset.rendered = "true";
   renderer.renderText(code, el, parseInt(qattType));
