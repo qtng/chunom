@@ -90,10 +90,38 @@
     tt {
       cursor: default;
     }
+    /* Real-time search preview styling */
+    #search-preview {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border-left: none;
+      min-width: 0;
+      white-space: nowrap;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    #search-preview:not(:empty) {
+      display: flex;
+      min-width: 40px;
+      max-width: 30vw;
+      overflow-x: auto;
+    }
+    /* Vertical alignment for SVGs in search preview */
+    #search-preview svg {
+      height: 1.4em;
+      top: -.25em; 
+    }
+    /* Remove Bootstrap focus outline/glow */
+    #search:focus {
+      box-shadow: none;
+      outline: none;
+      border-color: #6c757d;
+    }
   </style>
 </head>
 <body data-bs-theme="dark" class="bg-dark text-light">
-  <div id="copy-toast">Copied to clipboard</div>
+  <div id="copy-toast">Copied</div>
 
   <div class="container mt-4">
     <div class="mb-4 d-flex align-items-center justify-content-between">
@@ -107,6 +135,7 @@
     <div class="input-group mb-3">
       <span class="input-group-text bg-secondary text-white border-secondary">Search</span>
       <input type="search" id="search" class="form-control bg-dark text-white border-secondary" placeholder="Type Quốc Ngữ or Chữ Nôm..." disabled>
+      <div id="search-preview" class="input-group-text bg-dark border-secondary"></div>
       <div id="dict-status" class="input-group-text bg-dark border-secondary">
         <div class="spinner-border spinner-border-sm text-info" role="status"></div>
       </div>
@@ -146,6 +175,7 @@ class ChunomDict {
   constructor(apiUrl, searchInputId, resultsContainerId, statusId) {
     this.apiUrl = apiUrl;
     this.searchInput = document.getElementById(searchInputId);
+    this.searchPreview = document.getElementById('search-preview');
     this.resultsContainer = document.getElementById(resultsContainerId);
     this.discoveryContainer = document.getElementById('discovery');
     this.statusContainer = document.getElementById(statusId);
@@ -264,7 +294,6 @@ class ChunomDict {
     const listNext = document.getElementById('list-next-350');
     if (!list85 || !listNext) return;
 
-    // First deduplicate using a Map, prioritizing variant '1' for any given rank
     const uniqueRanksMap = new Map();
     this.data.forEach(r => {
       const rank = parseInt(r[5]);
@@ -275,7 +304,6 @@ class ChunomDict {
       }
     });
 
-    // Create sorted array from deduplicated entries
     const allUnique = Array.from(uniqueRanksMap.values())
       .sort((a, b) => parseInt(a[5]) - parseInt(b[5]));
 
@@ -301,7 +329,6 @@ class ChunomDict {
       container.appendChild(frag);
     };
 
-    // Semantic filtering based on rank value instead of array slice
     const top85Items = allUnique.filter(r => parseInt(r[5]) <= 85);
     const nextItems = allUnique.filter(r => parseInt(r[5]) > 85 && parseInt(r[5]) <= 500);
 
@@ -315,6 +342,22 @@ class ChunomDict {
 
   search(term) {
     const query = term.trim().toLowerCase();
+    
+    if (this.searchPreview) {
+      if (query && !/[\u4e00-\u9fff]/.test(query)) {
+        const html = this.getQattHtml(query, '1.4em');
+        this.searchPreview.innerHTML = html;
+        if (html) {
+          this.searchInput.style.borderRight = 'none';
+        } else {
+          this.searchInput.style.borderRight = '';
+        }
+      } else {
+        this.searchPreview.innerHTML = '';
+        this.searchInput.style.borderRight = '';
+      }
+    }
+
     this.resultsContainer.innerHTML = '';
     
     if (!query) {
@@ -426,7 +469,7 @@ class ChunomDict {
         <div class="d-flex justify-content-between align-items-center w-100 lh-sm">
           <span class="text-secondary fs-2 fw-bold">${read}</span>
           <div class="d-flex align-items-center gap-1">
-            ${this.getQattHtml(read, '0.8rem')}
+            ${this.getQattHtml(read)}
           </div>
         </div>
       `;
@@ -439,7 +482,7 @@ class ChunomDict {
         <div class="d-flex flex-column align-items-center">
           <div class="border border-secondary d-flex align-items-center justify-content-center p-3 rounded bg-black glyph-box active-scale" 
                onclick="dict.copyText('${mainNom}', this)" title="Click to copy glyph">
-            <span class="display-1 font-serif m-0 text-white">${this.wrapNomChars(mainNom)}</span>
+            <span class="display-1 font-serif m-0 text-white">${mainNom}</span>
           </div>
         </div>
         <div class="flex-grow-1">
@@ -461,7 +504,7 @@ class ChunomDict {
                 <span class="text-secondary fw-bold fs-5">${r[0]}</span> 
               </div>
               <div class="text-end d-flex align-items-center gap-2 flex-wrap justify-content-end">
-                ${this.getQattHtml(r[0], '0.8rem')}
+                ${this.getQattHtml(r[0])}
               </div>
             </div>
             <div class="d-flex justify-content-between align-items-center w-100">
