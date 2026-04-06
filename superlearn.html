@@ -6,7 +6,7 @@
     <base href="https://qtng.github.io/">
     <title>Superlearning - Chữ Nôm & QATT</title>
     
-    <!-- Bootstrap Dark Mode -->
+    <!-- Bootstrap & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     
@@ -88,10 +88,7 @@
 
         .loading-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.9);
             display: flex;
             flex-direction: column;
@@ -102,17 +99,9 @@
 
         .hidden { display: none !important; }
         
-        .bg-music-player {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 1001;
-        }
-
         #error-container {
             position: fixed;
-            top: 1rem;
-            left: 50%;
+            top: 1rem; left: 50%;
             transform: translateX(-50%);
             z-index: 3000;
             width: 90%;
@@ -125,36 +114,45 @@
             padding: 0.5rem;
             border-radius: 4px;
             margin-top: 0.5rem;
-            max-height: 200px;
+            max-height: 150px;
             overflow-y: auto;
             text-align: left;
             border: 1px solid rgba(255,255,255,0.1);
+            color: #ff8888;
+        }
+
+        .auth-status-badge {
+            font-size: 0.7rem;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            padding: 2px 10px;
+            border-radius: 15px;
+            color: #aaa;
+            margin-top: 5px;
+            display: inline-block;
         }
     </style>
 </head>
 <body class="bg-dark">
 
     <div id="nav-container"></div>
-
-    <!-- Error Alert Container -->
     <div id="error-container"></div>
 
     <div id="loading" class="loading-overlay">
         <div class="spinner-border text-primary mb-3" role="status"></div>
-        <div id="loading-text">Initialisiere...</div>
+        <div id="loading-text">Lade Superlearning...</div>
     </div>
 
     <div class="container py-5 mt-5">
-        
-        <!-- Deck Selection View -->
         <div id="deck-selection" class="row justify-content-center">
             <div class="col-md-8 text-center">
-                <h1 class="mb-4 text-primary"><i class="bi bi-rocket-takeoff"></i> Superlearning</h1>
+                <h1 class="mb-2 text-primary"><i class="bi bi-rocket-takeoff"></i> Superlearning</h1>
+                <div id="user-display" class="auth-status-badge mb-4">Warte auf Datenbank...</div>
                 
                 <!-- Shared Deck Input -->
                 <div class="card bg-dark border-secondary mb-5 shadow">
-                    <div class="card-body">
-                        <h5 class="card-title text-secondary mb-3">Geteiltes Deck laden</h5>
+                    <div class="card-body text-start">
+                        <h5 class="card-title text-secondary mb-3">Fremdes Deck laden</h5>
                         <div class="input-group">
                             <span class="input-group-text bg-dark border-secondary text-secondary">ID</span>
                             <input type="text" id="share-id-input" class="form-control bg-dark text-light border-secondary" placeholder="UUID hier einfügen...">
@@ -162,32 +160,27 @@
                                 <i class="bi bi-download"></i> Laden
                             </button>
                         </div>
-                        <div class="form-text text-start mt-2">Tipp: Kopiere die Deck-ID aus der URL eines geteilten Decks.</div>
                     </div>
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="mb-0 text-secondary">Deine Decks</h5>
+                    <h5 class="mb-0 text-secondary text-start">Deine Decks</h5>
                     <button class="btn btn-sm btn-outline-secondary" onclick="app.loadDecks()">
-                        <i class="bi bi-arrow-clockwise"></i> Aktualisieren
+                        <i class="bi bi-arrow-clockwise"></i>
                     </button>
                 </div>
                 
-                <div id="deck-list" class="list-group mb-4 text-start">
-                    <!-- Decks populated via JS -->
-                </div>
+                <div id="deck-list" class="list-group mb-4 text-start"></div>
             </div>
         </div>
 
-        <!-- Learning View -->
         <div id="learning-view" class="hidden text-center">
             <div class="mb-3 d-flex justify-content-between align-items-center bg-dark p-2 rounded border border-secondary">
                 <button class="btn btn-outline-secondary btn-sm" onclick="app.exitDeck()">
-                    <i class="bi bi-arrow-left"></i> Beenden
+                    <i class="bi bi-arrow-left"></i> Ende
                 </button>
                 <div id="deck-info" class="text-truncate px-3 flex-grow-1">
                     <strong id="active-deck-title" class="text-primary"></strong>
-                    <div id="active-deck-author" class="small text-secondary" style="font-size: 0.75rem;"></div>
                 </div>
                 <span id="progress-text" class="badge bg-dark border border-secondary text-secondary"></span>
             </div>
@@ -196,44 +189,30 @@
                 <div id="main-card" class="learning-card" onclick="app.flipCard()">
                     <div class="card-face card-front">
                         <div id="nom-display" class="nom-text mb-3"></div>
-                        <div class="text-secondary small mt-4"><i class="bi bi-hand-index-thumb"></i> Tippen zum Umdrehen</div>
+                        <div class="text-secondary small mt-4">Klicken zum Umdrehen</div>
                     </div>
                     <div class="card-face card-back">
                         <div id="qatt-display" class="qatt-container mb-3"></div>
                         <h2 id="quocngu-display" class="display-4 mb-2 text-primary"></h2>
-                        <div class="text-secondary small mt-2">Leertaste oder Klick zum Weiter</div>
                     </div>
                 </div>
             </div>
 
             <div class="mt-4">
                 <div class="btn-group shadow">
-                    <button class="btn btn-lg btn-outline-primary" onclick="app.prevCard()" title="Zurück">
-                        <i class="bi bi-chevron-left"></i>
-                    </button>
-                    <button id="autoplay-btn" class="btn btn-lg btn-primary px-4" onclick="app.toggleAutoplay()">
-                        <i class="bi bi-play-fill"></i> Autoplay
-                    </button>
-                    <button class="btn btn-lg btn-outline-primary" onclick="app.nextCard()" title="Weiter">
-                        <i class="bi bi-chevron-right"></i>
-                    </button>
+                    <button class="btn btn-lg btn-outline-primary" onclick="app.prevCard()"><i class="bi bi-chevron-left"></i></button>
+                    <button id="autoplay-btn" class="btn btn-lg btn-primary px-4" onclick="app.toggleAutoplay()"><i class="bi bi-play-fill"></i> Autoplay</button>
+                    <button class="btn btn-lg btn-outline-primary" onclick="app.nextCard()"><i class="bi bi-chevron-right"></i></button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Background Music -->
-    <div class="bg-music-player">
-        <audio id="bg-audio" loop>
-            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-17.mp3" type="audio/mpeg">
-        </audio>
-        <button class="btn btn-dark border-secondary rounded-circle shadow" id="music-toggle" onclick="app.toggleMusic()">
-            <i class="bi bi-volume-mute"></i>
-        </button>
-    </div>
-
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Supabase SDK (MUSS vor supabase.js geladen werden) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <script src="qatt-dc/js/parser.js"></script>
     <script src="qatt-dc/js/renderer.js"></script>
     <script src="qatt-dc/js/supabase.js"></script>
@@ -245,152 +224,125 @@
                 this.sp = new SupabaseService();
                 this.parser = new VietnameseParser();
                 this.renderer = new SvgGlyphRenderer();
-                
                 this.decks = [];
                 this.currentDeck = null;
                 this.currentIndex = 0;
                 this.isFlipped = false;
                 this.autoplayInterval = null;
                 this.qattType = localStorage.qattType || "0";
-                this.isMusicPlaying = false;
 
-                window.addEventListener('keydown', (e) => this.handleKeyPress(e));
+                window.addEventListener('keydown', (e) => {
+                    if (!this.currentDeck) return;
+                    if (e.code === 'Space') { e.preventDefault(); this.isFlipped ? this.nextCard() : this.flipCard(); }
+                    if (e.code === 'ArrowRight') this.nextCard();
+                    if (e.code === 'ArrowLeft') this.prevCard();
+                });
             }
 
             async init() {
+                const userDisplay = document.getElementById('user-display');
                 try {
-                    this.setLoading(true, "Verbindung zu Supabase...");
+                    userDisplay.textContent = "Lade SDK...";
+                    this.setLoading(true, "Initialisiere Datenbank...");
+                    
+                    // Prüfen ob Supabase SDK geladen wurde
+                    if (typeof supabase === 'undefined') {
+                        throw new Error("Supabase SDK (CDN) konnte nicht geladen werden. Bitte Internetverbindung prüfen.");
+                    }
+
                     await this.sp.init();
                     
+                    if (!this.sp.client) {
+                        throw new Error("Supabase Client wurde im Service nicht erstellt. Prüfe URL und API-Key in supabase.js.");
+                    }
+
+                    // Auth Check
+                    userDisplay.textContent = "Prüfe Sitzung...";
+                    const { data, error: sessionError } = await this.sp.client.auth.getSession();
+                    if (sessionError) throw sessionError;
+                    
+                    let session = data.session;
+
+                    if (!session) {
+                        userDisplay.textContent = "Melde anonym an...";
+                        const { data: authData, error: authError } = await this.sp.client.auth.signInAnonymously();
+                        if (authError) throw authError;
+                        session = authData.session;
+                    }
+
+                    const userId = session?.user?.id;
+                    userDisplay.innerHTML = userId 
+                        ? `<i class="bi bi-person-fill text-success"></i> Aktiv: ${userId.substring(0,8)}...` 
+                        : `<i class="bi bi-person-x text-warning"></i> Login fehlgeschlagen`;
+
                     const urlParams = new URLSearchParams(window.location.search);
                     const shareId = urlParams.get('share');
                     
                     if (shareId) {
-                        this.setLoading(true, "Geteiltes Deck wird abgerufen...");
-                        const sharedDeck = await this.sp.getDeck(shareId);
-                        if (sharedDeck) {
-                            this.startDeck(sharedDeck);
-                        } else {
-                            this.showError("Geteiltes Deck nicht gefunden.", { shareId });
-                            await this.loadDecks();
-                        }
+                        await this.loadSharedDeckById(shareId);
                     } else {
                         await this.loadDecks();
                     }
                 } catch (err) {
-                    this.showError("Initialisierungsfehler", err);
+                    const errorMsg = err.message || "Unbekannter Fehler";
+                    userDisplay.innerHTML = `<i class="bi bi-exclamation-triangle text-danger"></i> Fehler: ${errorMsg}`;
+                    console.error("Superlearning Init Error:", err);
+                    this.showError("Start fehlgeschlagen", err);
                 } finally {
                     this.setLoading(false);
-                }
-            }
-
-            handleKeyPress(e) {
-                if (this.currentDeck) {
-                    if (e.code === 'Space' || e.code === 'Enter') {
-                        e.preventDefault();
-                        if (this.isFlipped) this.nextCard();
-                        else this.flipCard();
-                    }
-                    if (e.code === 'ArrowRight') this.nextCard();
-                    if (e.code === 'ArrowLeft') this.prevCard();
                 }
             }
 
             setLoading(show, text = "") {
                 const el = document.getElementById('loading');
                 const txt = document.getElementById('loading-text');
-                if (show) {
-                    el.classList.remove('hidden');
-                    txt.textContent = text;
-                } else {
-                    el.classList.add('hidden');
-                }
+                if (show) { el.classList.remove('hidden'); txt.textContent = text; }
+                else { el.classList.add('hidden'); }
             }
 
             showError(msg, debugData = null) {
                 const container = document.getElementById('error-container');
                 const alert = document.createElement('div');
                 alert.className = 'alert alert-danger alert-dismissible fade show shadow-lg border-0';
-                
-                let debugHtml = '';
-                if (debugData) {
-                    const jsonStr = JSON.stringify(debugData, null, 2);
-                    debugHtml = `<pre class="debug-json"><code>${jsonStr}</code></pre>`;
-                }
-
-                alert.innerHTML = `
-                    <div class="d-flex align-items-start">
-                        <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
-                        <div class="flex-grow-1">
-                            <div class="fw-bold">${msg}</div>
-                            ${debugHtml}
-                        </div>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                `;
+                let debugHtml = debugData ? `<pre class="debug-json"><code>${JSON.stringify(debugData, null, 2)}</code></pre>` : '';
+                alert.innerHTML = `<div class="d-flex align-items-start"><i class="bi bi-exclamation-octagon-fill me-2 fs-4"></i><div><strong>${msg}</strong>${debugHtml}</div></div><button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
                 container.appendChild(alert);
-                
-                if (!debugData) {
-                    setTimeout(() => {
-                        const bsAlert = new bootstrap.Alert(alert);
-                        bsAlert.close();
-                    }, 8000);
-                }
             }
 
             async loadDecks() {
                 try {
-                    this.decks = await this.sp.getDecks();
+                    this.decks = await this.sp.getDecks() || [];
                     const list = document.getElementById('deck-list');
-                    list.innerHTML = '';
-                    
-                    if (!this.decks || this.decks.length === 0) {
-                        list.innerHTML = '<div class="p-4 text-center text-secondary border border-secondary border-dashed rounded">Keine eigenen Decks in Supabase gefunden.</div>';
-                        return;
-                    }
+                    list.innerHTML = this.decks.length === 0 
+                        ? '<div class="p-3 text-secondary border border-secondary border-dashed rounded text-center">Keine eigenen Decks gefunden.</div>'
+                        : '';
 
                     this.decks.forEach(deck => {
                         const btn = document.createElement('button');
                         btn.className = 'list-group-item list-group-item-action bg-dark text-light border-secondary d-flex justify-content-between align-items-center mb-2 rounded shadow-sm';
-                        btn.innerHTML = `
-                            <div>
-                                <strong class="text-primary">${deck.title}</strong><br>
-                                <span class="small text-secondary">${deck.words?.length || 0} Begriffe</span>
-                            </div>
-                            <i class="bi bi-play-circle-fill text-primary fs-3"></i>
-                        `;
+                        btn.innerHTML = `<div><strong class="text-primary">${deck.title || 'Unbenannt'}</strong><br><span class="small text-secondary">${deck.words?.length || 0} Begriffe</span></div><i class="bi bi-play-circle-fill text-primary fs-4"></i>`;
                         btn.onclick = () => this.startDeck(deck);
                         list.appendChild(btn);
                     });
                 } catch (e) {
-                    this.showError("Fehler beim Laden deiner Decks", e);
+                    this.showError("Decks konnten nicht geladen werden", e);
                 }
             }
 
-            async loadSharedDeckById() {
-                const idInput = document.getElementById('share-id-input');
-                const id = idInput.value.trim();
-                
-                if (!id) {
-                    this.showError("Bitte gib eine gültige Deck-ID ein.");
-                    return;
-                }
-
-                this.setLoading(true, "Deck wird gesucht...");
+            async loadSharedDeckById(externalId = null) {
+                const id = externalId || document.getElementById('share-id-input').value.trim();
+                if (!id) return;
+                this.setLoading(true, "Lade Deck...");
                 try {
-                    // Wir holen das rohe Ergebnis für besseres Debugging
                     const deck = await this.sp.getDeck(id);
-                    
-                    if (deck && deck.words && deck.words.length > 0) {
+                    if (deck?.words?.length > 0) {
                         this.startDeck(deck);
-                        idInput.value = '';
-                    } else if (deck) {
-                        this.showError("Das Deck wurde gefunden, ist aber leer.", deck);
+                        if (!externalId) document.getElementById('share-id-input').value = '';
                     } else {
-                        this.showError("Deck nicht gefunden. Überprüfe die ID.", { searchedId: id, result: deck });
+                        this.showError("Deck nicht gefunden", { id, response: deck });
                     }
                 } catch (e) {
-                    this.showError("Server-Fehler beim Abrufen des Decks", { error: e.message, stack: e.stack });
+                    this.showError("Netzwerkfehler beim Laden", e);
                 } finally {
                     this.setLoading(false);
                 }
@@ -400,13 +352,9 @@
                 this.currentDeck = deck;
                 this.currentIndex = 0;
                 this.isFlipped = false;
-                
                 document.getElementById('deck-selection').classList.add('hidden');
                 document.getElementById('learning-view').classList.remove('hidden');
-                
                 document.getElementById('active-deck-title').textContent = deck.title;
-                document.getElementById('active-deck-author').textContent = deck.username ? `Erstellt von: ${deck.username}` : "Anonymer Autor";
-                
                 this.updateCard();
             }
 
@@ -415,34 +363,24 @@
                 document.getElementById('learning-view').classList.add('hidden');
                 document.getElementById('deck-selection').classList.remove('hidden');
                 this.currentDeck = null;
-                window.history.replaceState({}, document.title, window.location.pathname);
                 this.loadDecks();
             }
 
             updateCard() {
-                if (!this.currentDeck || !this.currentDeck.words || !this.currentDeck.words.length) return;
-                
+                if (!this.currentDeck) return;
                 const word = this.currentDeck.words[this.currentIndex];
-                const nomEl = document.getElementById('nom-display');
-                const quocNguEl = document.getElementById('quocngu-display');
-                const qattEl = document.getElementById('qatt-display');
-                const progressEl = document.getElementById('progress-text');
-
-                this.isFlipped = false;
                 document.getElementById('main-card').classList.remove('is-flipped');
-
-                nomEl.textContent = word.n || "?";
-                quocNguEl.textContent = word.q || "";
-                progressEl.textContent = `${this.currentIndex + 1} / ${this.currentDeck.words.length}`;
-
+                this.isFlipped = false;
+                document.getElementById('nom-display').textContent = word.n || "?";
+                document.getElementById('quocngu-display').textContent = word.q || "";
+                document.getElementById('progress-text').textContent = `${this.currentIndex + 1} / ${this.currentDeck.words.length}`;
+                const qattEl = document.getElementById('qatt-display');
                 qattEl.innerHTML = '';
                 if (word.q) {
                     const parts = this.parser.parse(word.q);
                     if (parts) {
                         let code = parts.code;
-                        if (this.qattType === "0") {
-                            code = code.replace(",", ",+");
-                        }
+                        if (this.qattType === "0") code = code.replace(",", ",+");
                         this.renderer.renderText(code, qattEl, this.qattType);
                     }
                 }
@@ -470,49 +408,24 @@
             }
 
             startAutoplay() {
-                const btn = document.getElementById('autoplay-btn');
-                btn.innerHTML = '<i class="bi bi-pause-fill"></i> Stop';
-                btn.classList.replace('btn-primary', 'btn-danger');
-
+                document.getElementById('autoplay-btn').innerHTML = '<i class="bi bi-pause-fill"></i> Stop';
+                document.getElementById('autoplay-btn').classList.replace('btn-primary', 'btn-danger');
                 this.autoplayInterval = setInterval(() => {
-                    if (!this.isFlipped) {
-                        this.flipCard();
-                    } else {
-                        this.nextCard();
-                    }
+                    if (!this.isFlipped) this.flipCard();
+                    else this.nextCard();
                 }, 4000);
             }
 
             stopAutoplay() {
-                const btn = document.getElementById('autoplay-btn');
-                btn.innerHTML = '<i class="bi bi-play-fill"></i> Autoplay';
-                btn.classList.replace('btn-danger', 'btn-primary');
-
-                if (this.autoplayInterval) {
-                    clearInterval(this.autoplayInterval);
-                    this.autoplayInterval = null;
-                }
-            }
-          
-          
-          
-          
-          toggleMusic() {
-                const audio = document.getElementById('bg-audio');
-                const btn = document.getElementById('music-toggle');
-                if (this.isMusicPlaying) {
-                    audio.pause();
-                    btn.innerHTML = '<i class="bi bi-volume-mute"></i>';
-                } else {
-                    audio.play().catch(e => console.log("Audio play blocked"));
-                    btn.innerHTML = '<i class="bi bi-volume-up"></i>';
-                }
-                this.isMusicPlaying = !this.isMusicPlaying;
+                document.getElementById('autoplay-btn').innerHTML = '<i class="bi bi-play-fill"></i> Autoplay';
+                document.getElementById('autoplay-btn').classList.replace('btn-danger', 'btn-primary');
+                if (this.autoplayInterval) { clearInterval(this.autoplayInterval); this.autoplayInterval = null; }
             }
         }
 
         const app = new SuperlearningApp();
-        window.onload = () => app.init();
+        document.addEventListener('DOMContentLoaded', () => app.init());
     </script>
 </body>
 </html>
+
