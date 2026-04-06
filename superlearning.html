@@ -204,20 +204,20 @@
         <div class="row justify-content-center">
             <div class="col-md-8 text-center">
                 <h1 class="display-4 mb-2 fw-bold">Superlearning</h1>
-                <div id="user-display" class="auth-status-badge mb-5">Initialisiere...</div>
+                <div id="user-display" class="auth-status-badge mb-5">Loadinf...</div>
                 
                 <div class="card bg-dark border-secondary mb-5 shadow text-start">
                     <div class="card-body p-4">
-                        <h5 class="card-title text-secondary mb-3 small text-uppercase fw-bold">Fremdes Deck laden</h5>
+                        <h5 class="card-title text-secondary mb-3 small text-uppercase fw-bold">Load shared deck</h5>
                         <div class="input-group">
-                            <input value="9222f66f-6d0e-4b2d-bfdd-f31ebea71337" type="text" id="share-id-input" class="form-control bg-dark text-light border-secondary" placeholder="UUID hier einfügen...">
-                            <button class="btn btn-primary px-4" onclick="app.loadSharedDeckById()">Laden</button>
+                            <input value="9222f66f-6d0e-4b2d-bfdd-f31ebea71337" type="text" id="share-id-input" class="form-control bg-dark text-light border-secondary" placeholder="Insert UUID here...">
+                            <button class="btn btn-primary px-4" onclick="app.loadSharedDeckById()">Load</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="mb-0 text-secondary text-start small text-uppercase fw-bold">Deine Sammlungen</h5>
+                    <h5 class="mb-0 text-secondary text-start small text-uppercase fw-bold">My decks</h5>
                     <button class="btn btn-sm btn-outline-secondary border-0" onclick="app.loadDecks()">
                         <i class="bi bi-arrow-clockwise"></i>
                     </button>
@@ -246,22 +246,22 @@
 
         <div class="control-bar">
             <div class="controls-left">
-                <button class="btn-minimal" onclick="app.exitDeck()" title="Beenden"><i class="bi bi-x-lg"></i></button>
-                <button id="music-btn" class="btn-minimal" onclick="app.toggleMusic()" title="Musik"><i class="bi bi-music-note-beamed"></i></button>
-                <button class="btn-minimal" onclick="app.speakWord()" title="Aussprache"><i class="bi bi-volume-up"></i></button>
+                <button class="btn-minimal" onclick="app.exitDeck()" title="Stop"><i class="bi bi-x-lg"></i></button>
+                <button id="music-btn" class="btn-minimal" onclick="app.toggleMusic()" title="Background music"><i class="bi bi-music-note-beamed"></i></button>
+                <button class="btn-minimal" onclick="app.speakWord()" title="Speak"><i class="bi bi-volume-up"></i></button>
                 <div class="dropdown">
                     <button class="btn-minimal" data-bs-toggle="dropdown"><i class="bi bi-gear"></i></button>
                     <ul class="dropdown-menu dropdown-menu-dark shadow border-0">
-                        <li><button class="dropdown-item" onclick="app.setQattType('0')">Traditionell</button></li>
-                        <li><button class="dropdown-item" onclick="app.setQattType('1')">Vereinfacht V1</button></li>
-                        <li><button class="dropdown-item" onclick="app.setQattType('2')">Vereinfacht V2</button></li>
+                        <li><button class="dropdown-item" onclick="app.setQattType('0')">Chính thể</button></li>
+                        <li><button class="dropdown-item" onclick="app.setQattType('1')">Giản thể</button></li>
+                        <li><button class="dropdown-item" onclick="app.setQattType('2')">Giản thể +</button></li>
                     </ul>
                 </div>
             </div>
             <div class="controls-right">
-                <button class="btn-minimal" onclick="app.prevCard()" title="Zurück"><i class="bi bi-chevron-left"></i></button>
+                <button class="btn-minimal" onclick="app.prevCard()" title="Previous"><i class="bi bi-chevron-left"></i></button>
                 <button id="autoplay-btn" class="btn-minimal" onclick="app.toggleAutoplay()" title="Autoplay"><i class="bi bi-play-fill"></i></button>
-                <button class="btn-minimal" onclick="app.nextCard()" title="Vorwärts"><i class="bi bi-chevron-right"></i></button>
+                <button class="btn-minimal" onclick="app.nextCard()" title="Next"><i class="bi bi-chevron-right"></i></button>
             </div>
         </div>
     </div>
@@ -325,7 +325,7 @@
                     if (this.decks.length === 0) {
                         list.innerHTML = `
                             <div class="empty-state-box">
-                                <p class="small mb-0">Xou have no decks, yet.</p>
+                                <p class="small mb-0">You have no decks, yet.</p>
                             </div>`;
                         return;
                     }
@@ -334,7 +334,7 @@
                         const btn = document.createElement('button');
                         btn.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center';
                         const wordCount = deck.count || 0;
-                        btn.innerHTML = `<div><strong>${deck.title}</strong><br><span class="small text-secondary">${wordCount} Begriffe</span></div><i class="bi bi-play-circle-fill fs-4 text-primary opacity-50"></i>`;
+                        btn.innerHTML = `<div><strong>${deck.title}</strong><br><span class="small text-secondary">${wordCount} items</span></div><i class="bi bi-play-circle-fill fs-4 text-primary opacity-50"></i>`;
                         btn.onclick = () => this.startDeck(deck);
                         list.appendChild(btn);
                     });
