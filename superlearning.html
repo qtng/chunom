@@ -98,6 +98,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+			transform-origin: bottom center;
             transition: all 1s ease-in-out;
             transform: scale(1, 1);
             pointer-events: none;
@@ -108,7 +109,6 @@
         
         .layer-show {
         	opacity:1!important;
-			transform-origin: bottom center;
         	transform: scale(1.5, 1.5);
         	transition: all 3s ease-in-out;
         }
@@ -194,7 +194,7 @@
 </head>
 <body>
 
-	<div style="font-family: var(--nom-font-stack)">...</div>
+	<div id="webfont-preloader" style="font-family: var(--nom-font-stack)">&nbsp;</div>
     <div id="loading" class="loading-overlay">
         <div class="spinner-border text-primary" role="status"></div>
     </div>
