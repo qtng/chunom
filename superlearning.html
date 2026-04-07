@@ -1,5 +1,6 @@
+```html
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,15 +19,16 @@
             --nom-font-stack: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', 'Radicals Supplement', 'pa', 'HanaMinA', 'HanaMinB', serif;
         }
 
-        /* --- STARTSEITE (Bootstrap Dark Mode) --- */
         body {
-            background-color: #121212;
+            background-color: #0a0a0a;
             color: #f8f9fa;
             min-height: 100vh;
             margin: 0;
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
         }
 
+        /* --- START PAGE --- */
         .deck-card-list .list-group-item {
             background: #1e1e1e;
             border-color: #333;
@@ -50,29 +52,19 @@
             display: inline-block;
         }
 
-        /* Kompakte Empty State Box */
-        .empty-state-box {
-            padding: 1.5rem;
-            text-align: center;
-            color: #555;
-            border: 1px dashed #333;
-            border-radius: 0.75rem;
-            background: #181818;
-        }
-
-        /* --- PLAY MODUS (Hotpink Sphärisch) --- */
+        /* --- IMMERSIVE MODE --- */
         #learning-view {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-color: hotpink;
-            color: black;
             z-index: 9999;
             display: none; 
             flex-direction: column;
             align-items: center;
             justify-content: center;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            background-color: hotpink; 
+            transition: opacity 0.6s ease, background-color 8s ease-in-out;
+            overflow: hidden;
         }
 
         #learning-view.active {
@@ -80,165 +72,228 @@
             opacity: 1;
         }
 
+        /* --- CONTENT --- */
         .stage {
             position: relative;
             width: 100%;
-            height: 65vh;
+            height: 60vh;
             display: flex;
-            align-items: start;
+            align-items: center;
             justify-content: center;
-            cursor: pointer;
+            z-index: 10;
+            /* Um weitere 50px nach oben verschoben (total -100px) */
+            margin-top: -100px;
         }
 
         .layer {
             position: absolute;
             width: 100%;
-            height: 70%;
+            height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-			transform-origin: center center;
+            transform-origin: center center;
             transition: all 1s ease-in-out;
             transform: scale(1, 1);
             pointer-events: none;
+            color: black;
         }
 
         #nom-layer { opacity: 0 }
         #details-layer { opacity: 0 }
         
         .layer-show {
-        	opacity:1!important;
-        	transform: scale(1.5, 1.5);
-        	transition: all 3s ease-in-out;
+            opacity: 1 !important;
+            transform: scale(1.4, 1.4);
+            transition: all 4s ease-in-out;
         }
 
         .nom-display-large {
             font-family: var(--nom-font-stack);
-            font-size: 8rem;
+            font-size: 9rem;
             line-height: 1;
         }
 
         .nom-display-mini {
             font-family: var(--nom-font-stack);
-            font-size: 5rem;
-            margin-bottom: 2rem;
-            opacity: 0.6;
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.5;
         }
 
         .qatt-container {
-            height: clamp(4rem, 15vw, 6rem);
-            margin-bottom: 1.5rem;
+            height: clamp(3.5rem, 12vw, 5rem);
+            margin-bottom: 1.2rem;
         }
         .qatt-container svg {
             height: 100%;
-			stroke-linecap: square;
-			stroke-linejoin: round;
             stroke: black;
-            stroke-width: 9;
+            stroke-width: 6px;
+			stroke-linejoin: round;
+			stroke-linecap: square;
             fill: none;
         }
         .quocngu-text {
-            font-size: 1.5em;
+            font-size: 1.6em;
             font-weight: 300;
             text-transform: lowercase;
-            background: rgba(0,0,0,.1);
+            background: rgba(0, 0, 0, 0.07);
             border-radius: 100px;
-			padding: 2px 10px;
+            padding: 4px 25px;
         }
 
-        #autoplay-indicator {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 5rem;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s, transform 0.3s;
-            color: rgba(0,0,0,0.15);
-        }
-
+        /* --- CONTROL BAR --- */
         .control-bar {
             position: absolute;
-            bottom: 0; left: 0; right: 0;
-            padding: 2.5rem 3rem;
+            bottom: 1.5rem; 
+            left: 0; right: 0;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
             z-index: 10000;
+            padding: 0 10px;
+        }
+
+        .controls-pill {
+            background: rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 0.35rem 0.8rem;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .credits-container {
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0.4rem;
+            width: 100%;
+        }
+
+        .audio-credits {
+            font-size: 0.82rem;
+            color: rgba(0,0,0,0.45);
+            cursor: pointer;
+            transition: all 0.3s;
+            opacity: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .audio-credits.visible { opacity: 1; pointer-events: auto; }
+        .audio-credits:hover { color: black; }
+
+        .alpha-badge {
+            background: rgba(0,0,0,0.06);
+            padding: 1px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            letter-spacing: 0.03em;
         }
 
         .btn-minimal {
-            background: none;
-            border: none;
-            color: black;
-            padding: 0.6rem;
-            font-size: 1.3rem;
-            opacity: 0.5;
-            transition: all 0.2s;
+            background: none !important;
+            border: none !important;
+            color: black !important;
+            padding: 0.4rem;
+            font-size: 1.1rem;
+            opacity: 0.4;
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
+        
+        .btn-minimal.active { opacity: 1 !important; }
         .btn-minimal:hover { opacity: 1; transform: scale(1.1); }
+        .btn-minimal:focus, .btn-minimal:active { 
+            outline: none !important; 
+            box-shadow: none !important; 
+            transform: scale(1) !important; 
+        }
 
-        .controls-left, .controls-right { display: flex; gap: 1.2rem; align-items: center; }
+        .vr-separator {
+            width: 1px;
+            height: 16px;
+            background: rgba(0,0,0,0.08);
+            margin: 0 0.3rem;
+        }
+
+        .dropdown-menu-dark {
+            background-color: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 8px;
+            font-size: 0.9rem;
+        }
+
         .hidden { display: none !important; }
 
         .loading-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: #121212;
+            background: #0a0a0a;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10000;
         }
+
+        @media (min-width: 576px) {
+            .control-bar { bottom: 2rem; }
+            .controls-pill { padding: 0.45rem 1.2rem; gap: 0.5rem; }
+            .nom-display-large { font-size: 11rem; }
+            /* Angepasst für Desktop */
+            .stage { margin-top: -110px; }
+        }
     </style>
 </head>
 <body>
 
-	<div id="webfont-preloader" style="font-family: var(--nom-font-stack)">&nbsp;</div>
     <div id="loading" class="loading-overlay">
         <div class="spinner-border text-primary" role="status"></div>
     </div>
 
-    <!-- STARTSEITE -->
+    <!-- START PAGE -->
     <div class="container py-5 mt-5" id="deck-selection">
         <div class="row justify-content-center">
             <div class="col-md-8 text-center">
                 <h1 class="display-4 mb-2 fw-bold">Superlearning</h1>
-                <div id="user-display" class="auth-status-badge mb-5">Loadinf...</div>
+                <div id="user-display" class="auth-status-badge mb-5">Initializing...</div>
                 
                 <div class="card bg-dark border-secondary mb-5 shadow text-start">
                     <div class="card-body p-4">
                         <h5 class="card-title text-secondary mb-3 small text-uppercase fw-bold">Load shared deck</h5>
                         <div class="input-group">
-                            <input value="9222f66f-6d0e-4b2d-bfdd-f31ebea71337" type="text" id="share-id-input" class="form-control bg-dark text-light border-secondary" placeholder="Insert UUID here...">
+                            <input value="9222f66f-6d0e-4b2d-bfdd-f31ebea71337" type="text" id="share-id-input" class="form-control bg-dark text-light border-secondary">
                             <button class="btn btn-primary px-4" onclick="app.loadSharedDeckById()">Load</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="mb-0 text-secondary text-start small text-uppercase fw-bold">My decks</h5>
+                    <h5 class="mb-0 text-secondary text-start small text-uppercase fw-bold">My Decks</h5>
                     <button class="btn btn-sm btn-outline-secondary border-0" onclick="app.loadDecks()">
                         <i class="bi bi-arrow-clockwise"></i>
                     </button>
                 </div>
-                
                 <div id="deck-list" class="list-group deck-card-list text-start mb-5"></div>
             </div>
         </div>
     </div>
 
-    <!-- PLAY MODUS -->
-    <div id="learning-view" class="is-front">
-        <div id="autoplay-indicator"></div>
-        
-        <div class="stage" onclick="app.toggleAutoplay()">
-            <div id="nom-layer" class="layer">
-                <div id="nom-display" class="nom-display-large"></div>
-            </div>
-            
+    <!-- PLAY MODE -->
+    <div id="learning-view">
+        <div class="stage">
+            <div id="nom-layer" class="layer"><div id="nom-display" class="nom-display-large"></div></div>
             <div id="details-layer" class="layer">
                 <div id="nom-mini" class="nom-display-mini"></div>
                 <div id="qatt-display" class="qatt-container"></div>
@@ -247,32 +302,38 @@
         </div>
 
         <div class="control-bar">
-            <div class="controls-left">
-                <button class="btn-minimal" onclick="app.exitDeck()" title="Stop"><i class="bi bi-x-lg"></i></button>
-                <button id="music-btn" class="btn-minimal" onclick="app.toggleMusic()" title="Background music"><i class="bi bi-music-note-beamed"></i></button>
-                <button class="btn-minimal" onclick="app.speakWord()" title="Speak"><i class="bi bi-volume-up"></i></button>
-                <div class="dropdown">
-                    <button class="btn-minimal" data-bs-toggle="dropdown"><i class="bi bi-gear"></i></button>
-                    <ul class="dropdown-menu dropdown-menu-dark shadow border-0">
-                        <li><button class="dropdown-item" onclick="app.setQattType('0')">Chính thể</button></li>
-                        <li><button class="dropdown-item" onclick="app.setQattType('1')">Giản thể</button></li>
-                        <li><button class="dropdown-item" onclick="app.setQattType('2')">Giản thể +</button></li>
+            <div class="controls-pill">
+                <button class="btn-minimal" onclick="app.exitDeck()" title="Exit"><i class="bi bi-x-lg"></i></button>
+                <div class="vr-separator"></div>
+                
+                <button id="speak-btn" class="btn-minimal" onclick="app.toggleAutoSpeak()" title="Speak"><i class="bi bi-volume-up"></i></button>
+                <button id="binaural-btn" class="btn-minimal" onclick="app.toggleBinaural()" title="Binaural Alpha"><i class="bi bi-headphones"></i></button>
+                
+                <div class="vr-separator" id="music-separator"></div>
+                
+                <button id="prev-track-btn" class="btn-minimal" onclick="app.prevMusicTrack()" title="Prev Track"><i class="bi bi-chevron-left"></i></button>
+                <button id="music-btn" class="btn-minimal" onclick="app.toggleMusic()" title="Play/Pause"><i class="bi bi-play-fill"></i></button>
+                <button id="next-track-btn" class="btn-minimal" onclick="app.nextMusicTrack()" title="Next Track"><i class="bi bi-chevron-right"></i></button>
+                
+                <div class="vr-separator"></div>
+
+                <div class="dropdown dropup">
+                    <button class="btn-minimal" data-bs-toggle="dropdown" title="Settings"><i class="bi bi-gear"></i></button>
+                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow border-0">
+                        <li class="dropdown-header small text-uppercase">Script</li>
+                        <li><button class="dropdown-item" onclick="app.setQattType('0')">QATT chính thể</button></li>
+                        <li><button class="dropdown-item" onclick="app.setQattType('1')">QATT giản thể</button></li>
                     </ul>
                 </div>
             </div>
-            <div class="controls-right">
-                <button class="btn-minimal" onclick="app.prevCard()" title="Previous"><i class="bi bi-chevron-left"></i></button>
-                <button id="autoplay-btn" class="btn-minimal" onclick="app.toggleAutoplay()" title="Autoplay"><i class="bi bi-play-fill"></i></button>
-                <button class="btn-minimal" onclick="app.nextCard()" title="Next"><i class="bi bi-chevron-right"></i></button>
+            <div class="credits-container">
+                <div id="audio-credits" class="audio-credits" onclick="app.nextMusicTrack()"></div>
             </div>
         </div>
     </div>
 
-    <audio id="bg-audio" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-17.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="bg-audio"></audio>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="qatt-dc/js/parser.js"></script>
@@ -292,27 +353,42 @@
                 this.isShowingDetails = false;
                 this.autoplayInterval = null;
                 this.qattType = localStorage.qattType || "0";
-                this.isMusicPlaying = false;
+                
+                this.isMusicEnabled = localStorage.isMusicEnabled === 'true';
+                this.isBinauralActive = localStorage.isBinauralEnabled === 'true';
+                this.isAutoSpeakEnabled = localStorage.isAutoSpeakEnabled === 'true';
+                
+                this.playlist = [1, 4, 5, 6, 7, 12, 13, 14, 15, 16, 17];
+                this.currentPlaylistIndex = 0;
+                
+                this.audioCtx = null;
+                this.oscL = null; this.oscR = null;
+
+                this.colors = ['hotpink', '#9b59b6', '#3498db', '#1abc9c', '#e67e22', '#e91e63', '#8e44ad', '#d35400'];
+                this.currentColorIndex = 0;
+                this.colorTimer = null;
+
                 this.setupKeyboard();
+                this.setupAudioEvents();
+            }
+
+            setupAudioEvents() {
+                const audio = document.getElementById('bg-audio');
+                audio.addEventListener('ended', () => this.nextMusicTrack());
             }
 
             setupKeyboard() {
                 window.addEventListener('keydown', (e) => {
                     if (!this.currentDeck) return;
-                    if (e.code === 'Space' || e.code === 'Enter') { 
-                        e.preventDefault(); 
-                        this.toggleAutoplay();
-                    }
-                    if (e.code === 'ArrowRight') this.nextCard();
-                    if (e.code === 'ArrowLeft') this.prevCard();
+                    if (e.code === 'Space') { e.preventDefault(); this.toggleMusic(); }
                 });
             }
 
             async init() {
                 try {
                     await this.sp.init();
-                    const username = this.sp.defaultUsername()
-                    if(this.sp.user) document.getElementById('user-display').textContent = `User: ${username }`;
+                    const username = this.sp.defaultUsername();
+                    if(this.sp.user) document.getElementById('user-display').textContent = `User: ${username}`;
                     await this.loadDecks();
                 } catch (err) { console.error(err); }
                 finally { document.getElementById('loading').classList.add('hidden'); }
@@ -323,20 +399,14 @@
                     this.decks = await this.sp.getDecks() || [];
                     const list = document.getElementById('deck-list');
                     list.innerHTML = '';
-                    
                     if (this.decks.length === 0) {
-                        list.innerHTML = `
-                            <div class="empty-state-box">
-                                <p class="small mb-0">You have no decks, yet.</p>
-                            </div>`;
+                        list.innerHTML = `<div class="border p-4 text-center text-secondary">No decks found.</div>`;
                         return;
                     }
-
                     this.decks.forEach(deck => {
                         const btn = document.createElement('button');
                         btn.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center';
-                        const wordCount = deck.count || 0;
-                        btn.innerHTML = `<div><strong>${deck.title}</strong><br><span class="small text-secondary">${wordCount} items</span></div><i class="bi bi-play-circle-fill fs-4 text-primary opacity-50"></i>`;
+                        btn.innerHTML = `<div><strong>${deck.title}</strong><br><span class="small text-secondary">${deck.count || 0} items</span></div><i class="bi bi-play-circle-fill fs-4 text-primary opacity-50"></i>`;
                         btn.onclick = () => this.startDeck(deck);
                         list.appendChild(btn);
                     });
@@ -344,162 +414,205 @@
             }
 
             async loadSharedDeckById(id) {
-                const finalId = id || document.getElementById('share-id-input').value.trim();
-                if (!finalId) return;
+                const shareId = typeof id === 'string' ? id : document.getElementById('share-id-input').value.trim();
+                if (!shareId) return;
                 try {
-                    const deck = await this.sp.getDeck(finalId);
+                    const deck = await this.sp.getDeck(shareId);
                     if (deck) this.startDeck(deck);
                 } catch (e) { console.error(e); }
             }
 
             startDeck(deck) {
-                this.currentDeck = {
-                    ...deck,
-                    words: (deck.words || []).filter(w => w.n !== ".config")
-                };
+                this.currentDeck = { ...deck, words: (deck.words || []).filter(w => w.n !== ".config") };
                 this.currentIndex = 0;
-                document.getElementById('learning-view').classList.add('active');
+                const view = document.getElementById('learning-view');
+                view.style.display = 'flex';
+                setTimeout(() => view.classList.add('active'), 10);
                 document.body.style.overflow = 'hidden';
+                
+                this.currentPlaylistIndex = Math.floor(Math.random() * this.playlist.length);
+                this.loadAndPlayTrack();
+
+                document.getElementById('speak-btn').classList.toggle('active', this.isAutoSpeakEnabled);
+                document.getElementById('binaural-btn').classList.toggle('active', this.isBinauralActive);
+                this.updateMusicButtonUI();
+
+                if (this.isBinauralActive) this.startBinaural(true);
+
                 this.updateCard();
                 this.startAutoplay();
+                this.startColorCycle(); 
+                this.updateCreditsUI();
             }
 
             exitDeck() {
                 this.stopAutoplay();
-                document.getElementById('learning-view').classList.remove('active');
-                setTimeout(() => document.getElementById('learning-view').style.display = 'none', 500);
+                this.stopColorCycle(); 
+                const view = document.getElementById('learning-view');
+                view.classList.remove('active');
+                setTimeout(() => { view.style.display = 'none'; }, 600);
                 document.body.style.overflow = 'auto';
                 this.currentDeck = null;
-                this.loadDecks();
+                document.getElementById('bg-audio').pause();
+                this.stopBinaural(true);
+                window.speechSynthesis.cancel();
             }
+
+            startColorCycle() {
+                if (this.colorTimer) clearInterval(this.colorTimer);
+                const view = document.getElementById('learning-view');
+                const updateBg = () => {
+                    const color = this.colors[this.currentColorIndex];
+                    view.style.backgroundColor = color;
+                    this.currentColorIndex = (this.currentColorIndex + 1) % this.colors.length;
+                };
+                updateBg();
+                this.colorTimer = setInterval(updateBg, 15000); 
+            }
+
+            stopColorCycle() { if (this.colorTimer) clearInterval(this.colorTimer); }
 
             updateCard() {
                 if (!this.currentDeck || !this.currentDeck.words.length) return;
                 const word = this.currentDeck.words[this.currentIndex];
-                const view = document.getElementById('learning-view');
-                
                 this.isShowingDetails = false;
-                //view.classList.remove('show-details', 'is-back');
-                //view.classList.add('is-front');
-                
-                const char = word.n || "?";
-                document.getElementById('nom-display').dataset.value = char;
-                document.getElementById('nom-display').textContent = char;
-                document.getElementById('nom-mini').dataset.value = char;
-                document.getElementById('quocngu-display').dataset.value = word.qn || "";
-                
-                const qattEl = document.getElementById('qatt-display');
-                if (word.qn) {
-                    const parts = this.parser.parse(word.qn);
-                    if (parts) {
-                        let code = parts.code;
-                        if (this.qattType === "0") code = code.replace(",", ",+");
-                        const el = document.createElement("div");
-                        this.renderer.renderText(code, el, this.qattType);
-                        qattEl.dataset.value = el.innerHTML;
-                    }
-                }
-                
+                const nomDisplay = document.getElementById('nom-display');
+                nomDisplay.textContent = word.n || "?";
                 document.getElementById('nom-layer').classList.add("layer-show");
                 document.getElementById('details-layer').classList.remove("layer-show");
             }
 
             flipInternal() {
+                if (!this.currentDeck) return;
+                const word = this.currentDeck.words[this.currentIndex];
                 this.isShowingDetails = !this.isShowingDetails;
-                const view = document.getElementById('learning-view');
-                const nom = document.getElementById("nom-layer");
-                const details = document.getElementById("details-layer");
-                
-                const nomDisplay = document.getElementById('nom-display');
-                const nomMini = document.getElementById('nom-mini');
-                const qnDisplay = document.getElementById('quocngu-display');
-                const qattDisplay = document.getElementById('qatt-display');
+                const nomLayer = document.getElementById("nom-layer");
+                const detailsLayer = document.getElementById("details-layer");
                 
                 if (this.isShowingDetails) {
-                	nomMini.textContent = nomMini.dataset.value;
-                	qnDisplay.textContent = qnDisplay.dataset.value;
-                	qattDisplay.innerHTML = qattDisplay.dataset.value;
-                	nom.classList.remove("layer-show");
-                    details.classList.add("layer-show");
-                    
+                    const nomMini = document.getElementById('nom-mini');
+                    const qnDisplay = document.getElementById('quocngu-display');
+                    const qattDisplay = document.getElementById('qatt-display');
+                    nomMini.textContent = word.n || "?";
+                    qnDisplay.textContent = word.qn || "";
+                    if (word.qn) {
+                        const parts = this.parser.parse(word.qn);
+                        if (parts) {
+                            let code = parts.code;
+                            if (this.qattType === "0") code = code.replace(",", ",+");
+                            const el = document.createElement("div");
+                            this.renderer.renderText(code, el, this.qattType);
+                            qattDisplay.innerHTML = el.innerHTML;
+							console.log(word.qn, code, this.qattType);
+                        } else { qattDisplay.innerHTML = ""; }
+                    } else { qattDisplay.innerHTML = ""; }
+                    nomLayer.classList.remove("layer-show");
+                    detailsLayer.classList.add("layer-show");
+                    if (this.isAutoSpeakEnabled) this.speakWord();
                 } else {
-                	nomDisplay.textContent = nomDisplay.dataset.value;
-                    nom.classList.add("layer-show");
-                    details.classList.remove("layer-show");
+                    nomLayer.classList.add("layer-show");
+                    detailsLayer.classList.remove("layer-show");
                 }
-            }
-
-            nextCard() {
-                if (!this.currentDeck || !this.currentDeck.words.length) return;
-                this.currentIndex = (this.currentIndex + 1) % this.currentDeck.words.length;
-                this.updateCard();
-            }
-
-            prevCard() {
-                if (!this.currentDeck || !this.currentDeck.words.length) return;
-                this.currentIndex = (this.currentIndex - 1 + this.currentDeck.words.length) % this.currentDeck.words.length;
-                this.updateCard();
-            }
-
-            toggleAutoplay() {
-                if (this.autoplayInterval) {
-                    this.stopAutoplay();
-                    this.showIndicator('bi-pause-fill');
-                } else {
-                    this.startAutoplay();
-                    this.showIndicator('bi-play-fill');
-                }
-            }
-
-            showIndicator(iconClass) {
-                const indicator = document.getElementById('autoplay-indicator');
-                indicator.innerHTML = `<i class="bi ${iconClass}"></i>`;
-                indicator.style.opacity = "1";
-                indicator.style.transform = "translate(-50%, -50%) scale(1.5)";
-                setTimeout(() => {
-                    indicator.style.opacity = "0";
-                    indicator.style.transform = "translate(-50%, -50%) scale(1)";
-                }, 800);
             }
 
             startAutoplay() {
                 if (this.autoplayInterval) return;
-                document.getElementById('autoplay-btn').innerHTML = '<i class="bi bi-pause-fill"></i>';
                 this.autoplayInterval = setInterval(() => {
-                    if (!this.isShowingDetails) this.flipInternal();
-                    else this.nextCard();
+                    if (!this.isShowingDetails) { this.flipInternal(); }
+                    else { this.currentIndex = (this.currentIndex + 1) % this.currentDeck.words.length; this.updateCard(); }
                 }, 4000);
             }
 
-            stopAutoplay() {
-                document.getElementById('autoplay-btn').innerHTML = '<i class="bi bi-play-fill"></i>';
-                if (this.autoplayInterval) {
-                    clearInterval(this.autoplayInterval);
-                    this.autoplayInterval = null;
-                }
-            }
+            stopAutoplay() { if (this.autoplayInterval) { clearInterval(this.autoplayInterval); this.autoplayInterval = null; } }
 
             toggleMusic() {
+                this.isMusicEnabled = !this.isMusicEnabled;
+                localStorage.isMusicEnabled = this.isMusicEnabled;
                 const audio = document.getElementById('bg-audio');
-                if (this.isMusicPlaying) audio.pause();
-                else audio.play().catch(() => {});
-                this.isMusicPlaying = !this.isMusicPlaying;
-                document.getElementById('music-btn').classList.toggle('opacity-100', this.isMusicPlaying);
+                this.isMusicEnabled ? audio.play().catch(() => {}) : audio.pause();
+                this.updateMusicButtonUI();
+                this.updateCreditsUI();
+            }
+
+            updateMusicButtonUI() {
+                const btn = document.getElementById('music-btn');
+                btn.innerHTML = this.isMusicEnabled ? '<i class="bi bi-pause-fill"></i>' : '<i class="bi bi-play-fill"></i>';
+                btn.classList.toggle('active', this.isMusicEnabled);
+                document.getElementById('prev-track-btn').classList.toggle('hidden', !this.isMusicEnabled);
+                document.getElementById('next-track-btn').classList.toggle('hidden', !this.isMusicEnabled);
+            }
+
+            nextMusicTrack() { this.currentPlaylistIndex = (this.currentPlaylistIndex + 1) % this.playlist.length; this.loadAndPlayTrack(); }
+            prevMusicTrack() { this.currentPlaylistIndex = (this.currentPlaylistIndex - 1 + this.playlist.length) % this.playlist.length; this.loadAndPlayTrack(); }
+
+            loadAndPlayTrack() {
+                const trackNum = this.playlist[this.currentPlaylistIndex];
+                const audio = document.getElementById('bg-audio');
+                audio.src = `https://www.soundhelix.com/examples/mp3/SoundHelix-Song-${trackNum}.mp3`;
+                audio.load();
+                if (this.isMusicEnabled) audio.play();
+                this.updateCreditsUI();
+            }
+
+            updateCreditsUI() {
+                const credits = document.getElementById('audio-credits');
+                let content = "";
+                if (this.isMusicEnabled) {
+                    const trackNum = this.playlist[this.currentPlaylistIndex];
+                    content += `<i class="bi bi-shuffle"></i> SoundHelix Song ${trackNum}`;
+                }
+                if (this.isBinauralActive) {
+                    if (content) content += " • ";
+                    content += `<span class="alpha-badge">Alpha 10Hz</span>`;
+                }
+                credits.innerHTML = content;
+                credits.classList.toggle('visible', content !== "");
+            }
+
+            toggleAutoSpeak() {
+                this.isAutoSpeakEnabled = !this.isAutoSpeakEnabled;
+                localStorage.isAutoSpeakEnabled = this.isAutoSpeakEnabled;
+                document.getElementById('speak-btn').classList.toggle('active', this.isAutoSpeakEnabled);
             }
 
             speakWord() {
-                if (!this.currentDeck || !this.currentDeck.words.length) return;
-                const utterance = new SpeechSynthesisUtterance(this.currentDeck.words[this.currentIndex].qn);
-                utterance.lang = 'vi-VN';
-                utterance.rate = 0.8;
+                const word = this.currentDeck.words[this.currentIndex];
+                const utterance = new SpeechSynthesisUtterance(word.qn);
+                utterance.lang = 'vi-VN'; utterance.rate = 0.8;
+                window.speechSynthesis.cancel();
                 window.speechSynthesis.speak(utterance);
             }
 
-            setQattType(type) {
-                this.qattType = type;
-                localStorage.qattType = type;
-                this.updateCard();
+            toggleBinaural() {
+                this.isBinauralActive = !this.isBinauralActive;
+                localStorage.isBinauralEnabled = this.isBinauralActive;
+                this.isBinauralActive ? this.startBinaural() : this.stopBinaural();
+                document.getElementById('binaural-btn').classList.toggle('active', this.isBinauralActive);
+                this.updateCreditsUI();
             }
+
+            startBinaural(forceResume = false) {
+                if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
+                this.stopBinaural(true);
+                this.oscL = this.audioCtx.createOscillator();
+                this.oscR = this.audioCtx.createOscillator();
+                const panL = this.audioCtx.createStereoPanner();
+                const panR = this.audioCtx.createStereoPanner();
+                const gain = this.audioCtx.createGain();
+                this.oscL.frequency.value = 200; this.oscR.frequency.value = 210; 
+                panL.pan.value = -1; panR.pan.value = 1; gain.gain.value = 0.05; 
+                this.oscL.connect(panL).connect(gain); this.oscR.connect(panR).connect(gain);
+                gain.connect(this.audioCtx.destination);
+                this.oscL.start(); this.oscR.start();
+            }
+
+            stopBinaural(internalOnly = false) {
+                if (this.oscL) { this.oscL.stop(); this.oscR.stop(); this.oscL = null; this.oscR = null; }
+                if (!internalOnly) this.isBinauralActive = false;
+            }
+
+            setQattType(type) { this.qattType = type; localStorage.qattType = type; this.updateCard(); }
         }
 
         const app = new SuperlearningApp();
@@ -507,6 +620,3 @@
     </script>
 </body>
 </html>
-
-
-     
