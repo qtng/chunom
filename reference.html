@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QATT - Character table</title>
+    
+    <!-- Externe Ressourcen -->
+    <script src="https://qtng.github.io/qatt-dc/js/renderer.js"></script>
+    <script src="https://qtng.github.io/qatt-dc/js/parser.js"></script>
+    
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #38bdf8;
+            --bg-card: #1e293b;
+            --strokew: 7px;
+            --tone-color: #4ade80; 
+            --onset-color: #60a5fa; /* Blau */
+            --vowel-color: #f87171; /* Rot */
+            --coda-color: #c084fc;
+            --rhyme-color: gold;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            background-color: var(--primary);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 220px; /* Platz für Inspector */
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        select {
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--accent);
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+        .reference-grid {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 40px;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        @media (min-width: 640px) {
+            .reference-grid { grid-template-columns: repeat(6, 1fr); }
+        }
+
+        @media (min-width: 1024px) {
+            .reference-grid { grid-template-columns: repeat(9, 1fr); }
+        }
+
+        .section-title {
+            grid-column: 1 / -1;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            font-weight: 800;
+            padding: 12px 15px;
+            letter-spacing: 2px;
+            border-left: 4px solid var(--accent);
+            border-radius: 4px;
+            margin-top: 20px;
+            pointer-events: none;
+        }
+
+        .section-title.title-onset {
+            background: linear-gradient(90deg, rgba(96, 165, 250, 0.15) 0%, transparent 100%);
+            border-left-color: var(--onset-color);
+            color: var(--onset-color);
+        }
+        .section-title.title-vowel {
+            background: linear-gradient(90deg, rgba(248, 113, 113, 0.15) 0%, transparent 100%);
+            border-left-color: var(--vowel-color);
+            color: var(--vowel-color);
+        }
+        .section-title.title-tone {
+            background: linear-gradient(90deg, rgba(74, 222, 128, 0.15) 0%, transparent 100%);
+            border-left-color: var(--tone-color);
+            color: var(--tone-color);
+        }
+        .section-title.title-coda {
+            background: linear-gradient(90deg, rgba(192, 132, 252, 0.15) 0%, transparent 100%);
+            border-left-color: var(--coda-color);
+            color: var(--coda-color);
+        }
+    
+        .cell-vowel tt.main-tt svg use {
+            color: var(--vowel-color)!important
+        }
+        .cell-vowel tt.main-tt svg use[href*="_"] {
+            color: white!important
+        }
+        .cell-vowel tt.main-tt svg use[href*="qt"] {
+            color: white!important
+        }
+        .cell-rhyme tt.main-tt svg use {
+            color: gold!important
+        }
+        .cell-rhyme tt.main-tt svg use[href*="_"] {
+            color: white!important
+        }
+        .cell-rhyme tt.main-tt svg use[href*="qt"] {
+            color: white!important
+        }
+
+        .cell {
+            background: var(--bg-card);
+            padding: 12px 0px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            display: flex;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        .cell:hover {
+            background: #243347;
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .cell-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            width: 100%;
+        }
+
+        .cell-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .glyph-container {
+            display: flex;
+            align-items: flex-end;
+            /* Geändert von space-between auf space-around für bessere Balance */
+            justify-content: space-around; 
+            width: 100%;
+            padding: 0px;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+
+        svg {
+            stroke: currentColor;
+            stroke-width: var(--strokew);
+            stroke-linecap: square;
+            stroke-linejoin: square;
+            fill: transparent;
+            overflow: visible !important;
+            display: inline-block;
+            max-width: 100%;
+            margin-right: -6px;
+        }
+
+        tt[data-type="2"] svg, tt[data-type="1"] svg, tt[data-type="0.0"] svg, tt[data-type="0"] svg {
+            height: 2.5em;
+            stroke-width: 6px;
+        }
+        
+        /* Schatten nur für die Hauptanzeige */
+        .main-tt use {
+            filter: drop-shadow(0 0 40px rgba(175, 175, 255, 1));
+        }
+
+        tt[data-is-alt="true"] svg {
+            xheight: 1.95em;
+            xopacity: 0.45;
+            xstroke-width: 5px;
+        }
+
+        tt { transition: transform 0.15s ease; display: inline-block; }
+        tt:hover { transform: scale(1.15); color: #fff; }
+
+        #inspector {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: #020617;
+            border-top: 2px solid var(--accent);
+            padding: 20px;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 -10px 50px rgba(0,0,0,0.8);
+            z-index: 1000;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #inspector.visible { transform: translateY(0); }
+
+        .inspector-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        #code-display {
+            flex-grow: 1;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.75rem;
+            background: #000;
+            color: #4ade80;
+            padding: 12px;
+            border-radius: 6px;
+            overflow: auto;
+            white-space: pre-wrap;
+            border: 1px solid #1e293b;
+        }
+
+        .btn-ui {
+            background: var(--accent);
+            color: #020617;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+
+        @media print {
+            body { background: white; color: black; }
+            #inspector, .btn-ui, .controls { display: none !important; }
+            .cell { border: 1px solid #ccc; background: white !important; }
+            .section-title { background: #eee !important; color: black !important; }
+            svg { stroke: black !important; }
+        }
+    </style>
+    <style id="dynamic-style-tag"></style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>QATT Reference</h1>
+            
+            <div style="display:none" class="d-none controls">
+                <label for="type-select" style="font-size: 0.85rem; color: var(--text-muted);">Darstellungs-Typ:</label>
+                <select id="type-select" onchange="handleTypeChange(this.value)">
+                    <option value="0">0</option>
+                    <option value="0.0">0.0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item"><span class="dot" style="background:var(--onset-color)"></span> Onset</div>
+                <div class="legend-item"><span class="dot" style="background:var(--vowel-color)"></span> Vowel</div>
+                <div class="legend-item"><span class="dot" style="background:var(--tone-color)"></span> Tone</div>
+                <div class="legend-item"><span class="dot" style="background:var(--coda-color)"></span> Coda</div>
+                <div class="legend-item"><span class="dot" style="background:var(--rhyme-color)"></span> Rhyme</div>
+            </div>
+            
+            <div class="legend" style="margin-top:20px; display:inline-block; width:auto; border:1px solid gray; padding:8px">
+            <div class="legend-item" style="text-align: center">
+                Left: traditional <span style="margin:0 10px">•</span> Right: simplified
+            </div>
+            </div>
+        </header>
+
+        <div id="reference-grid" class="reference-grid"></div>
+    </div>
+
+    <div id="inspector">
+        <div class="inspector-header">
+            <span style="font-size: 0.75rem; font-weight: bold; color: var(--accent); letter-spacing: 1px;" id="inspector-label">SVG SOURCE</span>
+            <div style="display:flex; gap:10px;">
+                <button class="btn-ui" onclick="copyCode()">Copy HTML</button>
+                <button class="btn-ui" style="background:#334155; color:white;" onclick="closeInspector()">Close</button>
+            </div>
+        </div>
+        <div id="code-display"></div>
+    </div>
+
+    <script>
+    	let TYPE = localStorage.getItem('qattType') || "0";
+        
+        const onsets = " b c ch d đ g gi h k kh l m n ng nh ph r s t th tr v x".split(" ");
+        const vowels = "ă â a ơ ê e i ia ô o u ua ư ưa".split(" ");
+        const tones = "an àn ản ãn án ạn át ạt".split(" ");
+        const codas = "u i n m ng t p c nh ch".split(" ");
+        const rhymes = `-n an
+ ên
+ in
+ ôn
+ ăn
+ un
+ ưn
+ ơn
+ en
+ iên
+ on
+ ân
+ uôn
+ ươn
+
+    -m
+ am
+ êm
+ im
+ ôm
+ ăm
+ um
+ ưm
+ ơm
+ em
+ iêm
+ om
+ âm
+ uôm
+ ươm
+
+    -ng/nh
+ ang
+ ênh
+ inh
+ ông
+ ăng
+ ung
+ ưng
+ anh
+ eng
+ iêng
+ ong
+ âng
+ uông
+ ương
+
+    -o/u
+ ao
+ êu
+ iu
+ ưu
+ au
+ ơu
+ âu
+ eo
+ iêu
+ ươu
+
+ -i/y
+ ai
+ ôi
+ ui
+ ưi
+ ay
+ ây
+ ơi
+ oi
+ uôi
+ ươi
+    
+ -(u/o)-
+ oan
+ uên
+ uyn
+ uăn
+ uơn
+ oen
+ uyên
+ uân
+ oam
+ uym
+ oăm
+ oem
+ uâm
+ oang
+ uênh
+ uynh
+ oăng
+ oanh
+ oeng
+ uyêng
+ uâng
+ oao
+ uêu
+ uyu
+ oau
+ oeo
+ uyêu
+ uâu
+ oai
+ oay
+ uây`.replace(/[\r\s]+/g, " ").split(" ")
+        let renderer, parser;
+        let onsetRules = [], vowelRules = [], codaRules = [], toneRules = [], rhymeRules = [];
+
+        function formatHTML(html) {
+            return html ? html.replace(/></g, '>\n<') : "";
+        }
+
+        function inspect(el, label, type) {
+            const display = document.getElementById('code-display');
+            const labelEl = document.getElementById('inspector-label');
+            
+            display.innerText = formatHTML(el.innerHTML);
+            
+            const cleanLabel = label.replace(/<[^>]*>/g, "");
+            labelEl.innerText = `SVG SOURCE: ${cleanLabel} (Type ${type})`;
+            document.getElementById('inspector').classList.add('visible');
+        }
+
+        function closeInspector() { document.getElementById('inspector').classList.remove('visible'); }
+
+        function copyCode() {
+            const text = document.getElementById('code-display').innerText;
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textarea);
+        }
+
+        function createCell(text, type) {
+            const cellId = 'c-' + Math.random().toString(36).substr(2, 5);
+            const cellDiv = document.createElement("div");
+            cellDiv.className = "cell cell-" + type;
+            cellDiv.id = cellId;
+
+            const content = document.createElement("div");
+            content.className = "cell-content";
+
+            const label = document.createElement("div");
+            label.className = "cell-label";
+            
+            let labelHtml = "";
+            let wordToParse = text;
+
+            if (type === 'onset') {
+                const onsetChar = (text === "" || text === " ") ? "ʔ" : text;
+                labelHtml = `${onsetChar}<span style="font-size: 0.9rem; font-weight: 300;">a</span>`;
+                wordToParse = (text === "" || text === " ") ? "a" : text + "a";
+            } else if (type === 'coda') {
+                const prefix = "a";
+                labelHtml = `<span style="font-size: 0.9rem; font-weight: 300;">${prefix}</span>${text}`;
+                wordToParse = prefix + text;
+            } else {
+                labelHtml = (text === "" || text === " ") ? "ʔ" : text;
+            }
+            label.innerHTML = labelHtml;
+
+            const glyphs = document.createElement("div");
+            glyphs.className = "glyph-container";
+
+            const ttMain = document.createElement("tt");
+            ttMain.className = "main-tt";
+            ttMain.setAttribute("data-type", TYPE);
+            ttMain.onclick = (e) => { e.stopPropagation(); inspect(ttMain, label.innerHTML, TYPE); };
+
+            const ttAlt = document.createElement("tt");
+            ttAlt.setAttribute("data-type", "0");
+            ttAlt.setAttribute("data-is-alt", "true");
+            ttAlt.onclick = (e) => { e.stopPropagation(); inspect(ttAlt, label.innerHTML, "0"); };
+
+            glyphs.append(ttMain, ttAlt);
+            content.append(label, glyphs);
+            cellDiv.appendChild(content);
+
+            const result = parser.parse(wordToParse);
+            
+            if (result && result.code) {
+                renderer.renderText(result.code.replace(",", TYPE == "0" ? ",+" : ","), ttMain, parseFloat(TYPE));
+                renderer.renderText(result.code.replace(",", ","), ttAlt, 1);
+                //renderer.renderText(result.code.replace(",", ","), ttAlt2, 2);
+
+                const parts = result.code.split(",");
+                
+                if (type === 'onset') {
+                    if (parts[0]) onsetRules.push({ id: cellId, selectorParts: [parts[0] + "-large", "v2-"+parts[0]+"-small"] });
+                }
+                
+                if (type === 'vowel' || type === 'rhyme') {
+                    if (parts[1]) (type === 'rhyme' ? rhymeRules : vowelRules).push({ id: cellId, selectorParts: [parts[1], parts[1] + "-large"] });
+                }
+
+                if (type === 'coda' || type === 'rhyme') {
+                    if (parts[2]) {
+                        const upper = parts[2].toUpperCase();
+                        (type === 'rhyme' ? rhymeRules : codaRules).push({ id: cellId, selectorParts: [upper, upper + "_t"] });
+                    }
+                }
+                
+                if (type === 'tone') {
+                    toneRules.push({ id: cellId, selectorParts: ["qt0", "qt1", "qt2", "qt3", "qt4", "qt5", "qt6", "qt7", "qt8"] });
+                }
+            }
+            return cellDiv;
+        }
+
+        function renderAll() {
+            const grid = document.getElementById('reference-grid');
+            grid.innerHTML = "";
+            onsetRules = [];
+            vowelRules = [];
+            codaRules = [];
+            toneRules = [];
+            rhymeRules = [];
+            initialized = false;
+
+            renderSection("Onsets", onsets, "onset");
+            renderSection("Vowels", vowels, "vowel");
+            
+            const expandedTones = [];
+            tones.forEach(t => {
+                const base = t.replace(/[nt]/g, ''); 
+                if (TYPE == "2") expandedTones.push(base);           
+                expandedTones.push(t);     
+            });
+            renderSection("Codas", codas, "coda");
+            renderSection("Tones", expandedTones, "tone");
+            renderSection("Rhymes", rhymes, "rhyme");
+        }
+
+        function renderSection(title, items, type) {
+            const grid = document.getElementById('reference-grid');
+            const header = document.createElement("div");
+            header.className = `section-title title-${type}`;
+            header.innerText = title;
+            grid.appendChild(header);
+
+            items.forEach(item => {
+                if (item !== undefined) grid.appendChild(createCell(item, type));
+            });
+        }
+
+        function handleTypeChange(val) {
+            TYPE = val;
+            localStorage.setItem('qattType', val);
+            renderAll();
+        }
+
+		let counter = 0;
+		let initialized = false;
+        setInterval(() => {
+        	counter++;
+        	if (initialized && (counter % 20)) return
+            const styleTag = document.getElementById('dynamic-style-tag');
+            let rules = `use[href^="#_t"] { stroke: var(--) !important; }\n`;
+            onsetRules.forEach(r => r.selectorParts.forEach(p => rules += `#${r.id} use[href="#${p}"] { stroke: var(--onset-color) !important; }\n`));
+            vowelRules.forEach(r => r.selectorParts.forEach(p => rules += `#${r.id} use[href="#${p}"] { stroke: var(--vowel-color) !important; }\n`));
+            codaRules.forEach(r => r.selectorParts.forEach(p => rules += `#${r.id} use[href="#${p}"] { stroke: var(--coda-color) !important; }\n`));
+            toneRules.forEach(r => r.selectorParts.forEach(p => rules += `#${r.id} use[href="#${p}"] { stroke: var(--tone-color) !important; }\n`));
+            rhymeRules.forEach(r => r.selectorParts.forEach(p => rules += `#${r.id} use[href="#${p}"] { stroke: var(--rhyme-color) !important; }\n`));
+            if (styleTag.textContent !== rules) {
+            	styleTag.textContent = rules;
+            	initialized = true;
+            }
+        }, 100);
+
+        window.onload = () => {
+            if (typeof VietnameseParser === 'undefined' || typeof SvgGlyphRenderer === 'undefined') {
+                console.error("External scripts not loaded yet.");
+                return;
+            }
+            
+            document.getElementById('type-select').value = TYPE;
+            
+            parser = new VietnameseParser();
+            renderer = new SvgGlyphRenderer({});
+            renderAll();
+        };
+    </script>
+</body>
+</html>
+
