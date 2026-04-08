@@ -29,7 +29,7 @@ class AudioManager {
             isBinauralOn: initialState.isBinauralOn === true,
             binauralType: initialState.binauralType || 'alpha',
             binauralVolume: parseVolume(initialState.binauralVolume),
-            currentTrackIdx: parseInt(initialState.currentTrackIdx) || Math.floor(Math.random() * config.playlist.length)
+            currentTrackIdx: parseInt(initialState.currentTrackIdx) || 0)
         };
 
         this.ctx = null;
