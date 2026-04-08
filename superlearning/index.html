@@ -235,7 +235,8 @@
                     isMusicOn: localStorage.getItem('musicOn') !== 'false',
                     isSpeechOn: localStorage.getItem('speechOn') !== 'false',
                     isBinauralOn: localStorage.getItem('binauralOn') !== 'false',
-                    binauralType: localStorage.getItem('binauralType') || 'alpha'
+                    binauralType: localStorage.getItem('binauralType') || 'alpha',
+                    currentTrackIdx: 0
                 };
                 
                 this.audio = new AudioManager(
