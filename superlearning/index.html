@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="https://qtng.github.io/">
+    <title>Chunom.org - Superlearning</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://chunom.org/media/css/fonts/all.css">
+    
+    <style>
+        :root {
+            --nom-font-stack: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', 'Radicals Supplement', 'pa', 'HanaMinA', 'HanaMinB', serif;
+            --ui-color: white;
+            --ui-bg-alpha: rgba(255, 255, 255, 0.15);
+            --ui-border: rgba(255, 255, 255, 0.2);
+            --ui-shadow: rgba(0, 0, 0, 0.8); 
+            --accent-start: #FF69B4;
+        }
+
+        .ui-theme-dark-bg { 
+            --ui-color: white;
+            --ui-bg-alpha: rgba(255, 255, 255, 0.15);
+            --ui-border: rgba(255, 255, 255, 0.2);
+            --ui-shadow: rgba(0, 0, 0, 0.8); 
+        }
+        .ui-theme-light-bg { 
+            --ui-color: black;
+            --ui-bg-alpha: rgba(0, 0, 0, 0.1);
+            --ui-border: rgba(0, 0, 0, 0.1);
+            --ui-shadow: transparent; 
+        }
+
+        body { background-color: #050505; color: #f8f9fa; min-height: 100vh; font-family: 'Inter', system-ui, sans-serif; overflow-x: hidden; }
+
+        /* UI Styles */
+        .deck-card-list .list-group-item {
+            background: #1e1e1e; border-color: #333; color: #eee; margin-bottom: 0.5rem;
+            border-radius: 0.75rem !important; transition: all 0.2s;
+        }
+        .deck-card-list .list-group-item:hover { background: #252525; border-color: #0d6efd; }
+        .auth-status-badge { font-size: 0.7rem; background: #1e1e1e; border: 1px solid #333; padding: 4px 12px; border-radius: 20px; color: #888; }
+
+        /* Immersive View */
+        #learning-view {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.6s ease; background-color: var(--accent-start);
+        }
+        #learning-view.active { display: flex; opacity: 1; }
+        .video-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.6) 100%); }
+        
+        #bg-video {
+            min-width: 100%; min-height: 100%; width: auto; height: auto; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); object-fit: cover; filter: brightness(0.4) saturate(0.7) contrast(1.1);
+            transition: filter 0.5s ease, opacity 1s ease; opacity: 0;
+        }
+        #bg-video.playing { opacity: 1; }
+        #bg-video.inverted { filter: invert(1) brightness(0.7) saturate(0.5); }
+
+        #color-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            mix-blend-mode: normal; opacity: 1; transition: background-color 8s ease-in-out, opacity 0.5s ease;
+            pointer-events: none; background-color: var(--accent-start);
+        }
+
+        .stage { position: relative; width: 100%; height: 60vh; display: flex; align-items: center; justify-content: center; z-index: 10; margin-top: -100px; }
+        .layer {
+            position: absolute; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: all 1s ease-in-out; color: var(--ui-color); text-shadow: 0 4px 15px var(--ui-shadow); opacity: 0;
+        }
+        .layer-show { opacity: 1 !important; transform: scale(1.4); transition: all 4s ease-in-out; }
+
+        .nom-display-large { font-family: var(--nom-font-stack); font-size: 9rem; line-height: 1; }
+        .nom-display-mini { font-family: var(--nom-font-stack); font-size: 4.5rem; margin-bottom: 1.5rem; opacity: 0.6; }
+        .qatt-container svg { height: clamp(3.5rem, 12vw, 5rem); stroke: var(--ui-color); stroke-width: 9; fill: none; filter: drop-shadow(0 4px 8px var(--ui-shadow)); }
+        .quocngu-text { font-size: 1.6em; font-weight: 300; background: var(--ui-bg-alpha); backdrop-filter: blur(8px); border: 1px solid var(--ui-border); border-radius: 100px; padding: 4px 25px; box-shadow: 0 4px 10px var(--ui-shadow); }
+
+        /* Controls */
+        .control-bar { position: absolute; bottom: 1.5rem; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; z-index: 10000; }
+        .controls-pill { background: var(--ui-bg-alpha); backdrop-filter: blur(15px); padding: 0.35rem 0.8rem; border-radius: 100px; display: flex; align-items: center; gap: 0.25rem; box-shadow: 0 8px 24px rgba(0,0,0,0.4); border: 1px solid var(--ui-border); }
+        .btn-minimal { background: none; border: none; color: var(--ui-color); padding: 0.4rem; font-size: 1.1rem; opacity: 0.5; transition: all 0.2s; }
+        .btn-minimal.active { opacity: 1 !important; }
+        .btn-minimal:hover { transform: scale(1.1); }
+
+        .audio-credits { font-size: 0.82rem; color: var(--ui-color); opacity: 0; transition: all 0.3s; text-shadow: 0 2px 4px var(--ui-shadow); display: flex; align-items: center; gap: 6px; cursor: pointer; pointer-events: none; }
+        .audio-credits.visible { opacity: 0.7; pointer-events: auto; }
+        .audio-credits:hover { opacity: 1; }
+        .alpha-badge { background: var(--ui-bg-alpha); padding: 1px 8px; border-radius: 4px; font-weight: 600; font-size: 0.7rem; color: var(--ui-color); }
+        .dropdown-menu-dark { background: rgba(15, 15, 15, 0.98); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; }
+    </style>
+</head>
+<body>
+
+    <div id="loading" class="position-fixed top-0 start-0 w-100 h-100 bg-black d-flex justify-content-center align-items-center" style="z-index:20000;">
+        <div class="spinner-border text-primary"></div>
+    </div>
+
+    <div class="container py-5 mt-5" id="deck-selection">
+        <div class="row justify-content-center text-center">
+            <div class="col-md-8">
+                <h1 class="display-4 mb-2 fw-bold">Superlearning</h1>
+                <div id="user-display" class="auth-status-badge mb-5">Initializing...</div>
+                <div class="card bg-dark border-secondary mb-5 shadow text-start">
+                    <div class="card-body p-4">
+                        <h5 class="card-title text-secondary mb-3 small text-uppercase fw-bold">Load shared deck</h5>
+                        <div class="input-group">
+                            <input value="9222f66f-6d0e-4b2d-bfdd-f31ebea71337" type="text" id="share-id-input" class="form-control bg-dark text-light border-secondary">
+                            <button class="btn btn-primary px-4" onclick="app.loadSharedDeckById()">Load</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="deck-list" class="list-group deck-card-list text-start mb-5"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="learning-view">
+        <div class="video-container"><video id="bg-video" autoplay muted loop playsinline></video></div>
+        <div id="color-overlay"></div>
+        <div class="stage">
+            <div id="nom-layer" class="layer"><div id="nom-display" class="nom-display-large"></div></div>
+            <div id="details-layer" class="layer">
+                <div id="nom-mini" class="nom-display-mini"></div>
+                <div id="qatt-display" class="qatt-container"></div>
+                <div id="quocngu-display" class="quocngu-text mt-3"></div>
+            </div>
+        </div>
+        <div class="control-bar">
+            <div class="controls-pill">
+                <button class="btn-minimal" onclick="app.exit()"><i class="bi bi-x-lg"></i></button>
+                <div class="vr mx-2 opacity-25" style="height:20px;"></div>
+                <button id="speak-toggle" class="btn-minimal" onclick="app.audio.toggleSpeech()"><i class="bi bi-volume-up"></i></button>
+                <button id="binaural-toggle" class="btn-minimal" onclick="app.audio.toggleBinaural()"><i class="bi bi-headphones"></i></button>
+                <div class="vr mx-2 opacity-25" style="height:20px;"></div>
+                <button class="btn-minimal" onclick="app.audio.prevTrack()"><i class="bi bi-chevron-left"></i></button>
+                <button id="music-toggle" class="btn-minimal" onclick="app.audio.toggleMusic()"><i class="bi bi-play-fill"></i></button>
+                <button class="btn-minimal" onclick="app.audio.nextTrack()"><i class="bi bi-chevron-right"></i></button>
+                <div class="vr mx-2 opacity-25" style="height:20px;"></div>
+                <div class="dropdown dropup">
+                    <button class="btn-minimal" data-bs-toggle="dropdown"><i class="bi bi-gear"></i></button>
+                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow" id="settings-menu"></ul>
+                </div>
+            </div>
+            <div class="credits-container mt-2"><div id="audio-credits" class="audio-credits" onclick="app.audio.nextTrack()"></div></div>
+        </div>
+    </div>
+
+    <audio id="bg-audio"></audio>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="qatt-dc/js/parser.js"></script>
+    <script src="qatt-dc/js/renderer.js"></script>
+    <script src="qatt-dc/js/supabase.js"></script>
+    
+    <script src="https://qtng.github.io/chunom/superlearning/audiomanager.js"></script>
+
+    <script>
+        /**
+         * Global App Configuration
+         */
+        const APP_CONFIG = {
+            visuals: {
+                luminous_spirit: { src: 'https://qtng.github.io/chunom/225845_tiny.mp4', theme: 'light', inv: true, label: 'Luminous Spirit' },
+                triangles: { src: 'https://qtng.github.io/chunom/36028-408417039_tiny.mp4', theme: 'dark', inv: false, label: 'Triangles' },
+                cosmic_breath: { src: 'https://qtng.github.io/chunom/225845_tiny.mp4', theme: 'dark', inv: false, label: 'Cosmic Breath' },
+                none: { src: null, theme: 'light', inv: false, label: 'No Video' }
+            },
+            binaural: {
+                alpha: { freq: 10, label: 'Alpha 10Hz' },
+                gamma: { freq: 40, label: 'Gamma 40Hz' },
+                none: { freq: 0, label: 'None' }
+            },
+            colors: ['#FF69B4', '#9B59B6', '#3498DB', '#1ABC9C', '#E67E22', '#E91E63', '#8E44AD', '#D35400'],
+            playlist: [1, 4, 5, 6, 7, 12, 13, 14, 15, 16, 17],
+            intervals: { cardSwitch: 4000, colorPulse: 15000 }
+        };
+
+        /**
+         * Minimal EventEmitter for VisualManager
+         * (AudioManager now brings its own internal version)
+         */
+        class SimpleEmitter {
+            constructor() { this.events = {}; }
+            on(evt, fn) { (this.events[evt] = this.events[evt] || []).push(fn); }
+            emit(evt, data) { (this.events[evt] || []).forEach(fn => fn(data)); }
+        }
+
+        class VisualManager extends SimpleEmitter {
+            constructor(videoEl, overlayEl, containerEl) {
+                super();
+                this.video = videoEl; this.overlay = overlayEl; this.view = containerEl;
+                this.timer = null; this.colorIdx = 0;
+                
+                this.video.onplaying = () => {
+                    this.video.classList.add('playing');
+                    this.overlay.style.mixBlendMode = 'overlay';
+                    this.overlay.style.opacity = '0.45';
+                };
+            }
+            setSource(key) {
+                const cfg = APP_CONFIG.visuals[key];
+                localStorage.setItem('videoKey', key);
+                this.video.classList.remove('playing');
+                this.overlay.style.mixBlendMode = 'normal';
+                this.overlay.style.opacity = '1';
+                if (key === 'none') { this.video.pause(); this.view.classList.add('no-video'); } 
+                else { this.view.classList.remove('no-video'); this.video.src = cfg.src; this.video.classList.toggle('inverted', cfg.inv); this.video.load(); this.video.play().catch(()=>{}); }
+                this.view.className = `active ${cfg.theme === 'dark' ? 'ui-theme-dark-bg' : 'ui-theme-light-bg'} ${key === 'none' ? 'no-video' : ''}`;
+                this.emit('update', key);
+            }
+            startCycle() {
+                if (this.timer) clearInterval(this.timer);
+                const pulse = () => {
+                    const nextColor = APP_CONFIG.colors[this.colorIdx];
+                    this.overlay.style.backgroundColor = nextColor;
+                    this.view.style.backgroundColor = nextColor;
+                    this.colorIdx = (this.colorIdx + 1) % APP_CONFIG.colors.length;
+                };
+                pulse();
+                this.timer = setInterval(pulse, APP_CONFIG.intervals.colorPulse);
+            }
+            stop() { clearInterval(this.timer); this.video.pause(); }
+        }
+
+        class SuperlearningApp {
+            constructor() {
+                this.sp = new SupabaseService(); 
+                this.parser = new VietnameseParser(); 
+                this.renderer = new SvgGlyphRenderer();
+                
+                // Initialize Audio with injected state
+                const audioState = {
+                    isMusicOn: localStorage.getItem('musicOn') !== 'false',
+                    isSpeechOn: localStorage.getItem('speechOn') !== 'false',
+                    isBinauralOn: localStorage.getItem('binauralOn') !== 'false',
+                    binauralType: localStorage.getItem('binauralType') || 'alpha'
+                };
+                
+                this.audio = new AudioManager(
+                    document.getElementById('bg-audio'), 
+                    { playlist: APP_CONFIG.playlist, binaural: APP_CONFIG.binaural }, 
+                    audioState
+                );
+                
+                this.visual = new VisualManager(
+                    document.getElementById('bg-video'), 
+                    document.getElementById('color-overlay'), 
+                    document.getElementById('learning-view')
+                );
+                
+                this.decks = []; this.currentDeck = null; this.idx = 0; 
+                this.isFlipped = false; this.loop = null;
+                this.qattType = "1"; 
+                this.currentVideoKey = localStorage.getItem('videoKey') || 'luminous_spirit';
+                
+                this.bindEvents();
+            }
+
+            bindEvents() {
+                // Listen to the AudioManager's internal events
+                this.audio.on('update', (state) => {
+                    localStorage.setItem('musicOn', state.isMusicOn);
+                    localStorage.setItem('speechOn', state.isSpeechOn);
+                    localStorage.setItem('binauralOn', state.isBinauralOn);
+                    localStorage.setItem('binauralType', state.binauralType);
+                    this.syncAudioUI(state); 
+                    this.renderSettings(); 
+                    this.updateCredits(state);
+                });
+                
+                this.visual.on('update', (key) => { 
+                    this.currentVideoKey = key; 
+                    this.renderSettings(); 
+                });
+            }
+
+            async init() {
+                await this.sp.init();
+                const user = this.sp.defaultUsername();
+                if(this.sp.user) document.getElementById('user-display').textContent = `User: ${user}`;
+                await this.loadDecks();
+                document.getElementById('loading').classList.add('d-none');
+            }
+
+            async loadDecks() {
+                this.decks = await this.sp.getDecks() || [];
+                const list = document.getElementById('deck-list');
+                if (this.decks.length === 0) { 
+                    list.innerHTML = `<div class="p-4 text-center text-secondary border border-secondary rounded-3">No decks found.</div>`; 
+                    return; 
+                }
+                list.innerHTML = this.decks.map(d => `
+                    <button class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" onclick="app.start('${d.id}')">
+                        <div><strong>${d.title}</strong><br><small class="text-secondary">${d.count} items</small></div>
+                        <i class="bi bi-play-circle-fill fs-4 text-primary opacity-50"></i>
+                    </button>`).join('');
+            }
+
+            async start(deckId) {
+                const deck = this.decks.find(d => d.id === deckId) || await this.sp.getDeck(deckId);
+                this.currentDeck = { ...deck, words: deck.words.filter(w => w.n !== ".config") };
+                this.idx = 0;
+                document.getElementById('learning-view').style.display = 'flex';
+                setTimeout(() => document.getElementById('learning-view').classList.add('active'), 50);
+                document.body.style.overflow = 'hidden';
+                
+                this.audio.init(); 
+                this.visual.startCycle(); 
+                this.visual.setSource(this.currentVideoKey);
+                this.updateCard(); 
+                this.startAutoplay();
+            }
+
+            exit() {
+                clearInterval(this.loop); this.visual.stop(); this.audio.stopBinaural();
+                document.getElementById('bg-audio').pause();
+                document.getElementById('learning-view').classList.remove('active');
+                setTimeout(() => document.getElementById('learning-view').style.display = 'none', 600);
+                document.body.style.overflow = 'auto';
+            }
+
+            syncAudioUI(state) {
+                document.getElementById('music-toggle').innerHTML = state.isMusicOn ? '<i class="bi bi-pause-fill"></i>' : '<i class="bi bi-play-fill"></i>';
+                document.getElementById('music-toggle').classList.toggle('active', state.isMusicOn);
+                document.getElementById('speak-toggle').classList.toggle('active', state.isSpeechOn);
+                document.getElementById('binaural-toggle').classList.toggle('active', state.isBinauralOn && state.binauralType !== 'none');
+            }
+
+            updateCard() {
+                const w = this.currentDeck.words[this.idx];
+                this.isFlipped = false; 
+                document.getElementById('nom-display').textContent = w.n;
+                document.getElementById('nom-layer').className = 'layer layer-show';
+                document.getElementById('details-layer').className = 'layer';
+            }
+
+            flip() {
+                this.isFlipped = !this.isFlipped;
+                const w = this.currentDeck.words[this.idx];
+                const nomL = document.getElementById('nom-layer'), detL = document.getElementById('details-layer');
+                if (this.isFlipped) {
+                    document.getElementById('nom-mini').textContent = w.n;
+                    document.getElementById('quocngu-display').textContent = w.qn;
+                    const parts = this.parser.parse(w.qn);
+                    const qContainer = document.getElementById('qatt-display');
+                    if (parts) {
+                        let code = this.qattType === "0" ? parts.code.replace(",", ",+") : parts.code;
+                        const tmp = document.createElement('div');
+                        this.renderer.renderText(code, tmp, this.qattType);
+                        qContainer.innerHTML = tmp.innerHTML;
+                    } else qContainer.innerHTML = "";
+                    nomL.className = 'layer'; detL.className = 'layer layer-show';
+                    this.audio.speak(w.qn);
+                } else { nomL.className = 'layer layer-show'; detL.className = 'layer'; }
+            }
+
+            startAutoplay() {
+                if (this.loop) clearInterval(this.loop);
+                this.loop = setInterval(() => { 
+                    if (!this.isFlipped) this.flip(); 
+                    else { this.idx = (this.idx + 1) % this.currentDeck.words.length; this.updateCard(); } 
+                }, APP_CONFIG.intervals.cardSwitch);
+            }
+
+            updateCredits(state) {
+                const el = document.getElementById('audio-credits');
+                let html = "";
+                if (state.isMusicOn) html += `<i class="bi bi-shuffle"></i> SoundHelix Song ${APP_CONFIG.playlist[state.currentTrackIdx]}`;
+                if (state.isBinauralOn && state.binauralType !== 'none') {
+                    if (html) html += " • ";
+                    html += `<span class="alpha-badge">${APP_CONFIG.binaural[state.binauralType].label}</span>`;
+                }
+                el.innerHTML = html; el.classList.toggle('visible', html !== "");
+            }
+
+            renderSettings() {
+                const menu = document.getElementById('settings-menu');
+                const createItem = (label, type, val, action) => {
+                    const active = (type === 'video' && this.currentVideoKey === val) || 
+                                 (type === 'binaural' && this.audio.state.binauralType === val) || 
+                                 (type === 'qatt' && this.qattType === val);
+                    return `<li><button class="dropdown-item ${active?'fw-bold':''}" onclick="${action}">${active?'✓ ':''}${label}</button></li>`;
+                };
+                let vItems = Object.entries(APP_CONFIG.visuals).map(([k, v]) => createItem(v.label, 'video', k, `app.visual.setSource('${k}')`)).join('');
+                let bItems = Object.entries(APP_CONFIG.binaural).map(([k, v]) => createItem(v.label, 'binaural', k, `app.audio.setBinaural('${k}')`)).join('');
+                menu.innerHTML = `<li class="dropdown-header small text-uppercase">Visuals</li>${vItems}<li class="dropdown-divider"></li><li class="dropdown-header small text-uppercase">Focus</li>${bItems}<li class="dropdown-divider"></li><li class="dropdown-header small text-uppercase">Script Style</li>${createItem('Standard', 'qatt', '0', "app.setQattType('0')")}${createItem('Simplified', 'qatt', '1', "app.setQattType('1')")}`;
+            }
+
+            setQattType(t) { this.qattType = t; if (this.isFlipped) { this.isFlipped = false; this.flip(); } this.renderSettings(); }
+            async loadSharedDeckById() { const id = document.getElementById('share-id-input').value.trim(); if (id) this.start(id); }
+        }
+
+        const app = new SuperlearningApp();
+        document.addEventListener('DOMContentLoaded', () => app.init());
+    </script>
+</body>
+</html>
