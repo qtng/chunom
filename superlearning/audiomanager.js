@@ -1,4 +1,4 @@
-//**
+/**
  * AUDIO MANAGER (Self-contained with internal EventEmitter)
  * https://qtng.github.io/chunom/superlearning/audiomanager.js
  */
