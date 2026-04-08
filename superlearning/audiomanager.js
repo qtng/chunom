@@ -1,6 +1,5 @@
 /**
- * AUDIO MANAGER (Production Grade)
- * Optimized for synthetic audio and long-running sessions.
+ * AUDIO MANAGER (Stable Routing Version)
  * https://qtng.github.io/chunom/superlearning/audiomanager.js
  */
 
@@ -15,6 +14,9 @@ class AudioManager {
         this.el = audioEl;
         this.config = config;
         this.events = new EventEmitter();
+
+        // Essential for MediaElementSource to work with external URLs
+        this.el.crossOrigin = "anonymous";
 
         const parseVolume = (v) => {
             const num = parseFloat(v);
@@ -42,16 +44,16 @@ class AudioManager {
     on(evt, fn) { this.events.on(evt, fn); }
 
     /**
-     * Initializes the Web Audio API context.
-     * Routes the audio element through a compressor to prevent distortion.
+     * Initializes the AudioContext.
+     * Routes music through a compressor to prevent long-term distortion.
      */
     init() {
         if (!this.ctx) {
             this.ctx = new (window.AudioContext || window.webkitAudioContext)();
             
-            // Compressor helps manage high-density electro music peaks
+            // DynamicsCompressor prevents clipping with dense synthetic music
             this.masterCompressor = this.ctx.createDynamicsCompressor();
-            this.masterCompressor.threshold.setValueAtTime(-12, this.ctx.currentTime);
+            this.masterCompressor.threshold.setValueAtTime(-15, this.ctx.currentTime);
             this.masterCompressor.knee.setValueAtTime(30, this.ctx.currentTime);
             this.masterCompressor.ratio.setValueAtTime(12, this.ctx.currentTime);
             this.masterCompressor.attack.setValueAtTime(0.003, this.ctx.currentTime);
@@ -59,10 +61,15 @@ class AudioManager {
             this.masterCompressor.connect(this.ctx.destination);
 
             if (!this.sourceAttached) {
+                // Connect the <audio> tag once to the Web Audio Graph
                 const source = this.ctx.createMediaElementSource(this.el);
                 source.connect(this.masterCompressor);
                 this.sourceAttached = true;
             }
+        }
+
+        if (this.ctx.state === 'suspended') {
+            this.ctx.resume();
         }
 
         this._loadTrack();
@@ -117,9 +124,6 @@ class AudioManager {
         this._loadTrack();
     }
 
-    /**
-     * TTS with a safety buffer to prevent driver-level crackling
-     */
     speak(text, lang = 'vi-VN', rate = 0.8) {
         if (!this.state.isSpeechOn) return;
         speechSynthesis.cancel();
@@ -128,7 +132,7 @@ class AudioManager {
             u.lang = lang;
             u.rate = rate;
             speechSynthesis.speak(u);
-        }, 60);
+        }, 50);
     }
 
     startBinaural() {
@@ -170,27 +174,20 @@ class AudioManager {
         }
     }
 
-    /**
-     * Flushes the audio buffer to prevent long-term distortion
-     */
     _loadTrack() {
         const trackId = this.config.playlist[this.state.currentTrackIdx];
         
+        // Soft flush
         this.el.pause();
-        this.el.src = ""; // Clear existing buffer
-        this.el.load(); 
-        
         this.el.src = `https://www.soundhelix.com/examples/mp3/SoundHelix-Song-${trackId}.mp3`;
+        this.el.load();
         
-        if (this.ctx && this.ctx.state === 'suspended') {
-            this.ctx.resume();
-        }
-
         if (this.state.isMusicOn) {
-            // Small delay to let the browser register the source change
-            setTimeout(() => {
+            // Wait for metadata to avoid 'play() interrupted by load()' errors
+            this.el.oncanplay = () => {
                 this.el.play().catch(() => {});
-            }, 100);
+                this.el.oncanplay = null;
+            };
         }
         this._notify();
     }
