@@ -179,7 +179,7 @@ class AudioManager {
         
         // Soft flush
         this.el.pause();
-        this.el.src = `https://www.soundhelix.com/examples/mp3/SoundHelix-Song-${trackId}.mp3`;
+        this.el.src = `https://qtng.github.io/chunom-assets/audio/SoundHelix-Song-${trackId}.mp3`;
         this.el.load();
         
         if (this.state.isMusicOn) {
