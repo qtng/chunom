@@ -1,5 +1,6 @@
 /**
- * AUDIO MANAGER (Stable Routing Version)
+ * AUDIO MANAGER (Selective Sync Version)
+ * Distinguishes between UI-driven pauses and System-driven pauses.
  * https://qtng.github.io/chunom/superlearning/audiomanager.js
  */
 
@@ -14,9 +15,6 @@ class AudioManager {
         this.el = audioEl;
         this.config = config;
         this.events = new EventEmitter();
-
-        // Essential for MediaElementSource to work with external URLs
-        this.el.crossOrigin = "anonymous";
 
         const parseVolume = (v) => {
             const num = parseFloat(v);
@@ -38,60 +36,89 @@ class AudioManager {
         this.masterCompressor = null; 
         this.sourceAttached = false; 
         
+        // Flag to distinguish internal UI actions from OS/System actions
+        this._isInternalChange = false;
+
+        // System event bindings
+        this.el.onplay = () => this._handleSystemPlay();
+        this.el.onpause = () => this._handleSystemPause();
         this.el.onended = () => this.nextTrack();
     }
 
     on(evt, fn) { this.events.on(evt, fn); }
 
-    /**
-     * Initializes the AudioContext.
-     * Routes music through a compressor to prevent long-term distortion.
-     */
     init() {
         if (!this.ctx) {
             this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-            
-            // DynamicsCompressor prevents clipping with dense synthetic music
             this.masterCompressor = this.ctx.createDynamicsCompressor();
-            this.masterCompressor.threshold.setValueAtTime(-15, this.ctx.currentTime);
-            this.masterCompressor.knee.setValueAtTime(30, this.ctx.currentTime);
+            this.masterCompressor.threshold.setValueAtTime(-18, this.ctx.currentTime);
+            this.masterCompressor.knee.setValueAtTime(40, this.ctx.currentTime);
             this.masterCompressor.ratio.setValueAtTime(12, this.ctx.currentTime);
             this.masterCompressor.attack.setValueAtTime(0.003, this.ctx.currentTime);
             this.masterCompressor.release.setValueAtTime(0.25, this.ctx.currentTime);
             this.masterCompressor.connect(this.ctx.destination);
 
             if (!this.sourceAttached) {
-                // Connect the <audio> tag once to the Web Audio Graph
                 const source = this.ctx.createMediaElementSource(this.el);
                 source.connect(this.masterCompressor);
                 this.sourceAttached = true;
             }
         }
-
-        if (this.ctx.state === 'suspended') {
-            this.ctx.resume();
-        }
-
+        if (this.ctx.state === 'suspended') this.ctx.resume();
         this._loadTrack();
         if (this.state.isBinauralOn) this.startBinaural();
         this._notify();
     }
 
+    _handleSystemPlay() {
+        if (this._isInternalChange) return; // Ignore internal state toggles
+        if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+        this.state.isMusicOn = true;
+        if (this.state.isBinauralOn) this.startBinaural();
+        this._notify();
+    }
+
+    _handleSystemPause() {
+        // If the pause was triggered by UI toggleMusic, we don't want to kill beats/speech
+        if (this._isInternalChange) {
+            this._isInternalChange = false; 
+            return; 
+        }
+
+        // Hard stop for everything if triggered by System (e.g. Notification Bar)
+        this.state.isMusicOn = false;
+        this.stopBinaural(false); 
+        if ('speechSynthesis' in window) speechSynthesis.cancel();
+        this._notify();
+    }
+
+    /**
+     * Toggles music. Uses a flag to tell the system handler to keep beats/speech alive.
+     */
     toggleMusic() {
         if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+        
+        this._isInternalChange = true; // Signal to the onpause/onplay handlers
         this.state.isMusicOn = !this.state.isMusicOn;
-        this.state.isMusicOn ? this.el.play().catch(() => {}) : this.el.pause();
+        
+        if (this.state.isMusicOn) {
+            this.el.play().catch(() => { this._isInternalChange = false; });
+        } else {
+            this.el.pause();
+        }
         this._notify();
     }
 
     toggleSpeech() {
         this.state.isSpeechOn = !this.state.isSpeechOn;
+        if (!this.state.isSpeechOn) speechSynthesis.cancel();
         this._notify();
     }
 
     toggleBinaural() {
         if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
         if (this.state.binauralType === 'none') return this.setBinaural('alpha');
+        
         this.state.isBinauralOn = !this.state.isBinauralOn;
         this.state.isBinauralOn ? this.startBinaural() : this.stopBinaural();
         this._notify();
@@ -125,7 +152,9 @@ class AudioManager {
     }
 
     speak(text, lang = 'vi-VN', rate = 0.8) {
+        // Speech is independent of music state, but stops if system is paused
         if (!this.state.isSpeechOn) return;
+        
         speechSynthesis.cancel();
         setTimeout(() => {
             const u = new SpeechSynthesisUtterance(text);
@@ -136,8 +165,8 @@ class AudioManager {
     }
 
     startBinaural() {
-        if (!this.ctx) return;
-        this.stopBinaural();
+        if (!this.ctx || !this.state.isBinauralOn) return;
+        this.stopBinaural(false); 
         
         const typeCfg = this.config.binaural[this.state.binauralType];
         if (!typeCfg || typeCfg.freq === 0) return;
@@ -149,7 +178,7 @@ class AudioManager {
 
         this.binauralGainNode = this.ctx.createGain();
         this.binauralGainNode.gain.value = vol * 0.15;
-        this.binauralGainNode.connect(this.masterCompressor);
+        this.masterCompressor ? this.binauralGainNode.connect(this.masterCompressor) : this.binauralGainNode.connect(this.ctx.destination);
 
         const freqs = [baseFreq - (beatFreq / 2), baseFreq + (beatFreq / 2)];
         freqs.forEach((f, i) => {
@@ -163,7 +192,8 @@ class AudioManager {
         });
     }
 
-    stopBinaural() {
+    stopBinaural(resetState = false) {
+        if (resetState) this.state.isBinauralOn = false;
         this.oscs.forEach(o => { 
             try { o.stop(); o.disconnect(); } catch(e) {} 
         });
@@ -176,14 +206,11 @@ class AudioManager {
 
     _loadTrack() {
         const trackId = this.config.playlist[this.state.currentTrackIdx];
-        
-        // Soft flush
         this.el.pause();
-        this.el.src = `https://qtng.github.io/chunom-assets/audio/SoundHelix-Song-${trackId}.mp3`;
+        this.el.src = `https://qtng.github.io/chunom/superlearning/media/music/track-${trackId}.mp3`;
         this.el.load();
         
         if (this.state.isMusicOn) {
-            // Wait for metadata to avoid 'play() interrupted by load()' errors
             this.el.oncanplay = () => {
                 this.el.play().catch(() => {});
                 this.el.oncanplay = null;
