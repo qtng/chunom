@@ -5,6 +5,7 @@
 
 /**
  * Internal Helper: EventEmitter
+ * Encapsulates the Observer pattern within this module.
  */
 class _EventEmitter {
     constructor() { 
@@ -29,24 +30,38 @@ class AudioManager {
         this.config = config;
         this.events = new _EventEmitter();
 
+        // Ensure numeric values are finite and valid
+        const parseVolume = (v) => {
+            const num = parseFloat(v);
+            return isFinite(num) ? num : 0.5;
+        };
+
         this.state = {
-            isMusicOn: initialState.isMusicOn ?? true,
-            isSpeechOn: initialState.isSpeechOn ?? true,
-            isBinauralOn: initialState.isBinauralOn ?? true,
+            isMusicOn: initialState.isMusicOn !== false, // Default true
+            isSpeechOn: initialState.isSpeechOn !== false, // Default true
+            isBinauralOn: initialState.isBinauralOn === true, // Default false/true based on preference
             binauralType: initialState.binauralType || 'alpha',
-            binauralVolume: initialState.binauralVolume ?? 0.5, // Range 0.0 to 1.0
-            currentTrackIdx: initialState.currentTrackIdx ?? Math.floor(Math.random() * config.playlist.length)
+            binauralVolume: parseVolume(initialState.binauralVolume),
+            currentTrackIdx: parseInt(initialState.currentTrackIdx) || Math.floor(Math.random() * config.playlist.length)
         };
 
         this.ctx = null;
         this.oscs = [];
-        this.binauralGainNode = null; // Reference to update volume live
+        this.binauralGainNode = null;
         
         this.el.onended = () => this.nextTrack();
     }
 
-    on(evt, fn) { this.events.on(evt, fn); }
+    /**
+     * External Interface: Register event listeners
+     */
+    on(evt, fn) { 
+        this.events.on(evt, fn); 
+    }
 
+    /**
+     * Initialize the audio system
+     */
     init() {
         this._loadTrack();
         if (this.state.isBinauralOn) this.startBinaural();
@@ -55,7 +70,11 @@ class AudioManager {
 
     toggleMusic() {
         this.state.isMusicOn = !this.state.isMusicOn;
-        this.state.isMusicOn ? this.el.play().catch(() => {}) : this.el.pause();
+        if (this.state.isMusicOn) {
+            this.el.play().catch(() => {});
+        } else {
+            this.el.pause();
+        }
         this._notify();
     }
 
@@ -82,11 +101,14 @@ class AudioManager {
      * Updates the volume of the binaural beats (0.0 to 1.0)
      */
     setBinauralVolume(val) {
-        this.state.binauralVolume = parseFloat(val);
-        // Update GainNode immediately if it exists
-        if (this.binauralGainNode) {
-            // Mapping 0.0-1.0 slider to a max perceived gain (e.g., 0.15 max)
-            this.binauralGainNode.gain.setTargetAtTime(this.state.binauralVolume * 0.15, this.ctx.currentTime, 0.05);
+        let v = parseFloat(val);
+        if (!isFinite(v)) v = 0.5;
+        this.state.binauralVolume = v;
+        
+        if (this.binauralGainNode && this.ctx) {
+            // Apply gain with a small ramp to avoid clicks
+            const targetGain = this.state.binauralVolume * 0.15;
+            this.binauralGainNode.gain.setTargetAtTime(targetGain, this.ctx.currentTime, 0.05);
         }
         this._notify();
     }
@@ -101,17 +123,33 @@ class AudioManager {
         this._loadTrack();
     }
 
+    /**
+     * Trigger text-to-speech
+     */
     speak(text, lang = 'vi-VN', rate = 0.8) {
         if (!this.state.isSpeechOn) return;
         const u = new SpeechSynthesisUtterance(text);
-        u.lang = lang; u.rate = rate;
+        u.lang = lang;
+        u.rate = rate;
         speechSynthesis.cancel();
         speechSynthesis.speak(u);
     }
 
+    // --- Internal Methods ---
+
+    /**
+     * Generate binaural frequencies using Web Audio API
+     */
     startBinaural() {
-        if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-        if (this.ctx.state === 'suspended') this.ctx.resume();
+        // Initialize AudioContext on user interaction
+        if (!this.ctx) {
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        if (this.ctx.state === 'suspended') {
+            this.ctx.resume();
+        }
+
         this.stopBinaural();
         
         const typeCfg = this.config.binaural[this.state.binauralType];
@@ -120,9 +158,12 @@ class AudioManager {
         const base = 200;
         const diff = typeCfg.freq;
         
-        // Create GainNode for volume control
+        // Ensure volume is a valid finite number before setting
+        let vol = parseFloat(this.state.binauralVolume);
+        if (!isFinite(vol)) vol = 0.5;
+
         this.binauralGainNode = this.ctx.createGain();
-        this.binauralGainNode.gain.value = this.state.binauralVolume * 0.15;
+        this.binauralGainNode.gain.value = vol * 0.15;
         this.binauralGainNode.connect(this.ctx.destination);
 
         [0, diff].forEach((d, i) => {
@@ -137,7 +178,9 @@ class AudioManager {
     }
 
     stopBinaural() {
-        this.oscs.forEach(o => { try { o.stop(); } catch(e) {} });
+        this.oscs.forEach(o => { 
+            try { o.stop(); } catch(e) {} 
+        });
         this.oscs = [];
         this.binauralGainNode = null;
     }
@@ -145,7 +188,9 @@ class AudioManager {
     _loadTrack() {
         const trackId = this.config.playlist[this.state.currentTrackIdx];
         this.el.src = `https://www.soundhelix.com/examples/mp3/SoundHelix-Song-${trackId}.mp3`;
-        if (this.state.isMusicOn) this.el.play().catch(() => {});
+        if (this.state.isMusicOn) {
+            this.el.play().catch(() => {});
+        }
         this._notify();
     }
 
