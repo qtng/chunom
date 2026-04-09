@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chunom.org - Superlearning Dashboard</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        /* Minimal custom CSS for theme and specific typography */
+        body { 
+            background-color: #050505; 
+        }
+        .text-ls-1 {
+            letter-spacing: 0.1em;
+        }
+        .border-dashed {
+            border-style: dashed !important;
+        }
+        /* Custom focus shadow for dark inputs */
+        .form-control:focus {
+            background-color: #111;
+            color: white;
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+    </style>
+</head>
+<body class="text-light">
+
+    <div class="container mt-3">
+        <div class="row justify-content-center text-center">
+            <div class="col-md-8 col-lg-6">
+                
+                <h1 class="display-4 mb-2 fw-bold">Superlearning</h1>
+                
+                <div class="mb-5">
+                    <span id="user-display" class="badge rounded-pill bg-dark border border-secondary text-secondary fw-normal px-3 py-2">
+                        Connecting...
+                    </span>
+                </div>
+                
+                <!-- Personal Decks Section -->
+                <div class="text-start mb-5">
+                    <div class="d-flex justify-content-between align-items-end border-bottom border-secondary border-opacity-25 pb-2 mb-3">
+                        <h6 class="text-secondary text-uppercase text-ls-1 mb-0">
+                            My Decks
+                        </h6>
+                        <button class="btn btn-sm btn-link text-secondary text-decoration-none p-0 border-0" 
+                                data-bs-toggle="modal" data-bs-target="#createDeckModal" title="Create New Deck">
+                            <i class="bi bi-plus-lg fs-5"></i>
+                        </button>
+                    </div>
+                    
+                    <div id="deck-list" class="list-group list-group-flush shadow-sm">
+                        <div class="d-flex align-items-center justify-content-center p-5 text-secondary">
+                            <div class="spinner-border spinner-border-sm me-3" role="status"></div>
+                            <span>Loading personal decks...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Public Decks Section -->
+                <div class="text-start mb-5">
+                    <h6 class="text-secondary text-uppercase text-ls-1 border-bottom border-secondary border-opacity-25 pb-2 mb-3">
+                        Public Decks
+                    </h6>
+                    <div id="public-deck-list" class="list-group list-group-flush shadow-sm">
+                        <div class="d-flex align-items-center justify-content-center p-5 text-secondary">
+                            <div class="spinner-border spinner-border-sm me-3" role="status"></div>
+                            <span>Loading public decks...</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Deck Modal - Static backdrop and no keyboard closing to prevent interruption -->
+    <div class="modal fade" id="createDeckModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createDeckModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-light border-secondary">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title" id="createDeckModalLabel">New Deck</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" id="closeModalBtn"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="deckTitleInput" class="form-label text-secondary small text-uppercase">Deck Title</label>
+                        <input type="text" class="form-control bg-dark text-light border-secondary" id="deckTitleInput" placeholder="e.g. Basic Verbs">
+                        <div class="invalid-feedback">Please enter a title.</div>
+                    </div>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="cancelBtn">Cancel</button>
+                    <button type="button" class="btn btn-primary px-4 d-flex align-items-center" id="submitCreateBtn">
+                        <span id="btnText">Create & Edit</span>
+                        <div id="btnSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- App specific logic -->
+    <script src="https://qtng.github.io/qatt-dc/js/navigation.js"></script>
+    <script src="https://qtng.github.io/qatt-dc/js/supabase.js"></script>
+
+    <script>
+        /**
+         * AI INSTRUCTION: 
+         * MANDATORY: This app and its comments MUST always remain in English.
+         * NEVER translate UI elements or code comments to German.
+         */
+
+        class SuperlearningDashboard {
+            constructor() {
+                this.sp = new SupabaseService();
+                this.isCreating = false;
+            }
+
+            async init() {
+                try {
+                    await this.sp.init();
+                    
+                    const user = this.sp.defaultUsername();
+                    const statusEl = document.getElementById('user-display');
+                    
+                    if (this.sp.user) {
+                        statusEl.textContent = `User: ${user}`;
+                        statusEl.classList.replace('text-secondary', 'text-light');
+                    } else {
+                        statusEl.textContent = "Status: Online";
+                    }
+
+                    this.setupEventListeners();
+                    await this.loadLists();
+                } catch (e) {
+                    console.error("Dashboard Init Error:", e);
+                    document.getElementById('user-display').textContent = "Error: Connection failed";
+                }
+            }
+
+            setupEventListeners() {
+                const modalEl = document.getElementById('createDeckModal');
+                const titleInput = document.getElementById('deckTitleInput');
+                const submitBtn = document.getElementById('submitCreateBtn');
+
+                // Focus input when modal is shown
+                modalEl.addEventListener('shown.bs.modal', () => {
+                    titleInput.focus();
+                });
+
+                // Clear input when modal is hidden
+                modalEl.addEventListener('hidden.bs.modal', () => {
+                    if (!this.isCreating) {
+                        titleInput.value = '';
+                        titleInput.classList.remove('is-invalid');
+                    }
+                });
+
+                // Handle submit on button click
+                submitBtn.addEventListener('click', () => this.handleCreateDeck());
+
+                // Handle submit on Enter key
+                titleInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !this.isCreating) this.handleCreateDeck();
+                });
+            }
+
+            async loadLists() {
+                const [personal, publicDecks] = await Promise.all([
+                    this.sp.getDecks() || [],
+                    this.sp.getPublicDecks() || []
+                ]);
+
+                this.renderList('deck-list', personal);
+                this.renderList('public-deck-list', publicDecks);
+            }
+
+            renderList(containerId, data) {
+                const el = document.getElementById(containerId);
+                if (!data || data.length === 0) {
+                    let emptyHtml = `
+                        <div class="p-4 text-center text-secondary border border-secondary border-dashed rounded-3 small">
+                            No decks found.`;
+                    
+                    if (containerId === 'deck-list') {
+                        emptyHtml += `
+                            <div class="mt-2">
+                                <button class="btn btn-sm btn-link text-primary text-decoration-none p-0" 
+                                        data-bs-toggle="modal" data-bs-target="#createDeckModal">
+                                    Create your first deck now
+                                </button>
+                            </div>`;
+                    }
+                    
+                    emptyHtml += `</div>`;
+                    el.innerHTML = emptyHtml;
+                    return;
+                }
+
+                el.innerHTML = data.map(d => `
+                    <a href="immersive.html?id=${d.id}" 
+                       class="list-group-item list-group-item-action bg-dark text-light border-secondary border-opacity-25 d-flex justify-content-between align-items-center py-3 mb-2 rounded-3">
+                        <div class="text-start">
+                            <div class="fw-bold">${d.title}</div>
+                            <small class="text-secondary">${d.count || 0} items</small>
+                        </div>
+                        <i class="bi bi-play-circle-fill fs-4 text-primary opacity-75"></i>
+                    </a>
+                `).join('');
+            }
+
+            setLoading(loading) {
+                this.isCreating = loading;
+                const btn = document.getElementById('submitCreateBtn');
+                const text = document.getElementById('btnText');
+                const spinner = document.getElementById('btnSpinner');
+                const input = document.getElementById('deckTitleInput');
+                const cancelBtn = document.getElementById('cancelBtn');
+                const closeBtn = document.getElementById('closeModalBtn');
+
+                if (loading) {
+                    btn.disabled = true;
+                    input.disabled = true;
+                    cancelBtn.classList.add('invisible');
+                    closeBtn.classList.add('invisible');
+                    text.textContent = "Creating...";
+                    spinner.classList.remove('d-none');
+                } else {
+                    btn.disabled = false;
+                    input.disabled = false;
+                    cancelBtn.classList.remove('invisible');
+                    closeBtn.classList.remove('invisible');
+                    text.textContent = "Create & Edit";
+                    spinner.classList.add('d-none');
+                }
+            }
+
+            async handleCreateDeck() {
+                if (this.isCreating) return;
+
+                const titleInput = document.getElementById('deckTitleInput');
+                const title = titleInput.value.trim();
+                
+                if (!title) {
+                    titleInput.classList.add('is-invalid');
+                    return;
+                }
+
+                titleInput.classList.remove('is-invalid');
+                this.setLoading(true);
+
+                try {
+                    const newId = crypto.randomUUID();
+                    const initialDeck = {
+                        id: newId,
+                        title: title,
+                        words: [
+                            { n: "學", qn: "học" }
+                        ]
+                    };
+
+                    await this.sp.saveDeck(initialDeck);
+                    
+                    // Small delay for visual consistency
+                    setTimeout(() => {
+                        window.location.href = `edit.html?id=${newId}`;
+                    }, 500);
+                } catch (e) {
+                    console.error("Creation Error:", e);
+                    this.setLoading(false);
+                    alert("Failed to create deck. Please check your connection.");
+                }
+            }
+        }
+
+        const dashboard = new SuperlearningDashboard();
+        window.onload = () => dashboard.init();
+    </script>
+</body>
+</html>
