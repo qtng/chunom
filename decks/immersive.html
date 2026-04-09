@@ -20,27 +20,25 @@
         :root {
             --nom-font-stack: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', 'Radicals Supplement', 'pa', 'HanaMinA', 'HanaMinB', serif;
             --ui-color: white;
-            --ui-bg-alpha: rgba(255, 255, 255, 0.15);
-            --ui-border: rgba(255, 255, 255, 0.2);
+            --ui-bg-alpha: rgba(255, 255, 255, 0.1);
+            --ui-border: rgba(255, 255, 255, 0.15);
             --ui-shadow: rgba(0, 0, 0, 0.8); 
             --accent-start: #FF69B4;
+            --active-color: #0000aa; 
+            --danger-color: #dc3545; 
         }
 
-        .ui-theme-dark-bg { --ui-color: white; --ui-bg-alpha: rgba(255, 255, 255, 0.15); --ui-border: rgba(255, 255, 255, 0.2); --ui-shadow: rgba(0, 0, 0, 0.8); }
-        .ui-theme-light-bg { --ui-color: black; --ui-bg-alpha: rgba(0, 0, 0, 0.1); --ui-border: rgba(0, 0, 0, 0.1); --ui-shadow: transparent; }
+        .ui-theme-dark-bg { --ui-color: white; --ui-bg-alpha: rgba(255, 255, 255, 0.1); --ui-border: rgba(255, 255, 255, 0.15); --ui-shadow: rgba(0, 0, 0, 0.8); }
+        .ui-theme-light-bg { --ui-color: black; --ui-bg-alpha: rgba(0, 0, 0, 0.05); --ui-border: rgba(0, 0, 0, 0.1); --ui-shadow: transparent; }
 
         body { background-color: #000; color: #f8f9fa; min-height: 100vh; font-family: 'Inter', system-ui, sans-serif; overflow: hidden; margin: 0; }
 
-        /* Navbar Auto-Hide */
-        .navbar { transition: opacity 0.8s ease, transform 0.8s ease, visibility 0.8s !important; z-index: 5000 !important; }
-        .nav-hidden { opacity: 0 !important; transform: translateY(-20px); visibility: hidden; pointer-events: none; }
-
-        /* Immersive View */
         #learning-view {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1000;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             opacity: 0; transition: opacity 1.5s ease; background-color: var(--accent-start);
             cursor: pointer;
+            outline: none !important;
         }
         #learning-view.active { opacity: 1; }
         .video-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.6) 100%); }
@@ -67,23 +65,62 @@
         }
         .layer-show { opacity: 1 !important; transform: scale(1.4); transition: all 4s ease-in-out; }
 
-        /* Typography & Fonts */
         .nom-display-large { font-family: var(--nom-font-stack); font-size: 9rem; line-height: 1; }
-        .nom-display-small { font-family: var(--nom-font-stack); }
         .nom-display-mini { font-family: var(--nom-font-stack); font-size: 4.5rem; margin-bottom: 1.5rem; opacity: 0.6; }
         
         .qatt-container svg { height: clamp(3.5rem, 12vw, 5rem); stroke: var(--ui-color); stroke-width: 9; fill: none; filter: drop-shadow(0 4px 8px var(--ui-shadow)); }
         .quocngu-text { font-size: 1.6em; font-weight: 300; background: var(--ui-bg-alpha); backdrop-filter: blur(8px); border: 1px solid var(--ui-border); border-radius: 100px; padding: 4px 25px; box-shadow: 0 4px 10px var(--ui-shadow); }
 
-        /* Controls */
+        /* Steuerung */
         .control-bar { position: absolute; bottom: 1.5rem; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; z-index: 2000; cursor: default; }
         .controls-pill { background: var(--ui-bg-alpha); backdrop-filter: blur(15px); padding: 0.35rem 0.8rem; border-radius: 100px; display: flex; align-items: center; gap: 0.25rem; box-shadow: 0 8px 24px rgba(0,0,0,0.4); border: 1px solid var(--ui-border); }
-        .btn-minimal { background: none; border: none; color: var(--ui-color); padding: 0.4rem; font-size: 1.1rem; opacity: 0.5; transition: all 0.2s; }
-        .btn-minimal.active { opacity: 1 !important; }
-        .btn-minimal:hover { transform: scale(1.1); }
-        .speak-toggle.pe-none { opacity: .2; }
+        
+        .btn-minimal { 
+            background: none; border: none; color: var(--ui-color); padding: 0.4rem; font-size: 1.1rem; 
+            opacity: 0.4; 
+            transition: opacity 0.3s ease, transform 0.3s ease, color 0.3s ease; 
+            cursor: pointer; border-radius: 50%;
+            outline: none !important;
+            box-shadow: none !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Fokusringe visuell unterdrücken */
+        .btn-minimal:focus, 
+        .btn-minimal:active, 
+        .btn-minimal:focus-visible {
+            opacity: 0.4;
+            outline: none !important;
+            box-shadow: none !important;
+        }
 
-        /* Loading & Prequel */
+        /* Sticky Hover auf Touch verhindern */
+        @media (hover: hover) {
+            .btn-minimal:hover:not(.active):not(.active-danger) {
+                opacity: 0.7;
+            }
+        }
+
+        .btn-minimal.active { 
+            opacity: 1 !important; 
+            color: var(--active-color) !important;
+            transform: scale(1.15);
+        }
+
+        .btn-minimal.active-danger {
+            opacity: 1 !important;
+            color: var(--danger-color) !important;
+            transform: scale(1.15);
+        }
+        
+        .credits-container { 
+            height: 1.4em; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin-top: 0.5rem; 
+        }
+
         #loading-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black;
             display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 6000; transition: opacity 1s ease;
@@ -91,47 +128,30 @@
         .spinner-custom { width: 3rem; height: 3rem; border: 3px solid rgba(255,255,255,0.1); border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        #deck-info { display: none; text-align: center; margin-bottom: 2rem; animation: fadeIn 0.8s ease forwards; padding: 0 20px; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
+        #deck-info { display: none; text-align: center; margin-bottom: 2rem; padding: 0 20px; }
         #deck-title { font-size: 2.2rem; font-weight: 700; color: white; margin-bottom: 0.5rem; }
         #deck-meta { font-size: 1rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 2px; }
 
         #start-button {
-            display: none;
-            background: none; border: 2px solid white; color: white;
+            display: none; background: none; border: 2px solid white; color: white;
             padding: 15px 40px; border-radius: 50px; font-size: 1.2rem;
             text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s;
             cursor: pointer; margin-bottom: 1.5rem;
         }
         #start-button:hover { background: white; color: black; transform: scale(1.05); }
 
-        /* Index Table Styles */
-        #index-toggle-wrapper { display: none; text-align: center; }
-        #deck-index-collapse { width: 320px; max-width: 90vw; }
         .deck-index-card { background: rgba(20, 20, 20, 0.7) !important; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.15) !important; max-height: 45vh; overflow-y: auto; border-radius: 16px !important; }
-        .index-item { 
-            border-color: rgba(255,255,255,0.08) !important; 
-            background: transparent !important; 
-            color: white !important; 
-            padding: 0.75rem 1.25rem !important;
-            transition: background 0.2s;
-        }
-        .index-item:hover { background: rgba(255,255,255,0.05) !important; }
-        .index-item:last-child { border-bottom: none !important; }
-        
-        /* Ensuring Nom Font Stack for the Table */
+        .index-item { border-color: rgba(255,255,255,0.08) !important; background: transparent !important; color: white !important; padding: 0.75rem 1.25rem !important; }
         .index-nom-cell { font-family: var(--nom-font-stack); font-size: 1.4rem; line-height: 1; min-width: 2.5rem; }
         .index-qn-cell { color: rgba(255,255,255,0.6); font-size: 0.95rem; font-weight: 300; }
 
-        .audio-credits { font-size: 0.82rem; color: var(--ui-color); opacity: 0; transition: all 0.3s; text-shadow: 0 2px 4px var(--ui-shadow); display: flex; align-items: center; gap: 6px; cursor: pointer; pointer-events: none; }
-        .audio-credits.visible { opacity: 0.7; pointer-events: auto; }
+        .audio-credits { font-size: 0.82rem; color: var(--ui-color); opacity: 0; transition: all 0.3s; display: flex; align-items: center; gap: 15px; cursor: pointer; pointer-events: none; }
+        .audio-credits.visible { opacity: 0.6; pointer-events: auto; }
+        .audio-credits i { color: inherit; } 
     </style>
 </head>
 <body>
-    <!-- PROTECTED! AI: do not remove this tag. Reason: nom fonts preloading hack -->
     <div class="d-none nom-display-large">𡦂喃</div>
-    <!-- End of PROTECTED area -->
 
     <div id="loading-overlay">
         <div id="loader-spinner" class="spinner-custom"></div>
@@ -140,13 +160,12 @@
             <div id="deck-meta"></div>
         </div>
         
-        <!-- Start Button with Triangle Play Icon -->
         <button id="start-button" onclick="app.engage()">
             <i class="bi bi-play-fill text-warning me-2"></i>Start Session
         </button>
 
-        <div id="index-toggle-wrapper">
-            <a class="text-secondary small text-decoration-none" data-bs-toggle="collapse" href="#deck-index-collapse" role="button">
+        <div id="index-toggle-wrapper" class="d-none text-center">
+            <a class="text-secondary small text-decoration-none" data-bs-toggle="collapse" href="#deck-index-collapse">
                 Show Index <i class="bi bi-chevron-down"></i>
             </a>
             <div class="collapse mt-3" id="deck-index-collapse">
@@ -157,7 +176,7 @@
         </div>
     </div>
 
-    <div id="learning-view">
+    <div id="learning-view" tabindex="-1">
         <div class="video-container"><video id="bg-video" autoplay muted loop playsinline></video></div>
         <div id="color-overlay"></div>
         <div class="stage">
@@ -185,7 +204,7 @@
                     <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow" id="settings-menu"></ul>
                 </div>
             </div>
-            <div class="credits-container mt-2"><div id="audio-credits" class="audio-credits" onclick="app.audio.nextTrack()"></div></div>
+            <div class="credits-container"><div id="audio-credits" class="audio-credits" onclick="app.audio.nextTrack()"></div></div>
         </div>
     </div>
 
@@ -199,11 +218,7 @@
                 cosmic_breath: { src: 'https://qtng.github.io/chunom/225845_tiny.mp4', theme: 'dark', inv: false, label: 'Cosmic Breath' },
                 none: { src: null, theme: 'light', inv: false, label: 'No Video' }
             },
-            binaural: {
-                alpha: { freq: 10, label: 'Alpha 10Hz' },
-                gamma: { freq: 40, label: 'Gamma 40Hz' },
-                none: { freq: 0, label: 'None' }
-            },
+            binaural: { alpha: { freq: 10, label: 'Alpha 10Hz' }, gamma: { freq: 40, label: 'Gamma 40Hz' }, none: { freq: 0, label: 'None' } },
             colors: ['#FF69B4', '#9B59B6', '#3498DB', '#1ABC9C', '#E67E22', '#E91E63', '#8E44AD', '#D35400'],
             playlist: [1, 4, 5, 6, 7, 12, 13, 14, 15, 16, 17],
             intervals: { cardSwitch: 4500, colorPulse: 15000, navHide: 7500 }
@@ -255,7 +270,6 @@
                 this.sp = new SupabaseService(); 
                 this.parser = new VietnameseParser(); 
                 this.renderer = new SvgGlyphRenderer();
-                
                 const audioState = {
                     isMusicOn: localStorage.getItem('musicOn') !== 'false',
                     isSpeechOn: localStorage.getItem('speechOn') !== 'false',
@@ -263,104 +277,90 @@
                     binauralType: localStorage.getItem('binauralType') || 'alpha',
                     currentTrackIdx: 0
                 };
-                
-                this.audio = new AudioManager(
-                    document.getElementById('bg-audio'), 
-                    { playlist: APP_CONFIG.playlist, binaural: APP_CONFIG.binaural }, 
-                    audioState
-                );
-                
-                this.visual = new VisualManager(
-                    document.getElementById('bg-video'), 
-                    document.getElementById('color-overlay'), 
-                    document.getElementById('learning-view')
-                );
-                
-                this.currentDeck = null; this.idx = 0; 
-                this.isFlipped = false; this.loop = null;
+                this.audio = new AudioManager(document.getElementById('bg-audio'), { playlist: APP_CONFIG.playlist, binaural: APP_CONFIG.binaural }, audioState);
+                this.visual = new VisualManager(document.getElementById('bg-video'), document.getElementById('color-overlay'), document.getElementById('learning-view'));
+                this.currentDeck = null; this.idx = 0; this.isFlipped = false; this.loop = null;
                 this.qattType = localStorage.getItem('qattType') || "1"; 
                 this.currentVideoKey = localStorage.getItem('videoKey') || 'luminous_spirit';
                 this.navTimer = null;
-                
                 this.bindEvents();
             }
 
             bindEvents() {
                 this.audio.on('update', (state) => {
-                    localStorage.setItem('musicOn', state.isMusicOn);
-                    localStorage.setItem('speechOn', state.isSpeechOn);
-                    localStorage.setItem('binauralOn', state.isBinauralOn);
-                    localStorage.setItem('binauralType', state.binauralType);
-                    this.syncAudioUI(state); 
-                    this.renderSettings(); 
-                    this.updateCredits(state);
+                    localStorage.setItem('musicOn', state.isMusicOn); localStorage.setItem('speechOn', state.isSpeechOn);
+                    localStorage.setItem('binauralOn', state.isBinauralOn); localStorage.setItem('binauralType', state.binauralType);
+                    this.syncAudioUI(state); this.renderSettings(); this.updateCredits(state);
                 });
                 this.visual.on('update', (key) => { this.currentVideoKey = key; this.renderSettings(); });
                 document.getElementById('learning-view').addEventListener('click', () => this.toggleNavbar());
+
+                // Radikaler Fokus-Abbruch und Entfokussierung
+                document.addEventListener('click', (e) => {
+                    if (e.target.closest('.btn-minimal')) {
+                        const view = document.getElementById('learning-view');
+                        requestAnimationFrame(() => {
+                            if (view) view.focus();
+                        });
+                    }
+                }, true);
             }
 
             async init() {
-                await this.sp.init();
-                const urlParams = new URLSearchParams(window.location.search);
-                const deckId = urlParams.get('id') || "9222f66f-6d0e-4b2d-bfdd-f31ebea71337";
-                const deck = await this.sp.getDeck(deckId);
-                if (deck) {
-                    this.currentDeck = { ...deck, words: deck.words.filter(w => w.n !== ".config") };
-                    
-                    document.getElementById('deck-title').textContent = this.currentDeck.title;
-                    document.getElementById('deck-meta').textContent = `${this.currentDeck.words.length} items`;
-                    
-                    const indexList = document.getElementById('deck-index-list');
-                    indexList.innerHTML = this.currentDeck.words.map(w => `
-                        <li class="list-group-item index-item d-flex justify-content-between align-items-center">
-                            <span class="index-nom-cell">${w.n}</span>
-                            <span class="index-qn-cell">${w.qn}</span>
-                        </li>
-                    `).join('');
-                    
-                    document.getElementById('loader-spinner').style.display = 'none';
-                    document.getElementById('deck-info').style.display = 'block';
-                    document.getElementById('start-button').style.display = 'block';
-                    document.getElementById('index-toggle-wrapper').style.display = 'block';
-                }
+                try {
+                    await this.sp.init();
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const deckId = urlParams.get('id') || "9222f66f-6d0e-4b2d-bfdd-f31ebea71337";
+                    const deck = await this.sp.getDeck(deckId);
+                    if (deck) {
+                        this.currentDeck = { ...deck, words: deck.words.filter(w => w.n !== ".config") };
+                        document.getElementById('deck-title').textContent = this.currentDeck.title;
+                        document.getElementById('deck-meta').textContent = `${this.currentDeck.words.length} items`;
+                        const indexList = document.getElementById('deck-index-list');
+                        indexList.innerHTML = this.currentDeck.words.map(w => `
+                            <li class="list-group-item index-item d-flex justify-content-between align-items-center">
+                                <span class="index-nom-cell">${w.n}</span>
+                                <span class="index-qn-cell">${w.qn}</span>
+                            </li>
+                        `).join('');
+                        document.getElementById('loader-spinner').style.display = 'none';
+                        document.getElementById('deck-info').style.display = 'block';
+                        document.getElementById('start-button').style.display = 'block';
+                        document.getElementById('index-toggle-wrapper').classList.remove('d-none');
+                    }
+                } catch (e) { console.error("Init fehlgeschlagen", e); }
             }
 
             engage() {
                 const loader = document.getElementById('loading-overlay');
-                loader.style.opacity = '0';
-                setTimeout(() => loader.remove(), 1000);
-
+                loader.style.opacity = '0'; setTimeout(() => loader.remove(), 1000);
                 document.getElementById('learning-view').classList.add('active');
-                this.audio.init(); 
-                this.visual.startCycle(); 
-                this.visual.setSource(this.currentVideoKey);
-                this.updateCard(); 
-                this.startAutoplay();
-                this.showNavbar();
+                this.audio.init(); this.visual.startCycle(); this.visual.setSource(this.currentVideoKey);
+                this.updateCard(); this.startAutoplay(); this.showNavbar();
             }
 
             showNavbar() {
-                const nav = document.querySelector('.navbar');
-                if (!nav) return;
-                nav.classList.remove('nav-hidden');
-                clearTimeout(this.navTimer);
+                const nav = document.querySelector('.navbar'); if (!nav) return;
+                nav.classList.remove('nav-hidden'); clearTimeout(this.navTimer);
                 this.navTimer = setTimeout(() => this.hideNavbar(), APP_CONFIG.intervals.navHide);
             }
             hideNavbar() { const nav = document.querySelector('.navbar'); if (nav) nav.classList.add('nav-hidden'); }
-            toggleNavbar() {
-                const nav = document.querySelector('.navbar');
-                if (!nav) return;
-                if (nav.classList.contains('nav-hidden')) this.showNavbar(); else this.hideNavbar();
-            }
+            toggleNavbar() { const nav = document.querySelector('.navbar'); if (!nav) return; if (nav.classList.contains('nav-hidden')) this.showNavbar(); else this.hideNavbar(); }
 
             syncAudioUI(state) {
-                const btn = document.getElementById('music-toggle');
-                if(btn) {
-                    btn.innerHTML = state.isMusicOn ? '<i class="bi bi-pause-fill"></i>' : '<i class="bi bi-play-fill"></i>';
-                    btn.classList.toggle('active', state.isMusicOn);
+                const musicBtn = document.getElementById('music-toggle');
+                if(musicBtn) {
+                    musicBtn.innerHTML = state.isMusicOn ? '<i class="bi bi-pause-fill"></i>' : '<i class="bi bi-play-fill"></i>';
+                    musicBtn.classList.toggle('active', state.isMusicOn);
                 }
-                document.getElementById('speak-toggle')?.classList.toggle('active', state.isSpeechOn);
-                document.getElementById('speak-toggle')?.classList.toggle('pe-none', !state.hasSpeechVoice);
+                const speakBtn = document.getElementById('speak-toggle');
+                if (speakBtn) {
+                    speakBtn.classList.remove('active', 'active-danger');
+                    if (state.isSpeechOn) {
+                        if (state.hasSpeechVoice === false) speakBtn.classList.add('active-danger');
+                        else speakBtn.classList.add('active');
+                    }
+                }
                 document.getElementById('binaural-toggle')?.classList.toggle('active', state.isBinauralOn && state.binauralType !== 'none');
             }
 
@@ -402,22 +402,23 @@
 
             updateCredits(state) {
                 const el = document.getElementById('audio-credits');
-                let html = "";
-                if (state.isMusicOn) html += `<i class="bi bi-shuffle"></i> Track ${APP_CONFIG.playlist[state.currentTrackIdx]}`;
-                if (state.isBinauralOn && state.binauralType !== 'none') {
-                    if (html) html += " • ";
-                    html += `<span class="alpha-badge">${APP_CONFIG.binaural[state.binauralType].label}</span>`;
+                let creditsParts = [];
+                if (state.isSpeechOn) {
+                    if (state.hasSpeechVoice === false) creditsParts.push(`<span class="badge rounded-pill bg-danger text-light fw-normal px-2">⚠️ No voice installed!</span>`);
+                    else creditsParts.push(`<i class="bi bi-chat-left-text"></i> Voice`);
                 }
-                el.innerHTML = html; el.classList.toggle('visible', html !== "");
+                if (state.isBinauralOn && state.binauralType !== 'none') {
+                    creditsParts.push(`<span class="badge rounded-pill bg-dark text-light fw-normal px-2">${APP_CONFIG.binaural[state.binauralType].label}</span>`);
+                }
+                if (state.isMusicOn) creditsParts.push(`<i class="bi bi-shuffle"></i> Track ${APP_CONFIG.playlist[state.currentTrackIdx]}`);
+                el.innerHTML = creditsParts.join(' ');
+                el.classList.toggle('visible', creditsParts.length > 0);
             }
 
             renderSettings() {
-                const menu = document.getElementById('settings-menu');
-                if(!menu) return;
+                const menu = document.getElementById('settings-menu'); if(!menu) return;
                 const createItem = (label, type, val, action) => {
-                    const active = (type === 'video' && this.currentVideoKey === val) || 
-                                 (type === 'binaural' && this.audio.state.binauralType === val) || 
-                                 (type === 'qatt' && this.qattType === val);
+                    const active = (type === 'video' && this.currentVideoKey === val) || (type === 'binaural' && this.audio.state.binauralType === val) || (type === 'qatt' && this.qattType === val);
                     return `<li><button class="dropdown-item ${active?'fw-bold':''}" onclick="${action}">${active?'✓ ':''}${label}</button></li>`;
                 };
                 let vItems = Object.entries(APP_CONFIG.visuals).map(([k, v]) => createItem(v.label, 'video', k, `app.visual.setSource('${k}')`)).join('');
@@ -426,8 +427,7 @@
             }
 
             setQattType(t) { 
-                this.qattType = t; 
-                localStorage.setItem('qattType', t);
+                this.qattType = t; localStorage.setItem('qattType', t);
                 if (this.isFlipped) { this.isFlipped = false; this.flip(); } 
                 this.renderSettings(); 
             }
