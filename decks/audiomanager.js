@@ -23,12 +23,24 @@ class AudioManager {
             return isFinite(num) ? num : 0.5;
         };
 
-        const voices = window.speechSynthesis.getVoices();
-        const viVoice = voices.find(voice => voice.lang === 'vi-VN' || voice.lang === 'vi_VN');
-        if (viVoice) this.voice = viVoice;
-        else this.voice = null;
-        if (!this.voice) console.error("no vietnamese voice found on device");
+        this.voice = null;
 
+        const findVoice = () => {
+            const voices = window.speechSynthesis.getVoices();
+            const viVoice = voices.find(v => v.lang === 'vi-VN' || v.lang === 'vi_VN');
+            if (viVoice) {
+                this.voice = viVoice;
+                this.state.hasSpeechVoice = true;
+                this._notify();
+            }
+        };
+
+        // voices are often delayed
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = findVoice;
+        }
+        findVoice(); // initial try
+        
         this.state = {
             isMusicOn: initialState.isMusicOn !== false,
             isSpeechOn: initialState.isSpeechOn !== false,
