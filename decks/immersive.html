@@ -26,26 +26,21 @@
             --accent-start: #FF69B4;
         }
 
-        .ui-theme-dark-bg { 
-            --ui-color: white;
-            --ui-bg-alpha: rgba(255, 255, 255, 0.15);
-            --ui-border: rgba(255, 255, 255, 0.2);
-            --ui-shadow: rgba(0, 0, 0, 0.8); 
-        }
-        .ui-theme-light-bg { 
-            --ui-color: black;
-            --ui-bg-alpha: rgba(0, 0, 0, 0.1);
-            --ui-border: rgba(0, 0, 0, 0.1);
-            --ui-shadow: transparent; 
-        }
+        .ui-theme-dark-bg { --ui-color: white; --ui-bg-alpha: rgba(255, 255, 255, 0.15); --ui-border: rgba(255, 255, 255, 0.2); --ui-shadow: rgba(0, 0, 0, 0.8); }
+        .ui-theme-light-bg { --ui-color: black; --ui-bg-alpha: rgba(0, 0, 0, 0.1); --ui-border: rgba(0, 0, 0, 0.1); --ui-shadow: transparent; }
 
         body { background-color: #000; color: #f8f9fa; min-height: 100vh; font-family: 'Inter', system-ui, sans-serif; overflow: hidden; margin: 0; }
+
+        /* Navbar Auto-Hide */
+        .navbar { transition: opacity 0.8s ease, transform 0.8s ease, visibility 0.8s !important; z-index: 5000 !important; }
+        .nav-hidden { opacity: 0 !important; transform: translateY(-20px); visibility: hidden; pointer-events: none; }
 
         /* Immersive View */
         #learning-view {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1000;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             opacity: 0; transition: opacity 1.5s ease; background-color: var(--accent-start);
+            cursor: pointer;
         }
         #learning-view.active { opacity: 1; }
         .video-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.6) 100%); }
@@ -72,33 +67,94 @@
         }
         .layer-show { opacity: 1 !important; transform: scale(1.4); transition: all 4s ease-in-out; }
 
+        /* Typography & Fonts */
         .nom-display-large { font-family: var(--nom-font-stack); font-size: 9rem; line-height: 1; }
+        .nom-display-small { font-family: var(--nom-font-stack); }
         .nom-display-mini { font-family: var(--nom-font-stack); font-size: 4.5rem; margin-bottom: 1.5rem; opacity: 0.6; }
+        
         .qatt-container svg { height: clamp(3.5rem, 12vw, 5rem); stroke: var(--ui-color); stroke-width: 9; fill: none; filter: drop-shadow(0 4px 8px var(--ui-shadow)); }
         .quocngu-text { font-size: 1.6em; font-weight: 300; background: var(--ui-bg-alpha); backdrop-filter: blur(8px); border: 1px solid var(--ui-border); border-radius: 100px; padding: 4px 25px; box-shadow: 0 4px 10px var(--ui-shadow); }
 
         /* Controls */
-        .control-bar { position: absolute; bottom: 1.5rem; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; z-index: 2000; }
+        .control-bar { position: absolute; bottom: 1.5rem; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; z-index: 2000; cursor: default; }
         .controls-pill { background: var(--ui-bg-alpha); backdrop-filter: blur(15px); padding: 0.35rem 0.8rem; border-radius: 100px; display: flex; align-items: center; gap: 0.25rem; box-shadow: 0 8px 24px rgba(0,0,0,0.4); border: 1px solid var(--ui-border); }
         .btn-minimal { background: none; border: none; color: var(--ui-color); padding: 0.4rem; font-size: 1.1rem; opacity: 0.5; transition: all 0.2s; }
         .btn-minimal.active { opacity: 1 !important; }
         .btn-minimal:hover { transform: scale(1.1); }
-        .speak-toggle.pe-none {opacity:.2}
+        .speak-toggle.pe-none { opacity: .2; }
 
-        .audio-credits { font-size: 0.82rem; color: var(--ui-color); opacity: 0; transition: all 0.3s; text-shadow: 0 2px 4px var(--ui-shadow); display: flex; align-items: center; gap: 6px; cursor: pointer; pointer-events: none; }
-        .audio-credits.visible { opacity: 0.7; pointer-events: auto; }
-        
+        /* Loading & Prequel */
         #loading-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black;
-            display: flex; justify-content: center; align-items: center; z-index: 3000; transition: opacity 1s ease;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 6000; transition: opacity 1s ease;
         }
         .spinner-custom { width: 3rem; height: 3rem; border: 3px solid rgba(255,255,255,0.1); border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        #deck-info { display: none; text-align: center; margin-bottom: 2rem; animation: fadeIn 0.8s ease forwards; padding: 0 20px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        #deck-title { font-size: 2.2rem; font-weight: 700; color: white; margin-bottom: 0.5rem; }
+        #deck-meta { font-size: 1rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 2px; }
+
+        #start-button {
+            display: none;
+            background: none; border: 2px solid white; color: white;
+            padding: 15px 40px; border-radius: 50px; font-size: 1.2rem;
+            text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s;
+            cursor: pointer; margin-bottom: 1.5rem;
+        }
+        #start-button:hover { background: white; color: black; transform: scale(1.05); }
+
+        /* Index Table Styles */
+        #index-toggle-wrapper { display: none; text-align: center; }
+        #deck-index-collapse { width: 320px; max-width: 90vw; }
+        .deck-index-card { background: rgba(20, 20, 20, 0.7) !important; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.15) !important; max-height: 45vh; overflow-y: auto; border-radius: 16px !important; }
+        .index-item { 
+            border-color: rgba(255,255,255,0.08) !important; 
+            background: transparent !important; 
+            color: white !important; 
+            padding: 0.75rem 1.25rem !important;
+            transition: background 0.2s;
+        }
+        .index-item:hover { background: rgba(255,255,255,0.05) !important; }
+        .index-item:last-child { border-bottom: none !important; }
+        
+        /* Ensuring Nom Font Stack for the Table */
+        .index-nom-cell { font-family: var(--nom-font-stack); font-size: 1.4rem; line-height: 1; min-width: 2.5rem; }
+        .index-qn-cell { color: rgba(255,255,255,0.6); font-size: 0.95rem; font-weight: 300; }
+
+        .audio-credits { font-size: 0.82rem; color: var(--ui-color); opacity: 0; transition: all 0.3s; text-shadow: 0 2px 4px var(--ui-shadow); display: flex; align-items: center; gap: 6px; cursor: pointer; pointer-events: none; }
+        .audio-credits.visible { opacity: 0.7; pointer-events: auto; }
     </style>
 </head>
 <body>
+    <!-- PROTECTED! AI: do not remove this tag. Reason: nom fonts preloading hack -->
+    <div class="d-none nom-display-large">𡦂喃</div>
+    <!-- End of PROTECTED area -->
+
     <div id="loading-overlay">
-        <div class="spinner-custom"></div>
+        <div id="loader-spinner" class="spinner-custom"></div>
+        <div id="deck-info">
+            <h1 id="deck-title"></h1>
+            <div id="deck-meta"></div>
+        </div>
+        
+        <!-- Start Button with Triangle Play Icon -->
+        <button id="start-button" onclick="app.engage()">
+            <i class="bi bi-play-fill text-warning me-2"></i>Start Session
+        </button>
+
+        <div id="index-toggle-wrapper">
+            <a class="text-secondary small text-decoration-none" data-bs-toggle="collapse" href="#deck-index-collapse" role="button">
+                Show Index <i class="bi bi-chevron-down"></i>
+            </a>
+            <div class="collapse mt-3" id="deck-index-collapse">
+                <div class="card deck-index-card shadow-lg">
+                    <ul class="list-group list-group-flush text-start" id="deck-index-list"></ul>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="learning-view">
@@ -112,9 +168,8 @@
                 <div id="quocngu-display" class="quocngu-text mt-3"></div>
             </div>
         </div>
-        <div class="control-bar">
+        <div class="control-bar" onclick="event.stopPropagation()">
             <div class="controls-pill">
-                <!-- Schließen Button zur index.html -->
                 <button class="btn-minimal" onclick="location.href='/chunom/decks/index.html'"><i class="bi bi-x-lg"></i></button>
                 <div class="vr mx-2 opacity-25" style="height:20px;"></div>
                 
@@ -151,7 +206,7 @@
             },
             colors: ['#FF69B4', '#9B59B6', '#3498DB', '#1ABC9C', '#E67E22', '#E91E63', '#8E44AD', '#D35400'],
             playlist: [1, 4, 5, 6, 7, 12, 13, 14, 15, 16, 17],
-            intervals: { cardSwitch: 4500, colorPulse: 15000 }
+            intervals: { cardSwitch: 4500, colorPulse: 15000, navHide: 7500 }
         };
 
         class SimpleEmitter {
@@ -225,6 +280,7 @@
                 this.isFlipped = false; this.loop = null;
                 this.qattType = localStorage.getItem('qattType') || "1"; 
                 this.currentVideoKey = localStorage.getItem('videoKey') || 'luminous_spirit';
+                this.navTimer = null;
                 
                 this.bindEvents();
             }
@@ -239,41 +295,62 @@
                     this.renderSettings(); 
                     this.updateCredits(state);
                 });
-                
-                this.visual.on('update', (key) => { 
-                    this.currentVideoKey = key; 
-                    this.renderSettings(); 
-                });
+                this.visual.on('update', (key) => { this.currentVideoKey = key; this.renderSettings(); });
+                document.getElementById('learning-view').addEventListener('click', () => this.toggleNavbar());
             }
 
             async init() {
                 await this.sp.init();
                 const urlParams = new URLSearchParams(window.location.search);
                 const deckId = urlParams.get('id') || "9222f66f-6d0e-4b2d-bfdd-f31ebea71337";
-                await this.start(deckId);
-                
+                const deck = await this.sp.getDeck(deckId);
+                if (deck) {
+                    this.currentDeck = { ...deck, words: deck.words.filter(w => w.n !== ".config") };
+                    
+                    document.getElementById('deck-title').textContent = this.currentDeck.title;
+                    document.getElementById('deck-meta').textContent = `${this.currentDeck.words.length} items`;
+                    
+                    const indexList = document.getElementById('deck-index-list');
+                    indexList.innerHTML = this.currentDeck.words.map(w => `
+                        <li class="list-group-item index-item d-flex justify-content-between align-items-center">
+                            <span class="index-nom-cell">${w.n}</span>
+                            <span class="index-qn-cell">${w.qn}</span>
+                        </li>
+                    `).join('');
+                    
+                    document.getElementById('loader-spinner').style.display = 'none';
+                    document.getElementById('deck-info').style.display = 'block';
+                    document.getElementById('start-button').style.display = 'block';
+                    document.getElementById('index-toggle-wrapper').style.display = 'block';
+                }
+            }
+
+            engage() {
                 const loader = document.getElementById('loading-overlay');
                 loader.style.opacity = '0';
                 setTimeout(() => loader.remove(), 1000);
-            }
 
-            async start(deckId) {
-                const deck = await this.sp.getDeck(deckId);
-                if (!deck) {
-                    console.error("Deck not found");
-                    return;
-                }
-                this.currentDeck = { ...deck, words: deck.words.filter(w => w.n !== ".config") };
-                this.idx = 0;
-                
-                const view = document.getElementById('learning-view');
-                view.classList.add('active');
-                
+                document.getElementById('learning-view').classList.add('active');
                 this.audio.init(); 
                 this.visual.startCycle(); 
                 this.visual.setSource(this.currentVideoKey);
                 this.updateCard(); 
                 this.startAutoplay();
+                this.showNavbar();
+            }
+
+            showNavbar() {
+                const nav = document.querySelector('.navbar');
+                if (!nav) return;
+                nav.classList.remove('nav-hidden');
+                clearTimeout(this.navTimer);
+                this.navTimer = setTimeout(() => this.hideNavbar(), APP_CONFIG.intervals.navHide);
+            }
+            hideNavbar() { const nav = document.querySelector('.navbar'); if (nav) nav.classList.add('nav-hidden'); }
+            toggleNavbar() {
+                const nav = document.querySelector('.navbar');
+                if (!nav) return;
+                if (nav.classList.contains('nav-hidden')) this.showNavbar(); else this.hideNavbar();
             }
 
             syncAudioUI(state) {
