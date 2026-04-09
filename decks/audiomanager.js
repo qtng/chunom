@@ -36,10 +36,12 @@ class AudioManager {
         };
 
         // voices are often delayed
-        if (speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = findVoice;
+        if (window.speechSynthesis) {
+            if (window.speechSynthesis.onvoiceschanged !== undefined) {
+                window.speechSynthesis.onvoiceschanged = findVoice;
+            }
+            findVoice(); // initial try
         }
-        findVoice(); // initial try
         
         this.state = {
             isMusicOn: initialState.isMusicOn !== false,
