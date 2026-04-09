@@ -83,6 +83,7 @@
         .btn-minimal { background: none; border: none; color: var(--ui-color); padding: 0.4rem; font-size: 1.1rem; opacity: 0.5; transition: all 0.2s; }
         .btn-minimal.active { opacity: 1 !important; }
         .btn-minimal:hover { transform: scale(1.1); }
+        .speak-toggle.pe-none {opacity:.2}
 
         .audio-credits { font-size: 0.82rem; color: var(--ui-color); opacity: 0; transition: all 0.3s; text-shadow: 0 2px 4px var(--ui-shadow); display: flex; align-items: center; gap: 6px; cursor: pointer; pointer-events: none; }
         .audio-credits.visible { opacity: 0.7; pointer-events: auto; }
@@ -282,7 +283,7 @@
                     btn.classList.toggle('active', state.isMusicOn);
                 }
                 document.getElementById('speak-toggle')?.classList.toggle('active', state.isSpeechOn);
-                document.getElementById('speak-toggle')?.classList.toggle('text-danger', !state.hasSpeechVoice);
+                document.getElementById('speak-toggle')?.classList.toggle('pe-none', !state.hasSpeechVoice);
                 document.getElementById('binaural-toggle')?.classList.toggle('active', state.isBinauralOn && state.binauralType !== 'none');
             }
 
