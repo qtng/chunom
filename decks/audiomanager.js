@@ -152,7 +152,7 @@ class AudioManager {
         speechSynthesis.cancel();
         setTimeout(() => {
             const u = new SpeechSynthesisUtterance(text);
-            //u.lang = lang;
+            u.lang = lang;
             u.rate = rate;
             u.voice = this.voice;
             speechSynthesis.speak(u);
