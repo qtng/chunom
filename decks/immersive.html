@@ -460,6 +460,14 @@
 
             syncAudioUI() {
                 const state = this.audio.state;
+    
+    // Save to localStorage whenever UI syncs
+    localStorage.setItem('musicOn', state.isMusicOn);
+    localStorage.setItem('speechOn', state.isSpeechOn);
+    localStorage.setItem('binauralOn', state.isBinauralOn);
+    localStorage.setItem('binauralType', state.binauralType);
+
+                
                 const musicBtn = document.getElementById('music-toggle');
                 musicBtn.innerHTML = state.isMusicOn ? '<i class="bi bi-pause-fill"></i>' : '<i class="bi bi-play-fill"></i>';
                 musicBtn.classList.toggle('active', state.isMusicOn);
