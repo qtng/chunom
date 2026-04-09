@@ -23,9 +23,16 @@ class AudioManager {
             return isFinite(num) ? num : 0.5;
         };
 
+        const voices = window.speechSynthesis.getVoices();
+        const viVoice = voices.find(voice => voice.lang === 'vi-VN' || voice.lang === 'vi_VN');
+        if (viVoice) this.voice = viVoice;
+        else this.voice = null;
+        if (!this.voice) console.error("no vietnamese voice found on device");
+
         this.state = {
             isMusicOn: initialState.isMusicOn !== false,
             isSpeechOn: initialState.isSpeechOn !== false,
+            hasSpeechVoice: this.voice?true:false,
             isBinauralOn: initialState.isBinauralOn === true,
             binauralType: initialState.binauralType || 'alpha',
             binauralVolume: parseVolume(initialState.binauralVolume),
@@ -48,6 +55,7 @@ class AudioManager {
      * Routes music through a compressor to prevent long-term distortion.
      */
     init() {
+                
         if (!this.ctx) {
             this.ctx = new (window.AudioContext || window.webkitAudioContext)();
             
@@ -126,11 +134,13 @@ class AudioManager {
 
     speak(text, lang = 'vi-VN', rate = 0.8) {
         if (!this.state.isSpeechOn) return;
+        if (!this.voice) return;
         speechSynthesis.cancel();
         setTimeout(() => {
             const u = new SpeechSynthesisUtterance(text);
-            u.lang = lang;
+            //u.lang = lang;
             u.rate = rate;
+            u.voice = this.voice;
             speechSynthesis.speak(u);
         }, 50);
     }
