@@ -589,11 +589,11 @@ function renderQatt(el) {
     el.dataset.originalCode = code;
   }
   
-  if (qattType === "0" && code.includes(",")) code = code.replace(",", ",+");
+  //if (qattType === "0" && code.includes(",")) code = code.replace(",", ",+");
   
   el.innerHTML = "";
   el.dataset.rendered = "true";
-  renderer.renderText(code, el, parseInt(qattType));
+  renderer.render(code, el, parseInt(qattType));
 }
 
 function initObserver() {
