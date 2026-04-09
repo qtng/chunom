@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chunom.org - Superlearning Dashboard</title>
+    <title>Chunom.org - Flashcards Dashboard</title>
     
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
     <style>
-        /* Minimal custom CSS for theme and specific typography */
         body { 
-            background-color: #050505; 
+            background-color: #123; 
+            font-family: system-ui, -apple-system, sans-serif;
+            background-image: radial-gradient(circle at 50% -20%, #0d2a35 0%, #050505 80%);
+            min-height: 100vh;
         }
         .text-ls-1 {
             letter-spacing: 0.1em;
@@ -20,44 +22,85 @@
         .border-dashed {
             border-style: dashed !important;
         }
-        /* Custom focus shadow for dark inputs */
         .form-control:focus {
             background-color: #111;
             color: white;
-            border-color: #0d6efd;
-            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+            border-color: #0dcaf0;
+            box-shadow: 0 0 0 0.25rem rgba(13, 202, 240, 0.25);
+        }
+        
+        /* Glassmorphism Cards */
+        .glass-item {
+            background: rgba(255, 255, 255, 0.03) !important;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-item:hover {
+            background: rgba(255, 255, 255, 0.07) !important;
+            border-color: rgba(13, 202, 240, 0.4) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+        
+        /* UX Enhancements for Edit Mode */
+        .btn-mode {
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .btn-mode:hover {
+            background-color: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.2);
+        }
+        .btn-edit-active {
+            background-color: rgba(13, 202, 240, 0.1) !important;
+            border-color: #0dcaf0 !important;
+            color: #0dcaf0 !important;
+        }
+        
+        .mode-badge {
+            font-size: 0.65rem;
+            vertical-align: middle;
+            margin-top: -2px;
+            background-color: rgba(255, 193, 7, 0.2) !important;
+            color: #ffc107 !important;
+            border: 1px solid rgba(255, 193, 7, 0.3);
         }
     </style>
 </head>
 <body class="text-light">
 
-    <div class="container mt-3">
+    <div class="container mt-5">
         <div class="row justify-content-center text-center">
             <div class="col-md-8 col-lg-6">
                 
-                <h1 class="display-4 mb-2 fw-bold">Superlearning</h1>
-                
-                <div class="mb-5">
-                    <span id="user-display" class="badge rounded-pill bg-dark border border-secondary text-secondary fw-normal px-3 py-2">
-                        Connecting...
-                    </span>
-                </div>
+                <!-- Updated Header -->
+                <h1 class="display-4 mb-5 fw-bold text-info">Flashcards</h1>
                 
                 <!-- Personal Decks Section -->
                 <div class="text-start mb-5">
                     <div class="d-flex justify-content-between align-items-end border-bottom border-secondary border-opacity-25 pb-2 mb-3">
-                        <h6 class="text-secondary text-uppercase text-ls-1 mb-0">
-                            My Decks
-                        </h6>
-                        <button class="btn btn-sm btn-link text-secondary text-decoration-none p-0 border-0" 
-                                data-bs-toggle="modal" data-bs-target="#createDeckModal" title="Create New Deck">
-                            <i class="bi bi-plus-lg fs-5"></i>
-                        </button>
+                        <div class="d-flex align-items-center gap-2">
+                            <h6 class="text-secondary text-uppercase text-ls-1 mb-0">My Decks</h6>
+                            <span id="edit-indicator" class="badge rounded-pill d-none mode-badge">EDIT MODE</span>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-mode text-secondary px-2 py-1 rounded d-flex align-items-center gap-1" 
+                                    data-bs-toggle="modal" data-bs-target="#createDeckModal" title="Add New Deck">
+                                <i class="bi bi-plus-lg"></i>
+                                <span class="small">Add</span>
+                            </button>
+                            <button id="toggle-edit-mode" class="btn btn-sm btn-mode text-secondary px-2 py-1 rounded d-flex align-items-center gap-1" 
+                                    title="Manage your decks">
+                                <i id="edit-icon" class="bi bi-pencil"></i>
+                                <span class="small">Edit</span>
+                            </button>
+                        </div>
                     </div>
                     
                     <div id="deck-list" class="list-group list-group-flush shadow-sm">
                         <div class="d-flex align-items-center justify-content-center p-5 text-secondary">
-                            <div class="spinner-border spinner-border-sm me-3" role="status"></div>
+                            <div class="spinner-border spinner-border-sm me-3 text-info" role="status"></div>
                             <span>Loading personal decks...</span>
                         </div>
                     </div>
@@ -70,7 +113,7 @@
                     </h6>
                     <div id="public-deck-list" class="list-group list-group-flush shadow-sm">
                         <div class="d-flex align-items-center justify-content-center p-5 text-secondary">
-                            <div class="spinner-border spinner-border-sm me-3" role="status"></div>
+                            <div class="spinner-border spinner-border-sm me-3 text-info" role="status"></div>
                             <span>Loading public decks...</span>
                         </div>
                     </div>
@@ -80,10 +123,10 @@
         </div>
     </div>
 
-    <!-- Create Deck Modal - Static backdrop and no keyboard closing to prevent interruption -->
+    <!-- Create Deck Modal -->
     <div class="modal fade" id="createDeckModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createDeckModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-dark text-light border-secondary">
+            <div class="modal-content bg-dark text-light border-secondary shadow-lg">
                 <div class="modal-header border-secondary">
                     <h5 class="modal-title" id="createDeckModalLabel">New Deck</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" id="closeModalBtn"></button>
@@ -97,7 +140,7 @@
                 </div>
                 <div class="modal-footer border-secondary">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="cancelBtn">Cancel</button>
-                    <button type="button" class="btn btn-primary px-4 d-flex align-items-center" id="submitCreateBtn">
+                    <button type="button" class="btn btn-info px-4 d-flex align-items-center text-dark fw-bold" id="submitCreateBtn">
                         <span id="btnText">Create & Edit</span>
                         <div id="btnSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"></div>
                     </button>
@@ -110,42 +153,30 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
-    <!-- App specific logic -->
     <script src="https://qtng.github.io/qatt-dc/js/navigation.js"></script>
     <script src="https://qtng.github.io/qatt-dc/js/supabase.js"></script>
 
     <script>
         /**
-         * AI INSTRUCTION: 
-         * MANDATORY: This app and its comments MUST always remain in English.
-         * NEVER translate UI elements or code comments to German.
+         * SuperlearningDashboard
+         * Handles the UI state for deck management and navigation.
          */
-
         class SuperlearningDashboard {
             constructor() {
                 this.sp = new SupabaseService();
                 this.isCreating = false;
+                this.editMode = false;
+                this.personalDecks = [];
+                this.publicDecks = [];
             }
 
             async init() {
                 try {
                     await this.sp.init();
-                    
-                    const user = this.sp.defaultUsername();
-                    const statusEl = document.getElementById('user-display');
-                    
-                    if (this.sp.user) {
-                        statusEl.textContent = `User: ${user}`;
-                        statusEl.classList.replace('text-secondary', 'text-light');
-                    } else {
-                        statusEl.textContent = "Status: Online";
-                    }
-
                     this.setupEventListeners();
                     await this.loadLists();
                 } catch (e) {
                     console.error("Dashboard Init Error:", e);
-                    document.getElementById('user-display').textContent = "Error: Connection failed";
                 }
             }
 
@@ -153,13 +184,12 @@
                 const modalEl = document.getElementById('createDeckModal');
                 const titleInput = document.getElementById('deckTitleInput');
                 const submitBtn = document.getElementById('submitCreateBtn');
+                const editToggle = document.getElementById('toggle-edit-mode');
+                const editIcon = document.getElementById('edit-icon');
+                const editIndicator = document.getElementById('edit-indicator');
 
-                // Focus input when modal is shown
-                modalEl.addEventListener('shown.bs.modal', () => {
-                    titleInput.focus();
-                });
+                modalEl.addEventListener('shown.bs.modal', () => titleInput.focus());
 
-                // Clear input when modal is hidden
                 modalEl.addEventListener('hidden.bs.modal', () => {
                     if (!this.isCreating) {
                         titleInput.value = '';
@@ -167,12 +197,21 @@
                     }
                 });
 
-                // Handle submit on button click
                 submitBtn.addEventListener('click', () => this.handleCreateDeck());
 
-                // Handle submit on Enter key
                 titleInput.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter' && !this.isCreating) this.handleCreateDeck();
+                });
+
+                editToggle.addEventListener('click', () => {
+                    this.editMode = !this.editMode;
+                    
+                    // Toggle visual states
+                    editToggle.classList.toggle('btn-edit-active', this.editMode);
+                    editIcon.className = this.editMode ? 'bi bi-pencil-fill' : 'bi bi-pencil';
+                    editIndicator.classList.toggle('d-none', !this.editMode);
+                    
+                    this.renderList('deck-list', this.personalDecks, true);
                 });
             }
 
@@ -182,12 +221,16 @@
                     this.sp.getPublicDecks() || []
                 ]);
 
-                this.renderList('deck-list', personal);
-                this.renderList('public-deck-list', publicDecks);
+                this.personalDecks = personal;
+                this.publicDecks = publicDecks;
+
+                this.renderList('deck-list', this.personalDecks, true);
+                this.renderList('public-deck-list', this.publicDecks, false);
             }
 
-            renderList(containerId, data) {
+            renderList(containerId, data, isPersonal) {
                 const el = document.getElementById(containerId);
+                
                 if (!data || data.length === 0) {
                     let emptyHtml = `
                         <div class="p-4 text-center text-secondary border border-secondary border-dashed rounded-3 small">
@@ -196,7 +239,7 @@
                     if (containerId === 'deck-list') {
                         emptyHtml += `
                             <div class="mt-2">
-                                <button class="btn btn-sm btn-link text-primary text-decoration-none p-0" 
+                                <button class="btn btn-sm btn-link text-info text-decoration-none p-0" 
                                         data-bs-toggle="modal" data-bs-target="#createDeckModal">
                                     Create your first deck now
                                 </button>
@@ -208,16 +251,28 @@
                     return;
                 }
 
-                el.innerHTML = data.map(d => `
-                    <a href="immersive.html?id=${d.id}" 
-                       class="list-group-item list-group-item-action bg-dark text-light border-secondary border-opacity-25 d-flex justify-content-between align-items-center py-3 mb-2 rounded-3">
-                        <div class="text-start">
-                            <div class="fw-bold">${d.title}</div>
-                            <small class="text-secondary">${d.count || 0} items</small>
-                        </div>
-                        <i class="bi bi-play-circle-fill fs-4 text-primary opacity-75"></i>
-                    </a>
-                `).join('');
+                el.innerHTML = data.map(d => {
+                    const useEditMode = isPersonal && this.editMode;
+                    const url = useEditMode ? `edit.html?id=${d.id}` : `immersive.html?id=${d.id}`;
+                    const iconClass = useEditMode ? 'bi-pencil-fill text-warning' : 'bi-play-circle-fill text-info';
+                    const label = useEditMode ? 'Edit' : 'Play';
+
+                    return `
+                        <a href="${url}" 
+                           class="list-group-item list-group-item-action glass-item text-light py-3 mb-3 rounded-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="text-start">
+                                    <div class="fw-bold">${d.title}</div>
+                                    <small class="text-secondary">${d.words ? d.words.length : 0} items</small>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <span class="small text-secondary me-2 d-none d-sm-inline">${label}</span>
+                                    <i class="bi ${iconClass} fs-4 opacity-75"></i>
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                }).join('');
             }
 
             setLoading(loading) {
@@ -270,14 +325,12 @@
 
                     await this.sp.saveDeck(initialDeck);
                     
-                    // Small delay for visual consistency
                     setTimeout(() => {
                         window.location.href = `edit.html?id=${newId}`;
                     }, 500);
                 } catch (e) {
                     console.error("Creation Error:", e);
                     this.setLoading(false);
-                    alert("Failed to create deck. Please check your connection.");
                 }
             }
         }
@@ -287,3 +340,4 @@
     </script>
 </body>
 </html>
+
