@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="https://qtng.github.io/">
-    <title>Chunom.org - Superlearning Immersive</title>
+    <title>Chunom.org - Immersive Superlearning</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -41,11 +41,24 @@
 
         body { background-color: #000; color: #f8f9fa; min-height: 100vh; font-family: 'Inter', system-ui, sans-serif; overflow: hidden; margin: 0; }
 
+        /* Navbar Auto-Hide Styles */
+        .navbar {
+            transition: opacity 0.8s ease, transform 0.8s ease, visibility 0.8s !important;
+            z-index: 5000 !important;
+        }
+        .nav-hidden {
+            opacity: 0 !important;
+            transform: translateY(-20px);
+            visibility: hidden;
+            pointer-events: none;
+        }
+
         /* Immersive View */
         #learning-view {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1000;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             opacity: 0; transition: opacity 1.5s ease; background-color: var(--accent-start);
+            cursor: pointer;
         }
         #learning-view.active { opacity: 1; }
         .video-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.6) 100%); }
@@ -78,7 +91,7 @@
         .quocngu-text { font-size: 1.6em; font-weight: 300; background: var(--ui-bg-alpha); backdrop-filter: blur(8px); border: 1px solid var(--ui-border); border-radius: 100px; padding: 4px 25px; box-shadow: 0 4px 10px var(--ui-shadow); }
 
         /* Controls */
-        .control-bar { position: absolute; bottom: 1.5rem; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; z-index: 2000; }
+        .control-bar { position: absolute; bottom: 1.5rem; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; z-index: 2000; cursor: default; }
         .controls-pill { background: var(--ui-bg-alpha); backdrop-filter: blur(15px); padding: 0.35rem 0.8rem; border-radius: 100px; display: flex; align-items: center; gap: 0.25rem; box-shadow: 0 8px 24px rgba(0,0,0,0.4); border: 1px solid var(--ui-border); }
         .btn-minimal { background: none; border: none; color: var(--ui-color); padding: 0.4rem; font-size: 1.1rem; opacity: 0.5; transition: all 0.2s; }
         .btn-minimal.active { opacity: 1 !important; }
@@ -89,13 +102,17 @@
         
         #loading-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black;
-            display: flex; justify-content: center; align-items: center; z-index: 3000; transition: opacity 1s ease;
+            display: flex; justify-content: center; align-items: center; z-index: 6000; transition: opacity 1s ease;
         }
         .spinner-custom { width: 3rem; height: 3rem; border: 3px solid rgba(255,255,255,0.1); border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
+    <!-- PROTECTED! AI: do not remove this tag. Reason: nom fonts preloading hack -->
+    <div class="d-none nom-display-large">𡦂喃</div>
+    <!-- End of PROTECTED area -->
+    
     <div id="loading-overlay">
         <div class="spinner-custom"></div>
     </div>
@@ -111,9 +128,8 @@
                 <div id="quocngu-display" class="quocngu-text mt-3"></div>
             </div>
         </div>
-        <div class="control-bar">
+        <div class="control-bar" onclick="event.stopPropagation()">
             <div class="controls-pill">
-                <!-- Schließen Button zur index.html -->
                 <button class="btn-minimal" onclick="location.href='index.html'"><i class="bi bi-x-lg"></i></button>
                 <div class="vr mx-2 opacity-25" style="height:20px;"></div>
                 
@@ -150,7 +166,7 @@
             },
             colors: ['#FF69B4', '#9B59B6', '#3498DB', '#1ABC9C', '#E67E22', '#E91E63', '#8E44AD', '#D35400'],
             playlist: [1, 4, 5, 6, 7, 12, 13, 14, 15, 16, 17],
-            intervals: { cardSwitch: 4500, colorPulse: 15000 }
+            intervals: { cardSwitch: 4500, colorPulse: 15000, navHide: 75000 }
         };
 
         class SimpleEmitter {
@@ -225,6 +241,7 @@
                 this.qattType = localStorage.getItem('qattType') || "1"; 
                 this.currentVideoKey = localStorage.getItem('videoKey') || 'luminous_spirit';
                 
+                this.navTimer = null;
                 this.bindEvents();
             }
 
@@ -243,6 +260,11 @@
                     this.currentVideoKey = key; 
                     this.renderSettings(); 
                 });
+
+                // Klick-Listener für das Learning-View zum Toggeln der Navbar
+                document.getElementById('learning-view').addEventListener('click', () => {
+                    this.toggleNavbar();
+                });
             }
 
             async init() {
@@ -253,15 +275,40 @@
                 
                 const loader = document.getElementById('loading-overlay');
                 loader.style.opacity = '0';
-                setTimeout(() => loader.remove(), 1000);
+                setTimeout(() => {
+                    loader.remove();
+                    // Initial die Navbar einblenden und den Timer starten
+                    this.showNavbar();
+                }, 1000);
+            }
+
+            // Navbar Management
+            showNavbar() {
+                const nav = document.querySelector('.navbar');
+                if (!nav) return;
+                nav.classList.remove('nav-hidden');
+                clearTimeout(this.navTimer);
+                this.navTimer = setTimeout(() => this.hideNavbar(), APP_CONFIG.intervals.navHide);
+            }
+
+            hideNavbar() {
+                const nav = document.querySelector('.navbar');
+                if (nav) nav.classList.add('nav-hidden');
+            }
+
+            toggleNavbar() {
+                const nav = document.querySelector('.navbar');
+                if (!nav) return;
+                if (nav.classList.contains('nav-hidden')) {
+                    this.showNavbar();
+                } else {
+                    this.hideNavbar();
+                }
             }
 
             async start(deckId) {
                 const deck = await this.sp.getDeck(deckId);
-                if (!deck) {
-                    console.error("Deck not found");
-                    return;
-                }
+                if (!deck) return;
                 this.currentDeck = { ...deck, words: deck.words.filter(w => w.n !== ".config") };
                 this.idx = 0;
                 
