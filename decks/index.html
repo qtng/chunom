@@ -5,116 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chunom.org - Flashcards Dashboard</title>
     
-    <!-- Bootstrap 5 -->
+    <!-- Bootstrap 5.3 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
+    <!-- Nom Fonts -->
+    <link rel="stylesheet" href="https://chunom.org/media/css/fonts/all.css">
+
     <style>
         body { 
-            background-color: #123; 
-            font-family: system-ui, -apple-system, sans-serif;
-            background-image: radial-gradient(circle at 50% -20%, #0d2a35 0%, #050505 80%);
             min-height: 100vh;
+            background-color: #000; /* Pure black background */
         }
-        .text-ls-1 {
-            letter-spacing: 0.1em;
+
+        /* Pure custom button class without any hover or focus highlights */
+        .btn-subtle {
+            all: unset;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.25rem 0.5rem;
+            cursor: pointer;
+            color: var(--bs-secondary);
+            font-size: 0.925rem;
+            font-weight: 500;
+            user-select: none;
         }
-        .border-dashed {
-            border-style: dashed !important;
+
+        /* Visual state for active Edit mode icon */
+        .edit-active-icon {
+            color: var(--bs-warning) !important;
         }
-        .form-control:focus {
-            background-color: #111;
-            color: white;
-            border-color: #0dcaf0;
-            box-shadow: 0 0 0 0.25rem rgba(13, 202, 240, 0.25);
+
+        /* Clean list items with secondary background and NO borders */
+        .list-group-item {
+            background-color: var(--bs-secondary-bg) !important;
+            border: none !important;
+            margin-bottom: 0.5rem;
         }
-        
-        /* Glassmorphism Cards */
-        .glass-item {
-            background: rgba(255, 255, 255, 0.03) !important;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        .list-group-item-action:focus {
+            background-color: var(--bs-secondary-bg);
+            box-shadow: none;
         }
-        .glass-item:hover {
-            background: rgba(255, 255, 255, 0.07) !important;
-            border-color: rgba(13, 202, 240, 0.4) !important;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+
+        /* Clean list container */
+        .list-group {
+            border: none !important;
         }
-        
-        /* UX Enhancements for Edit Mode */
-        .btn-mode {
-            transition: all 0.2s ease;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .btn-mode:hover {
-            background-color: rgba(255,255,255,0.05);
-            border-color: rgba(255,255,255,0.2);
-        }
-        .btn-edit-active {
-            background-color: rgba(13, 202, 240, 0.1) !important;
-            border-color: #0dcaf0 !important;
-            color: #0dcaf0 !important;
-        }
-        
-        .mode-badge {
-            font-size: 0.65rem;
-            vertical-align: middle;
-            margin-top: -2px;
-            background-color: rgba(255, 193, 7, 0.2) !important;
-            color: #ffc107 !important;
-            border: 1px solid rgba(255, 193, 7, 0.3);
+
+        /* Helper for section headers */
+        .section-header {
+            border: none !important;
         }
     </style>
 </head>
-<body class="text-light">
+<body class="text-light" data-bs-theme="dark">
 
-    <div class="container mt-5">
+    <div class="container py-3">
         <div class="row justify-content-center text-center">
             <div class="col-md-8 col-lg-6">
                 
-                <!-- Updated Header -->
-                <h1 class="display-4 mb-5 fw-bold text-info">Flashcards</h1>
+                <!-- Header -->
+                <h1 class="display-4 mb-5 fw-bold">Flashcards</h1>
                 
                 <!-- Personal Decks Section -->
                 <div class="text-start mb-5">
-                    <div class="d-flex justify-content-between align-items-end border-bottom border-secondary border-opacity-25 pb-2 mb-3">
+                    <div class="d-flex justify-content-between align-items-center pb-2 mb-3 section-header">
                         <div class="d-flex align-items-center gap-2">
-                            <h6 class="text-secondary text-uppercase text-ls-1 mb-0">My Decks</h6>
-                            <span id="edit-indicator" class="badge rounded-pill d-none mode-badge">EDIT MODE</span>
+                            <h6 class="text-secondary text-uppercase mb-0 small" style="letter-spacing: 0.1em;">My Decks</h6>
+                            <span id="edit-indicator" class="badge rounded-pill text-bg-warning d-none" style="font-size: 0.7em;">EDIT MODE</span>
                         </div>
                         <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-mode text-secondary px-2 py-1 rounded d-flex align-items-center gap-1" 
-                                    data-bs-toggle="modal" data-bs-target="#createDeckModal" title="Add New Deck">
+                            <button class="btn-subtle" data-bs-toggle="modal" data-bs-target="#createDeckModal">
                                 <i class="bi bi-plus-lg"></i>
-                                <span class="small">Add</span>
+                                <span>Add</span>
                             </button>
-                            <button id="toggle-edit-mode" class="btn btn-sm btn-mode text-secondary px-2 py-1 rounded d-flex align-items-center gap-1" 
-                                    title="Manage your decks">
+                            <button id="toggle-edit-mode" class="btn-subtle d-none">
                                 <i id="edit-icon" class="bi bi-pencil"></i>
-                                <span class="small">Edit</span>
+                                <span>Edit</span>
                             </button>
                         </div>
                     </div>
                     
-                    <div id="deck-list" class="list-group list-group-flush shadow-sm">
-                        <div class="d-flex align-items-center justify-content-center p-5 text-secondary">
-                            <div class="spinner-border spinner-border-sm me-3 text-info" role="status"></div>
-                            <span>Loading personal decks...</span>
+                    <div id="deck-list" class="list-group">
+                        <div class="text-center p-5 text-secondary rounded">
+                            <div class="spinner-border spinner-border-sm text-warning mb-2" role="status"></div>
+                            <div class="small">Loading personal decks...</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Public Decks Section -->
                 <div class="text-start mb-5">
-                    <h6 class="text-secondary text-uppercase text-ls-1 border-bottom border-secondary border-opacity-25 pb-2 mb-3">
+                    <h6 class="text-secondary text-uppercase pb-2 mb-3 small section-header" style="letter-spacing: 0.1em;">
                         Public Decks
                     </h6>
-                    <div id="public-deck-list" class="list-group list-group-flush shadow-sm">
-                        <div class="d-flex align-items-center justify-content-center p-5 text-secondary">
-                            <div class="spinner-border spinner-border-sm me-3 text-info" role="status"></div>
-                            <span>Loading public decks...</span>
+                    <div id="public-deck-list" class="list-group">
+                        <div class="text-center p-5 text-secondary">
+                            <div class="spinner-border spinner-border-sm text-warning mb-2" role="status"></div>
+                            <div class="small">Loading public decks...</div>
                         </div>
                     </div>
                 </div>
@@ -124,23 +114,24 @@
     </div>
 
     <!-- Create Deck Modal -->
-    <div class="modal fade" id="createDeckModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createDeckModalLabel" aria-hidden="true">
+    <div class="modal fade" id="createDeckModal" data-bs-backdrop="static" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-dark text-light border-secondary shadow-lg">
-                <div class="modal-header border-secondary">
-                    <h5 class="modal-title" id="createDeckModalLabel">New Deck</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" id="closeModalBtn"></button>
+            <div class="modal-content border-0 shadow-lg bg-dark">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">New Deck</h5>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body border-0">
                     <div class="mb-3">
                         <label for="deckTitleInput" class="form-label text-secondary small text-uppercase">Deck Title</label>
-                        <input type="text" class="form-control bg-dark text-light border-secondary" id="deckTitleInput" placeholder="e.g. Basic Verbs">
+                        <input type="text" class="form-control bg-dark border-secondary shadow-none" id="deckTitleInput" placeholder="e.g. Basic Verbs">
                         <div class="invalid-feedback">Please enter a title.</div>
                     </div>
                 </div>
-                <div class="modal-footer border-secondary">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="cancelBtn">Cancel</button>
-                    <button type="button" class="btn btn-info px-4 d-flex align-items-center text-dark fw-bold" id="submitCreateBtn">
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary border-0 shadow-none" data-bs-dismiss="modal">Cancel</button>
+                    <!-- Button changed to btn-warning -->
+                    <button type="button" class="btn btn-warning px-4 fw-bold text-dark border-0 shadow-none" id="submitCreateBtn">
                         <span id="btnText">Create & Edit</span>
                         <div id="btnSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"></div>
                     </button>
@@ -149,18 +140,12 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <script src="https://qtng.github.io/qatt-dc/js/navigation.js"></script>
     <script src="https://qtng.github.io/qatt-dc/js/supabase.js"></script>
 
     <script>
-        /**
-         * SuperlearningDashboard
-         * Handles the UI state for deck management and navigation.
-         */
         class SuperlearningDashboard {
             constructor() {
                 this.sp = new SupabaseService();
@@ -189,7 +174,6 @@
                 const editIndicator = document.getElementById('edit-indicator');
 
                 modalEl.addEventListener('shown.bs.modal', () => titleInput.focus());
-
                 modalEl.addEventListener('hidden.bs.modal', () => {
                     if (!this.isCreating) {
                         titleInput.value = '';
@@ -198,19 +182,14 @@
                 });
 
                 submitBtn.addEventListener('click', () => this.handleCreateDeck());
-
                 titleInput.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter' && !this.isCreating) this.handleCreateDeck();
                 });
 
                 editToggle.addEventListener('click', () => {
                     this.editMode = !this.editMode;
-                    
-                    // Toggle visual states
-                    editToggle.classList.toggle('btn-edit-active', this.editMode);
-                    editIcon.className = this.editMode ? 'bi bi-pencil-fill' : 'bi bi-pencil';
+                    editIcon.className = this.editMode ? 'bi bi-pencil-fill edit-active-icon' : 'bi bi-pencil';
                     editIndicator.classList.toggle('d-none', !this.editMode);
-                    
                     this.renderList('deck-list', this.personalDecks, true);
                 });
             }
@@ -220,9 +199,16 @@
                     this.sp.getDecks() || [],
                     this.sp.getPublicDecks() || []
                 ]);
-
                 this.personalDecks = personal;
                 this.publicDecks = publicDecks;
+
+                const editToggle = document.getElementById('toggle-edit-mode');
+                if (this.personalDecks.length > 0) {
+                    editToggle.classList.remove('d-none');
+                } else {
+                    editToggle.classList.add('d-none');
+                    this.editMode = false;
+                }
 
                 this.renderList('deck-list', this.personalDecks, true);
                 this.renderList('public-deck-list', this.publicDecks, false);
@@ -230,22 +216,20 @@
 
             renderList(containerId, data, isPersonal) {
                 const el = document.getElementById(containerId);
-                
                 if (!data || data.length === 0) {
                     let emptyHtml = `
-                        <div class="p-4 text-center text-secondary border border-secondary border-dashed rounded-3 small">
+                        <div class="p-4 text-center text-secondary rounded-3 small bg-body-secondary">
                             No decks found.`;
                     
                     if (containerId === 'deck-list') {
                         emptyHtml += `
                             <div class="mt-2">
-                                <button class="btn btn-sm btn-link text-info text-decoration-none p-0" 
+                                <button class="btn btn-sm btn-link text-warning text-decoration-none p-0 border-0 shadow-none" 
                                         data-bs-toggle="modal" data-bs-target="#createDeckModal">
                                     Create your first deck now
                                 </button>
                             </div>`;
                     }
-                    
                     emptyHtml += `</div>`;
                     el.innerHTML = emptyHtml;
                     return;
@@ -254,21 +238,19 @@
                 el.innerHTML = data.map(d => {
                     const useEditMode = isPersonal && this.editMode;
                     const url = useEditMode ? `edit.html?id=${d.id}` : `immersive.html?id=${d.id}`;
-                    const iconClass = useEditMode ? 'bi-pencil-fill text-warning' : 'bi-play-circle-fill text-info';
+                    // Icon and accents set to text-warning
+                    const iconClass = useEditMode ? 'bi-pencil-fill text-warning' : 'bi-play-circle-fill text-warning';
                     const label = useEditMode ? 'Edit' : 'Play';
 
                     return `
-                        <a href="${url}" 
-                           class="list-group-item list-group-item-action glass-item text-light py-3 mb-3 rounded-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="text-start">
-                                    <div class="fw-bold">${d.title}</div>
-                                    <small class="text-secondary">${d.words ? d.words.length : 0} items</small>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <span class="small text-secondary me-2 d-none d-sm-inline">${label}</span>
-                                    <i class="bi ${iconClass} fs-4 opacity-75"></i>
-                                </div>
+                        <a href="${url}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 mb-2 rounded shadow-none">
+                            <div class="text-start">
+                                <div class="fw-bold text-light">${d.title}</div>
+                                <small class="text-secondary">${d.words ? d.words.length : 0} items</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <span class="small text-secondary me-2 d-none d-sm-inline">${label}</span>
+                                <i class="bi ${iconClass} fs-4 opacity-75"></i>
                             </div>
                         </a>
                     `;
@@ -281,21 +263,15 @@
                 const text = document.getElementById('btnText');
                 const spinner = document.getElementById('btnSpinner');
                 const input = document.getElementById('deckTitleInput');
-                const cancelBtn = document.getElementById('cancelBtn');
-                const closeBtn = document.getElementById('closeModalBtn');
 
                 if (loading) {
                     btn.disabled = true;
                     input.disabled = true;
-                    cancelBtn.classList.add('invisible');
-                    closeBtn.classList.add('invisible');
                     text.textContent = "Creating...";
                     spinner.classList.remove('d-none');
                 } else {
                     btn.disabled = false;
                     input.disabled = false;
-                    cancelBtn.classList.remove('invisible');
-                    closeBtn.classList.remove('invisible');
                     text.textContent = "Create & Edit";
                     spinner.classList.add('d-none');
                 }
@@ -303,33 +279,21 @@
 
             async handleCreateDeck() {
                 if (this.isCreating) return;
-
                 const titleInput = document.getElementById('deckTitleInput');
                 const title = titleInput.value.trim();
-                
                 if (!title) {
                     titleInput.classList.add('is-invalid');
                     return;
                 }
-
                 titleInput.classList.remove('is-invalid');
                 this.setLoading(true);
 
                 try {
                     const newId = crypto.randomUUID();
-                    const initialDeck = {
-                        id: newId,
-                        title: title,
-                        words: []
-                    };
-
-                    await this.sp.saveDeck(initialDeck);
-                    
-                    setTimeout(() => {
-                        window.location.href = `edit.html?id=${newId}`;
-                    }, 500);
+                    await this.sp.saveDeck({ id: newId, title: title, words: [] });
+                    setTimeout(() => window.location.href = `edit.html?id=${newId}`, 500);
                 } catch (e) {
-                    console.error("Creation Error:", e);
+                    console.error("Creation failed:", e);
                     this.setLoading(false);
                 }
             }
@@ -340,4 +304,3 @@
     </script>
 </body>
 </html>
-
