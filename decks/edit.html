@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deck Editor</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        body { 
+            background-color: #050505; 
+            color: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        #loading-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #050505;
+            z-index: 10000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.4s ease-out;
+        }
+
+        .form-control, .form-control:focus {
+            background-color: #111;
+            color: white;
+            border-color: #333;
+        }
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+        .form-control:disabled {
+            background-color: #0a0a0a;
+            color: #666;
+            border-color: #222;
+            cursor: not-allowed;
+        }
+        .word-row { transition: all 0.2s; }
+        .word-row:hover { background-color: #111; }
+        .nom-font {
+            font-family: 'Nom Na Tong Supplement', 'pa', serif;
+            font-size: 1.2rem;
+        }
+        .letter-spacing-1 { letter-spacing: 0.1em; }
+
+        #save-status {
+            font-size: 0.75rem;
+            transition: opacity 0.3s;
+        }
+    </style>
+</head>
+<body class="text-light">
+
+    <!-- Global Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="spinner-border text-primary mb-3" role="status"></div>
+        <div class="text-secondary small text-uppercase letter-spacing-1">Loading Deck Data...</div>
+    </div>
+
+    <!-- Main Editor Content -->
+    <div id="editor-shell" class="d-none">
+        <nav class="navbar navbar-dark bg-dark border-bottom border-secondary border-opacity-25 sticky-top">
+            <div class="container">
+                <a href="index.html" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left me-1"></i> Dashboard
+                </a>
+                <div class="d-flex align-items-center">
+                    <span id="read-only-badge" class="badge bg-warning text-dark me-3 d-none">
+                        <i class="bi bi-eye me-1"></i> Read Only
+                    </span>
+                    <span id="save-status" class="text-secondary me-2 opacity-50">
+                        <i class="bi bi-check2-all me-1"></i> Ready
+                    </span>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container mt-4 mb-5">
+            <div class="row justify-content-center">
+                <div class="col-md-10 col-lg-8">
+                    
+                    <!-- Deck Title -->
+                    <div class="mb-5">
+                        <label class="form-label text-secondary small text-uppercase fw-bold">Deck Title</label>
+                        <input type="text" id="deckTitle" class="form-control form-control-lg fw-bold" placeholder="Enter deck title...">
+                    </div>
+
+                    <!-- Word List Section -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="text-secondary text-uppercase mb-0">Word Pairs</h6>
+                        <button class="btn btn-outline-primary btn-sm" id="addWordBtn">
+                            <i class="bi bi-plus-lg me-1"></i> Add Pair
+                        </button>
+                    </div>
+
+                    <div id="wordListContainer" class="mb-4">
+                        <!-- Rows injected here -->
+                    </div>
+
+                    <div class="d-grid gap-2" id="bottomActions">
+                        <button class="btn btn-dark border-secondary border-opacity-25 text-secondary py-3" id="bottomAddBtn">
+                            <i class="bi bi-plus-circle me-2"></i> Add another word pair
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://qtng.github.io/qatt-dc/js/navigation.js"></script>
+    <script src="https://qtng.github.io/qatt-dc/js/parser.js"></script>
+    <script src="https://qtng.github.io/qatt-dc/js/renderer.js"></script>
+    <script src="https://qtng.github.io/qatt-dc/js/supabase.js"></script>
+
+    <script>
+        /**
+         * AI INSTRUCTION: 
+         * MANDATORY: This app and its comments MUST always remain in English.
+         * NEVER translate UI elements or code comments to German.
+         */
+
+        class SuperlearningEditor {
+            constructor() {
+                this.sp = new SupabaseService();
+                this.deckId = new URLSearchParams(window.location.search).get('id');
+                this.deckData = null;
+                this.isReadOnly = false;
+                this.saveTimeout = null;
+                
+                if (!this.deckId) {
+                    window.location.href = 'index.html';
+                }
+            }
+
+            async init() {
+                try {
+                    await this.sp.init();
+                    const data = await this.sp.getDeck(this.deckId);
+                    
+                    if (!data) {
+                        window.location.href = 'index.html';
+                        return;
+                    }
+
+                    this.deckData = data;
+                    
+                    // Check ownership
+                    // If supabase.js provides user info, compare UID.
+                    // Fallback to Read-Only if not the creator.
+                    if (this.sp.user && this.deckData.user_id && this.sp.user.id !== this.deckData.user_id) {
+                        this.isReadOnly = true;
+                    }
+
+                    this.renderEditor();
+                    if (!this.isReadOnly) {
+                        this.setupEventListeners();
+                    } else {
+                        this.applyReadOnlyState();
+                    }
+                    this.showEditor();
+                } catch (e) {
+                    console.error("Editor Init Error:", e);
+                    window.location.href = 'index.html';
+                }
+            }
+
+            showEditor() {
+                const overlay = document.getElementById('loading-overlay');
+                const shell = document.getElementById('editor-shell');
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.remove();
+                    shell.classList.remove('d-none');
+                }, 400);
+            }
+
+            applyReadOnlyState() {
+                document.getElementById('read-only-badge').classList.remove('d-none');
+                document.getElementById('save-status').classList.add('d-none');
+                document.getElementById('deckTitle').disabled = true;
+                document.getElementById('addWordBtn').classList.add('d-none');
+                document.getElementById('bottomActions').classList.add('d-none');
+                
+                // Disable all inputs in rows
+                document.querySelectorAll('.word-row input').forEach(input => input.disabled = true);
+                document.querySelectorAll('.remove-row-btn').forEach(btn => btn.classList.add('d-none'));
+            }
+
+            renderEditor() {
+                document.getElementById('deckTitle').value = this.deckData.title || "Untitled Deck";
+                const container = document.getElementById('wordListContainer');
+                container.innerHTML = "";
+
+                if (this.deckData.words && this.deckData.words.length > 0) {
+                    this.deckData.words.forEach(word => {
+                        if (word.n === ".config") return;
+                        this.createWordRow(word.n, word.qn);
+                    });
+                }
+                
+                if (container.children.length === 0 && !this.isReadOnly) {
+                    this.createWordRow("", "");
+                }
+            }
+
+            createWordRow(nom = "", qn = "") {
+                const container = document.getElementById('wordListContainer');
+                const row = document.createElement('div');
+                row.className = "row g-2 mb-2 p-2 border border-secondary border-opacity-10 rounded-3 word-row align-items-center";
+                
+                const disabledAttr = this.isReadOnly ? 'disabled' : '';
+                const removeBtnHidden = this.isReadOnly ? 'd-none' : '';
+
+                row.innerHTML = `
+                    <div class="col-5">
+                        <input type="text" ${disabledAttr} class="form-control nom-input nom-font" placeholder="Nom" value="${nom}">
+                    </div>
+                    <div class="col-5">
+                        <input type="text" ${disabledAttr} class="form-control qn-input" placeholder="Quốc Ngữ" value="${qn}">
+                    </div>
+                    <div class="col-2 text-end">
+                        <button class="btn btn-outline-danger border-0 remove-row-btn ${removeBtnHidden}" title="Remove">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                `;
+
+                if (!this.isReadOnly) {
+                    row.querySelector('.remove-row-btn').addEventListener('click', () => {
+                        row.remove();
+                        this.triggerAutoSave();
+                    });
+                    
+                    // Trigger save on change
+                    row.querySelectorAll('input').forEach(input => {
+                        input.addEventListener('input', () => this.triggerAutoSave());
+                    });
+                }
+
+                container.appendChild(row);
+            }
+
+            setupEventListeners() {
+                document.getElementById('addWordBtn').addEventListener('click', () => {
+                    this.createWordRow();
+                    this.triggerAutoSave();
+                });
+                document.getElementById('bottomAddBtn').addEventListener('click', () => {
+                    this.createWordRow();
+                    this.triggerAutoSave();
+                });
+                document.getElementById('deckTitle').addEventListener('input', () => this.triggerAutoSave());
+            }
+
+            triggerAutoSave() {
+                if (this.isReadOnly) return;
+                
+                const status = document.getElementById('save-status');
+                status.innerHTML = `<i class="bi bi-pencil"></i> Editing...`;
+                status.classList.remove('text-success');
+                status.classList.add('text-secondary');
+
+                clearTimeout(this.saveTimeout);
+                this.saveTimeout = setTimeout(() => this.handleSave(), 1500);
+            }
+
+            async handleSave() {
+                const status = document.getElementById('save-status');
+                status.innerHTML = `<div class="spinner-border spinner-border-sm me-1"></div> Saving...`;
+
+                const title = document.getElementById('deckTitle').value.trim() || "Untitled Deck";
+                const rows = document.querySelectorAll('.word-row');
+                const words = [];
+
+                rows.forEach(row => {
+                    const n = row.querySelector('.nom-input').value.trim();
+                    const qn = row.querySelector('.qn-input').value.trim();
+                    if (n || qn) {
+                        words.push({ n, qn });
+                    }
+                });
+
+                const updatedDeck = {
+                    ...this.deckData,
+                    title: title,
+                    words: words
+                };
+
+                try {
+                    await this.sp.saveDeck(updatedDeck);
+                    status.innerHTML = `<i class="bi bi-check2-all me-1"></i> Saved`;
+                    status.classList.replace('text-secondary', 'text-success');
+                } catch (e) {
+                    console.error("Save Error:", e);
+                    status.innerHTML = `<i class="bi bi-exclamation-circle me-1"></i> Save Failed`;
+                    status.classList.add('text-danger');
+                }
+            }
+        }
+
+        const editor = new SuperlearningEditor();
+        window.onload = () => editor.init();
+    </script>
+</body>
+</html>
