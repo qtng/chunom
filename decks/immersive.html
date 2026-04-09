@@ -3,39 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <base href="https://qtng.github.io/">
     <title>Chunom.org - Superlearning Immersive</title>
     
+    <!-- External Dependencies -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://chunom.org/media/css/fonts/all.css">
-    <script src="qatt-dc/js/navigation.js"></script>
+    <script src="https://qtng.github.io/qatt-dc/js/navigation.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="qatt-dc/js/parser.js"></script>
-    <script src="qatt-dc/js/renderer.js"></script>
-    <script src="qatt-dc/js/supabase.js"></script>
-    <script src="chunom/decks/audiomanager.js"></script>
+    <script src="https://qtng.github.io/qatt-dc/js/parser.js"></script>
+    <script src="https://qtng.github.io/qatt-dc/js/renderer.js"></script>
+    <script src="https://qtng.github.io/qatt-dc/js/supabase.js"></script>
+    <script src="https://qtng.github.io/chunom/decks/audiomanager.js"></script>
+    
     <style>
         :root {
             --nom-font-stack: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', 'Radicals Supplement', 'pa', 'HanaMinA', 'HanaMinB', serif;
             --ui-color: white;
             --ui-bg-alpha: rgba(255, 255, 255, 0.1);
             --ui-border: rgba(255, 255, 255, 0.15);
-            --ui-shadow: rgba(0, 0, 0, 0.8); 
-            --accent-start: #FF69B4;
+            --ui-shadow: rgba(0, 0, 0, 0.3); 
+            --accent-start: #FF69B4; 
             --danger-color: #dc3545; 
         }
 
-        .ui-theme-dark-bg { --ui-color: white; --ui-bg-alpha: rgba(255, 255, 255, 0.1); --ui-border: rgba(255, 255, 255, 0.15); --ui-shadow: rgba(0, 0, 0, 0.8); }
+        /* Responsive UI themes */
+        .ui-theme-dark-bg { --ui-color: white; --ui-bg-alpha: rgba(255, 255, 255, 0.1); --ui-border: rgba(255, 255, 255, 0.15); --ui-shadow: rgba(0, 0, 0, 0.3); }
         .ui-theme-light-bg { --ui-color: black; --ui-bg-alpha: rgba(0, 0, 0, 0.05); --ui-border: rgba(0, 0, 0, 0.1); --ui-shadow: transparent; }
 
-        body { background-color: #000; color: #f8f9fa; min-height: 100vh; font-family: 'Inter', system-ui, sans-serif; overflow: hidden; margin: 0; }
+        body { 
+            background-color: #000; 
+            color: #f8f9fa; 
+            min-height: 100vh; 
+            font-family: 'Inter', system-ui, sans-serif; 
+            margin: 0;
+            overflow-x: hidden;
+            touch-action: pan-y;
+        }
 
+        /* Navigation hiding mechanism */
         .navbar {
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease !important;
             transform: translateY(0);
             opacity: 1;
+            z-index: 2000 !important;
         }
         .navbar.nav-hidden {
             transform: translateY(-100%);
@@ -43,12 +55,92 @@
             pointer-events: none;
         }
 
+        /* Layout Elements */
         #loading-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: black; display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; 
             z-index: 1000; 
             transition: opacity 1s ease; 
         }
+
+        .video-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: var(--accent-start); overflow: hidden; }
+        
+        #bg-video { 
+            min-width: 100%; min-height: 100%; width: auto; height: auto; 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            object-fit: cover; filter: brightness(0.5) saturate(0.8); 
+            transition: opacity 2s ease; opacity: 0; 
+        }
+        #bg-video.playing { opacity: 1; }
+        #bg-video.inverted { filter: invert(1) brightness(0.7) saturate(0.5); }
+        
+        #color-overlay { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            z-index: -1; 
+            opacity: 0.7; 
+            mix-blend-mode: overlay; 
+            transition: background-color 8s ease-in-out, opacity 0.5s ease; pointer-events: none; 
+            background-color: var(--accent-start); 
+        }
+        #color-overlay.full-chroma { opacity: 1; mix-blend-mode: normal; }
+
+        .stage { 
+            position: relative; 
+            width: 100%; 
+            height: 60vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 10; 
+            margin-top: -50px; 
+        }
+
+        /* Layer animations */
+        .layer { 
+            position: absolute; 
+            width: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            transition: all 1s ease-in-out; 
+            color: var(--ui-color); 
+            text-shadow: 0 4px 15px var(--ui-shadow); 
+            opacity: 0; 
+            pointer-events: none; 
+        }
+        .layer-show { opacity: 1 !important; transform: scale(1.4); transition: all 4s ease-in-out; }
+
+        .nom-display-large { font-family: var(--nom-font-stack); font-size: 9rem; line-height: 1; }
+        .nom-display-mini { font-family: var(--nom-font-stack); font-size: 4.5rem; margin-bottom: 1.5rem; opacity: 0.6; }
+        .qatt-container { display: flex; gap: 0.5rem; justify-content: center; align-items: center; }
+        .qatt-container svg { height: 5rem; stroke: var(--ui-color); stroke-width: 9; fill: none; filter: drop-shadow(0 4px 15px var(--ui-shadow)); }
+        
+        .quocngu-text { 
+            font-size: 1.6em; 
+            font-weight: 300; 
+            background: var(--ui-bg-alpha); 
+            backdrop-filter: blur(8px); 
+            border: 1px solid var(--ui-border); 
+            border-radius: 100px; 
+            padding: 4px 25px; 
+            box-shadow: 0 10px 30px var(--ui-shadow); 
+        }
+
+        /* Controls */
+        .control-bar { position: absolute; bottom: 1.5rem; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; z-index: 1500; cursor: default; }
+        .controls-pill { background: var(--ui-bg-alpha); backdrop-filter: blur(15px); padding: 0.35rem 0.8rem; border-radius: 100px; display: flex; align-items: center; gap: 0.25rem; box-shadow: 0 8px 24px rgba(0,0,0,0.4); border: 1px solid var(--ui-border); }
+        .btn-minimal { background: none; border: none; color: var(--ui-color); padding: 0.4rem; font-size: 1.1rem; opacity: 0.4; transition: opacity 0.3s ease, transform 0.3s ease; cursor: pointer; border-radius: 50%; outline: none !important; box-shadow: none !important; }
+        .btn-minimal.active { opacity: 1 !important; color: var(--ui-color) !important; transform: scale(1.15); }
+
+        .dropdown-menu-custom { width: auto; min-width: 260px; padding: 0.5rem 0; background: rgba(33, 37, 41, 0.98) !important; backdrop-filter: blur(20px); border: 1px solid var(--ui-border); z-index: 1600; }
+        .dropdown-menu-custom .dropdown-divider { margin: 0.25rem 0 !important; opacity: 0.1; }
+        .dropdown-item { padding: 0.25rem 1rem 0.25rem 2.5rem; font-size: 0.88rem; color: rgba(255,255,255,0.8); transition: background 0.2s; }
+        .dropdown-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+        /* Audio feedback */
+        .credits-container { height: 1.4em; display: flex; align-items: center; justify-content: center; margin-top: 0.5rem; cursor: pointer; }
+        .audio-credits { font-size: 0.82rem; color: var(--ui-color); opacity: 0.6; display: flex; align-items: center; gap: 12px; transition: opacity 0.2s; }
 
         #learning-view {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
@@ -57,78 +149,51 @@
             opacity: 0; transition: opacity 1.5s ease; background-color: var(--accent-start);
             cursor: pointer;
             outline: none !important;
-            overflow: visible !important;
         }
         #learning-view.active { opacity: 1; }
-        .btn-start-icon { font-size: 1.8rem; vertical-align: middle; }
-        
-        .video-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.6) 100%); overflow: hidden; }
-        #bg-video { min-width: 100%; min-height: 100%; width: auto; height: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); object-fit: cover; filter: brightness(0.4) saturate(0.7) contrast(1.1); transition: filter 0.5s ease, opacity 1.5s ease; opacity: 0; }
-        #bg-video.playing { opacity: 1; }
-        #bg-video.inverted { filter: invert(1) brightness(0.7) saturate(0.5); }
-        #color-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; mix-blend-mode: normal; opacity: 1; transition: background-color 8s ease-in-out, opacity 0.5s ease; pointer-events: none; background-color: var(--accent-start); }
 
-        /* Punkt 2 Revert: Stage back to 60vh and margin-top -50px */
-        .stage { position: relative; width: 100%; height: 60vh; display: flex; align-items: center; justify-content: center; z-index: 10; margin-top: -50px; }
-        .layer { position: absolute; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 1s ease-in-out; color: var(--ui-color); text-shadow: 0 4px 15px var(--ui-shadow); opacity: 0; pointer-events: none; }
-        .layer-show { opacity: 1 !important; transform: scale(1.4); transition: all 4s ease-in-out; }
-
-        /* Punkt 1 Revert: font-sizes back to 9rem and 4.5rem */
-        .nom-display-large { font-family: var(--nom-font-stack); font-size: 9rem; line-height: 1; }
-        .nom-display-mini { font-family: var(--nom-font-stack); font-size: 4.5rem; margin-bottom: 1.5rem; opacity: 0.6; }
-        .qatt-container { display: flex; gap: 0.5rem; justify-content: center; align-items: center; }
-        .qatt-container svg { height: clamp(3.5rem, 12vw, 5rem); stroke: var(--ui-color); stroke-width: 9; fill: none; filter: drop-shadow(0 4px 8px var(--ui-shadow)); }
-        .quocngu-text { font-size: 1.6em; font-weight: 300; background: var(--ui-bg-alpha); backdrop-filter: blur(8px); border: 1px solid var(--ui-border); border-radius: 100px; padding: 4px 25px; box-shadow: 0 4px 10px var(--ui-shadow); }
-
-        .control-bar { position: absolute; bottom: 1.5rem; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; z-index: 1500; cursor: default; }
-        .controls-pill { background: var(--ui-bg-alpha); backdrop-filter: blur(15px); padding: 0.35rem 0.8rem; border-radius: 100px; display: flex; align-items: center; gap: 0.25rem; box-shadow: 0 8px 24px rgba(0,0,0,0.4); border: 1px solid var(--ui-border); }
-        .btn-minimal { background: none; border: none; color: var(--ui-color); padding: 0.4rem; font-size: 1.1rem; opacity: 0.4; transition: opacity 0.3s ease, transform 0.3s ease; cursor: pointer; border-radius: 50%; outline: none !important; box-shadow: none !important; -webkit-tap-highlight-color: transparent; }
-        .btn-minimal.active { opacity: 1 !important; color: var(--ui-color) !important; transform: scale(1.15); }
-        .btn-minimal.active-danger { opacity: 1 !important; color: var(--danger-color) !important; transform: scale(1.15); }
-
-        .dropdown-menu-custom { width: auto; min-width: 260px; padding: 0.5rem 0; overflow: visible; background: rgba(33, 37, 41, 0.98) !important; backdrop-filter: blur(20px); border: 1px solid var(--ui-border); z-index: 1600; }
-        .settings-section-header { padding: 0.8rem 1rem 0.3rem; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255, 255, 255, 0.6); display: flex; align-items: center; }
-        .dropdown-item { padding: 0.25rem 1rem 0.25rem 2.5rem; font-size: 0.88rem; transition: background 0.2s; color: rgba(255,255,255,0.8); white-space: normal; }
-        .dropdown-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
-        .dropdown-divider-custom { height: 1px; background: rgba(255, 255, 255, 0.1); margin: 0.5rem 0; }
-
-        .credits-container { height: 1.4em; display: flex; align-items: center; justify-content: center; margin-top: 0.5rem; }
-        .audio-credits { font-size: 0.82rem; color: var(--ui-color); opacity: 0; transition: all 0.3s; display: flex; align-items: center; gap: 12px; cursor: pointer; pointer-events: none; }
-        .audio-credits.visible { opacity: 0.6; pointer-events: auto; }
-
-        .spinner-custom { width: 3rem; height: 3rem; border: 3px solid rgba(255,255,255,0.1); border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        #deck-info { display: none; text-align: center; margin-bottom: 2rem; padding: 0 20px; }
-        #deck-title { font-size: 2.2rem; font-weight: 700; color: white; margin-bottom: 0.5rem; }
-        #deck-meta { font-size: 1rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 2px; }
-        #start-button { display: none; background: none; border: 2px solid white; color: white; padding: 15px 40px; border-radius: 50px; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; cursor: pointer; margin-bottom: 1.5rem; }
+        #start-button { 
+            display: none; background: none; border: 2px solid white; color: white; 
+            padding: 8px 40px; border-radius: 50px; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; 
+            transition: all 0.3s; cursor: pointer; margin-bottom: 1.5rem; 
+        }
         #start-button:hover { background: white; color: black; transform: scale(1.05); }
+        .btn-start-icon { font-size: 2.2rem; vertical-align: middle; }
 
         .deck-index-card { background: rgba(20, 20, 20, 0.7) !important; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.15) !important; max-height: 45vh; overflow-y: auto; border-radius: 16px !important; }
-        .index-item { border-color: rgba(255,255,255,0.08) !important; background: transparent !important; color: white !important; padding: 0.75rem 1.25rem !important; }
+        .index-item { border-color: rgba(255,255,255,0.08) !important; background: transparent !important; color: white !important; padding: 0.75rem 1.25rem !important; gap: 1rem; }
         .index-nom-cell { font-family: var(--nom-font-stack); font-size: 1.4rem; line-height: 1; min-width: 2.5rem; }
-        .index-qn-cell { color: rgba(255,255,255,0.6); font-size: 0.95rem; font-weight: 300; }
+        .index-qn-cell { color: rgba(255,255,255,0.6); font-size: 0.95rem; font-weight: 300; flex: 1; text-align: right; }
+        .index-qatt-cell { display: flex; align-items: center; justify-content: center; min-width: 3.5rem; }
+        .index-qatt-cell svg { height: 1.8rem; stroke: rgba(255,255,255,0.8); stroke-width: 10; fill: none; }
     </style>
 </head>
 <body>
     <div id="loading-overlay">
-        <div id="loader-spinner" class="spinner-custom"></div>
-        <div id="deck-info">
+        <div id="loading-spinner" class="spinner-border text-light mb-4" style="width: 3rem; height: 3rem;" role="status"></div>
+        <div id="deck-info" class="text-center">
             <h1 id="deck-title" class="mt-3"></h1>
-            <div id="deck-meta"></div>
+            <div id="deck-meta" class="text-secondary small text-uppercase mb-4"></div>
         </div>
-        <button id="start-button" onclick="app.engage()"><i class="bi bi-2x bi-play-fill text-warning me-2"></i>Start Session</button>
+        <button id="start-button" onclick="app.engage()">
+            <i class="bi bi-play-fill text-warning me-2 btn-start-icon"></i>Start Session
+        </button>
         <div id="index-toggle-wrapper" class="d-none text-center">
-            <a class="text-secondary small text-decoration-none" data-bs-toggle="collapse" href="#deck-index-collapse">Show all characters <i class="bi bi-chevron-down"></i></a>
+            <a class="text-secondary small text-decoration-none" data-bs-toggle="collapse" href="#deck-index-collapse">
+                Show all characters <i class="bi bi-chevron-down"></i>
+            </a>
             <div class="collapse mt-3" id="deck-index-collapse">
-                <div class="card deck-index-card shadow-lg"><ul class="list-group list-group-flush text-start" id="deck-index-list"></ul></div>
+                <div class="card deck-index-card shadow-lg">
+                    <ul class="list-group list-group-flush text-start" id="deck-index-list"></ul>
+                </div>
             </div>
         </div>
     </div>
 
-    <div id="learning-view" tabindex="-1">
-        <div class="video-container"><video id="bg-video" autoplay muted loop playsinline></video></div>
+    <div id="learning-view">
+        <div class="video-container">
+            <video id="bg-video" loop muted autoplay playsinline></video>
+        </div>
         <div id="color-overlay"></div>
         
         <div class="stage" onclick="app.toggleNavbar()">
@@ -142,7 +207,7 @@
 
         <div class="control-bar" onclick="event.stopPropagation()">
             <div class="controls-pill">
-                <button class="btn-minimal" onclick="location.href='/chunom/decks/index.html'"><i class="bi bi-x-lg"></i></button>
+                <button class="btn-minimal" onclick="location.href='https://qtng.github.io/chunom/decks/index.html'"><i class="bi bi-x-lg"></i></button>
                 <div class="vr mx-2 opacity-25" style="height:20px;"></div>
                 <button id="speak-toggle" class="btn-minimal" onclick="app.audio.toggleSpeech()"><i class="bi bi-volume-up"></i></button>
                 <button id="binaural-toggle" class="btn-minimal" onclick="app.audio.toggleBinaural()"><i class="bi bi-headphones"></i></button>
@@ -156,39 +221,140 @@
                     <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow dropdown-menu-custom" id="settings-menu"></div>
                 </div>
             </div>
-            <div class="credits-container"><div id="audio-credits" class="audio-credits" onclick="app.audio.nextTrack()"></div></div>
+            <div class="credits-container" onclick="app.audio.nextTrack()"><div id="audio-credits" class="audio-credits"></div></div>
         </div>
     </div>
 
     <audio id="bg-audio"></audio>
 
     <script>
-        const APP_CONFIG = {
-            visuals: {
-                luminous_spirit: { src: 'https://qtng.github.io/chunom/225845_tiny.mp4', theme: 'light', inv: true, label: 'Luminous Spirit' },
-                triangles: { src: 'https://qtng.github.io/chunom/36028-408417039_tiny.mp4', theme: 'dark', inv: false, label: 'Triangles' },
-                cosmic_breath: { src: 'https://qtng.github.io/chunom/225845_tiny.mp4', theme: 'dark', inv: false, label: 'Cosmic Breath' },
-                none: { src: null, theme: 'light', inv: false, label: 'Chroma' }
-            },
-            binaural: { alpha: { freq: 10, label: 'Alpha 10Hz' }, gamma: { freq: 40, label: 'Gamma 40Hz' }, none: { freq: 0, label: 'Disable binaural beats' } },
-            colors: ['#FF69B4', '#9B59B6', '#3498DB', '#1ABC9C', '#E67E22', '#E91E63'],
-            playlist: [1, 4, 5, 6, 7, 12, 13, 14, 15, 16, 17],
-            intervals: { cardSwitch: 4500, colorPulse: 15000, navHide: 5000 }
+        /**
+         * VIDEO_VARIANTS: Source configurations for themes
+         */
+        const VIDEO_VARIANTS = {
+            v1: { src: 'https://qtng.github.io/chunom/225845_tiny.mp4', theme: 'light', inv: true }, // Luminous
+            v2: { src: 'https://qtng.github.io/chunom/36028-408417039_tiny.mp4', theme: 'dark', inv: false }, // Triangles
+            v3: { src: 'https://qtng.github.io/chunom/225845_tiny.mp4', theme: 'dark', inv: false } // Cosmic
         };
 
+        const APP_CONFIG = {
+            visuals: {
+                luminous_spirit: { 
+                    label: 'Luminous Spirit', 
+                    interval: 60000, 
+                    sequence: [VIDEO_VARIANTS.v1]
+                },
+                triangles: { 
+                    label: 'Triangles', 
+                    interval: 60000, 
+                    sequence: [VIDEO_VARIANTS.v2]
+                },
+                cosmic_breath: { 
+                    label: 'Cosmic Breath', 
+                    interval: 60000, 
+                    sequence: [VIDEO_VARIANTS.v3]
+                },
+                none: { label: 'Chroma', interval: null, sequence: [] }
+            },
+            binaural: { 
+                alpha: { freq: 10, label: '10Hz Alpha (memorize words)' }, 
+                gamma: { freq: 6, label: '6Hz Theta (passive learning)' }, 
+                none: { freq: 0, label: 'No binaural beats' } 
+            },
+            colors: ['#FF69B4', '#9B59B6', '#3498DB', '#1ABC9C', '#E67E22', '#E91E63'],
+            playlist: [1, 4, 5, 6, 7, 12, 13, 14, 15, 16, 17],
+            intervals: { cardSwitch: 4500, colorPulse: 5000, navHide: 5000, preloadDelay: 4000 }
+        };
+
+        /**
+         * VisualManager: Handles video playback, sequences, and background coloring
+         */
         class VisualManager {
             constructor(videoEl, overlayEl, viewEl) {
                 this.video = videoEl; this.overlay = overlayEl; this.view = viewEl;
                 this.colorIdx = 0;
+                this.currentThemeKey = null;
+                this.sequenceIdx = 0;
+                this.sequenceTimer = null;
+                this.preloadTimer = null;
+                this.preloaderElements = [];
             }
+
             setSource(key) {
-                const cfg = APP_CONFIG.visuals[key];
+                this.currentThemeKey = key;
+                this.sequenceIdx = 0;
                 localStorage.setItem('videoKey', key);
-                if (!cfg.src) { this.video.pause(); this.video.classList.remove('playing'); } 
-                else { this.video.src = cfg.src; this.video.classList.toggle('inverted', cfg.inv); this.video.load(); this.video.play(); }
-                this.view.className = `active ${cfg.theme === 'dark' ? 'ui-theme-dark-bg' : 'ui-theme-light-bg'}`;
-                app.renderSettings();
+                
+                const theme = APP_CONFIG.visuals[key];
+                
+                if (this.sequenceTimer) clearInterval(this.sequenceTimer);
+                if (this.preloadTimer) clearTimeout(this.preloadTimer);
+                this.clearPreloaders();
+                
+                if (!theme.sequence || theme.sequence.length === 0) {
+                    this.video.pause();
+                    this.overlay.classList.add('full-chroma');
+                    this.view.className = `active ui-theme-light-bg`;
+                } else {
+                    this.overlay.classList.remove('full-chroma');
+                    this.playSequenceStep(); 
+                    
+                    if (theme.sequence.length > 1) {
+                        this.preloadTimer = setTimeout(() => {
+                            this.preloadThemeSequence(theme);
+                        }, APP_CONFIG.intervals.preloadDelay);
+
+                        if (theme.interval) {
+                            this.sequenceTimer = setInterval(() => {
+                                this.sequenceIdx = (this.sequenceIdx + 1) % theme.sequence.length;
+                                this.playSequenceStep();
+                            }, theme.interval);
+                        }
+                    }
+                }
+                
+                if(window.app) window.app.renderSettings();
             }
+
+            preloadThemeSequence(theme) {
+                this.clearPreloaders();
+                theme.sequence.forEach((config, idx) => {
+                    if (idx === this.sequenceIdx) return;
+                    const p = document.createElement('video');
+                    p.preload = 'auto';
+                    p.src = config.src;
+                    this.preloaderElements.push(p);
+                });
+            }
+
+            clearPreloaders() {
+                this.preloaderElements.forEach(p => {
+                    p.src = "";
+                    p.load();
+                });
+                this.preloaderElements = [];
+            }
+
+            playSequenceStep() {
+                const theme = APP_CONFIG.visuals[this.currentThemeKey];
+                if (!theme || !theme.sequence[this.sequenceIdx]) return;
+                const config = theme.sequence[this.sequenceIdx];
+                
+                this.video.classList.remove('playing');
+                this.video.src = config.src;
+                this.video.classList.toggle('inverted', !!config.inv);
+                this.video.load();
+                
+                // Update UI class for contrast based on current variant config
+                const themeClass = config.theme === 'dark' ? 'ui-theme-dark-bg' : 'ui-theme-light-bg';
+                this.view.className = `active ${themeClass}`;
+                
+                this.video.oncanplay = () => {
+                    this.video.play().catch(() => {});
+                    this.video.classList.add('playing');
+                };
+            }
+
             startCycle() {
                 setInterval(() => {
                     const next = APP_CONFIG.colors[this.colorIdx];
@@ -199,35 +365,78 @@
             }
         }
 
+        /**
+         * SuperlearningApp: Main Logic
+         */
         class SuperlearningApp {
             constructor() {
-                this.sp = new SupabaseService(); this.parser = new VietnameseParser(); this.renderer = new SvgGlyphRenderer();
-                this.audio = new AudioManager(document.getElementById('bg-audio'), { playlist: APP_CONFIG.playlist, binaural: APP_CONFIG.binaural }, {
+                this.sp = new SupabaseService(); 
+                this.parser = new VietnameseParser(); 
+                this.renderer = new SvgGlyphRenderer();
+                
+                // Audio configuration
+                this.audio = new AudioManager(document.getElementById('bg-audio'), { 
+                    playlist: APP_CONFIG.playlist, 
+                    binaural: APP_CONFIG.binaural 
+                }, {
                     isMusicOn: localStorage.getItem('musicOn') !== 'false',
                     isSpeechOn: localStorage.getItem('speechOn') !== 'false',
                     isBinauralOn: localStorage.getItem('binauralOn') !== 'false',
                     binauralType: localStorage.getItem('binauralType') || 'alpha'
                 });
-                this.visual = new VisualManager(document.getElementById('bg-video'), document.getElementById('color-overlay'), document.getElementById('learning-view'));
-                this.qattType = localStorage.getItem('qattType') || "1"; this.idx = 0; this.isFlipped = false;
-                this.navTimer = null;
+
+                this.visual = new VisualManager(
+                    document.getElementById('bg-video'), 
+                    document.getElementById('color-overlay'), 
+                    document.getElementById('learning-view')
+                );
+
+                this.qattType = localStorage.getItem('qattType') || "1"; 
+                this.idx = 0; 
+                this.isFlipped = false;
+                this.navTimer = null; 
                 this.sessionActive = false;
             }
+
             async init() {
                 await this.sp.init();
                 const urlParams = new URLSearchParams(window.location.search);
                 const deck = await this.sp.getDeck(urlParams.get('id') || "9222f66f-6d0e-4b2d-bfdd-f31ebea71337");
+                
                 if (deck) {
                     this.deck = { ...deck, words: deck.words.filter(w => w.n !== ".config") };
                     document.getElementById('deck-title').textContent = this.deck.title;
                     document.getElementById('deck-meta').textContent = `${this.deck.words.length} items`;
-                    document.getElementById('deck-index-list').innerHTML = this.deck.words.map(w => `<li class="list-group-item index-item d-flex justify-content-between align-items-center"><span class="index-nom-cell">${w.n}</span><span class="index-qn-cell">${w.qn}</span></li>`).join('');
-                    document.getElementById('loader-spinner').style.display = 'none';
+                    
+                    const indexList = document.getElementById('deck-index-list');
+                    indexList.innerHTML = this.deck.words.map((w, i) => `
+                        <li class="list-group-item index-item d-flex justify-content-between align-items-center">
+                            <span class="index-nom-cell">${w.n}</span>
+                            <span class="index-qatt-cell" id="idx-qatt-${i}"></span>
+                            <span class="index-qn-cell">${w.qn}</span>
+                        </li>
+                    `).join('');
+
+                    this.deck.words.forEach((w, i) => {
+                        const target = document.getElementById(`idx-qatt-${i}`);
+                        if (target) {
+                            const parsed = this.parser.parse(w.qn);
+                            this.renderer.renderText(parsed ? parsed.code.split(' ')[0] : w.qn, target, "1");
+                        }
+                    });
+
+                    document.getElementById('loading-spinner').style.display = 'none';
                     document.getElementById('deck-info').style.display = 'block';
                     document.getElementById('start-button').style.display = 'block';
                     document.getElementById('index-toggle-wrapper').classList.remove('d-none');
                 }
-                this.audio.on('update', (state) => { this.syncAudioUI(); this.renderSettings(); this.updateCredits(state); });
+                
+                // Sync UI when AudioManager state changes
+                this.audio.on('update', () => { 
+                    this.syncAudioUI(); 
+                    this.renderSettings(); 
+                    this.updateCredits(); 
+                });
             }
 
             toggleNavbar() {
@@ -241,9 +450,7 @@
                 if (!nav) return;
                 nav.classList.remove('nav-hidden');
                 clearTimeout(this.navTimer);
-                if (this.sessionActive) {
-                    this.navTimer = setTimeout(() => this.hideNavbar(), APP_CONFIG.intervals.navHide);
-                }
+                if (this.sessionActive) this.navTimer = setTimeout(() => this.hideNavbar(), APP_CONFIG.intervals.navHide);
             }
 
             hideNavbar() {
@@ -260,12 +467,25 @@
                 document.getElementById('binaural-toggle').classList.toggle('active', state.isBinauralOn);
             }
 
-            updateCredits(state) {
+            updateCredits() {
                 const el = document.getElementById('audio-credits');
+                const state = this.audio.state;
                 let parts = [];
-                if (state.isSpeechOn) parts.push('<i class="bi bi-chat-left-text me-1"></i> Voice');
-                if (state.isBinauralOn && state.binauralType !== 'none') parts.push(`<span class="badge bg-dark px-2">${APP_CONFIG.binaural[state.binauralType].label}</span>`);
-                if (state.isMusicOn) parts.push(`<i class="bi bi-shuffle me-1"></i> Track ${APP_CONFIG.playlist[state.currentTrackIdx]}`);
+                
+                if (state.isSpeechOn) {
+                    if (!state.hasSpeechVoice) {
+                        parts.push('<span class="badge bg-danger px-2">⚠️ No voice installed</span>');
+                    } else {
+                        parts.push('<i class="bi bi-chat-left-text me-1"></i> Voice');
+                    }
+                }
+                if (state.isBinauralOn && state.binauralType !== 'none') {
+                    parts.push(`<span class="badge bg-dark px-2">${APP_CONFIG.binaural[state.binauralType].label}</span>`);
+                }
+                if (state.isMusicOn) {
+                    parts.push(`<i class="bi bi-shuffle me-1"></i> Track ${APP_CONFIG.playlist[state.currentTrackIdx]}`);
+                }
+                
                 el.innerHTML = parts.join(' ');
                 el.classList.toggle('visible', parts.length > 0);
             }
@@ -275,24 +495,30 @@
                 document.getElementById('loading-overlay').style.opacity = 0;
                 setTimeout(() => document.getElementById('loading-overlay').remove(), 1000);
                 document.getElementById('learning-view').classList.add('active');
-                this.audio.init(); this.visual.startCycle();
+                
+                this.audio.init(); 
+                this.visual.startCycle();
                 this.visual.setSource(localStorage.getItem('videoKey') || 'luminous_spirit');
+                
                 this.updateCard();
                 this.showNavbar();
                 setInterval(() => this.isFlipped ? this.next() : this.flip(), 4500);
             }
 
             updateCard() {
-                const w = this.deck.words[this.idx]; this.isFlipped = false;
+                const w = this.deck.words[this.idx]; 
+                this.isFlipped = false;
                 document.getElementById('nom-display').textContent = w.n;
                 document.getElementById('nom-layer').classList.add('layer-show');
                 document.getElementById('details-layer').classList.remove('layer-show');
             }
 
             flip() {
-                const w = this.deck.words[this.idx]; this.isFlipped = true;
+                const w = this.deck.words[this.idx]; 
+                this.isFlipped = true;
                 document.getElementById('nom-mini').textContent = w.n;
                 document.getElementById('quocngu-display').textContent = w.qn;
+                
                 const qCont = document.getElementById('qatt-display');
                 const parts = this.parser.parse(w.qn);
                 if (parts) {
@@ -303,38 +529,61 @@
                         qCont.innerHTML += div.innerHTML;
                     });
                 }
+                
                 document.getElementById('nom-layer').classList.remove('layer-show');
                 document.getElementById('details-layer').classList.add('layer-show');
                 this.audio.speak(w.qn);
             }
 
-            next() { this.idx = (this.idx + 1) % this.deck.words.length; this.updateCard(); }
+            next() { 
+                this.idx = (this.idx + 1) % this.deck.words.length; 
+                this.updateCard(); 
+            }
 
             renderSettings() {
-                const menu = document.getElementById('settings-menu'); if (!menu) return;
+                const menu = document.getElementById('settings-menu'); 
+                if (!menu) return;
                 const state = this.audio.state;
-                const item = (label, active, action) => `<button class="dropdown-item ${active ? 'fw-bold' : ''}" onclick="${action}">${active ? '✓ ' : ''}${label}</button>`;
+                const item = (label, active, action) => `
+                    <button class="dropdown-item ${active ? 'fw-bold' : ''}" onclick="${action}">
+                        ${active ? '✓ ' : ''}${label}
+                    </button>`;
+                
                 const vKey = localStorage.getItem('videoKey') || 'luminous_spirit';
+                
                 menu.innerHTML = `
-                    <div class="settings-section-header"><i class="bi bi-camera-video me-2"></i>Background visuals</div>
+                    <div class="px-3 py-2 text-secondary small text-uppercase">Backgrounds</div>
                     ${Object.entries(APP_CONFIG.visuals).map(([k, v]) => item(v.label, vKey === k, `app.visual.setSource('${k}')`)).join('')}
-                    <div class="dropdown-divider-custom"></div>
-                    <div class="settings-section-header"><i class="bi bi-headphones me-2"></i>Binaural Beats</div>
-                    ${Object.entries(APP_CONFIG.binaural).map(([k, v]) => item(v.label, state.binauralType === k && state.isBinauralOn, `app.audio.setBinaural('${k}')`)).join('')}
-                    <div class="dropdown-divider-custom"></div>
-                    <div class="settings-section-header"><i class="bi bi-volume-up me-2"></i>Speech</div>
-                    ${item('Enabled', state.isSpeechOn, "if(!app.audio.state.isSpeechOn) app.audio.toggleSpeech()")}
-                    ${item('Disabled', !state.isSpeechOn, "if(app.audio.state.isSpeechOn) app.audio.toggleSpeech()")}
-                    <div class="dropdown-divider-custom"></div>
-                    <div class="settings-section-header"><i class="bi bi-translate me-2"></i>Quốc Âm Tân Tự</div>
+                    
+                    <div class="dropdown-divider"></div>
+                    <div class="px-3 py-2 text-secondary small text-uppercase">Binaural Beats</div>
+                    ${Object.entries(APP_CONFIG.binaural).map(([k, v]) => {
+                        const isActive = (k === 'none') ? !state.isBinauralOn : (state.isBinauralOn && state.binauralType === k);
+                        return item(v.label, isActive, `app.audio.setBinaural('${k}')`);
+                    }).join('')}
+                    
+                    <div class="dropdown-divider"></div>
+                    <div class="px-3 py-2 text-secondary small text-uppercase">Speech</div>
+                    ${item('enabled', state.isSpeechOn, "if(!app.audio.state.isSpeechOn) app.audio.toggleSpeech()")}
+                    ${item('disabled', !state.isSpeechOn, "if(app.audio.state.isSpeechOn) app.audio.toggleSpeech()")}
+                    
+                    <div class="dropdown-divider"></div>
+                    <div class="px-3 py-2 text-secondary small text-uppercase">QATT style</div>
                     ${item('Chính thể', this.qattType === "0", "app.setQattType('0')")}
                     ${item('Giản thể', this.qattType === "1", "app.setQattType('1')")}
                 `;
             }
-            setQattType(t) { this.qattType = t; localStorage.setItem('qattType', t); this.renderSettings(); }
+
+            setQattType(t) { 
+                this.qattType = t; 
+                localStorage.setItem('qattType', t); 
+                this.renderSettings(); 
+            }
         }
 
+        // Bootstrapping
         const app = new SuperlearningApp();
+        window.app = app;
         document.addEventListener('DOMContentLoaded', () => app.init());
     </script>
 </body>
