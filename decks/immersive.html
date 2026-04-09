@@ -282,6 +282,7 @@
                     btn.classList.toggle('active', state.isMusicOn);
                 }
                 document.getElementById('speak-toggle')?.classList.toggle('active', state.isSpeechOn);
+                document.getElementById('speak-toggle')?.classList.toggle('text-danger', !state.hasSpeechVoice);
                 document.getElementById('binaural-toggle')?.classList.toggle('active', state.isBinauralOn && state.binauralType !== 'none');
             }
 
