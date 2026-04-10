@@ -541,7 +541,7 @@
                 
                 document.getElementById('nom-layer').classList.remove('layer-show');
                 document.getElementById('details-layer').classList.add('layer-show');
-                this.audio.speak(w.qn);
+                this.audio.speak(w.qn, location.search.indexOf("cloud") > - 1 ? "cloud" : "auto");
             }
 
             next() { 
