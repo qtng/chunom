@@ -121,12 +121,12 @@ class AudioManager {
     }
 
     async _speakCloud(text) {
-        if (!this.googleApiKey || this.googleApiKey.includes("HIER")) return;
+        if (!this.googleApiKey) return;
 
         const url = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${this.googleApiKey}`;
         const payload = {
             input: { text: text },
-            voice: { languageCode: "vi-VN", name: "vi-VN-Neural2-A" },
+            voice: { languageCode: "vi-VN", name: "vi-VN-Neural2-B" },
             audioConfig: { audioEncoding: "MP3" }
         };
 
