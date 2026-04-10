@@ -95,7 +95,7 @@ class AudioManager {
     async speak(text, mode = 'auto', rate = 0.8) {
         if (!this.state.isSpeechOn) return;
 
-        if (!this.voice) {
+        if (!this.voice && window.speechSynthesis) {
             this.voice = window.speechSynthesis.getVoices().find(v => v.lang.startsWith('vi'));
         }
 
