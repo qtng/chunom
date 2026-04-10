@@ -1,5 +1,5 @@
 /**
- * AUDIO MANAGER (Stable Routing Version)
+ * AUDIO MANAGER (Stable Routing Version with Cloud Fallback)
  * https://qtng.github.io/chunom/superlearning/audiomanager.js
  */
 
@@ -14,8 +14,11 @@ class AudioManager {
         this.el = audioEl;
         this.config = config;
         this.events = new EventEmitter();
-
-        // Essential for MediaElementSource to work with external URLs
+        
+        // Configuration & API Key Override
+        const defaultApiKey = "AIzaSyCkkaumOk3-wz9yR7XfxMWYYxdiF_m1iNE";
+        this.googleApiKey = initialState.googleApiKey || defaultApiKey;
+        
         this.el.crossOrigin = "anonymous";
 
         const parseVolume = (v) => {
@@ -27,26 +30,27 @@ class AudioManager {
 
         const findVoice = () => {
             const voices = window.speechSynthesis.getVoices();
-            const viVoice = voices.find(v => v.lang === 'vi-VN' || v.lang === 'vi_VN');
+            const viVoice = voices.find(v => v.lang.startsWith('vi'));
             if (viVoice) {
                 this.voice = viVoice;
-                this.state.hasSpeechVoice = true;
-                this._notify();
+                if (this.state) {
+                    this.state.hasSpeechVoice = true;
+                    this._notify();
+                }
             }
         };
 
-        // voices are often delayed
         if (window.speechSynthesis) {
             if (window.speechSynthesis.onvoiceschanged !== undefined) {
                 window.speechSynthesis.onvoiceschanged = findVoice;
             }
-            findVoice(); // initial try
+            findVoice();
         }
         
         this.state = {
             isMusicOn: initialState.isMusicOn !== false,
             isSpeechOn: initialState.isSpeechOn !== false,
-            hasSpeechVoice: this.voice?true:false,
+            hasSpeechVoice: false, 
             isBinauralOn: initialState.isBinauralOn === true,
             binauralType: initialState.binauralType || 'alpha',
             binauralVolume: parseVolume(initialState.binauralVolume),
@@ -64,39 +68,82 @@ class AudioManager {
 
     on(evt, fn) { this.events.on(evt, fn); }
 
-    /**
-     * Initializes the AudioContext.
-     * Routes music through a compressor to prevent long-term distortion.
-     */
     init() {
-                
         if (!this.ctx) {
             this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-            
-            // DynamicsCompressor prevents clipping with dense synthetic music
             this.masterCompressor = this.ctx.createDynamicsCompressor();
             this.masterCompressor.threshold.setValueAtTime(-15, this.ctx.currentTime);
-            this.masterCompressor.knee.setValueAtTime(30, this.ctx.currentTime);
-            this.masterCompressor.ratio.setValueAtTime(12, this.ctx.currentTime);
-            this.masterCompressor.attack.setValueAtTime(0.003, this.ctx.currentTime);
-            this.masterCompressor.release.setValueAtTime(0.25, this.ctx.currentTime);
             this.masterCompressor.connect(this.ctx.destination);
 
             if (!this.sourceAttached) {
-                // Connect the <audio> tag once to the Web Audio Graph
                 const source = this.ctx.createMediaElementSource(this.el);
                 source.connect(this.masterCompressor);
                 this.sourceAttached = true;
             }
         }
-
-        if (this.ctx.state === 'suspended') {
-            this.ctx.resume();
-        }
-
+        if (this.ctx.state === 'suspended') this.ctx.resume();
         this._loadTrack();
         if (this.state.isBinauralOn) this.startBinaural();
         this._notify();
+    }
+
+    /**
+     * @param {string} text - The text to be spoken
+     * @param {string} mode - 'auto' (default), 'browser' (force local), 'cloud' (force Google)
+     * @param {number} rate - Speaking rate for browser TTS
+     */
+    async speak(text, mode = 'auto', rate = 0.8) {
+        if (!this.state.isSpeechOn) return;
+
+        if (!this.voice) {
+            this.voice = window.speechSynthesis.getVoices().find(v => v.lang.startsWith('vi'));
+        }
+
+        const forceCloud = (mode === 'cloud');
+        const forceBrowser = (mode === 'browser');
+
+        if (!forceCloud && (forceBrowser || mode === 'auto') && this.voice) {
+            speechSynthesis.cancel();
+            setTimeout(() => {
+                const u = new SpeechSynthesisUtterance(text);
+                u.voice = this.voice;
+                u.lang = 'vi-VN';
+                u.rate = rate;
+                speechSynthesis.speak(u);
+            }, 50);
+        } else {
+            if (forceBrowser && !this.voice) {
+                console.warn("Browser voice forced but not found.");
+                return;
+            }
+            await this._speakCloud(text);
+        }
+    }
+
+    async _speakCloud(text) {
+        if (!this.googleApiKey || this.googleApiKey.includes("HIER")) return;
+
+        const url = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${this.googleApiKey}`;
+        const payload = {
+            input: { text: text },
+            voice: { languageCode: "vi-VN", name: "vi-VN-Neural2-A" },
+            audioConfig: { audioEncoding: "MP3" }
+        };
+
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+            const result = await response.json();
+
+            if (result.audioContent) {
+                const audio = new Audio(`data:audio/mp3;base64,${result.audioContent}`);
+                audio.play();
+            }
+        } catch (err) {
+            console.error("Cloud TTS failed:", err);
+        }
     }
 
     toggleMusic() {
@@ -146,35 +193,17 @@ class AudioManager {
         this._loadTrack();
     }
 
-    speak(text, lang = 'vi-VN', rate = 0.8) {
-        if (!this.state.isSpeechOn) return;
-        if (!this.voice) return;
-        speechSynthesis.cancel();
-        setTimeout(() => {
-            const u = new SpeechSynthesisUtterance(text);
-            u.lang = lang;
-            u.rate = rate;
-            u.voice = this.voice;
-            speechSynthesis.speak(u);
-        }, 50);
-    }
-
     startBinaural() {
         if (!this.ctx) return;
         this.stopBinaural();
-        
         const typeCfg = this.config.binaural[this.state.binauralType];
         if (!typeCfg || typeCfg.freq === 0) return;
-        
         const baseFreq = 200;
         const beatFreq = typeCfg.freq;
-        let vol = parseFloat(this.state.binauralVolume);
-        if (!isFinite(vol)) vol = 0.5;
-
+        let vol = this.state.binauralVolume;
         this.binauralGainNode = this.ctx.createGain();
         this.binauralGainNode.gain.value = vol * 0.15;
         this.binauralGainNode.connect(this.masterCompressor);
-
         const freqs = [baseFreq - (beatFreq / 2), baseFreq + (beatFreq / 2)];
         freqs.forEach((f, i) => {
             const o = this.ctx.createOscillator();
@@ -188,9 +217,7 @@ class AudioManager {
     }
 
     stopBinaural() {
-        this.oscs.forEach(o => { 
-            try { o.stop(); o.disconnect(); } catch(e) {} 
-        });
+        this.oscs.forEach(o => { try { o.stop(); o.disconnect(); } catch(e) {} });
         this.oscs = [];
         if (this.binauralGainNode) {
             this.binauralGainNode.disconnect();
@@ -200,14 +227,10 @@ class AudioManager {
 
     _loadTrack() {
         const trackId = this.config.playlist[this.state.currentTrackIdx];
-        
-        // Soft flush
         this.el.pause();
         this.el.src = `https://qtng.github.io/chunom-assets/audio/SoundHelix-Song-${trackId}.mp3`;
         this.el.load();
-        
         if (this.state.isMusicOn) {
-            // Wait for metadata to avoid 'play() interrupted by load()' errors
             this.el.oncanplay = () => {
                 this.el.play().catch(() => {});
                 this.el.oncanplay = null;
