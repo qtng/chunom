@@ -126,7 +126,7 @@ class AudioManager {
         const url = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${this.googleApiKey}`;
         const payload = {
             input: { text: text },
-            voice: { languageCode: "vi-VN", name: "vi-VN-Standard-D" },
+            voice: { languageCode: "vi-VN", name: "vi-VN-Standard-A" },
             audioConfig: { audioEncoding: "MP3" }
         };
 
