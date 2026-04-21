@@ -1,0 +1,129 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chunom.org - Highscores</title>
+  <!-- Bootstrap 5 CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- External Supabase Config -->
+  <script src="https://qtng.github.io/qatt-dc/js/supabase.js"></script>
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+      <h1 class="h4 mb-0 text-primary">
+        <i class="bi bi-trophy me-2"></i>Highscore Table
+      </h1>
+      <button id="refreshBtn" class="btn btn-outline-primary btn-sm">
+        <i class="bi bi-arrow-clockwise"></i> Refresh
+      </button>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th class="ps-4">Rank</th>
+              <th>Username</th>
+              <th class="text-end pe-4">Score</th>
+            </tr>
+          </thead>
+          <tbody id="highscoreContainer">
+            <tr>
+              <td colspan="3" class="text-center py-5 text-muted">
+                Loading data...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/**
+ * HighscoreApp
+ * Encapsulated logic for fetching and displaying scores.
+ */
+class HighscoreApp {
+  constructor(config) {
+    this.container = document.getElementById(config.containerId);
+    this.refreshBtn = document.getElementById(config.refreshBtnId);
+    this.tableName = config.tableName || 'scores';
+    
+    // Check for global Supabase client from external script
+    this.client = typeof supabaseClient !== 'undefined' ? supabaseClient : null;
+
+    if (this.client) {
+      this.init();
+    } else {
+      this.renderError("Database configuration missing.");
+    }
+  }
+
+  init() {
+    this.fetchHighscores();
+    this.refreshBtn.addEventListener('click', () => this.fetchHighscores());
+  }
+
+  async fetchHighscores() {
+    this.container.innerHTML = '<tr><td colspan="3" class="text-center py-4">Updating...</td></tr>';
+    
+    try {
+      const { data, error } = await this.client
+        .from(this.tableName)
+        .select('username, score')
+        .order('score', { ascending: false })
+        .limit(10);
+
+      if (error) throw error;
+      this.render(data);
+    } catch (err) {
+      console.error("Fetch error:", err);
+      this.renderError("Failed to load scores.");
+    }
+  }
+
+  render(data) {
+    if (!data || data.length === 0) {
+      this.container.innerHTML = '<tr><td colspan="3" class="text-center py-4">No scores available.</td></tr>';
+      return;
+    }
+
+    this.container.innerHTML = data.map((item, index) => `
+      <tr>
+        <td class="ps-4 fw-bold text-secondary">${index + 1}</td>
+        <td>${item.username}</td>
+        <td class="text-end pe-4 fw-bold text-primary">${item.score}</td>
+      </tr>
+    `).join('');
+  }
+
+  renderError(msg) {
+    this.container.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-danger">${msg}</td></tr>`;
+  }
+}
+
+// Instantiate on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  new HighscoreApp({
+    containerId: 'highscoreContainer',
+    refreshBtnId: 'refreshBtn',
+    tableName: 'scores'
+  });
+});
+</script>
+
+</body>
+</html>
+
+```
