@@ -230,8 +230,8 @@ class ChunomDict {
       document.body.classList.toggle('hide-qn', hidden);
     });
 
-    const qattSimplified = localStorage.getItem(this.qattTypeKey) === '1';
-    this.qattToggle.checked = qattSimplified;
+    const isMini = localStorage.getItem(this.qattTypeKey) !== '0';
+    this.qattToggle.checked = isMini;
 
     this.qattToggle.addEventListener('change', (e) => {
       const qattMini = e.target.checked ? "3" : "0";
