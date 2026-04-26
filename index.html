@@ -140,7 +140,7 @@
         <!-- Simplified QATT Toggle -->
         <div class="form-check form-switch small">
           <input class="form-check-input" type="checkbox" role="switch" id="toggle-qatt">
-          <label class="form-check-label text-secondary" for="toggle-qatt">Simplified QATT</label>
+          <label class="form-check-label text-secondary" for="toggle-qatt">QATT-mini</label>
         </div>
       </div>
     </div>
@@ -234,8 +234,8 @@ class ChunomDict {
     this.qattToggle.checked = qattSimplified;
 
     this.qattToggle.addEventListener('change', (e) => {
-      const simplified = e.target.checked ? "1" : "0";
-      localStorage.setItem(this.qattTypeKey, simplified);
+      const qattMini = e.target.checked ? "3" : "0";
+      localStorage.setItem(this.qattTypeKey, qattMini);
       this.triggerReRender();
     });
   }
@@ -583,7 +583,7 @@ let renderer, parser, dict;
 
 function renderQatt(el) {
   if (el.dataset.rendered) return;
-  const qattType = localStorage.getItem('qattType') || "0";
+  const qattType = localStorage.getItem('qattType') || "3";
   let code = el.innerText.trim();
   if (!el.dataset.originalCode) {
     el.dataset.originalCode = code;
