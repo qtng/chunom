@@ -228,7 +228,7 @@ class AudioManager {
     _loadTrack() {
         const trackId = this.config.playlist[this.state.currentTrackIdx];
         this.el.pause();
-        this.el.src = `https://qtng.github.io/chunom-assets/audio/SoundHelix-Song-${trackId}.mp3`;
+        this.el.src = `/chunom-assets/audio/SoundHelix-Song-${trackId}.mp3`;
         this.el.load();
         if (this.state.isMusicOn) {
             this.el.oncanplay = () => {
