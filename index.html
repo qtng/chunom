@@ -8,9 +8,9 @@
   <link rel="stylesheet" href="https://chunom.org/media/css/fonts/all.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="/qatt/js/navigation.js"></script>
-  <script src="/qatt/js/renderer.js?2"></script>
-  <script src="/qatt/js/parser.js"></script>
+  <script src="../qatt/js/navigation.js"></script>
+  <script src="../qatt/js/renderer.js"></script>
+  <script src="../qatt/js/parser.js"></script>
   <style>
     /* Globales SVG Styling */
     svg {
@@ -33,8 +33,8 @@
       color: inherit;
     }
     .glyph-box {
-      width: 120px;
-      height: 120px;
+      min-width: 120px;
+      height: 160px;
       flex-shrink: 0;
     }
     .font-serif {
@@ -42,10 +42,6 @@
     }
     .font-monospace {
       font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', monospace;
-    }
-    .active-scale:active {
-      transform: scale(0.95);
-      transition: transform 0.1s;
     }
     .lh-sm {
       line-height: 1.1;
@@ -88,6 +84,7 @@
     }
     tt {
       cursor: default;
+      vertical-align: sub;
     }
 
     /* Logik zum Ausblenden von Quốc Ngữ */
@@ -118,49 +115,63 @@
     #search:focus {
       box-shadow: none;
       outline: none;
-      border-color: #6c757d;
-    }
-    .form-check-input:checked {
-        background-color: #0dcaf0;
-        border-color: #0dcaf0;
+      border-color: #ddd;
     }
   </style>
 </head>
-<body data-bs-theme="dark" class="bg-dark text-light">
+<body>
   <div id="copy-toast">Copied</div>
 
   <div class="container mt-4">
-    <div class="mb-4 d-flex align-items-center justify-content-end">
-      <div class="d-flex gap-3 align-items-center">
-        <!-- Toggle für Quốc Ngữ ausblenden -->
-        <div class="form-check form-switch small">
-          <input class="form-check-input" type="checkbox" role="switch" id="toggle-qn">
-          <label class="form-check-label text-secondary" for="toggle-qn">Hide QN</label>
+
+
+    <div class="alert alert-primary">
+      <div class="d-flex flex-wrap justify-content-between align-items-start">
+        <div>
+          <h4 class="fw-light">
+            Thử thách <b>Thư Pháp</b> tháng
+            <span class="fw-bold"><script>document.write(new Date().toLocaleString('default', { month: 'long' }))</script></span>
+          </h4>
         </div>
-        <!-- Simplified QATT Toggle -->
-        <div class="form-check form-switch small">
-          <input class="form-check-input" type="checkbox" role="switch" id="toggle-qatt">
-          <label class="form-check-label text-secondary" for="toggle-qatt">QATT-mini</label>
+        <div>
+          Hạn nộp bài:
+          28.<script>document.write(`0${new Date().getMonth() + 1}`.slice(-2))</script>.<script>document.write(1900+new Date().getYear())</script>
         </div>
       </div>
     </div>
 
-    <div class="input-group mb-3">
-      <span class="input-group-text bg-secondary text-white border-secondary">Search</span>
-      <input type="search" id="search" class="form-control bg-dark text-white border-secondary" placeholder="Type Quốc Ngữ or Chữ Nôm..." disabled>
-      <div id="search-preview" class="input-group-text bg-dark border-secondary"></div>
-      <div id="dict-status" class="input-group-text bg-dark border-secondary">
-        <div class="spinner-border spinner-border-sm text-info" role="status"></div>
+    <div class="mt-4 alert alert-secondary">
+      <div class="input-group">
+        <span class="input-group-text">Tìm</span>
+        <input type="search" id="search" class="form-control" placeholder="Quốc Ngữ hoặc Chữ Nôm..." disabled>
+        <div id="search-preview" class="input-group-text bg-warning border"></div>
+        <div id="dict-status" class="input-group-text">
+          <div class="spinner-border spinner-border-sm text-info" role="status"></div>
+        </div>
+      </div>
+      <div class="mt-3 text-center text-lg-end">
+        <!-- Toggle für Quốc Ngữ ausblenden -->
+        <div class="d-inline-flex">
+          <div class="form-check form-switch small me-3">
+            <input class="form-check-input" type="checkbox" role="switch" id="toggle-qn">
+            <label class="form-check-label text-secondary" for="toggle-qn">Hiện Quốc Ngữ</label>
+          </div>
+          <!-- Simplified QATT Toggle -->
+          <div class="form-check form-switch small">
+            <input class="form-check-input" type="checkbox" role="switch" id="toggle-qatt">
+            <label class="form-check-label text-secondary" for="toggle-qatt">Dùng QÂTT giản thể</label>
+          </div>
+        </div>
       </div>
     </div>
 
     <div id="discovery" class="mt-4">
       <div class="mb-5">
-        <h6 class="text-secondary border-bottom border-secondary pb-2 mb-3 text-uppercase small fw-bold">Top 85 Frequent Words</h6>
+        <div class="alert alert-light shadow-sm py-1 border-0 text-uppercase fw-bold">Top 85 Frequent Words</div>
         <div id="list-top-85" class="row row-cols-4 row-cols-sm-5 row-cols-md-8 row-cols-lg-10 g-2"></div>
       </div>
       <div class="mb-5">
-        <h6 class="text-secondary border-bottom border-secondary pb-2 mb-3 text-uppercase small fw-bold">Next Frequent Words (up to Rank 500)</h6>
+        <div class="alert alert-light shadow-sm py-1 border-0 text-uppercase fw-bold">Next Frequent Words (up to Rank 500)</div>
         <div id="list-next-350" class="row row-cols-4 row-cols-sm-5 row-cols-md-8 row-cols-lg-10 g-2"></div>
       </div>
     </div>
@@ -170,16 +181,16 @@
 
   <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content bg-dark text-light border-secondary shadow-lg">
-        <div class="modal-header border-secondary">
-          <h5 class="modal-title" id="modalTitle">Details</h5>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle">Chi tiết</h5>
           <div class="d-flex align-items-center">
             <i class="bi bi-heart" onclick="alert('not yet implemented')"></i>
-            <button type="button" class="ms-4 btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="ms-4 btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
         </div>
         <div class="modal-body" id="modalBody"></div>
-        <div class="modal-footer border-secondary">
+        <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
@@ -221,13 +232,13 @@ class ChunomDict {
 
   initSettings() {
     const qnHidden = localStorage.getItem(this.qnHiddenKey) === 'true';
-    this.qnToggle.checked = qnHidden;
+    this.qnToggle.checked = !qnHidden;
     if (qnHidden) document.body.classList.add('hide-qn');
 
     this.qnToggle.addEventListener('change', (e) => {
       const hidden = e.target.checked;
-      localStorage.setItem(this.qnHiddenKey, hidden);
-      document.body.classList.toggle('hide-qn', hidden);
+      localStorage.setItem(this.qnHiddenKey,! hidden);
+      document.body.classList.toggle('hide-qn', !hidden);
     });
 
     const isMini = localStorage.getItem(this.qattTypeKey) !== '0';
@@ -341,7 +352,7 @@ class ChunomDict {
     return quocNgu.split(/\s+/).map(word => {
       const parsed = parser.parse(word);
       const cleanWord = word.replace(/"/g, '&quot;');
-      return parsed ? `<tt class="text-info" style="font-size: ${fontSize};" title="${cleanWord}" data-original-code="${parsed.code}">${parsed.code}</tt>` : '';
+      return parsed ? `<tt style="font-size: ${fontSize};" title="${cleanWord}" data-original-code="${parsed.code}">${parsed.code}</tt>` : '';
     }).join(' ');
   }
 
@@ -369,9 +380,9 @@ class ChunomDict {
         const col = document.createElement('div');
         col.className = 'col';
         col.innerHTML = `
-          <div class="bg-dark pt-4 p-2 rounded text-center h-100 d-flex flex-column justify-content-center border border-secondary border-opacity-25 position-relative shadow-sm opacity-hover-75" style="cursor: pointer;">
-            <span class="position-absolute top-0 start-0 m-1 badge badge-rank" style="opacity: 0.8;">#${r[5]}</span>
-            <div class="h3 font-serif text-white mb-0">${this.wrapNomChars(r[1])}</div>
+          <div class="pt-4 p-2 rounded text-center h-100 d-flex flex-column justify-content-center border border-secondary border-opacity-25 position-relative shadow-sm opacity-hover-75" style="cursor: pointer">
+            <span class="position-absolute top-0 start-0 m-1 badge badge-rank" style="opacity: 0.8">#${r[5]}</span>
+            <div class="h3 font-serif mb-0">${this.wrapNomChars(r[1])}</div>
             <div class="d-flex align-items-center justify-content-center gap-1 mt-1 overflow-hidden flex-wrap">
               ${this.getQattHtml(r[0], '0.7rem')}
             </div>
@@ -434,11 +445,11 @@ class ChunomDict {
   createResultItem(row) {
     const [quocNgu, nom, meaning, id] = [row[0], row[1], row[2], row[5]];
     const div = document.createElement('div');
-    div.className = 'list-group-item list-group-item-action bg-dark text-light border-secondary py-3';
+    div.className = 'list-group-item list-group-item-action py-3';
     div.innerHTML = `
       <div class="d-flex w-100 align-items-center mb-1">
         <div class="me-auto d-flex align-items-center">
-          <span class="fs-2 text-white me-2">${this.wrapNomChars(nom)}</span>
+          <span class="fs-2 me-2">${this.wrapNomChars(nom)}</span>
           <span class="text-secondary fw-bold qn-text">${quocNgu}</span>
         </div>
         <div class="text-end d-flex align-items-center gap-2 flex-wrap justify-content-end">
@@ -477,7 +488,7 @@ class ChunomDict {
   wrapNomChars(text) {
     if (!text) return '';
     return text.replace(/[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}]/gu, (match) => {
-      return `<span class="font-serif link-light link-underline-opacity-0 link-underline-opacity-100-hover" style="cursor: pointer;" onclick="event.stopPropagation(); dict.showDetails(null, '${match}')">${match}</span>`;
+      return `<span class="font-serif" style="cursor: pointer;" onclick="event.stopPropagation(); dict.showDetails(null, '${match}')">${match}</span>`;
     });
   }
 
@@ -519,7 +530,7 @@ class ChunomDict {
     const readingsHtml = uniqueReadings.map(read => {
       return `
         <div class="d-flex justify-content-between align-items-center w-100 lh-sm">
-          <span class="text-secondary fs-2 fw-bold qn-text">${read}</span>
+          <span class="fs-2 fw-bold qn-text">${read}</span>
           <div class="d-flex align-items-center gap-1">
             ${this.getQattHtml(read)}
           </div>
@@ -527,32 +538,44 @@ class ChunomDict {
       `;
     }).join('');
 
+    const quocNgu = uniqueReadings.join('; ');
+    const qatt = uniqueReadings.map(read => {
+      return this.getQattHtml(read);
+    }).join(' / ');
+
     const rawDataStr = sortedRelated.map(r => r.join(',')).join('\n');
 
     this.modalBody.innerHTML = `
       <div class="d-flex align-items-start gap-4 mb-4 p-2">
         <div class="d-flex flex-column align-items-center">
-          <div class="border border-secondary d-flex align-items-center justify-content-center p-3 rounded bg-black glyph-box active-scale" 
+          <div class="d-flex align-items-center justify-content-center rounded border glyph-box px-2" 
                onclick="dict.copyText('${mainNom}', this)" title="Click to copy glyph">
-            <span class="display-1 font-serif m-0 text-white">${mainNom}</span>
+            <!--<span class="display-1 font-serif text-nowrap">${mainNom}</span>-->
+            <img src="https://chunom.org/media/animations/anim-${hex}.gif"
+              data-fallback="https://chunom.org/media/glyph-composer/new/${hex}.svg"
+              onload="this.style.visibility='visible'"
+              onerror="$(this).css({visibility:'hidden',marginTop:-40,height:200});var fb=$(this).data('fallback'); $(this).data('fallback', ''); if(fb!='') this.src=fb; else {this.onerror=null;this.src='https://chunom.org/media/glyph-composer/svg/${hex}.svg'}"
+              style="height:150px;width:150px"/>
           </div>
         </div>
         <div class="flex-grow-1">
           <div class="d-flex flex-column w-100">${readingsHtml || '<span class="text-secondary fst-italic">Part of compound words</span>'}</div>
-          <div class="d-flex flex-column gap-1 mt-3 opacity-75 small text-secondary">
-             ${hex ? `<div class="clickable-meta" onclick="dict.copyText('${hex}', this)" title="Click to copy Hex code">Unicode: U+${hex}</div>` : ''}
-             ${strokes ? `<div>Strokes: ${strokes}</div>` : ''}
-             ${rank ? `<div>Rank: <span class="badge badge-rank">#${rank}</span></div>` : ''}
+          <div class="d-flex flex-column gap-1 mt-3 small text-secondary">
+            <div>Quốc Ngữ: ${quocNgu}</div>
+            <div>Quốc Âm Tân Tự: ${qatt}</div>
+             ${hex ? `<div><span class="clickable-meta border-bottom" onclick="dict.copyText('${hex}', this)" title="Click to copy Hex code">Unicode: U+${hex}</span></div>` : ''}
+             ${strokes ? `<div>Số nét: ${strokes}</div>` : ''}
+             ${rank ? `<div>Hạng: <span class="badge badge-rank">#${rank}</span></div>` : ''}
           </div>
         </div>
       </div>
-      <div class="list-group list-group-flush border-top border-secondary">
+      <div class="list-group list-group-flush border-top">
         ${sortedRelated.map(r => {
           return `
-          <div class="list-group-item bg-transparent text-light border-secondary py-3 px-0">
+          <div class="list-group-item py-3 px-0">
             <div class="d-flex align-items-center justify-content-between mb-1">
               <div class="d-flex align-items-center flex-wrap">
-                <span class="fs-3 text-white me-2">${this.wrapNomChars(r[1])}</span>
+                <span class="fs-3 me-2">${this.wrapNomChars(r[1])}</span>
                 <span class="text-secondary fw-bold fs-5 qn-text">${r[0]}</span> 
               </div>
               <div class="text-end d-flex align-items-center gap-2 flex-wrap justify-content-end">
@@ -566,12 +589,12 @@ class ChunomDict {
           </div>`;
         }).join('')}
       </div>
-      <div class="mt-4 pt-3 border-top border-secondary opacity-50">
+      <div class="mt-4 pt-3 border-top opacity-50">
         <div class="d-flex justify-content-between align-items-center mb-2">
           <small class="text-uppercase fw-bold" style="font-size: 0.65rem;">Raw Data:</small>
           <button class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.6rem;" onclick="dict.copyText(decodeURIComponent('${encodeURIComponent(rawDataStr)}'), this)">Copy All</button>
         </div>
-        <pre class="bg-black p-2 rounded text-info border border-secondary font-monospace" 
+        <pre class="bg-black p-2 rounded text-info border font-monospace" 
              style="font-size: 0.65rem; white-space: pre-wrap; cursor: pointer;" 
              onclick="dict.copyText(this.innerText, this)" title="Click to copy raw content">${rawDataStr}</pre>
       </div>`;
