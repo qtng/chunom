@@ -139,9 +139,16 @@ class AudioManager {
             });
             const result = await response.json();
 
+            if (!response.ok) {
+                console.error(`Google Cloud TTS API error (HTTP ${response.status}):`, result.error || result);
+                return;
+            }
+
             if (result.audioContent) {
                 const audio = new Audio(`data:audio/mp3;base64,${result.audioContent}`);
                 audio.play();
+            } else {
+                console.warn("Google TTS response had no audioContent:", result);
             }
         } catch (err) {
             console.error("Cloud TTS failed:", err);
