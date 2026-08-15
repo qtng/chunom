@@ -18,7 +18,7 @@ class AudioManager {
         this.events = new EventEmitter();
         
         // Configuration & API Key Override
-        const defaultApiKey = "AIzaSyCkkaumOk3-wz9yR7XfxMWYYxdiF_m1iNE";
+        const defaultApiKey = "AIzaSyBI69AC7hLhMfX5gGEw1npY_-Na9V6MdaU";
         this.googleApiKey = initialState.googleApiKey || defaultApiKey;
         
         this.el.crossOrigin = "anonymous";
