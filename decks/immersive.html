@@ -505,7 +505,7 @@
                 setTimeout(() => document.getElementById('loading-overlay').remove(), 1000);
                 document.getElementById('learning-view').classList.add('active');
                 
-                this.audio.init(); 
+                this.audio.initMusicEngine(); 
                 this.visual.startCycle();
                 this.visual.setSource(localStorage.getItem('videoKey') || 'luminous_spirit');
                 
