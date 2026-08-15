@@ -1,6 +1,8 @@
 /**
  * AUDIO MANAGER (Stable Routing Version with Cloud Fallback)
  * https://qtng.github.io/chunom/superlearning/audiomanager.js
+ * Call initMusicEngine() to use background audio and binaural beats.
+ * To only use speak(str, rate=0.8, mode='auto'), don't call initMusicEngine().
  */
 
 class EventEmitter {
@@ -68,7 +70,7 @@ class AudioManager {
 
     on(evt, fn) { this.events.on(evt, fn); }
 
-    init() {
+    initMusicEngine() {
         if (!this.ctx) {
             this.ctx = new (window.AudioContext || window.webkitAudioContext)();
             this.masterCompressor = this.ctx.createDynamicsCompressor();
@@ -92,7 +94,7 @@ class AudioManager {
      * @param {string} mode - 'auto' (default), 'browser' (force local), 'cloud' (force Google)
      * @param {number} rate - Speaking rate for browser TTS
      */
-    async speak(text, mode = 'auto', rate = 0.8) {
+    async speak(text, rate = 0.8, mode = 'auto') {
         if (!this.state.isSpeechOn) return;
 
         if (!this.voice && window.speechSynthesis) {
