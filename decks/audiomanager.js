@@ -126,7 +126,7 @@ class AudioManager {
         if (!this.googleApiKey) return;
 
         const url = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${this.googleApiKey}`;
-        const input = !ssml ? {text: text} : {input: {ssml: text}};
+        const input = !ssml ? {text: text} : {ssml: text};
         const payload = {
             input: input,
             voice: { languageCode: lang || "vi-VN", name: voice || "vi-VN-Standard-A" },
