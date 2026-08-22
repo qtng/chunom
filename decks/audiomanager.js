@@ -122,12 +122,13 @@ class AudioManager {
         }
     }
 
-    async speakCloud(text, lang= "vi-VN", voice = "vi-VN-Standard-A") {
+    async speakCloud(text, lang= "vi-VN", voice = "vi-VN-Standard-A", ssml = false) {
         if (!this.googleApiKey) return;
 
         const url = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${this.googleApiKey}`;
+        const input = !ssml ? {text: text} : {input: {ssml: text}};
         const payload = {
-            input: { text: text },
+            input: input,
             voice: { languageCode: lang || "vi-VN", name: voice || "vi-VN-Standard-A" },
             audioConfig: { audioEncoding: "MP3" }
         };
