@@ -146,9 +146,18 @@ class AudioManager {
             }
 
             if (result.audioContent) {
+                return new Promise((resolve) => {
+                    const audio = new Audio(`data:audio/mp3;base64,${result.audioContent}`);
+                    audio.onended = resolve;
+                    audio.onerror = resolve; // ignore errors
+                    audio.play().catch(resolve);
+                });
+            }
+            /*if (result.audioContent) {
                 const audio = new Audio(`data:audio/mp3;base64,${result.audioContent}`);
                 audio.play();
-            } else {
+            }*/
+            else {
                 console.warn("Google TTS response had no audioContent:", result);
             }
         } catch (err) {
