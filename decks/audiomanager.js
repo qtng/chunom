@@ -105,12 +105,12 @@ class AudioManager {
         const forceBrowser = (mode === 'browser');
 
         if (!forceCloud && (forceBrowser || mode === 'auto') && this.voice) {
-            speechSynthesis.cancel();
             setTimeout(() => {
                 const u = new SpeechSynthesisUtterance(text);
                 u.voice = this.voice;
                 u.lang = 'vi-VN';
                 u.rate = rate;
+                this.stopSpeech();
                 speechSynthesis.speak(u);
             }, 50);
         } else {
@@ -118,7 +118,7 @@ class AudioManager {
                 console.warn("Browser voice forced but not found.");
                 return;
             }
-            await this._speakCloud(text);
+            await this.speakCloud(text);
         }
     }
 
@@ -148,20 +148,35 @@ class AudioManager {
             if (result.audioContent) {
                 return new Promise((resolve) => {
                     const audio = new Audio(`data:audio/mp3;base64,${result.audioContent}`);
-                    audio.onended = resolve;
-                    audio.onerror = resolve; // ignore errors
+                    this.currentCloudAudio = audio;
+                    audio.onended = () => {
+                        this.currentCloudAudio = null;
+                        resolve();
+                    };
+                    audio.onerror = () => {
+                        this.currentCloudAudio = null;
+                        resolve();
+                    };
+                    this.stopSpeech();
                     audio.play().catch(resolve);
                 });
             }
-            /*if (result.audioContent) {
-                const audio = new Audio(`data:audio/mp3;base64,${result.audioContent}`);
-                audio.play();
-            }*/
             else {
                 console.warn("Google TTS response had no audioContent:", result);
             }
         } catch (err) {
             console.error("Cloud TTS failed:", err);
+        }
+    }
+
+    stopSpeech() {
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
+        if (this.currentCloudAudio) {
+            this.currentCloudAudio.pause();
+            this.currentCloudAudio.currentTime = 0;
+            this.currentCloudAudio = null;
         }
     }
 
