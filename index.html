@@ -151,12 +151,12 @@
       <div class="mt-3 text-center text-lg-end">
         <!-- Toggle für Quốc Ngữ ausblenden -->
         <div class="d-inline-flex">
-          <div class="form-check form-switch small me-3">
+          <div class="form-check form-switch small">
             <input class="form-check-input" type="checkbox" role="switch" id="toggle-qn">
             <label class="form-check-label text-secondary" for="toggle-qn">Hiện Quốc Ngữ</label>
           </div>
           <!-- Simplified QATT Toggle -->
-          <div class="form-check form-switch small">
+          <div class="d-none ms-3 form-check form-switch small">
             <input class="form-check-input" type="checkbox" role="switch" id="toggle-qatt">
             <label class="form-check-label text-secondary" for="toggle-qatt">Dùng QÂTT giản thể</label>
           </div>
@@ -604,6 +604,7 @@ class ChunomDict {
 let renderer, parser, dict;
 
 function renderQatt(el) {
+  return "n/a"
   if (el.dataset.rendered) return;
   const qattType = localStorage.getItem('qattType') || "3";
   let code = el.innerText.trim();
