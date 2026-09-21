@@ -604,7 +604,8 @@ class ChunomDict {
 let renderer, parser, dict;
 
 function renderQatt(el) {
-  return "n/a"
+  el.innerHTML = "";
+  return;
   if (el.dataset.rendered) return;
   const qattType = localStorage.getItem('qattType') || "3";
   let code = el.innerText.trim();
