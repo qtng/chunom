@@ -89,7 +89,7 @@ const MASTER_PROMPT = [
   'Do not transcribe yet, only prepare candidates.',
   'Split the text into syllables and group them into words where appropriate.',
   'Give each unit a sequential ID; no syllable may be missing or added.',
-  'For each unit give 2 to 4 candidates sorted by confidence.',
+  'For each unit give 2 to 4 candidates sorted by confidence. Prefer phono-semantic if available and confidence is sufficient.',
   'For each candidate give: character, Unicode codepoint, Vietnamese reading, type (Sino-Vietnamese / purely Nôm / phono-semantic), and a reason of at most 10 words.',
   'The reading of a candidate must match the syllable.',
   'If you are not sure a character exists or is read that way, do not propose it.',
