@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quốc Ngữ → Chữ Nôm with your own chatbot</title>
+<style>
+  :root {
+    --ink: #1d2433;
+    --paper: #f7f8fa;
+    --line: #cfd5e0;
+    --accent: #2a5c8a;
+    --accent-ink: #ffffff;
+    --warn: #8a4b12;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 1.25rem;
+    font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--ink); background: var(--paper);
+  }
+  main { max-width: 42rem; margin: 0 auto; }
+  h1 { font-size: 1.5rem; line-height: 1.25; margin: 0 0 .5rem; }
+  h2 { font-size: 1.1rem; margin: 2rem 0 .5rem; }
+  p { margin: .5rem 0; }
+  .nom { font-family: "Noto Serif CJK SC", "Noto Serif SC", "Nom Na Tong", "HAN NOM A", "HAN NOM B", serif; }
+  ol { padding-left: 1.25rem; }
+  li { margin: .25rem 0; }
+  .row { display: flex; flex-wrap: wrap; gap: .5rem; margin: .75rem 0; }
+  button {
+    font: inherit; padding: .6rem .9rem; border-radius: 6px;
+    border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink);
+    cursor: pointer;
+  }
+  button.secondary { background: transparent; color: var(--accent); }
+  button:focus-visible { outline: 3px solid #f0b429; outline-offset: 2px; }
+  details { margin: 1rem 0; border-top: 1px solid var(--line); padding-top: .5rem; }
+  summary { cursor: pointer; font-weight: 600; }
+  pre {
+    white-space: pre-wrap; word-break: break-word; font-size: .85rem;
+    background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: .75rem;
+    max-height: 18rem; overflow: auto;
+  }
+  #status { min-height: 1.5rem; color: var(--accent); font-weight: 600; }
+  #status.warn { color: var(--warn); }
+  .note { color: #4a5568; font-size: .9rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Quốc Ngữ → Chữ Nôm with your own chatbot</h1>
+  <p>Open a guided prompt in your chatbot. You add your text at the end, send it, and the chatbot walks you through candidates, selection and a final check.</p>
+
+  <h2>How it works</h2>
+  <ol>
+    <li>Choose your chatbot below. The prompt appears in the input box but is not sent yet.</li>
+    <li>Click at the very end of the prompt and type or paste your Quốc Ngữ text (one or two sentences). Then send.</li>
+    <li>Review the candidate table. Reply <b>OK</b>, or name candidates to remove or add.</li>
+    <li>Reply <b>OK</b> again for the final check. The result is shown as Quốc Ngữ and Chữ Nôm text.</li>
+  </ol>
+
+  <div class="row">
+    <button id="open-chatgpt">Open in ChatGPT</button>
+    <button id="open-claude">Open in Claude</button>
+    <button id="open-gemini">Open Gemini and copy prompt</button>
+  </div>
+  <div class="row">
+    <button class="secondary" id="copy-master">Copy prompt for Gemini</button>
+  </div>
+  <div id="status" role="status" aria-live="polite"></div>
+
+  <details>
+    <summary>Show the prompt</summary>
+    <pre id="master-view"></pre>
+  </details>
+
+  <p class="note">Your text is sent only to the chatbot you choose, not to this site. Chatbots can still make mistakes: verify uncertain characters in a dictionary.</p>
+</main>
+
+<script>
+// The prompt is deliberately a single line without line breaks: some chatbots
+// send a prefilled prompt immediately when it contains a line break.
+// The final sentence is the input prompt that the user completes with their text.
+const MASTER_PROMPT = [
+  'You will help me transcribe Vietnamese (Quốc Ngữ) into Chữ Nôm.',
+  'Follow this protocol strictly, never skip ahead, and execute only the step that is currently due.',
+
+  'STEP 1 (now, using the text at the end of this message):',
+  'Do not transcribe yet, only prepare candidates.',
+  'Split the text into syllables and group them into words where appropriate.',
+  'Give each unit a sequential ID; no syllable may be missing or added.',
+  'For each unit give 2 to 4 candidates sorted by confidence.',
+  'For each candidate give: character, Unicode codepoint, Vietnamese reading, type (Sino-Vietnamese / purely Nôm / phono-semantic), and a reason of at most 10 words.',
+  'The reading of a candidate must match the syllable.',
+  'If you are not sure a character exists or is read that way, do not propose it.',
+  'Never invent characters; write "none" if you know no reliable candidate.',
+  'For purely Vietnamese words (pronouns, particles, function words) never propose a Sino-Vietnamese character with a different reading, e.g. never 我 for "tôi" (it is read "ngã").',
+  'Show the result as a table: ID | Quốc Ngữ | candidates.',
+  'End with exactly: "Reply OK to continue, or tell me which candidates to remove or add."',
+
+  'STEP 2 (after my reply):',
+  'Apply any corrections I gave.',
+  'Choose exactly one candidate per unit, only from the list; if none fits, use "?".',
+  'Make sure the choices are coherent in context (word class, meaning, consistent spelling of identical words).',
+  'Show a table: ID | Quốc Ngữ | chosen character.',
+  'Then show the IDs marked "?" or low confidence, and the unit counts (input vs. output; no omissions, no additions).',
+  'Finally show the assembled text on two lines: "Quốc Ngữ: ..." and "Chữ Nôm: ...".',
+  'End with exactly: "Reply OK for a back-reading check."',
+
+  'STEP 3 (after my OK):',
+  'Ignore your earlier reasoning.',
+  'Read each character of the Chữ Nôm text in Quốc Ngữ based on the characters alone.',
+  'Do not guess to force a match; write "?" if a reading is unclear.',
+  'Compare with the original text and list every discrepancy with position, the syllable you read, and the expected syllable (or say there are none).',
+  'Finally show the verified text again on two lines: "Quốc Ngữ: ..." and "Chữ Nôm: ...".',
+
+  'Now begin with STEP 1 for this Quốc Ngữ text: '
+].join(' ');
+
+// Providers that accept a prefilled prompt via URL. Verify occasionally: such parameters can change.
+const PROVIDERS = {
+  chatgpt: (q) => "https://chatgpt.com/?q=" + q,
+  claude:  (q) => "https://claude.ai/new?q=" + q
+};
+const FALLBACK_URLS = { chatgpt: "https://chatgpt.com/", claude: "https://claude.ai/new" };
+const GEMINI_URL = "https://gemini.google.com/app";
+const MAX_ENCODED_LENGTH = 6000; // longer links may be cut off by some servers
+
+const $ = (id) => document.getElementById(id);
+const status = $("status");
+
+function say(msg, warn = false) {
+  status.textContent = msg;
+  status.className = warn ? "warn" : "";
+}
+
+async function copy(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (e) {
+    // Fallback for browsers without clipboard permission
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    let ok = false;
+    try { ok = document.execCommand("copy"); } catch (_) {}
+    ta.remove();
+    return ok;
+  }
+}
+
+// Opens the provider with the prefilled prompt. If the link would be too long, copies instead.
+async function openProvider(name, prompt) {
+  const encoded = encodeURIComponent(prompt);
+  if (encoded.length > MAX_ENCODED_LENGTH) {
+    const ok = await copy(prompt);
+    window.open(FALLBACK_URLS[name], "_blank", "noopener");
+    say(ok ? "Prompt too long for a link. It was copied: paste it into the chat, then add your text at the end."
+           : "Prompt too long for a link. Use “Copy prompt”, paste it into the chat, then add your text at the end.", true);
+    return;
+  }
+  window.open(PROVIDERS[name](encoded), "_blank", "noopener");
+  say("Opened. Add your text at the end of the prompt, then send. If the prompt box is empty, use “Copy prompt” and paste it.");
+}
+
+async function openGemini(prompt) {
+  const ok = await copy(prompt);
+  window.open(GEMINI_URL, "_blank", "noopener");
+  say(ok ? "Prompt copied. In Gemini, paste it, add your text at the end, then send."
+         : "Could not copy automatically. Use “Copy prompt”, then paste it in Gemini.", !ok);
+}
+
+$("master-view").textContent = MASTER_PROMPT;
+$("open-chatgpt").onclick = () => openProvider("chatgpt", MASTER_PROMPT);
+$("open-claude").onclick  = () => openProvider("claude", MASTER_PROMPT);
+$("open-gemini").onclick  = () => openGemini(MASTER_PROMPT);
+$("copy-master").onclick  = async () => {
+  say((await copy(MASTER_PROMPT))
+    ? "Prompt copied. Paste it into your chatbot and add your text at the end."
+    : "Copy failed. Open “Show the prompt” and copy it by hand.", false);
+};
+</script>
+</body>
+</html>
