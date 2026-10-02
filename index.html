@@ -7,10 +7,12 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" integrity="sha384-tViUnnbYAV00FLIhhi3v/dWt3Jxw4gZQcNoSCxCIFNJVCx7/D55/wXsrNIRANwdD" crossorigin="anonymous">
   <link rel="stylesheet" href="https://chunom.org/media/css/fonts/all.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://chunom.org/media/js/ime.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="../qatt/js/navigation.js"></script>
-  <script src="../qatt/js/renderer.js"></script>
-  <script src="../qatt/js/parser.js"></script>
+  <script src="https://qatt.org/qatt/js/navigation.js"></script>
+  <script src="https://qatt.org/qatt/js/qatt.js"></script>
+  <script src="https://qatt.org/qatt/js/parser.js"></script>
   <style>
     svg {
       stroke: currentColor;
@@ -65,6 +67,13 @@
       z-index: 9999;
       display: none;
       border: 1px solid #444;
+    }
+    .tile {
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .tile:hover {
+      transform: translateY(-2px);
+      border-color: rgba(var(--bs-primary-rgb), 0.6) !important;
     }
     .clickable-meta {
       cursor: pointer;
@@ -148,19 +157,19 @@
           <div class="spinner-border spinner-border-sm text-info" role="status"></div>
         </div>
       </div>
-      <div class="mt-3 text-center text-lg-end">
+      <div class="mt-3 d-flex justify-content-between align-items-center">
         <!-- Toggle für Quốc Ngữ ausblenden -->
         <div class="d-inline-flex">
-          <div class="form-check form-switch small">
+          <div class="form-check form-switch small mb-0">
             <input class="form-check-input" type="checkbox" role="switch" id="toggle-qn">
             <label class="form-check-label text-secondary" for="toggle-qn">Hiện Quốc Ngữ</label>
           </div>
-          <!-- Simplified QATT Toggle -->
-          <div class="d-none ms-3 form-check form-switch small">
-            <input class="form-check-input" type="checkbox" role="switch" id="toggle-qatt">
-            <label class="form-check-label text-secondary" for="toggle-qatt">Dùng QÂTT giản thể</label>
+          <div class="ms-3 form-check form-switch small mb-0">
+            <input class="form-check-input" type="checkbox" role="switch" id="toggle-telex">
+            <label class="form-check-label text-secondary" for="toggle-telex">Telex</label>
           </div>
         </div>
+        <button id="bookmarks-btn" type="button" class="btn btn-sm btn-link" disabled>My Bookmarks</button>
       </div>
     </div>
 
@@ -175,6 +184,7 @@
       </div>
     </div>
 
+    <div id="bookmarks-title" class="d-none mt-4 alert alert-light shadow-sm py-1 border-0 text-uppercase fw-bold">My Bookmarks</div>
     <div id="results" class="list-group w-100"></div>
   </div>
 
@@ -184,7 +194,7 @@
         <div class="modal-header">
           <h5 class="modal-title" id="modalTitle">Chi tiết</h5>
           <div class="d-flex align-items-center">
-            <i class="bi bi-heart" onclick="alert('not yet implemented')"></i>
+            <button type="button" id="bookmark-toggle" class="btn p-0 border-0 text-danger" aria-label="Bookmark"><i class="bi bi-heart"></i></button>
             <button type="button" class="ms-4 btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
         </div>
@@ -207,7 +217,7 @@ class ChunomDict {
     this.statusContainer = document.getElementById(statusId);
     this.toast = document.getElementById('copy-toast');
     this.qnToggle = document.getElementById('toggle-qn');
-    this.qattToggle = document.getElementById('toggle-qatt');
+    this.telexToggle = document.getElementById('toggle-telex');
     
     const modalEl = document.getElementById('detailModal');
     if (typeof bootstrap !== 'undefined') {
@@ -219,11 +229,12 @@ class ChunomDict {
     this.cacheKey = 'chunom_dict_data';
     this.cacheTimeKey = 'chunom_dict_timestamp';
     this.qnHiddenKey = 'chunom_qn_hidden';
-    this.qattTypeKey = 'qattType'; 
+    this.telexKey = 'chunom_telex';
     this.expirationMs = 24 * 60 * 60 * 1000; 
     this.data = [];
     
     this.initSettings();
+    this.initBookmarks();
     this.initHistoryHandler(modalEl);
     this.init();
     this.initGlobalClickHandlers();
@@ -240,28 +251,78 @@ class ChunomDict {
       document.body.classList.toggle('hide-qn', !hidden);
     });
 
-    const isMini = localStorage.getItem(this.qattTypeKey) !== '0';
-    this.qattToggle.checked = isMini;
-
-    this.qattToggle.addEventListener('change', (e) => {
-      const qattMini = e.target.checked ? "3" : "0";
-      localStorage.setItem(this.qattTypeKey, qattMini);
-      this.triggerReRender();
+    // Telex-IME von chunom.org: auf Touch-Geräten standardmäßig aus
+    const telex = localStorage.getItem(this.telexKey);
+    this.telexToggle.checked = telex ? telex === 'true' : !matchMedia('(pointer: coarse)').matches;
+    this.setTelex(this.telexToggle.checked);
+    this.telexToggle.addEventListener('change', (e) => {
+      localStorage.setItem(this.telexKey, e.target.checked);
+      this.setTelex(e.target.checked);
     });
   }
 
-  triggerReRender() {
-    document.querySelectorAll('tt').forEach(tt => {
-      tt.removeAttribute('data-rendered');
-      if (!tt.dataset.originalCode) {
-        tt.dataset.originalCode = tt.title || tt.innerText;
-      }
-      tt.innerText = tt.dataset.originalCode; 
-      renderQatt(tt);
-    });
-    if (this.searchInput.value) {
-      this.search(this.searchInput.value);
+  setTelex(on) {
+    if (!window.jQuery?.fn.ime) return;
+    const $search = $(this.searchInput);
+    if ($search.data('ime')) {
+      $search.ime('update', on ? { method: true, candidate_list: true } : { method: 'off', candidate_list: false });
+    } else if (on) {
+      $search.ime({
+        defer: true,
+        candidate_list: true,
+        font_list: ['nom na tong supplement'],
+        candidate_selected: (glyph) => { setTimeout(() => this.onType()); return glyph; }
+      });
     }
+  }
+
+  // Das IME ändert den Wert ohne input-Event, daher zusätzlich auf keyup reagieren
+  onType() {
+    if (this.searchInput.value === this.lastTerm) return;
+    this.lastTerm = this.searchInput.value;
+    this.search(this.lastTerm);
+  }
+
+  initBookmarks() {
+    this.bookmarksKey = 'chunom_bookmarks';
+    this.bookmarks = JSON.parse(localStorage.getItem(this.bookmarksKey) || '[]');
+    this.bookmarkToggle = document.getElementById('bookmark-toggle');
+    this.bookmarksBtn = document.getElementById('bookmarks-btn');
+    this.bookmarksTitle = document.getElementById('bookmarks-title');
+    this.bookmarkToggle.addEventListener('click', () => {
+      this.toggleBookmark(this.currentNom);
+      this.bookmarkToggle.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.5)' }, { transform: 'scale(1)' }], { duration: 300, easing: 'ease-out' });
+    });
+    this.bookmarksBtn.addEventListener('click', () => this.showingBookmarks ? this.search(this.searchInput.value) : this.showBookmarks());
+  }
+
+  toggleBookmark(nom) {
+    const i = this.bookmarks.indexOf(nom);
+    if (i < 0) this.bookmarks.unshift(nom); else this.bookmarks.splice(i, 1);
+    localStorage.setItem(this.bookmarksKey, JSON.stringify(this.bookmarks));
+    this.updateBookmarkUi();
+    if (this.showingBookmarks) this.showBookmarks();
+  }
+
+  updateBookmarkUi() {
+    this.bookmarkToggle.innerHTML = `<i class="bi ${this.bookmarks.includes(this.currentNom) ? 'bi-heart-fill' : 'bi-heart'}"></i>`;
+    this.bookmarksBtn.disabled = !this.bookmarks.length;
+  }
+
+  showBookmarks() {
+    if (!this.bookmarks.length) return this.search(this.searchInput.value);
+    this.resultsContainer.innerHTML = '';
+    this.discoveryContainer.classList.add('d-none');
+    this.bookmarksTitle.classList.remove('d-none');
+    this.showingBookmarks = true;
+    this.bookmarksBtn.classList.add('active');
+    const fragment = document.createDocumentFragment();
+    for (const nom of this.bookmarks) {
+      const rows = this.data.filter(r => r[1] === nom);
+      // Zeichen, die nur in Komposita vorkommen, haben keine eigene Zeile
+      (rows.length ? rows : [['', nom, '', '']]).forEach(r => fragment.appendChild(this.createResultItem(r, true)));
+    }
+    this.resultsContainer.appendChild(fragment);
   }
 
   initHistoryHandler(modalEl) {
@@ -342,8 +403,10 @@ class ChunomDict {
     this.statusContainer.classList.add('d-none');
     this.searchInput.removeAttribute('disabled');
     this.searchInput.placeholder = "Type Quốc Ngữ or Chữ Nôm...";
-    this.searchInput.addEventListener('input', (e) => this.search(e.target.value));
+    this.searchInput.addEventListener('input', () => this.onType());
+    this.searchInput.addEventListener('keyup', () => this.onType());
     this.renderDiscoveryLists();
+    this.updateBookmarkUi();
   }
 
   getQattHtml(quocNgu, fontSize = 'inherit') {
@@ -351,7 +414,7 @@ class ChunomDict {
     return quocNgu.split(/\s+/).map(word => {
       const parsed = parser.parse(word);
       const cleanWord = word.replace(/"/g, '&quot;');
-      return parsed ? `<tt style="font-size: ${fontSize};" title="${cleanWord}" data-original-code="${parsed.code}">${parsed.code}</tt>` : '';
+      return parsed ? `<tt style="font-size: ${fontSize};" title="${cleanWord}">${parsed.code}</tt>` : '';
     }).join(' ');
   }
 
@@ -379,7 +442,7 @@ class ChunomDict {
         const col = document.createElement('div');
         col.className = 'col';
         col.innerHTML = `
-          <div class="pt-4 p-2 rounded text-center h-100 d-flex flex-column justify-content-center border border-secondary border-opacity-25 position-relative shadow-sm opacity-hover-75" style="cursor: pointer">
+          <div class="pt-4 p-2 rounded text-center h-100 d-flex flex-column justify-content-center border border-secondary border-opacity-25 position-relative shadow-sm tile" style="cursor: pointer">
             <span class="position-absolute top-0 start-0 m-1 badge badge-rank" style="opacity: 0.8">#${r[5]}</span>
             <div class="h3 font-serif mb-0">${this.wrapNomChars(r[1])}</div>
             <div class="d-flex align-items-center justify-content-center gap-1 mt-1 overflow-hidden flex-wrap">
@@ -408,6 +471,9 @@ class ChunomDict {
 
   search(term) {
     const query = term.trim().toLowerCase();
+    this.showingBookmarks = false;
+    this.bookmarksBtn.classList.remove('active');
+    this.bookmarksTitle.classList.add('d-none');
     
     if (this.searchPreview) {
       if (query && !/[\u4e00-\u9fff]/.test(query)) {
@@ -441,7 +507,7 @@ class ChunomDict {
     this.resultsContainer.appendChild(fragment);
   }
 
-  createResultItem(row) {
+  createResultItem(row, removable = false) {
     const [quocNgu, nom, meaning, id] = [row[0], row[1], row[2], row[5]];
     const div = document.createElement('div');
     div.className = 'list-group-item list-group-item-action py-3';
@@ -454,6 +520,7 @@ class ChunomDict {
         <div class="text-end d-flex align-items-center gap-2 flex-wrap justify-content-end">
           ${this.getQattHtml(quocNgu)}
         </div>
+        ${removable ? `<button type="button" class="btn p-0 border-0 text-secondary ms-3 remove-bookmark" title="Remove" aria-label="Remove bookmark"><i class="bi bi-trash"></i></button>` : ''}
       </div>
       <div class="d-flex justify-content-between align-items-center w-100">
         <p class="mb-0 text-secondary small text-truncate flex-grow-1">${meaning}</p>
@@ -461,6 +528,10 @@ class ChunomDict {
       </div>
     `;
     div.addEventListener('click', () => this.showDetails(id, nom));
+    div.querySelector('.remove-bookmark')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggleBookmark(nom);
+    });
     return div;
   }
 
@@ -486,8 +557,9 @@ class ChunomDict {
 
   wrapNomChars(text) {
     if (!text) return '';
-    return text.replace(/[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}]/gu, (match) => {
-      return `<span class="font-serif" style="cursor: pointer;" onclick="event.stopPropagation(); dict.showDetails(null, '${match}')">${match}</span>`;
+    return text.replace(/[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{323af}]/gu, (match) => {
+      const hex = match.codePointAt(0).toString(16).toUpperCase();
+      return `<span class="font-serif" style="cursor: pointer;" onclick="event.stopPropagation(); dict.showDetails(null, '${match}')"><img src="https://chunom.org/media/generated/${hex}-32.png" alt="${match}" width="32" height="32" style="vertical-align: middle" onerror="this.replaceWith(this.alt)"></span>`;
     });
   }
 
@@ -518,6 +590,8 @@ class ChunomDict {
     }
 
     this.modalTitle.innerText = 'Details';
+    this.currentNom = mainNom;
+    this.updateBookmarkUi();
     const mainEntry = sortedRelated.find(r => r[1] === mainNom && !r[0].trim().includes(' '));
     const hex = mainEntry ? mainEntry[6] : (related.find(r => r[6])?.[6] || '');
     const strokes = mainEntry ? mainEntry[4] : (related.find(r => r[4])?.[4] || '');
@@ -551,10 +625,14 @@ class ChunomDict {
                onclick="dict.copyText('${mainNom}', this)" title="Click to copy glyph">
             <!--<span class="display-1 font-serif text-nowrap">${mainNom}</span>-->
             <img src="https://chunom.org/media/animations/anim-${hex}.gif"
-              data-fallback="https://chunom.org/media/glyph-composer/new/${hex}.svg"
+              data-fallbacks="https://chunom.org/media/glyph-composer/new/${hex}.svg https://chunom.org/media/glyph-composer/svg/${hex}.svg"
               onload="this.style.visibility='visible'"
-              onerror="$(this).css({visibility:'hidden',marginTop:-40,height:200});var fb=$(this).data('fallback'); $(this).data('fallback', ''); if(fb!='') this.src=fb; else {this.onerror=null;this.src='https://chunom.org/media/glyph-composer/svg/${hex}.svg'}"
+              onerror="Object.assign(this.style,{visibility:'hidden',marginTop:'-40px',height:'200px'});var fb=this.dataset.fallbacks.split(' ').filter(Boolean); if(fb.length){this.dataset.fallbacks=fb.slice(1).join(' ');this.src=fb[0]} else {this.onerror=null;this.nextElementSibling.classList.remove('d-none');this.remove()}"
               style="height:150px;width:150px"/>
+            <div class="d-none text-center">
+              <div class="display-1 font-serif text-nowrap">${hex ? `&#x${hex};` : mainNom}</div>
+              ${hex ? `<div class="small text-secondary font-monospace">U+${hex}</div>` : ''}
+            </div>
           </div>
         </div>
         <div class="flex-grow-1">
@@ -601,48 +679,17 @@ class ChunomDict {
   }
 }
 
-let renderer, parser, dict;
-
-function renderQatt(el) {
-  el.innerHTML = "";
-  return;
-  if (el.dataset.rendered) return;
-  const qattType = localStorage.getItem('qattType') || "3";
-  let code = el.innerText.trim();
-  if (!el.dataset.originalCode) {
-    el.dataset.originalCode = code;
-  }
-  
-  //if (qattType === "0" && code.includes(",")) code = code.replace(",", ",+");
-  
-  el.innerHTML = "";
-  el.dataset.rendered = "true";
-  renderer.render(code, el, parseInt(qattType));
-}
-
-function initObserver() {
-  const observer = new MutationObserver(mutations => {
-    for (let m of mutations) {
-      for (let n of m.addedNodes) {
-        if (n.nodeName === "TT") renderQatt(n);
-        else if (n.nodeType === 1) n.querySelectorAll("tt").forEach(renderQatt);
-      }
-    }
-  });
-  observer.observe(document.body, { childList: true, subtree: true });
-  document.querySelectorAll("tt").forEach(renderQatt);
-}
+let parser, dict;
 
 window.addEventListener("load", () => {
   try {
-    renderer = new SvgGlyphRenderer({});
     parser = new VietnameseParser();
-    initObserver();
+    new Qatt().observe("TT");
     dict = new ChunomDict('https://qatt.org/chunom/dict.csv', 'search', 'results', 'dict-status');
   } catch (e) {
     console.error("Initialization error", e);
   }
 });
   </script>
-</body>
 </html>
+</body>
