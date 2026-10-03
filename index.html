@@ -70,6 +70,14 @@
     .tile {
       transition: transform 0.15s, border-color 0.15s;
     }
+    #discovery .nav-link:not(.active) .tab-count {
+      display: none;
+    }
+    @media (max-width: 575.98px) {
+      #discovery .nav-tabs {
+        --bs-nav-link-padding-x: .6rem;
+      }
+    }
     .tile:hover, .tile:focus-visible {
       transform: translateY(-2px);
       border-color: rgba(var(--bs-primary-rgb), 0.6) !important;
@@ -169,16 +177,8 @@
       </div>
     </div>
 
-    <div id="discovery" class="mt-4">
-      <div class="mb-5">
-        <div class="alert alert-light shadow-sm py-1 border-0 text-uppercase fw-bold">Top 85 Frequent Words</div>
-        <div id="list-top-85" class="row row-cols-4 row-cols-sm-5 row-cols-md-8 row-cols-lg-10 g-2"></div>
-      </div>
-      <div class="mb-5">
-        <div class="alert alert-light shadow-sm py-1 border-0 text-uppercase fw-bold">Next Frequent Words (up to Rank 500)</div>
-        <div id="list-next-350" class="row row-cols-4 row-cols-sm-5 row-cols-md-8 row-cols-lg-10 g-2"></div>
-      </div>
-    </div>
+    <!-- Tabs nach Rang und Level, aufgebaut in renderDiscoveryLists() -->
+    <div id="discovery" class="mt-4 mb-5"></div>
 
     <div id="bookmarks-title" class="d-none mt-4 alert alert-light shadow-sm py-1 border-0 text-uppercase fw-bold">My Bookmarks</div>
     <div id="results" class="list-group w-100"></div>
@@ -204,12 +204,12 @@
 
   <script>
 // Kleiner DOM-Helfer: el('div', { className: 'x', 'data-copy': '…' }, kind, 'Text', [weitere]).
-// Texte werden Textknoten, nie HTML; Attribute mit Bindestrich per setAttribute, sonst als Property.
+// Texte werden Textknoten, nie HTML; bekannte Properties direkt, alles andere (data-*, aria-*, role) per setAttribute.
 function el(tag, attrs = {}, ...children) {
   const node = document.createElement(tag);
   for (const [key, value] of Object.entries(attrs)) {
     if (value == null || value === false) continue;
-    if (key.includes('-')) node.setAttribute(key, value); else node[key] = value;
+    if (key.includes('-') || !(key in node)) node.setAttribute(key, value); else node[key] = value;
   }
   node.append(...children.flat(Infinity).filter(child => child != null && child !== false && child !== ''));
   return node;
@@ -484,7 +484,7 @@ class ChunomDict {
       if (!NOM_CHAR.test(ch)) return ch;
       const hex = ch.codePointAt(0).toString(16).toUpperCase();
       return el('span', { className: 'font-serif nom-char', 'data-char': ch },
-        this.image([`https://chunom.org/media/generated/${hex}-32.png`], { alt: ch, width: 32, height: 32, style: 'vertical-align: middle' }, () => ch));
+        this.image([`https://chunom.org/media/generated/${hex}-32.png`], { alt: ch, width: 32, height: 32, loading: 'lazy', style: 'vertical-align: middle' }, () => ch));
     });
   }
 
@@ -502,38 +502,53 @@ class ChunomDict {
   }
 
   renderDiscoveryLists() {
-    const list85 = document.getElementById('list-top-85');
-    const listNext = document.getElementById('list-next-350');
-    if (!list85 || !listNext) return;
+    const rank = r => parseInt(r[5]) || Infinity;
+    const key = r => `${r[1]}|${r[0]}`;
 
-    const uniqueRanksMap = new Map();
-    this.data.forEach(r => {
-      const rank = parseInt(r[5]);
-      if (!isNaN(rank)) {
-        if (!uniqueRanksMap.has(rank) || r[3] === '1') {
-          uniqueRanksMap.set(rank, r);
-        }
-      }
-    });
+    // Nach Rang sortiert (ohne Rang zuletzt), doppelte CSV-Zeilen (gleiches Zeichen und Lesung) nur einmal
+    const sorted = rows => {
+      const seen = new Set();
+      return rows.sort((a, b) => rank(a) - rank(b)).filter(r => !seen.has(key(r)) && seen.add(key(r)));
+    };
+    // Top 100: die ersten 100 Einträge nach Rang, egal welches Level, auch gleichrangige
+    const top100 = sorted(this.data.filter(r => parseInt(r[5]))).slice(0, 100);
+    // Level-Tabs ohne die Top 100, damit jeder Eintrag in genau einem Tab steht.
+    // Level steht in Spalte 3 (0 = ohne Level)
+    const inTop100 = new Set(top100.map(key));
+    const byLevel = (...levels) => sorted(this.data.filter(r => levels.includes(r[3]) && !inTop100.has(key(r))));
 
-    const allUnique = Array.from(uniqueRanksMap.values())
-      .sort((a, b) => parseInt(a[5]) - parseInt(b[5]));
+    // [id, Beschriftung, kurz fürs Handy, Einträge]
+    const tabs = [
+      ['top-100', 'Top 100 Frequent Words', 'Top 100', top100],
+      ['level-2', 'Level 2', 'Level 2', byLevel('1', '2')],
+      ['level-3', 'Level 3', 'Level 3', byLevel('3')],
+      ['level-4', 'Level 4', 'Level 4', byLevel('4')]
+    ];
+    this.discoveryContainer.replaceChildren(
+      // Auf schmalen Bildschirmen waagerecht scrollbar statt umbrechend
+      el('ul', { className: 'nav nav-tabs flex-nowrap overflow-x-auto overflow-y-hidden mb-3', role: 'tablist' }, tabs.map(([id, label, short, rows], i) =>
+        el('li', { className: 'nav-item', role: 'presentation' },
+          el('button', {
+            className: `nav-link text-nowrap${i ? '' : ' active'}`, id: `tab-${id}`, type: 'button', role: 'tab',
+            'data-bs-toggle': 'tab', 'data-bs-target': `#pane-${id}`, 'aria-controls': `pane-${id}`, 'aria-selected': String(!i)
+          }, short === label ? label : [el('span', { className: 'd-sm-none', textContent: short }), el('span', { className: 'd-none d-sm-inline', textContent: label })],
+          // Anzahl, nur am aktiven Reiter sichtbar (CSS)
+          el('span', { className: 'badge rounded-pill text-bg-secondary ms-2 tab-count', textContent: rows.length }))))),
+      el('div', { className: 'tab-content' }, tabs.map(([id, , , rows], i) =>
+        el('div', { className: `tab-pane fade${i ? '' : ' show active'}`, id: `pane-${id}`, role: 'tabpanel', 'aria-labelledby': `tab-${id}` },
+          el('div', { className: 'row row-cols-4 row-cols-sm-5 row-cols-md-8 row-cols-lg-10 g-2' }, rows.map(r => this.createTile(r)))))));
+    // Bootstrap richtet die Pfeiltasten nur für Tabs ein, die beim Laden schon existieren
+    if (window.bootstrap) bootstrap.Tab.getOrCreateInstance(this.discoveryContainer.querySelector('.nav-link.active'));
+  }
 
-    const renderGrid = (items, container) => container.replaceChildren(...items.map(r => {
-      const tile = el('div', { className: 'pt-4 p-2 rounded text-center h-100 d-flex flex-column justify-content-center border border-secondary border-opacity-25 position-relative shadow-sm tile', style: 'cursor: pointer' },
-        el('span', { className: 'position-absolute top-0 start-0 m-1 badge badge-rank', style: 'opacity: 0.8', textContent: `#${r[5]}` }),
-        el('div', { className: 'h3 font-serif mb-0' }, this.nomChars(r[1])),
-        el('div', { className: 'd-flex align-items-center justify-content-center gap-1 mt-1 overflow-hidden flex-wrap' }, this.qattCodes(r[0], '0.7rem')),
-        el('div', { className: 'text-secondary small opacity-75 text-truncate w-100 qn-text', lang: 'vi', textContent: r[0] }));
-      this.makeActivatable(tile, () => this.showDetails(r[5], r[1]));
-      return el('div', { className: 'col' }, tile);
-    }));
-
-    const top85Items = allUnique.filter(r => parseInt(r[5]) <= 85);
-    const nextItems = allUnique.filter(r => parseInt(r[5]) > 85 && parseInt(r[5]) <= 500);
-
-    renderGrid(top85Items, list85);
-    renderGrid(nextItems, listNext);
+  createTile(r) {
+    const tile = el('div', { className: 'pt-4 p-2 rounded text-center h-100 d-flex flex-column justify-content-center border border-secondary border-opacity-25 position-relative shadow-sm tile', style: 'cursor: pointer' },
+      r[5] && el('span', { className: 'position-absolute top-0 start-0 m-1 badge badge-rank', style: 'opacity: 0.8', textContent: `#${r[5]}` }),
+      el('div', { className: 'h3 font-serif mb-0' }, this.nomChars(r[1])),
+      el('div', { className: 'd-flex align-items-center justify-content-center gap-1 mt-1 overflow-hidden flex-wrap' }, this.qattCodes(r[0], '0.7rem')),
+      el('div', { className: 'text-secondary small opacity-75 text-truncate w-100 qn-text', lang: 'vi', textContent: r[0] }));
+    this.makeActivatable(tile, () => this.showDetails(r[5], r[1]));
+    return el('div', { className: 'col' }, tile);
   }
 
   showError(msg) {
