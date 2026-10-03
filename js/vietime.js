@@ -1397,8 +1397,8 @@ var CACHEVERSION = '2017-11-22';
 			defer: false,
 			return_select: false,
 			space_select: false,
-			cached_dictionary: schema+'www.chunom.org/entry/base_chars/', /* Dictionary to load once and saved permanently in browser cache */
-			dictionaries: [schema+'www.chunom.org/entry/generated_chars/'], /* Dictionaries to load */
+			cached_dictionary: schema+'qatt.org/chunom/js/base_chars.json', /* Dictionary to load once and saved permanently in browser cache */
+			dictionaries: [schema+'qatt.org/chunom/js/generated_chars.json'], /* Dictionaries to load */
 			show_defaults: false, /* Show list of default symbols if no matches candidates */
 			show_definitions: true,
 			list_changed: null, /* Handler for candidate list change event */
