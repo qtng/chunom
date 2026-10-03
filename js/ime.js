@@ -1,5 +1,6 @@
 /*
 	VietIME Extension for jQuery
+*/
 
 // Increment to wipe permanent cache
 var CACHEVERSION = '2017-11-22';
@@ -881,7 +882,14 @@ var CACHEVERSION = '2017-11-22';
 				use_cache = true
 			}
             instance._loadStack = 0;
-            instance._finishFn = finish;
+			instance._finishFn = function() {
+				if (finish) finish();
+				if (instance.settings.dictionaries_loaded) instance.settings.dictionaries_loaded.apply(instance);
+			};
+			// complete fires after success and also on errors
+			var done = function() {
+				if (--instance._loadStack == 0 && instance._finishFn) instance._finishFn(), instance._finishFn = null;
+			};
 			for (var i = 0, ilen = dicts.length; i < ilen; i++) {
 				var url_data = dicts[i];
 				if (typeof url_data == "string") {
@@ -895,8 +903,7 @@ var CACHEVERSION = '2017-11-22';
 						if (use_cache && i == ilen-1) {
 							console.log("Loading dictionary to cache: " + url_data);
                             instance._loadStack++;
-							$.ajax({ url: url_data, success: function(data) {
-                                if (--this._loadStack == 0 && this._finishFn) {this._finishFn(), this._finishFn = null}
+							$.ajax({ url: url_data, dataType: 'text', complete: done, success: function(data) {
 								localStorage['__dictionary_cache_'+CACHEVERSION+'__'+this.settings.cached_dictionary] = data;
 								data = $.parseJSON(data);
 								if (data && data.dict) dict_compounds(data.dict);
@@ -905,8 +912,7 @@ var CACHEVERSION = '2017-11-22';
 						} else {
 							console.log("Loading dictionary " + url_data);
                             instance._loadStack++;
-							$.ajax({ url: url_data, success: function(data) {
-                                if (--this._loadStack == 0 && this._finishFn) {this._finishFn(), this._finishFn = null}
+							$.ajax({ url: url_data, dataType: 'text', complete: done, success: function(data) {
 								data = $.parseJSON(data);
 								if (data && data.dict) dict_compounds(data.dict);
 								if (data && data.defs) $.extend(charDetails, data.defs);
@@ -929,7 +935,7 @@ var CACHEVERSION = '2017-11-22';
             var deferred = function(){
                 if (!this.__loading_started__){
                     var info = $('<div class="ime-starting-indicator">⌛</div>').css({position:'absolute',background:'black',color:'black',lineHeight:'1.5em',width:'1.5em',textAlign:'center',opacity:.6,borderRadius:'100px',fontFamily:'serif'});
-                    var pos = $(this.node).attr('readonly', true).before(info).position();
+                    var pos = $(this.node).attr('readonly', ime.settings.defer == 'wait').before(info).position();
                     info.css({top: pos.top, left: pos.left, transition: '1.25s transform', transform: 'rotate(360deg)'})
                     console.log("Loading...");
                     loader(this, function(info){
@@ -1157,6 +1163,19 @@ var CACHEVERSION = '2017-11-22';
 				], pages: 8, page: 0
 			};
 		}
+		var list = findCandidates(w, remainder_required);
+		var clist = vUni.candidateList;
+		if (append && clist && clist.items) {
+			list = list.concat(clist.items);
+		}
+		var numPages = parseInt((list.length + 9) / 10);
+		vUni.candidateList = {items: list, pages: numPages, page: 0};
+		return true;
+	};
+
+	// Searches the loaded dictionaries for entries starting with w
+	// Returns [ str, head, remainder, collate, use_count, remainder.length ] items
+	function findCandidates(w, remainder_required) {
 		var list = [];
 		var seen = {};
 		var i = 0;
@@ -1206,14 +1225,8 @@ var CACHEVERSION = '2017-11-22';
 				)
 			);
 		});
-		var clist = vUni.candidateList;
-		if (append && clist && clist.items) {
-			list = list.concat(clist.items);
-		}
-		var numPages = parseInt((list.length + 9) / 10);
-		vUni.candidateList = {items: list, pages: numPages, page: 0};
-		return true;
-	};
+		return list;
+	}
 	
 	IMEClass.prototype.showCandidates = function(move, revolve) {
 		var clist = $("<div></div>");
@@ -1403,6 +1416,7 @@ var CACHEVERSION = '2017-11-22';
 			show_definitions: true,
 			list_changed: null, /* Handler for candidate list change event */
 			candidate_selected: null, /* call back (glyph, word) must return glyph */
+			dictionaries_loaded: null, /* call back when all dictionaries are loaded */
 			font_list: '', /* CSS font stack to use for character display */
 			match_fonts: true, /* Applies font list to input field, too. Only when chunom=true */
 			background: '#eeeeee',
@@ -1468,6 +1482,21 @@ var CACHEVERSION = '2017-11-22';
 
 	$.fn.vietime.dict = dict;
 	$.fn.vietime.dict_compounds = dict_compounds;
+
+	// Looks up a Quoc Ngu word in the loaded dictionaries, e.g. $.fn.vietime.lookup('chữ nôm')
+	// Returns [{glyph, reading, definition}], exact matches first
+	$.fn.vietime.lookup = function(word) {
+		word = (word || '').toLowerCase().replace(/[\s\-']/g, '');
+		if (word == '') return [];
+		return findCandidates(word, false).map(function(item) {
+			var key = item[1] + item[2];
+			return {
+				glyph: item[0],
+				reading: key.replace(upperCaseChar_RegExp, ' $1').trim().toLowerCase(),
+				definition: (charDetails[key + item[0]] || '').trim()
+			};
+		});
+	};
 
 })(jQuery);
 
