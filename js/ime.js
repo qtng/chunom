@@ -644,8 +644,8 @@ var CACHEVERSION = '2017-11-22';
 		//'xin\u5400': 'to ask for, to beg'
 	}
 
-	var dictstr = "|-_ideographicHyphen:－|&_ideographicAmpersand:＆|\"_ideographicQuoteEnd:」|\"_ideographicQuoteStart:「|\"_ideographicDoubleQuote:＂|<_ideographicBracket:〈|>_ideographicBracket:[...]"
-    dictstr += "|__ideographicSpace:　|._ideographicDot:。|,_ideographicList:、|?_ideographicQuestionMark:？|!_ideographicExclamationMark:！|=_unknownCharacterSymbol:〓|;_ideographicSemicolon:��[...]"
+	var dictstr = "|-_ideographicHyphen:－|&_ideographicAmpersand:＆|\"_ideographicQuoteEnd:」|\"_ideographicQuoteStart:「|\"_ideographicDoubleQuote:＂|<_ideographicBracket:〈|>_ideographicBracket:〉|<_ideographicBracket:《|>_ideographicBracket:》|[_ideographicBracket:【|]_ideographicBracket:】|(_ideographicBracket:（|)_ideographicBracket:）";
+    dictstr += "|__ideographicSpace:　|._ideographicDot:。|,_ideographicList:、|?_ideographicQuestionMark:？|!_ideographicExclamationMark:！|=_unknownCharacterSymbol:〓|;_ideographicSemicolon:；|*_ideographicAsterisk:＊|/_ideographicSlash:／";
 	dictstr += "|:_ideographicColon:："; /* hide, because colon is used for pa-strings */
     dictstr += "|__backslash:\\|__iterationMark:ヌ,ㇶ,〻,ゝ,々|__unknownSymbol:〓|__nhayMark:𡿨";
     dictstr += "|\\_plus:+|\\_iterationMark:ヌ,ㇶ,〻,ゝ,々|\\_unknownSymbol:〓|\\_nhayMark:𡿨";
@@ -683,7 +683,7 @@ var CACHEVERSION = '2017-11-22';
 
 	// Build a regexp with all upper case chars (for finding word boundaries in compounds)
 	var upperCaseChars_String = "";
-	var map = ["UNICODE", 65, 194, 258, 69, 202, 73, 79, 212, 416, 85, 431, 89, 193, 7844, 7854, 201, 7870, 205, 211, 7888, 7898, 218, 7912, 221, 192, 7846, 7856, 200, 7872, 204, 210, 7890, 7900, 217, 79[...]
+	var map = ["UNICODE", 65, 194, 258, 69, 202, 73, 79, 212, 416, 85, 431, 89, 193, 7844, 7854, 201, 7870, 205, 211, 7888, 7898, 218, 7912, 221, 192, 7846, 7856, 200, 7872, 204, 210, 7890, 7900, 217, 7914, 7922, 7840, 7852, 7862, 7864, 7878, 7882, 7884, 7896, 7906, 7908, 7920, 7924, 7842, 7848, 7858, 7866, 7874, 7880, 7886, 7892, 7902, 7910, 7916, 7926, 195, 7850, 7860, 7868, 7876, 296, 213, 7894, 7904, 360, 7918, 7928, 68, 272];
 	for (var i = 1; i < map.length; i++) upperCaseChars_String += String.fromCharCode(map[i]);
 	upperCaseChar_RegExp = RegExp("([A-Z" + upperCaseChars_String + "])", "g");
 
@@ -928,7 +928,7 @@ var CACHEVERSION = '2017-11-22';
             console.log("Set trigger...");
             var deferred = function(){
                 if (!this.__loading_started__){
-                    var info = $('<div class="ime-starting-indicator">⌛</div>').css({position:'absolute',background:'black',color:'black',lineHeight:'1.5em',width:'1.5em',textAlign:'center',opacity:[...]
+                    var info = $('<div class="ime-starting-indicator">⌛</div>').css({position:'absolute',background:'black',color:'black',lineHeight:'1.5em',width:'1.5em',textAlign:'center',opacity:.6,borderRadius:'100px',fontFamily:'serif'});
                     var pos = $(this.node).attr('readonly', true).before(info).position();
                     info.css({top: pos.top, left: pos.left, transition: '1.25s transform', transform: 'rotate(360deg)'})
                     console.log("Loading...");
@@ -1200,7 +1200,7 @@ var CACHEVERSION = '2017-11-22';
 			return(
 				a[5] < b[5] ? -1		// Short remainders first
 				: a[5] > b[5] ? 1		// Short remainders first
-				: (							// SAME LENGTH REMAINDERS:
+				: (						// SAME LENGTH REMAINDERS:
 					(b[4] - a[4])		// Order By Usage
 					|| (a[3] - b[3])	// Alphabetical
 				)
@@ -1256,7 +1256,7 @@ var CACHEVERSION = '2017-11-22';
 			else num = '<em class="ime-number">' + num + '</em>'
 			var glyph = items[i][0];
 	//		if (GLYPHS_WITH_IMAGE.indexOf(glyph) > -1) glyph = '<img src="/media/generated/' + glyph.charCodeAt(0).toString(16) + '-32.png" title="' + glyph + '" alt="' + glyph + '" width="24" height="24">';
-			var itm = $("<div class='ime-candidate ime-candidate-"+number+"'>" + definition + num + " <span class='ime-glyph'>" + glyph + "</span><span class='ime-text'><i class='ime-text-head'>" + head + "</i><span class='ime-text-remainder'>" + remainder + "</span></span></div>");
+			var itm = $("<div class='ime-candidate ime-candidate-"+number+"'>" + definition + num + " <span class='ime-glyph'>" + glyph + "</span><span class='ime-text'><i class='ime-text-head'>" + head + "</i><b class='ime-text-remainder'>" + remainder + "</b></span></div>");
 			itm.bind('touchend click', function(evt) {
 				var n = $(evt.target).closest('.ime-candidate').attr('class').split("-").pop();
 				instance.sendKey(n.charCodeAt(n.length-1));
@@ -1318,7 +1318,7 @@ var CACHEVERSION = '2017-11-22';
 			+ prefix+" .ime-candidate { cursor: pointer; padding: "+parseInt(s.padding)+"px 0; padding-left: 10px; border-top: 1px solid " + s.grid_color + "; white-space: nowrap; overflow: hidden }"
 			+ prefix+" .ime-candidate:hover { background-color: rgba(10, 120, 255, .4); transition: background-color 0.3s }"
 			+ prefix+" .ime-number { float: left; display: inline-block; font-style: normal; margin-left: 0.25em; margin-right: .5em }"
-			+ prefix+" .ime-definition { font-size: 0.7em; float: right; display: inline-block; margin-left: 1em; width: 8em; overflow: hidden; white-space: nowrap; opacity: 0.8; color: " + s.text_color + "; t[...]
+			+ prefix+" .ime-definition { font-size: 0.7em; float: right; display: inline-block; margin-left: 1em; width: 8em; overflow: hidden; white-space: nowrap; opacity: 0.8; color: " + s.text_color + "; text-decoration: none; text-align: left }"
 			//+ ".ime-definition:hover { overflow: visible; width: auto; display: absolute; text-align: right; margin: 0 0.3em; opacity: 1 }"
 			+ prefix+" .ime-definition:hover em { display: none }"
 			+ prefix+" .ime-definition:hover span { background-color: white; padding: 0.42em; padding-right: 0; border-radius: 0.2em; border: 1px solid gray; transition: background-color 1.8s }"
@@ -1391,7 +1391,7 @@ var CACHEVERSION = '2017-11-22';
 	}
 
 	function IMEClass(node, options) {
-		this.id = ID++
+		this.id = ID++;
         var schema = location.href.indexOf('file://') == 0 ? 'http://' : '//';
 		this.settings = $.extend({
 			defer: false,
@@ -1633,4 +1633,3 @@ function splitChars(text) {
     }
     return chars
 }
-
