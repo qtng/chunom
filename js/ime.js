@@ -707,9 +707,8 @@ var CACHEVERSION = '2017-11-22';
 			: document.all ? evt.keyCode : (evt.which || evt.charCode);
 
 		var w = this.vUni.getCurrentWord(this.node, 30, c);
+		if (w == null) return; // text is selected
 		if (typeof evt == "number") w += String.fromCharCode(c);
-
-		//if (w == null) return;
 		var selector;
 		var word = "";
 		var compound2 = "";
@@ -1496,6 +1495,33 @@ var CACHEVERSION = '2017-11-22';
 				definition: (charDetails[key + item[0]] || '').trim()
 			};
 		});
+	};
+
+	// Reverse lookup: entries whose glyphs contain the given characters, e.g. $.fn.vietime.lookupGlyph('越')
+	// Returns [{glyph, reading, definition}]
+	$.fn.vietime.lookupGlyph = function(text) {
+		var list = [], seen = {}, i = -1;
+		if (!text) return list;
+		while ((i = dictstr.indexOf(text, i + 1)) > -1) {
+			var start = dictstr.lastIndexOf('|', i) + 1, end = dictstr.indexOf('|', i);
+			if (end < 0) end = dictstr.length;
+			var entry = dictstr.substring(start, end).split(':'), key = entry[0];
+			i = end;
+			// skip mixed entries (e.g. 越Nam) and symbol entries
+			if (!entry[1] || !/^[a-zA-Z]/.test(key) && vietUCMap.indexOf(key.charAt(0)) < 0) continue;
+			var glyphs = entry[1].replace(/[\r\n]/g, '').split(',');
+			for (var k = 0; k < glyphs.length; k++) {
+				var glyph = glyphs[k];
+				if (glyph.indexOf(text) < 0 || seen[key + glyph]) continue;
+				seen[key + glyph] = 1;
+				list.push({
+					glyph: glyph,
+					reading: key.replace(upperCaseChar_RegExp, ' $1').trim().toLowerCase(),
+					definition: (charDetails[key + glyph] || '').trim()
+				});
+			}
+		}
+		return list;
 	};
 
 })(jQuery);
