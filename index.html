@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Chunom.org</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" integrity="sha384-tViUnnbYAV00FLIhhi3v/dWt3Jxw4gZQcNoSCxCIFNJVCx7/D55/wXsrNIRANwdD" crossorigin="anonymous">
   <link rel="stylesheet" href="https://chunom.org/media/css/fonts/all.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-  <script src="https://qatt.org/chunom/js/ime.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://qatt.org/qatt/js/navigation.js"></script>
-  <script src="https://qatt.org/qatt/js/qatt.js"></script>
-  <script src="https://qatt.org/qatt/js/parser.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+  <script defer src="https://qatt.org/chunom/js/ime.js"></script>
+  <script defer src="https://qatt.org/qatt/js/navigation.js"></script>
+  <script defer src="https://qatt.org/qatt/js/qatt.js"></script>
+  <script defer src="https://qatt.org/qatt/js/parser.js"></script>
   <style>
     svg {
       stroke: currentColor;
@@ -70,7 +70,7 @@
     .tile {
       transition: transform 0.15s, border-color 0.15s;
     }
-    .tile:hover {
+    .tile:hover, .tile:focus-visible {
       transform: translateY(-2px);
       border-color: rgba(var(--bs-primary-rgb), 0.6) !important;
     }
@@ -115,8 +115,8 @@
     /* Styling für die Echtzeit-Suchvorschau */
     #search-preview {
       display: none;
-      align-items: center; 
-      justify-content: flex-start; 
+      align-items: center;
+      justify-content: flex-start;
       border-left: none;
       min-width: 0;
       white-space: nowrap;
@@ -144,29 +144,13 @@
 
   <div class="container mt-4">
 
-
-    <!--<div class="alert alert-primary">
-      <a class="stretched-link" href="/qatt/challenge/index.html"></a>
-      <div class="d-flex flex-wrap justify-content-between align-items-start">
-        <div>
-          <h4 class="fw-light">
-            Thử thách <b>Thư Pháp</b>
-          </h4>
-        </div>
-        <div>
-          Hạn nộp bài:
-          25.<script>document.write(`0${new Date().getMonth() + 1}`.slice(-2))</script>.<script>document.write(1900+new Date().getYear())</script>
-        </div>
-      </div>
-    </div>-->
-
     <div class="mt-4 alert alert-secondary">
       <div class="mb-3 d-flex justify-content-between align-items-center">
         <!-- Toggle für Quốc Ngữ ausblenden -->
         <div class="d-inline-flex">
           <div class="form-check form-switch small mb-0">
             <input class="form-check-input" type="checkbox" role="switch" id="toggle-qn">
-            <label class="form-check-label text-secondary" for="toggle-qn">Hiện Quốc Ngữ</label>
+            <label class="form-check-label text-secondary" for="toggle-qn">Show Quốc Ngữ</label>
           </div>
           <div class="ms-3 form-check form-switch small mb-0">
             <input class="form-check-input" type="checkbox" role="switch" id="toggle-telex">
@@ -176,8 +160,8 @@
         <button id="bookmarks-btn" type="button" class="btn btn-sm btn-link" disabled>My Bookmarks</button>
       </div>
       <div class="input-group">
-        <span class="input-group-text">Tìm</span>
-        <input type="search" id="search" class="form-control" placeholder="Quốc Ngữ hoặc Chữ Nôm..." disabled>
+        <label class="input-group-text" for="search">Search</label>
+        <input type="search" id="search" class="form-control" placeholder="Type Quốc Ngữ or Chữ Nôm..." disabled>
         <div id="search-preview" class="input-group-text bg-warning border"></div>
         <div id="dict-status" class="input-group-text">
           <div class="spinner-border spinner-border-sm text-info" role="status"></div>
@@ -200,13 +184,13 @@
     <div id="results" class="list-group w-100"></div>
   </div>
 
-  <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+  <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true" aria-labelledby="modalTitle">
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalTitle">Chi tiết</h5>
+          <h5 class="modal-title" id="modalTitle">Details</h5>
           <div class="d-flex align-items-center">
-            <button type="button" id="bookmark-toggle" class="btn p-0 border-0 text-danger" aria-label="Bookmark"><i class="bi bi-heart"></i></button>
+            <button type="button" id="bookmark-toggle" class="btn p-0 border-0 text-danger" aria-label="Bookmark" aria-pressed="false"><i class="bi bi-heart"></i></button>
             <button type="button" class="ms-4 btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
         </div>
@@ -219,6 +203,20 @@
   </div>
 
   <script>
+// Kleiner DOM-Helfer: el('div', { className: 'x', 'data-copy': '…' }, kind, 'Text', [weitere]).
+// Texte werden Textknoten, nie HTML; Attribute mit Bindestrich per setAttribute, sonst als Property.
+function el(tag, attrs = {}, ...children) {
+  const node = document.createElement(tag);
+  for (const [key, value] of Object.entries(attrs)) {
+    if (value == null || value === false) continue;
+    if (key.includes('-')) node.setAttribute(key, value); else node[key] = value;
+  }
+  node.append(...children.flat(Infinity).filter(child => child != null && child !== false && child !== ''));
+  return node;
+}
+
+const NOM_CHAR = /[一-鿿㐀-䶿\u{20000}-\u{323af}]/u;
+
 class ChunomDict {
   constructor(apiUrl, searchInputId, resultsContainerId, statusId) {
     this.apiUrl = apiUrl;
@@ -230,21 +228,20 @@ class ChunomDict {
     this.toast = document.getElementById('copy-toast');
     this.qnToggle = document.getElementById('toggle-qn');
     this.telexToggle = document.getElementById('toggle-telex');
-    
+
     const modalEl = document.getElementById('detailModal');
     if (typeof bootstrap !== 'undefined') {
       this.modal = new bootstrap.Modal(modalEl);
     }
     this.modalBody = document.getElementById('modalBody');
-    this.modalTitle = document.getElementById('modalTitle');
-    
-    this.cacheKey = 'chunom_dict_data';
-    this.cacheTimeKey = 'chunom_dict_timestamp';
+
     this.qnHiddenKey = 'chunom_qn_hidden';
     this.telexKey = 'chunom_telex';
-    this.expirationMs = 24 * 60 * 60 * 1000; 
     this.data = [];
-    
+    // Früherer CSV-Cache; der HTTP-Cache genügt
+    localStorage.removeItem('chunom_dict_data');
+    localStorage.removeItem('chunom_dict_timestamp');
+
     this.initSettings();
     this.initBookmarks();
     this.initHistoryHandler(modalEl);
@@ -307,24 +304,23 @@ class ChunomDict {
   }
 
   updateBookmarkUi() {
-    this.bookmarkToggle.innerHTML = `<i class="bi ${this.bookmarks.includes(this.currentNom) ? 'bi-heart-fill' : 'bi-heart'}"></i>`;
+    const bookmarked = this.bookmarks.includes(this.currentNom);
+    this.bookmarkToggle.querySelector('i').className = `bi ${bookmarked ? 'bi-heart-fill' : 'bi-heart'}`;
+    this.bookmarkToggle.setAttribute('aria-pressed', bookmarked);
     this.bookmarksBtn.disabled = !this.bookmarks.length;
   }
 
   showBookmarks() {
     if (!this.bookmarks.length) return this.search(this.searchInput.value);
-    this.resultsContainer.innerHTML = '';
     this.discoveryContainer.classList.add('d-none');
     this.bookmarksTitle.classList.remove('d-none');
     this.showingBookmarks = true;
     this.bookmarksBtn.classList.add('active');
-    const fragment = document.createDocumentFragment();
-    for (const nom of this.bookmarks) {
+    // Zeichen, die nur in Komposita vorkommen, haben keine eigene Zeile
+    this.resultsContainer.replaceChildren(...this.bookmarks.flatMap(nom => {
       const rows = this.data.filter(r => r[1] === nom);
-      // Zeichen, die nur in Komposita vorkommen, haben keine eigene Zeile
-      (rows.length ? rows : [['', nom, '', '']]).forEach(r => fragment.appendChild(this.createResultItem(r, true)));
-    }
-    this.resultsContainer.appendChild(fragment);
+      return (rows.length ? rows : [['', nom, '', '']]).map(r => this.createResultItem(r, true));
+    }));
   }
 
   initHistoryHandler(modalEl) {
@@ -358,6 +354,7 @@ class ChunomDict {
         this.searchInput.focus();
       }
     });
+    // Capture: diese Klicks haben Vorrang vor der anklickbaren Zeile bzw. Kachel darunter
     document.addEventListener('click', (e) => {
       const tt = e.target.closest('qatt-code');
       if (tt && tt.title && e.target.closest('#detailModal')) {
@@ -367,8 +364,17 @@ class ChunomDict {
         this.search(query);
         if (this.modal) this.modal.hide();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
       }
-    }, true); // Capture: QATT-Klick hat Vorrang vor der anklickbaren Zeile im Popup
+      const nomChar = e.target.closest('.nom-char');
+      if (nomChar) {
+        e.stopPropagation();
+        this.showDetails(null, nomChar.dataset.char);
+        return;
+      }
+      const copy = e.target.closest('[data-copy]');
+      if (copy) this.copyText(copy.dataset.copy, copy);
+    }, true);
   }
 
   // Per Tab erreichbar und per Klick, Enter oder Leertaste auszulösen
@@ -385,27 +391,10 @@ class ChunomDict {
   }
 
   async init() {
-    let cachedData = localStorage.getItem(this.cacheKey);
-    const cachedTime = localStorage.getItem(this.cacheTimeKey);
-    const now = Date.now();
-
-    if (cachedData && cachedTime && (now - cachedTime < this.expirationMs)) {
-      try {
-        this.data = JSON.parse(cachedData);
-        this.finishLoading();
-        return;
-      } catch (e) {
-        console.error("Cache parse error", e);
-      }
-    }
-
     try {
       const response = await fetch(this.apiUrl);
-      if (!response.ok) throw new Error("Network error");
-      const text = await response.text();
-      this.data = this.parseCSV(text);
-      localStorage.setItem(this.cacheKey, JSON.stringify(this.data));
-      localStorage.setItem(this.cacheTimeKey, now.toString());
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      this.data = this.parseCSV(await response.text());
       this.finishLoading();
     } catch (err) {
       console.error("Fetch error", err);
@@ -436,7 +425,6 @@ class ChunomDict {
   finishLoading() {
     this.statusContainer.classList.add('d-none');
     this.searchInput.removeAttribute('disabled');
-    this.searchInput.placeholder = "Type Quốc Ngữ or Chữ Nôm...";
     this.searchInput.addEventListener('input', () => this.search(this.searchInput.value));
     // type="search" leert das Feld bei Esc; es soll nur das IME-Fenster schließen
     this.searchInput.addEventListener('keydown', (e) => { if (e.key === 'Escape') e.preventDefault(); });
@@ -444,11 +432,14 @@ class ChunomDict {
     this.updateBookmarkUi();
     // Link-fähig wie die alte App: ?search=... oder ?detail=<Zeichen>
     const params = new URLSearchParams(location.search);
-    const detail = params.get('detail'), search = params.get('search');
-    if (detail) {
+    const search = params.get('search');
+    let detail = params.get('detail');
+    detail = detail && (this.codePointChar(detail) || detail);
+    // Nur Nicht-ASCII (CJK usw.): Links sollen Zeichen öffnen, keinen beliebigen Text
+    if (detail && /^[^\x00-\x7f]+$/.test(detail)) {
       // Basiseintrag ohne Parameter; das Popup legt seinen eigenen Eintrag an, Zurück schließt es
       history.replaceState(null, '', this.linkUrl());
-      this.showDetails(null, this.codePointChar(detail) || detail);
+      this.showDetails(null, detail);
     } else if (search) {
       this.searchInput.value = this.codePointChar(search, true) || search;
       this.searchInput.focus(); // startet auch das Laden der IME-Wörterbücher
@@ -477,13 +468,37 @@ class ChunomDict {
     history.replaceState(history.state, '', this.linkUrl('search', term));
   }
 
-  getQattHtml(quocNgu, fontSize = 'inherit') {
-    if (!quocNgu || !parser) return '';
-    return quocNgu.split(/\s+/).map(word => {
-      const parsed = parser.parse(word);
-      const cleanWord = word.replace(/"/g, '&quot;');
-      return parsed ? `<qatt-code style="font-size: ${fontSize};" title="${cleanWord}">${parsed.code}</qatt-code>` : '';
-    }).join(' ');
+  // QATT-Elemente je Silbe; qatt.js rendert sie per MutationObserver
+  qattCodes(quocNgu, fontSize = 'inherit') {
+    const codes = [];
+    for (const word of (quocNgu && parser ? quocNgu.split(/\s+/) : [])) {
+      const parsed = word && parser.parse(word);
+      if (parsed) codes.push(' ', el('qatt-code', { title: word, style: `font-size: ${fontSize}`, textContent: parsed.code }));
+    }
+    return codes.slice(1);
+  }
+
+  // Nôm-Zeichen als chunom.org-Bild (Schrift als Ersatz), einzeln anklickbar
+  nomChars(text) {
+    return [...(text || '')].map(ch => {
+      if (!NOM_CHAR.test(ch)) return ch;
+      const hex = ch.codePointAt(0).toString(16).toUpperCase();
+      return el('span', { className: 'font-serif nom-char', 'data-char': ch },
+        this.image([`https://chunom.org/media/generated/${hex}-32.png`], { alt: ch, width: 32, height: 32, style: 'vertical-align: middle' }, () => ch));
+    });
+  }
+
+  // Bild mit Ersatzquellen; scheitern alle, ersetzt fallback() das Bild. onError läuft bei jedem Fehlschlag.
+  image(sources, attrs, fallback, onError) {
+    if (!sources.length) return fallback();
+    const img = el('img', attrs);
+    let i = 0;
+    img.addEventListener('error', () => {
+      onError?.(img);
+      if (++i < sources.length) img.src = sources[i]; else img.replaceWith(fallback());
+    });
+    img.src = sources[0];
+    return img;
   }
 
   renderDiscoveryLists() {
@@ -504,27 +519,15 @@ class ChunomDict {
     const allUnique = Array.from(uniqueRanksMap.values())
       .sort((a, b) => parseInt(a[5]) - parseInt(b[5]));
 
-    const renderGrid = (items, container) => {
-      const frag = document.createDocumentFragment();
-      items.forEach(r => {
-        const col = document.createElement('div');
-        col.className = 'col';
-        col.innerHTML = `
-          <div class="pt-4 p-2 rounded text-center h-100 d-flex flex-column justify-content-center border border-secondary border-opacity-25 position-relative shadow-sm tile" style="cursor: pointer">
-            <span class="position-absolute top-0 start-0 m-1 badge badge-rank" style="opacity: 0.8">#${r[5]}</span>
-            <div class="h3 font-serif mb-0">${this.wrapNomChars(r[1])}</div>
-            <div class="d-flex align-items-center justify-content-center gap-1 mt-1 overflow-hidden flex-wrap">
-              ${this.getQattHtml(r[0], '0.7rem')}
-            </div>
-            <div class="text-secondary small opacity-75 text-truncate w-100 qn-text">${r[0]}</div>
-          </div>
-        `;
-        col.onclick = () => this.showDetails(r[5], r[1]);
-        frag.appendChild(col);
-      });
-      container.innerHTML = "";
-      container.appendChild(frag);
-    };
+    const renderGrid = (items, container) => container.replaceChildren(...items.map(r => {
+      const tile = el('div', { className: 'pt-4 p-2 rounded text-center h-100 d-flex flex-column justify-content-center border border-secondary border-opacity-25 position-relative shadow-sm tile', style: 'cursor: pointer' },
+        el('span', { className: 'position-absolute top-0 start-0 m-1 badge badge-rank', style: 'opacity: 0.8', textContent: `#${r[5]}` }),
+        el('div', { className: 'h3 font-serif mb-0' }, this.nomChars(r[1])),
+        el('div', { className: 'd-flex align-items-center justify-content-center gap-1 mt-1 overflow-hidden flex-wrap' }, this.qattCodes(r[0], '0.7rem')),
+        el('div', { className: 'text-secondary small opacity-75 text-truncate w-100 qn-text', lang: 'vi', textContent: r[0] }));
+      this.makeActivatable(tile, () => this.showDetails(r[5], r[1]));
+      return el('div', { className: 'col' }, tile);
+    }));
 
     const top85Items = allUnique.filter(r => parseInt(r[5]) <= 85);
     const nextItems = allUnique.filter(r => parseInt(r[5]) > 85 && parseInt(r[5]) <= 500);
@@ -534,7 +537,7 @@ class ChunomDict {
   }
 
   showError(msg) {
-    this.statusContainer.innerHTML = `<span class="text-danger small">${msg}</span>`;
+    this.statusContainer.replaceChildren(el('span', { className: 'text-danger small', textContent: msg }));
   }
 
   search(term) {
@@ -544,20 +547,15 @@ class ChunomDict {
     this.showingBookmarks = false;
     this.bookmarksBtn.classList.remove('active');
     this.bookmarksTitle.classList.add('d-none');
-    
+
     if (this.searchPreview) {
-      if (query && !/[\u4e00-\u9fff]/.test(query)) {
-        const html = this.getQattHtml(query, '1.4em');
-        this.searchPreview.innerHTML = html;
-        this.searchInput.style.borderRight = html ? 'none' : '';
-      } else {
-        this.searchPreview.innerHTML = '';
-        this.searchInput.style.borderRight = '';
-      }
+      const codes = query && !/[一-鿿]/.test(query) ? this.qattCodes(query, '1.4em') : [];
+      this.searchPreview.replaceChildren(...codes);
+      this.searchInput.style.borderRight = codes.length ? 'none' : '';
     }
 
-    this.resultsContainer.innerHTML = '';
-    
+    this.resultsContainer.replaceChildren();
+
     if (!query) {
       this.discoveryContainer.classList.remove('d-none');
       return;
@@ -572,9 +570,7 @@ class ChunomDict {
     if (imeLookup) {
       const shown = new Set(rows.map(row => row[1]));
       for (const { glyph, reading, definition } of imeLookup(query)) {
-        if (shown.has(glyph)) continue;
-        const hex = [...glyph].length === 1 ? glyph.codePointAt(0).toString(16).toUpperCase() : '';
-        rows.push([reading, glyph, definition, '', '', '', hex]);
+        if (!shown.has(glyph)) rows.push([reading, glyph, definition]);
       }
     }
     // Exakte Aussprache zuerst, dann mit Beschreibung, dann der Rest – jeweils nach Rang (ohne Rang zuletzt), dann kürzere Aussprache
@@ -582,65 +578,41 @@ class ChunomDict {
     const rank = row => parseInt(row[5]) || Infinity;
     rows.sort((a, b) => group(a) - group(b) || rank(a) - rank(b) || a[0].trim().length - b[0].trim().length);
 
-    const fragment = document.createDocumentFragment();
-    rows.slice(0, 80).forEach(row => fragment.appendChild(this.createResultItem(row)));
-    this.resultsContainer.appendChild(fragment);
+    this.resultsContainer.append(...rows.slice(0, 80).map(row => this.createResultItem(row)));
   }
 
   createResultItem(row, removable = false) {
     const [quocNgu, nom, meaning, id] = [row[0], row[1], row[2], row[5]];
-    const div = document.createElement('div');
-    div.className = 'list-group-item list-group-item-action py-3';
-    div.innerHTML = `
-      <div class="d-flex w-100 align-items-center mb-1">
-        <div class="me-auto d-flex align-items-center">
-          <span class="fs-2 me-2">${this.wrapNomChars(nom)}</span>
-          <span class="text-secondary fw-bold qn-text">${quocNgu}</span>
-        </div>
-        <div class="text-end d-flex align-items-center gap-2 flex-wrap justify-content-end">
-          ${this.getQattHtml(quocNgu)}
-        </div>
-        ${removable ? `<button type="button" class="btn p-0 border-0 text-secondary ms-3 remove-bookmark" title="Remove" aria-label="Remove bookmark"><i class="bi bi-trash"></i></button>` : ''}
-      </div>
-      <div class="d-flex justify-content-between align-items-center w-100">
-        <p class="mb-0 text-secondary small text-truncate flex-grow-1">${meaning}</p>
-        ${id ? `<span class="badge badge-rank ms-2">#${id}</span>` : ''}
-      </div>
-    `;
-    this.makeActivatable(div, () => this.showDetails(id, nom, row));
-    div.querySelector('.remove-bookmark')?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.toggleBookmark(nom);
-    });
-    return div;
+    const item = el('div', { className: 'list-group-item list-group-item-action py-3' },
+      el('div', { className: 'd-flex w-100 align-items-center mb-1' },
+        el('div', { className: 'me-auto d-flex align-items-center' },
+          el('span', { className: 'fs-2 me-2' }, this.nomChars(nom)),
+          el('span', { className: 'text-secondary fw-bold qn-text', lang: 'vi', textContent: quocNgu })),
+        el('div', { className: 'text-end d-flex align-items-center gap-2 flex-wrap justify-content-end' }, this.qattCodes(quocNgu)),
+        removable && el('button', {
+          type: 'button', className: 'btn p-0 border-0 text-secondary ms-3 remove-bookmark', title: 'Remove', 'aria-label': 'Remove bookmark',
+          onclick: (e) => { e.stopPropagation(); this.toggleBookmark(nom); }
+        }, el('i', { className: 'bi bi-trash' }))),
+      el('div', { className: 'd-flex justify-content-between align-items-center w-100' },
+        el('p', { className: 'mb-0 text-secondary small text-truncate flex-grow-1', textContent: meaning }),
+        id && el('span', { className: 'badge badge-rank ms-2', textContent: `#${id}` })));
+    this.makeActivatable(item, () => this.showDetails(id, nom, row));
+    return item;
   }
 
-  async copyText(text, el) {
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-    document.body.appendChild(textArea);
-    textArea.select();
+  async copyText(text, target) {
     try {
-      document.execCommand('copy');
-      if (el && el.classList.contains('glyph-box')) {
-        el.classList.add('border-info');
-        setTimeout(() => el.classList.remove('border-info'), 1000);
-      }
-      this.toast.innerText = `Copied: ${text}`;
-      this.toast.style.display = 'block';
-      setTimeout(() => { this.toast.style.display = 'none'; }, 2000);
+      await navigator.clipboard.writeText(text);
     } catch (err) {
-      console.error('Copy failed', err);
+      return console.error('Copy failed', err);
     }
-    document.body.removeChild(textArea);
-  }
-
-  wrapNomChars(text) {
-    if (!text) return '';
-    return text.replace(/[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{323af}]/gu, (match) => {
-      const hex = match.codePointAt(0).toString(16).toUpperCase();
-      return `<span class="font-serif nom-char" onclick="event.stopPropagation(); dict.showDetails(null, '${match}')"><img src="https://chunom.org/media/generated/${hex}-32.png" alt="${match}" width="32" height="32" style="vertical-align: middle" onerror="this.replaceWith(this.alt)"></span>`;
-    });
+    if (target?.classList.contains('glyph-box')) {
+      target.classList.add('border-info');
+      setTimeout(() => target.classList.remove('border-info'), 1000);
+    }
+    this.toast.textContent = `Copied: ${text}`;
+    this.toast.style.display = 'block';
+    setTimeout(() => { this.toast.style.display = 'none'; }, 2000);
   }
 
   showDetails(clickedId, mainNom, row) {
@@ -674,79 +646,61 @@ class ChunomDict {
       history.replaceState(history.state, "", this.linkUrl('detail', mainNom));
     }
 
-    this.modalTitle.innerText = 'Details';
     this.currentNom = mainNom;
     this.updateBookmarkUi();
     const mainEntry = sortedRelated.find(r => r[1] === mainNom && !r[0].trim().includes(' '));
-    const hex = mainEntry ? mainEntry[6] : (related.find(r => r[6])?.[6] || '');
     const codes = [...mainNom].map(c => c.codePointAt(0).toString(16).toUpperCase());
+    // Bilder gibt es nur für Einzelzeichen; der Codepunkt kommt direkt vom Zeichen, nicht aus der CSV
+    const hex = codes.length === 1 ? codes[0] : '';
     const strokes = mainEntry ? mainEntry[4] : (related.find(r => r[4])?.[4] || '');
     const rank = clickedId || (mainEntry ? mainEntry[5] : null);
 
     const exactMatches = sortedRelated.filter(r => r[1] === mainNom);
     const uniqueReadings = [...new Set(exactMatches.map(r => r[0]))];
+    const qattParts = uniqueReadings.map(read => this.qattCodes(read)).filter(part => part.length);
 
-    // Kopfzeile nur Quốc Ngữ, QATT steht darunter
-    const readingsHtml = uniqueReadings.map(read => `<span class="fs-2 fw-bold lh-sm">${read}</span>`).join('');
+    // Großes Bild: Animation, dann zwei SVG-Varianten, sonst das Zeichen als Schrift
+    const glyph = this.image(
+      hex ? ['animations/anim-' + hex + '.gif', 'glyph-composer/new/' + hex + '.svg', 'glyph-composer/svg/' + hex + '.svg'].map(path => `https://chunom.org/media/${path}`) : [],
+      { style: 'height:150px;width:150px' },
+      () => el('div', { className: 'text-center' },
+        el('div', { className: 'display-1 font-serif text-nowrap', textContent: mainNom }),
+        hex && el('div', { className: 'small text-secondary font-monospace', textContent: `U+${hex}` })),
+      img => Object.assign(img.style, { visibility: 'hidden', marginTop: '-40px', height: '200px' }));
+    glyph.addEventListener('load', () => { glyph.style.visibility = 'visible'; });
 
-    const quocNgu = uniqueReadings.join('; ');
-    const qatt = uniqueReadings.map(read => {
-      return this.getQattHtml(read);
-    }).join(' / ');
-
-    this.modalBody.innerHTML = `
-      <div class="d-flex align-items-start gap-4 mb-4 p-2">
-        <div class="d-flex flex-column align-items-center">
-          <div class="d-flex align-items-center justify-content-center rounded border glyph-box px-2" 
-               onclick="dict.copyText('${mainNom}', this)" title="Click to copy glyph">
-            <!--<span class="display-1 font-serif text-nowrap">${mainNom}</span>-->
-            <img src="https://chunom.org/media/animations/anim-${hex}.gif"
-              data-fallbacks="https://chunom.org/media/glyph-composer/new/${hex}.svg https://chunom.org/media/glyph-composer/svg/${hex}.svg"
-              onload="this.style.visibility='visible'"
-              onerror="Object.assign(this.style,{visibility:'hidden',marginTop:'-40px',height:'200px'});var fb=this.dataset.fallbacks.split(' ').filter(Boolean); if(fb.length){this.dataset.fallbacks=fb.slice(1).join(' ');this.src=fb[0]} else {this.onerror=null;this.nextElementSibling.classList.remove('d-none');this.remove()}"
-              style="height:150px;width:150px"/>
-            <div class="d-none text-center">
-              <div class="display-1 font-serif text-nowrap">${hex ? `&#x${hex};` : mainNom}</div>
-              ${hex ? `<div class="small text-secondary font-monospace">U+${hex}</div>` : ''}
-            </div>
-          </div>
-        </div>
-        <div class="flex-grow-1">
-          <div class="d-flex flex-column w-100">${readingsHtml || '<span class="text-secondary fst-italic">Part of compound words</span>'}</div>
-          <div class="d-flex flex-column gap-1 mt-3 small text-secondary">
-            ${quocNgu ? `<div>Quốc Ngữ: ${quocNgu}</div>` : ''}
-            ${qatt ? `<div>Quốc Âm Tân Tự: ${qatt}</div>` : ''}
-             <div><span class="clickable-meta border-bottom" onclick="dict.copyText('${codes.join(' ')}', this)" title="Click to copy Hex code">Unicode: ${codes.map(c => `U+${c}`).join(' ')}</span> - <span class="clickable-meta border-bottom font-serif" onclick="dict.copyText('${mainNom}', this)" title="Click to copy">${mainNom}</span></div>
-             ${strokes ? `<div>Số nét: ${strokes}</div>` : ''}
-             ${rank ? `<div>Hạng: <span class="badge badge-rank">#${rank}</span></div>` : ''}
-          </div>
-        </div>
-      </div>
-      <div class="list-group list-group-flush border-top">
-        ${sortedRelated.map(r => {
-          return `
-          <div class="list-group-item ${r[1] !== mainNom ? 'list-group-item-action' : ''} py-3 px-0">
-            <div class="d-flex align-items-center justify-content-between mb-1">
-              <div class="d-flex align-items-center flex-wrap">
-                <span class="fs-3 me-2">${this.wrapNomChars(r[1])}</span>
-                <span class="text-secondary fw-bold fs-5 qn-text">${r[0]}</span> 
-              </div>
-              <div class="text-end d-flex align-items-center gap-2 flex-wrap justify-content-end">
-                ${this.getQattHtml(r[0])}
-              </div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center w-100">
-              <div class="text-secondary small text-truncate flex-grow-1">${r[2] || 'No description'}</div>
-              ${r[5] ? `<span class="badge badge-rank ms-2">#${r[5]}</span>` : ''}
-            </div>
-          </div>`;
-        }).join('')}
-      </div>`;
-    // Zeilen anderer Einträge (Komposita) öffnen deren Details
-    this.modalBody.querySelectorAll('.list-group-item').forEach((el, i) => {
-      const r = sortedRelated[i];
-      if (r[1] !== mainNom) this.makeActivatable(el, () => this.showDetails(r[5], r[1], r));
-    });
+    this.modalBody.replaceChildren(
+      el('div', { className: 'd-flex align-items-start gap-4 mb-4 p-2' },
+        el('div', { className: 'd-flex flex-column align-items-center' },
+          el('div', { className: 'd-flex align-items-center justify-content-center rounded border glyph-box px-2', title: 'Click to copy glyph', 'data-copy': mainNom }, glyph)),
+        el('div', { className: 'flex-grow-1' },
+          // Kopfzeile nur Quốc Ngữ, QATT steht darunter
+          el('div', { className: 'd-flex flex-column w-100' }, uniqueReadings.length
+            ? uniqueReadings.map(read => el('span', { className: 'fs-2 fw-bold lh-sm', lang: 'vi', textContent: read }))
+            : el('span', { className: 'text-secondary fst-italic', textContent: 'Part of compound words' })),
+          el('div', { className: 'd-flex flex-column gap-1 mt-3 small text-secondary' },
+            uniqueReadings.length > 0 && el('div', {}, 'Quốc Ngữ: ', el('span', { lang: 'vi', textContent: uniqueReadings.join('; ') })),
+            qattParts.length > 0 && el('div', {}, 'Quốc Âm Tân Tự: ', qattParts.map((part, i) => [i ? ' / ' : '', part])),
+            el('div', {},
+              el('span', { className: 'clickable-meta border-bottom', title: 'Click to copy hex code', 'data-copy': codes.join(' '), textContent: `Unicode: ${codes.map(c => `U+${c}`).join(' ')}` }),
+              ' - ',
+              el('span', { className: 'clickable-meta border-bottom font-serif', title: 'Click to copy', 'data-copy': mainNom, textContent: mainNom })),
+            strokes && el('div', { textContent: `Strokes: ${strokes}` }),
+            rank && el('div', {}, 'Rank: ', el('span', { className: 'badge badge-rank', textContent: `#${rank}` }))))),
+      el('div', { className: 'list-group list-group-flush border-top' }, sortedRelated.map(r => {
+        const item = el('div', { className: `list-group-item ${r[1] !== mainNom ? 'list-group-item-action' : ''} py-3 px-0` },
+          el('div', { className: 'd-flex align-items-center justify-content-between mb-1' },
+            el('div', { className: 'd-flex align-items-center flex-wrap' },
+              el('span', { className: 'fs-3 me-2' }, this.nomChars(r[1])),
+              el('span', { className: 'text-secondary fw-bold fs-5 qn-text', lang: 'vi', textContent: r[0] })),
+            el('div', { className: 'text-end d-flex align-items-center gap-2 flex-wrap justify-content-end' }, this.qattCodes(r[0]))),
+          el('div', { className: 'd-flex justify-content-between align-items-center w-100' },
+            el('div', { className: 'text-secondary small text-truncate flex-grow-1', textContent: r[2] || 'No description' }),
+            r[5] && el('span', { className: 'badge badge-rank ms-2', textContent: `#${r[5]}` })));
+        // Zeilen anderer Einträge (Komposita) öffnen deren Details
+        if (r[1] !== mainNom) this.makeActivatable(item, () => this.showDetails(r[5], r[1], r));
+        return item;
+      })));
     // Wechsel innerhalb des offenen Popups: nach oben und Fokus zurück ins Popup
     const modalEl = this.modalBody.closest('.modal');
     if (modalEl.classList.contains('show')) {
@@ -769,5 +723,5 @@ window.addEventListener("load", () => {
   }
 });
   </script>
-</html>
 </body>
+</html>
