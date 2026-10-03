@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://chunom.org/media/css/fonts/all.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="https://chunom.org/media/js/ime.min.js"></script>
+  <script src="https://qatt.org/chunom/js/ime.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://qatt.org/qatt/js/navigation.js"></script>
   <script src="https://qatt.org/qatt/js/qatt.js"></script>
@@ -83,14 +83,14 @@
       opacity: 1 !important;
       text-decoration: underline;
     }
-    #detailModal tt {
+    #detailModal qatt-code {
       cursor: pointer;
       transition: filter 0.2s;
     }
-    #detailModal tt:hover {
+    #detailModal qatt-code:hover {
       filter: brightness(1.3);
     }
-    tt {
+    qatt-code {
       cursor: default;
       vertical-align: sub;
     }
@@ -262,18 +262,19 @@ class ChunomDict {
   }
 
   setTelex(on) {
-    if (!window.jQuery?.fn.ime) return;
+    if (!window.jQuery?.fn.vietime) return;
     const $search = $(this.searchInput);
-    if ($search.data('ime')) {
-      $search.ime('update', on ? { method: true, candidate_list: true } : { method: 'off', candidate_list: false });
-    } else if (on) {
-      $search.ime({
+    // Instanz immer anlegen: sie lädt die Wörterbücher, die die Suche auch ohne Telex nutzt
+    if (!$search.data('ime')) {
+      $search.vietime({
         defer: true,
         candidate_list: true,
         font_list: ['nom na tong supplement'],
-        candidate_selected: (glyph) => { setTimeout(() => this.onType()); return glyph; }
+        candidate_selected: (glyph) => { setTimeout(() => this.onType()); return glyph; },
+        dictionaries_loaded: () => { if (!this.showingBookmarks) this.search(this.searchInput.value); }
       });
     }
+    $search.vietime('update', on ? { method: true, candidate_list: true } : { method: 'off', candidate_list: false });
   }
 
   // Das IME ändert den Wert ohne input-Event, daher zusätzlich auf keyup reagieren
@@ -338,7 +339,7 @@ class ChunomDict {
 
   initGlobalClickHandlers() {
     document.addEventListener('click', (e) => {
-      const tt = e.target.closest('tt');
+      const tt = e.target.closest('qatt-code');
       if (tt && tt.title && e.target.closest('#detailModal')) {
         e.stopPropagation();
         const query = tt.title.toLowerCase();
@@ -414,7 +415,7 @@ class ChunomDict {
     return quocNgu.split(/\s+/).map(word => {
       const parsed = parser.parse(word);
       const cleanWord = word.replace(/"/g, '&quot;');
-      return parsed ? `<tt style="font-size: ${fontSize};" title="${cleanWord}">${parsed.code}</tt>` : '';
+      return parsed ? `<qatt-code style="font-size: ${fontSize};" title="${cleanWord}">${parsed.code}</qatt-code>` : '';
     }).join(' ');
   }
 
@@ -496,12 +497,22 @@ class ChunomDict {
     this.discoveryContainer.classList.add('d-none');
 
     let count = 0;
+    const shown = new Set();
     const fragment = document.createDocumentFragment();
     for (const row of this.data) {
       if (row[0].includes(' ') && !row[1].includes(query) && !row[0].toLowerCase().includes(query)) continue;
       if (row[0].toLowerCase().includes(query) || row[1].includes(query)) {
         fragment.appendChild(this.createResultItem(row));
+        shown.add(row[1]);
         if (++count > 40) break;
+      }
+    }
+    // Treffer aus den IME-Wörterbüchern; neu ist ein Treffer nur, wenn seine Zeichen noch nicht gelistet sind
+    if (window.jQuery?.fn.vietime?.lookup && !/\p{Script=Han}/u.test(query)) {
+      const hits = $.fn.vietime.lookup(query).filter(hit => !shown.has(hit.glyph)).slice(0, 40);
+      for (const { glyph, reading, definition } of hits) {
+        const hex = [...glyph].length === 1 ? glyph.codePointAt(0).toString(16).toUpperCase() : '';
+        fragment.appendChild(this.createResultItem([reading, glyph, definition, '', '', '', hex]));
       }
     }
     this.resultsContainer.appendChild(fragment);
@@ -527,7 +538,7 @@ class ChunomDict {
         ${id ? `<span class="badge badge-rank ms-2">#${id}</span>` : ''}
       </div>
     `;
-    div.addEventListener('click', () => this.showDetails(id, nom));
+    div.addEventListener('click', () => this.showDetails(id, nom, row));
     div.querySelector('.remove-bookmark')?.addEventListener('click', (e) => {
       e.stopPropagation();
       this.toggleBookmark(nom);
@@ -563,8 +574,10 @@ class ChunomDict {
     });
   }
 
-  showDetails(clickedId, mainNom) {
+  showDetails(clickedId, mainNom, row) {
     let related = this.data.filter(row => row[1] && row[1].includes(mainNom));
+    // IME-Treffer stehen nicht in der CSV
+    if (row?.[0] && !related.includes(row)) related.unshift(row);
     const seenEntries = new Set();
     related = related.filter(r => {
       const key = `${r[0].trim().toLowerCase()}|${r[1].trim()}|${r[2].trim()}`;
@@ -684,7 +697,7 @@ let parser, dict;
 window.addEventListener("load", () => {
   try {
     parser = new VietnameseParser();
-    new Qatt().observe("TT");
+    new Qatt().observe("qatt-code");
     dict = new ChunomDict('https://qatt.org/chunom/dict.csv', 'search', 'results', 'dict-status');
   } catch (e) {
     console.error("Initialization error", e);
