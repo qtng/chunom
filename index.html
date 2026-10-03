@@ -75,6 +75,19 @@
       transform: translateY(-2px);
       border-color: rgba(var(--bs-primary-rgb), 0.6) !important;
     }
+    /* Einzeln anklickbare Zeichen: box-shadow statt padding, damit nichts verrutscht */
+    .nom-char {
+      cursor: pointer;
+    }
+    .nom-char, .nom-char img {
+      border-radius: .25rem;
+      transition: background-color .15s, box-shadow .15s;
+    }
+    :is(#results, #modalBody) .nom-char:hover img,
+    :is(#results, #modalBody) .nom-char:not(:has(img)):hover {
+      background-color: var(--bs-info-bg-subtle);
+      box-shadow: 0 0 0 .2rem var(--bs-info-bg-subtle);
+    }
     .clickable-meta {
       cursor: pointer;
       transition: opacity 0.2s;
@@ -149,15 +162,7 @@
     </div>-->
 
     <div class="mt-4 alert alert-secondary">
-      <div class="input-group">
-        <span class="input-group-text">Tìm</span>
-        <input type="search" id="search" class="form-control" placeholder="Quốc Ngữ hoặc Chữ Nôm..." disabled>
-        <div id="search-preview" class="input-group-text bg-warning border"></div>
-        <div id="dict-status" class="input-group-text">
-          <div class="spinner-border spinner-border-sm text-info" role="status"></div>
-        </div>
-      </div>
-      <div class="mt-3 d-flex justify-content-between align-items-center">
+      <div class="mb-3 d-flex justify-content-between align-items-center">
         <!-- Toggle für Quốc Ngữ ausblenden -->
         <div class="d-inline-flex">
           <div class="form-check form-switch small mb-0">
@@ -170,6 +175,14 @@
           </div>
         </div>
         <button id="bookmarks-btn" type="button" class="btn btn-sm btn-link" disabled>My Bookmarks</button>
+      </div>
+      <div class="input-group">
+        <span class="input-group-text">Tìm</span>
+        <input type="search" id="search" class="form-control" placeholder="Quốc Ngữ hoặc Chữ Nôm..." disabled>
+        <div id="search-preview" class="input-group-text bg-warning border"></div>
+        <div id="dict-status" class="input-group-text">
+          <div class="spinner-border spinner-border-sm text-info" role="status"></div>
+        </div>
       </div>
     </div>
 
@@ -330,14 +343,23 @@ class ChunomDict {
     window.addEventListener('popstate', () => {
       if (this.modal) this.modal.hide();
     });
+    // Nach dem Schließen zurück zum auslösenden Element, damit man per Tastatur weitermachen kann
+    modalEl.addEventListener('show.bs.modal', () => { this.returnFocus = document.activeElement; });
     modalEl.addEventListener('hidden.bs.modal', () => {
       if (history.state && history.state.modalOpen) {
         history.back();
       }
+      this.returnFocus?.focus();
     });
   }
 
   initGlobalClickHandlers() {
+    // Tippen irgendwo auf der Seite springt ins Suchfeld – nur sichtbare Zeichen, keine Tastenkürzel
+    document.addEventListener('keydown', (e) => {
+      if (e.key.length !== 1 || e.key === ' ' || e.ctrlKey || e.metaKey || e.isComposing) return;
+      if (e.target === this.searchInput || document.body.classList.contains('modal-open')) return;
+      this.searchInput.focus();
+    });
     document.addEventListener('click', (e) => {
       const tt = e.target.closest('qatt-code');
       if (tt && tt.title && e.target.closest('#detailModal')) {
@@ -347,6 +369,19 @@ class ChunomDict {
         this.search(query);
         if (this.modal) this.modal.hide();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, true); // Capture: QATT-Klick hat Vorrang vor der anklickbaren Zeile im Popup
+  }
+
+  // Per Tab erreichbar und per Klick, Enter oder Leertaste auszulösen
+  makeActivatable(el, action) {
+    el.tabIndex = 0;
+    el.setAttribute('role', 'button');
+    el.addEventListener('click', action);
+    el.addEventListener('keydown', (e) => {
+      if (e.target === el && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        action();
       }
     });
   }
@@ -496,25 +531,23 @@ class ChunomDict {
 
     this.discoveryContainer.classList.add('d-none');
 
-    let count = 0;
-    const shown = new Set();
-    const fragment = document.createDocumentFragment();
-    for (const row of this.data) {
-      if (row[0].includes(' ') && !row[1].includes(query) && !row[0].toLowerCase().includes(query)) continue;
-      if (row[0].toLowerCase().includes(query) || row[1].includes(query)) {
-        fragment.appendChild(this.createResultItem(row));
-        shown.add(row[1]);
-        if (++count > 40) break;
-      }
-    }
+    const rows = this.data.filter(row => row[0].toLowerCase().includes(query) || row[1].includes(query));
     // Treffer aus den IME-Wörterbüchern; neu ist ein Treffer nur, wenn seine Zeichen noch nicht gelistet sind
     if (window.jQuery?.fn.vietime?.lookup && !/\p{Script=Han}/u.test(query)) {
-      const hits = $.fn.vietime.lookup(query).filter(hit => !shown.has(hit.glyph)).slice(0, 40);
-      for (const { glyph, reading, definition } of hits) {
+      const shown = new Set(rows.map(row => row[1]));
+      for (const { glyph, reading, definition } of $.fn.vietime.lookup(query)) {
+        if (shown.has(glyph)) continue;
         const hex = [...glyph].length === 1 ? glyph.codePointAt(0).toString(16).toUpperCase() : '';
-        fragment.appendChild(this.createResultItem([reading, glyph, definition, '', '', '', hex]));
+        rows.push([reading, glyph, definition, '', '', '', hex]);
       }
     }
+    // Exakte Aussprache zuerst, dann mit Beschreibung, dann der Rest – jeweils nach Rang (ohne Rang zuletzt), dann kürzere Aussprache
+    const group = row => row[0].trim().toLowerCase() === query || row[1] === query ? 0 : row[2] ? 1 : 2;
+    const rank = row => parseInt(row[5]) || Infinity;
+    rows.sort((a, b) => group(a) - group(b) || rank(a) - rank(b) || a[0].trim().length - b[0].trim().length);
+
+    const fragment = document.createDocumentFragment();
+    rows.slice(0, 80).forEach(row => fragment.appendChild(this.createResultItem(row)));
     this.resultsContainer.appendChild(fragment);
   }
 
@@ -538,7 +571,7 @@ class ChunomDict {
         ${id ? `<span class="badge badge-rank ms-2">#${id}</span>` : ''}
       </div>
     `;
-    div.addEventListener('click', () => this.showDetails(id, nom, row));
+    this.makeActivatable(div, () => this.showDetails(id, nom, row));
     div.querySelector('.remove-bookmark')?.addEventListener('click', (e) => {
       e.stopPropagation();
       this.toggleBookmark(nom);
@@ -570,7 +603,7 @@ class ChunomDict {
     if (!text) return '';
     return text.replace(/[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{323af}]/gu, (match) => {
       const hex = match.codePointAt(0).toString(16).toUpperCase();
-      return `<span class="font-serif" style="cursor: pointer;" onclick="event.stopPropagation(); dict.showDetails(null, '${match}')"><img src="https://chunom.org/media/generated/${hex}-32.png" alt="${match}" width="32" height="32" style="vertical-align: middle" onerror="this.replaceWith(this.alt)"></span>`;
+      return `<span class="font-serif nom-char" onclick="event.stopPropagation(); dict.showDetails(null, '${match}')"><img src="https://chunom.org/media/generated/${hex}-32.png" alt="${match}" width="32" height="32" style="vertical-align: middle" onerror="this.replaceWith(this.alt)"></span>`;
     });
   }
 
@@ -607,29 +640,20 @@ class ChunomDict {
     this.updateBookmarkUi();
     const mainEntry = sortedRelated.find(r => r[1] === mainNom && !r[0].trim().includes(' '));
     const hex = mainEntry ? mainEntry[6] : (related.find(r => r[6])?.[6] || '');
+    const codes = [...mainNom].map(c => c.codePointAt(0).toString(16).toUpperCase());
     const strokes = mainEntry ? mainEntry[4] : (related.find(r => r[4])?.[4] || '');
     const rank = clickedId || (mainEntry ? mainEntry[5] : null);
 
-    const exactMatches = sortedRelated.filter(r => r[1] === mainNom && !r[0].trim().includes(' '));
+    const exactMatches = sortedRelated.filter(r => r[1] === mainNom);
     const uniqueReadings = [...new Set(exactMatches.map(r => r[0]))];
 
-    const readingsHtml = uniqueReadings.map(read => {
-      return `
-        <div class="d-flex justify-content-between align-items-center w-100 lh-sm">
-          <span class="fs-2 fw-bold qn-text">${read}</span>
-          <div class="d-flex align-items-center gap-1">
-            ${this.getQattHtml(read)}
-          </div>
-        </div>
-      `;
-    }).join('');
+    // Kopfzeile nur Quốc Ngữ, QATT steht darunter
+    const readingsHtml = uniqueReadings.map(read => `<span class="fs-2 fw-bold lh-sm">${read}</span>`).join('');
 
     const quocNgu = uniqueReadings.join('; ');
     const qatt = uniqueReadings.map(read => {
       return this.getQattHtml(read);
     }).join(' / ');
-
-    const rawDataStr = sortedRelated.map(r => r.join(',')).join('\n');
 
     this.modalBody.innerHTML = `
       <div class="d-flex align-items-start gap-4 mb-4 p-2">
@@ -651,9 +675,9 @@ class ChunomDict {
         <div class="flex-grow-1">
           <div class="d-flex flex-column w-100">${readingsHtml || '<span class="text-secondary fst-italic">Part of compound words</span>'}</div>
           <div class="d-flex flex-column gap-1 mt-3 small text-secondary">
-            <div>Quốc Ngữ: ${quocNgu}</div>
-            <div>Quốc Âm Tân Tự: ${qatt}</div>
-             ${hex ? `<div><span class="clickable-meta border-bottom" onclick="dict.copyText('${hex}', this)" title="Click to copy Hex code">Unicode: U+${hex}</span></div>` : ''}
+            ${quocNgu ? `<div>Quốc Ngữ: ${quocNgu}</div>` : ''}
+            ${qatt ? `<div>Quốc Âm Tân Tự: ${qatt}</div>` : ''}
+             <div><span class="clickable-meta border-bottom" onclick="dict.copyText('${codes.join(' ')}', this)" title="Click to copy Hex code">Unicode: ${codes.map(c => `U+${c}`).join(' ')}</span> - <span class="clickable-meta border-bottom font-serif" onclick="dict.copyText('${mainNom}', this)" title="Click to copy">${mainNom}</span></div>
              ${strokes ? `<div>Số nét: ${strokes}</div>` : ''}
              ${rank ? `<div>Hạng: <span class="badge badge-rank">#${rank}</span></div>` : ''}
           </div>
@@ -662,7 +686,7 @@ class ChunomDict {
       <div class="list-group list-group-flush border-top">
         ${sortedRelated.map(r => {
           return `
-          <div class="list-group-item py-3 px-0">
+          <div class="list-group-item ${r[1] !== mainNom ? 'list-group-item-action' : ''} py-3 px-0">
             <div class="d-flex align-items-center justify-content-between mb-1">
               <div class="d-flex align-items-center flex-wrap">
                 <span class="fs-3 me-2">${this.wrapNomChars(r[1])}</span>
@@ -678,16 +702,18 @@ class ChunomDict {
             </div>
           </div>`;
         }).join('')}
-      </div>
-      <div class="mt-4 pt-3 border-top opacity-50">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <small class="text-uppercase fw-bold" style="font-size: 0.65rem;">Raw Data:</small>
-          <button class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.6rem;" onclick="dict.copyText(decodeURIComponent('${encodeURIComponent(rawDataStr)}'), this)">Copy All</button>
-        </div>
-        <pre class="bg-black p-2 rounded text-info border font-monospace" 
-             style="font-size: 0.65rem; white-space: pre-wrap; cursor: pointer;" 
-             onclick="dict.copyText(this.innerText, this)" title="Click to copy raw content">${rawDataStr}</pre>
       </div>`;
+    // Zeilen anderer Einträge (Komposita) öffnen deren Details
+    this.modalBody.querySelectorAll('.list-group-item').forEach((el, i) => {
+      const r = sortedRelated[i];
+      if (r[1] !== mainNom) this.makeActivatable(el, () => this.showDetails(r[5], r[1], r));
+    });
+    // Wechsel innerhalb des offenen Popups: nach oben und Fokus zurück ins Popup
+    const modalEl = this.modalBody.closest('.modal');
+    if (modalEl.classList.contains('show')) {
+      modalEl.scrollTop = 0;
+      modalEl.focus();
+    }
     this.modal.show();
   }
 }
