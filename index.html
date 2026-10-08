@@ -15,9 +15,7 @@
   <style>
     svg {
       stroke: currentColor;
-      stroke-width: 5.75px;
       stroke-linecap: round;
-      stroke-linejoin: round;
       fill: transparent;
       vertical-align: baseline;
       display: inline-block;
@@ -479,12 +477,14 @@ class ChunomDict {
   }
 
   // Nôm-Zeichen als chunom.org-Bild (Schrift als Ersatz), einzeln anklickbar
-  nomChars(text) {
+  nomChars(text, size) {
     return [...(text || '')].map(ch => {
       if (!NOM_CHAR.test(ch)) return ch;
+      if (!size) size = 65;
+      const imgSize = size > 40 ? 220 : 32;
       const hex = ch.codePointAt(0).toString(16).toUpperCase();
       return el('span', { className: 'font-serif nom-char', 'data-char': ch },
-        this.image([`https://chunom.org/media/generated/${hex}-32.png`], { alt: ch, width: 32, height: 32, loading: 'lazy', style: 'vertical-align: middle' }, () => ch));
+        this.image([`https://chunom.org/media/generated/${hex}-${imgSize}.png`], { alt: ch, width: size, height: size, loading: 'lazy', style: 'vertical-align: middle' }, () => ch));
     });
   }
 
@@ -706,7 +706,7 @@ class ChunomDict {
         const item = el('div', { className: `list-group-item ${r[1] !== mainNom ? 'list-group-item-action' : ''} py-3 px-0` },
           el('div', { className: 'd-flex align-items-center justify-content-between mb-1' },
             el('div', { className: 'd-flex align-items-center flex-wrap' },
-              el('span', { className: 'fs-3 me-2' }, this.nomChars(r[1])),
+              el('span', { className: 'fs-3 me-2' }, this.nomChars(r[1], 50)),
               el('span', { className: 'text-secondary fw-bold fs-5 qn-text', lang: 'vi', textContent: r[0] })),
             el('div', { className: 'text-end d-flex align-items-center gap-2 flex-wrap justify-content-end' }, this.qattCodes(r[0]))),
           el('div', { className: 'd-flex justify-content-between align-items-center w-100' },
