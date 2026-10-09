@@ -10,6 +10,9 @@ import { DICTIONARIES } from './dictionaries.js';
 
 const ZOOMS = [1, 1.5, 2, 3];
 const SEARCH_DELAY = 350;
+const SWIPE_COMMIT = 80; // px a swipe must travel to turn the page
+const SWIPE_DAMPING = 0.6; // the page follows the finger at this fraction
+const SWIPE_MS = 150; // keep in sync with the transform transition in dict.css
 const WIDE = '(min-width: 1200px)'; // sidebar instead of tabs; keep in sync with dict.css
 
 const store = {
@@ -40,6 +43,7 @@ export class DictionaryViewer {
 		this.words = [];
 		this.keys = [];
 		this.loadToken = 0;
+		this.enter = 0;
 		this.searchTimer = null;
 
 		this.build();
@@ -118,8 +122,18 @@ export class DictionaryViewer {
 			this.buildContents());
 
 		// Wide screens show the contents as a sidebar next to the pages (see dict.css), narrow ones use the tabs
+		// Edge hints while swiping: arrow plus the page the swipe leads to
+		const swipeHint = (side, icon) => {
+			const label = el('span', { className: 'dict-swipe-label' });
+			const hint = el('div', { className: `dict-swipe dict-swipe-${side}`, ariaHidden: 'true' }, el('i', { className: `bi ${icon}` }), label);
+			hint.label = label;
+			return hint;
+		};
+		ui.hintPrev = swipeHint('prev', 'bi-chevron-left');
+		ui.hintNext = swipeHint('next', 'bi-chevron-right');
+
 		root.replaceChildren(el('div', { className: 'dict-wrap pt-3' }, header, ui.tabs,
-			el('div', { className: 'dict-layout' }, ui.paneContents, ui.panePages)));
+			el('div', { className: 'dict-layout' }, ui.paneContents, ui.panePages)), ui.hintPrev, ui.hintNext);
 	}
 
 	buildContents() {
@@ -209,19 +223,72 @@ export class DictionaryViewer {
 		else if (e.key == 'n' || e.key == 'N') this.ui.night.click();
 	}
 
-	// Horizontal swipe turns the page, but only while the page is not zoomed or pinched
+	// A horizontal swipe turns the page: the page follows the finger and an edge hint shows the target page.
+	// Only while the page is not zoomed or pinched, so panning and pinch-zoom keep working.
 	bindSwipe() {
-		let start = null;
 		const { stage } = this.ui;
+		let drag = null;
+		const usable = () => this.zoom == 1 && (window.visualViewport?.scale || 1) <= 1.05;
+
 		stage.addEventListener('touchstart', e => {
-			start = e.touches.length == 1 ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : null;
+			drag = e.touches.length == 1 && usable() ? { x: e.touches[0].clientX, y: e.touches[0].clientY, dx: 0, horizontal: null } : null;
 		}, { passive: true });
-		stage.addEventListener('touchend', e => {
-			if (!start || this.zoom != 1 || (window.visualViewport?.scale || 1) > 1.05) return;
-			const dx = e.changedTouches[0].clientX - start.x, dy = e.changedTouches[0].clientY - start.y;
-			start = null;
-			if (Math.abs(dx) > 70 && Math.abs(dy) < 50) this.go(this.page + (dx < 0 ? 1 : -1), 'replace');
+		stage.addEventListener('touchmove', e => {
+			if (!drag) return;
+			if (e.touches.length != 1 || !usable()) { this.swipeEnd(drag.dx, false); drag = null; return; }
+			const dx = e.touches[0].clientX - drag.x, dy = e.touches[0].clientY - drag.y;
+			if (drag.horizontal == null && Math.hypot(dx, dy) > 10) drag.horizontal = Math.abs(dx) > Math.abs(dy) * 1.5; // else it is a scroll
+			if (!drag.horizontal) return;
+			drag.dx = dx;
+			this.swipeMove(dx);
 		}, { passive: true });
+		const finish = cancelled => {
+			if (!drag) return;
+			const { dx, horizontal } = drag;
+			drag = null;
+			if (!horizontal) return;
+			const target = this.page + (dx < 0 ? 1 : -1);
+			this.swipeEnd(dx, !cancelled && Math.abs(dx) >= SWIPE_COMMIT && target >= this.min && target <= this.max);
+		};
+		stage.addEventListener('touchend', () => finish(false), { passive: true });
+		stage.addEventListener('touchcancel', () => finish(true), { passive: true });
+	}
+
+	swipeMove(dx) {
+		const { ui } = this;
+		const target = this.page + (dx < 0 ? 1 : -1);
+		const valid = target >= this.min && target <= this.max;
+		ui.img.style.transition = 'none';
+		ui.img.style.transform = `translateX(${dx * (valid ? SWIPE_DAMPING : 0.2)}px)`; // resists at the first and last page
+		for (const [hint, side] of [[ui.hintPrev, 1], [ui.hintNext, -1]]) {
+			const active = valid && dx * side > 0;
+			hint.style.opacity = active ? Math.min(1, Math.abs(dx) / SWIPE_COMMIT) : 0;
+			hint.classList.toggle('is-ready', active && Math.abs(dx) >= SWIPE_COMMIT); // release now to turn
+			if (active) hint.label.textContent = `p. ${target}`;
+		}
+	}
+
+	swipeEnd(dx, commit) {
+		const { ui } = this;
+		for (const hint of [ui.hintPrev, ui.hintNext]) {
+			hint.style.opacity = 0;
+			hint.classList.remove('is-ready');
+		}
+		ui.img.style.transition = ''; // back to the stylesheet transition
+		if (!commit) { ui.img.style.transform = ''; return; } // spring back
+		const dir = dx < 0 ? 1 : -1;
+		const animate = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const turn = () => {
+			ui.img.style.transition = 'none';
+			ui.img.style.transform = '';
+			ui.img.style.opacity = '';
+			this.enter = animate ? dir : 0;
+			this.go(this.page + dir, 'replace');
+		};
+		if (!animate) return turn();
+		ui.img.style.transform = `translateX(${-dir * ui.stage.clientWidth * 0.35}px)`; // old page slides out
+		ui.img.style.opacity = '0.2';
+		setTimeout(turn, SWIPE_MS);
 	}
 
 	showTab(name) {
@@ -305,6 +372,14 @@ export class DictionaryViewer {
 			if (token != this.loadToken) return;
 			ui.img.src = url;
 			ui.img.alt = `${c.short}, page ${this.page}`;
+			if (this.enter) { // after a swipe the new page slides in from the side the finger moved to
+				ui.img.style.transition = 'none';
+				ui.img.style.transform = `translateX(${this.enter * 40}px)`;
+				ui.img.offsetWidth; // apply the start position before animating
+				ui.img.style.transition = '';
+				ui.img.style.transform = '';
+				this.enter = 0;
+			}
 			ui.stage.classList.remove('is-loading');
 			for (const n of [this.page + 1, this.page - 1]) if (n >= this.min && n <= this.max) new Image().src = c.pageUrl(n + c.offset);
 		};
