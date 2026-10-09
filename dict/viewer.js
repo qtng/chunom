@@ -72,8 +72,8 @@ export class DictionaryViewer {
 			type: 'search', className: 'form-control', placeholder: 'Search', autocomplete: 'off', enterKeyHint: 'search',
 			ariaLabel: 'Search headword', disabled: true
 		});
-		ui.telex = el('button', { type: 'button', className: 'btn btn-outline-secondary', title: 'Telex typing (aa → â, ow → ơ)', ariaLabel: 'Telex typing' },
-			el('i', { className: 'bi bi-keyboard' }));
+		ui.telex = el('button', { type: 'button', className: 'btn btn-outline-secondary dict-telex', title: 'Type Vietnamese with Telex (aa → â, ow → ơ, s → sắc)' },
+			ui.telexIcon = el('i', { className: 'bi me-1' }), 'Telex');
 		ui.searchForm = el('form', { className: 'input-group dict-search', role: 'search' }, ui.search, ui.telex,
 			el('button', { type: 'submit', className: 'btn btn-primary', ariaLabel: 'Go to headword' }, el('i', { className: 'bi bi-search' })));
 
@@ -345,6 +345,7 @@ export class DictionaryViewer {
 		store.set('telex', on ? '1' : '0');
 		this.ui.telex.classList.toggle('active', on);
 		this.ui.telex.setAttribute('aria-pressed', String(on));
+		this.ui.telexIcon.className = `bi me-1 ${on ? 'bi-check-square-fill' : 'bi-square'}`;
 		this.ime?.update({ telex: on });
 	}
 
