@@ -59,7 +59,7 @@ body { background: #121212; color: #e0e0e0; font-family: system-ui, -apple-syste
 .dict-stage {
 	min-height: 60vh;
 	overflow-x: auto;
-	background: var(--dict-stage-bg, #77746d); /* soft contrast to the paper: white (Bonet, TĐCNTD) 4.7:1, grey (Génibrel) 2.6:1 */
+	background: var(--dict-stage-bg, #e3e0d9); /* a little darker than the paper (set per dictionary, see dictionaries.js) */
 	border: 1px solid #2c2c2c;
 	border-radius: .375rem;
 	touch-action: pan-y; /* horizontal swipes are ours (page turn); pinch is ours too (image zoom, see viewer.js) */

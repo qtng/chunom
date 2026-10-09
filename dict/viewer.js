@@ -120,6 +120,7 @@ export class DictionaryViewer {
 			el('div', { textContent: 'The page image could not be loaded.' }),
 			ui.retry = el('button', { type: 'button', className: 'btn btn-sm btn-outline-light mt-2', textContent: 'Try again' }));
 		ui.stage = el('div', { className: 'dict-stage' }, ui.img); // scrolls sideways when zoomed
+		if (c.stageColor) ui.stage.style.setProperty('--dict-stage-bg', c.stageColor); // a little darker than this dictionary's paper
 		ui.frame = el('div', { className: 'dict-frame' }, ui.stage, ui.spinner, ui.error); // does not scroll: the overlays stay centred on the visible part
 		ui.stageBottom = el('div', { className: 'dict-pager-bottom d-flex justify-content-between my-3' },
 			ui.prev2 = el('button', { type: 'button', className: 'btn btn-outline-secondary' }, el('i', { className: 'bi bi-chevron-left' }), ' Previous'),
