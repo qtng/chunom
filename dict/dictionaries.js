@@ -1,6 +1,9 @@
 /*
 	The scanned dictionaries. Page images stay on chunom.org and are hot-linked.
 
+	stageColor = background behind the page image: just a little darker than the scanned paper (about 1.3:1),
+	so tilting pages do not flicker between light and dark. Paper: Génibrel #c2c2c2, Bonet and TĐCNTD #ffffff.
+
 	lang = language of the printed text; titleLang, noteLang and the optional 4th entry of a contents row
 	override it where the text is English (these only set lang attributes).
 
@@ -14,6 +17,7 @@ export const DICTIONARIES = {
 	genibrel: {
 		id: 'genibrel',
 		lang: 'fr', // language of the printed text (title, contents), not of the viewer
+		stageColor: '#acaaa4',
 		short: 'Génibrel 1898',
 		title: 'Génibrel, J.F.M., 1898',
 		subtitle: 'Dictionnaire Annamite-Français',
@@ -40,6 +44,7 @@ export const DICTIONARIES = {
 	bonet: {
 		id: 'bonet',
 		lang: 'fr',
+		stageColor: '#e3e0d9',
 		short: 'Bonet 1899',
 		title: 'Bonet, Jean, 1899',
 		subtitle: 'Dictionnaire Annamite-Français',
@@ -69,6 +74,7 @@ export const DICTIONARIES = {
 	tdcntd: {
 		id: 'tdcntd',
 		lang: 'vi',
+		stageColor: '#e3e0d9',
 		titleLang: 'en',
 		noteLang: 'en',
 		short: 'TĐCNTD 2009',

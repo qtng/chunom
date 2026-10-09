@@ -119,7 +119,9 @@ export class DictionaryViewer {
 		ui.error = el('div', { className: 'dict-error alert alert-danger', hidden: true },
 			el('div', { textContent: 'The page image could not be loaded.' }),
 			ui.retry = el('button', { type: 'button', className: 'btn btn-sm btn-outline-light mt-2', textContent: 'Try again' }));
-		ui.stage = el('div', { className: 'dict-stage' }, ui.img, ui.spinner, ui.error);
+		ui.stage = el('div', { className: 'dict-stage' }, ui.img); // scrolls sideways when zoomed
+		if (c.stageColor) ui.stage.style.setProperty('--dict-stage-bg', c.stageColor); // a little darker than this dictionary's paper
+		ui.frame = el('div', { className: 'dict-frame' }, ui.stage, ui.spinner, ui.error); // does not scroll: the overlays stay centred on the visible part
 		ui.stageBottom = el('div', { className: 'dict-pager-bottom d-flex justify-content-between my-3' },
 			ui.prev2 = el('button', { type: 'button', className: 'btn btn-outline-secondary' }, el('i', { className: 'bi bi-chevron-left' }), ' Previous'),
 			ui.next2 = el('button', { type: 'button', className: 'btn btn-outline-secondary' }, 'Next ', el('i', { className: 'bi bi-chevron-right' })));
@@ -134,7 +136,7 @@ export class DictionaryViewer {
 			tab('pages', 'bi-book', 'Pages'), tab('contents', 'bi-list-ul', 'Contents'));
 
 		ui.panePages = el('div', { className: 'dict-pane', id: 'dict-pane-pages', role: 'tabpanel', ariaLabelledby: 'dict-tab-pages' },
-			toolbar, ui.hint, ui.stage, ui.stageBottom);
+			toolbar, ui.hint, ui.frame, ui.stageBottom);
 		ui.paneContents = el('div', { className: 'dict-pane', id: 'dict-pane-contents', role: 'tabpanel', ariaLabelledby: 'dict-tab-contents' },
 			this.buildContents());
 

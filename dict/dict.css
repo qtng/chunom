@@ -55,13 +55,11 @@ body { background: #121212; color: #e0e0e0; font-family: system-ui, -apple-syste
 }
 
 /* Page image */
+.dict-frame { position: relative; max-width: 1000px; margin-inline: auto; } /* holds the scrolling stage and the overlays */
 .dict-stage {
-	position: relative;
-	max-width: 1000px;
-	margin-inline: auto;
 	min-height: 60vh;
 	overflow-x: auto;
-	background: #1c1c1c;
+	background: var(--dict-stage-bg, #e3e0d9); /* a little darker than the paper (set per dictionary, see dictionaries.js) */
 	border: 1px solid #2c2c2c;
 	border-radius: .375rem;
 	touch-action: pan-y; /* horizontal swipes are ours (page turn); pinch is ours too (image zoom, see viewer.js) */
@@ -80,12 +78,15 @@ body { background: #121212; color: #e0e0e0; font-family: system-ui, -apple-syste
 	will-change: transform;
 }
 .dict-stage.is-zoomed .dict-image { cursor: zoom-out; }
+.dict-stage.is-inverted { background: #1c1c1c; } /* inverted pages are dark: keep the dark stage */
 .dict-stage.is-inverted .dict-image { filter: invert(1) hue-rotate(180deg); background: #111; }
 .dict-stage.is-loading .dict-image { opacity: .35; }
 .dict-image:not([src]) { visibility: hidden; min-height: 60vh; }
 
 .dict-spinner { position: absolute; top: 40vh; left: 50%; margin: -1rem 0 0 -1rem; display: none; }
-.dict-stage.is-loading .dict-spinner { display: block; }
+.dict-stage.is-loading ~ .dict-spinner { display: block; }
+.dict-spinner { color: #2a2a27; } /* dark on the mid grey stage ... */
+.dict-stage.is-inverted ~ .dict-spinner { color: #adb5bd; } /* ... light on the dark one */
 .dict-error { position: absolute; top: 2rem; left: 50%; transform: translateX(-50%); text-align: center; z-index: 2; }
 .dict-error[hidden] { display: none; }
 
@@ -93,7 +94,8 @@ body { background: #121212; color: #e0e0e0; font-family: system-ui, -apple-syste
 
 @media (max-width: 575.98px) {
 	.dict-toolbar > div { gap: .5rem !important; padding-block: .5rem !important; }
-	.dict-stage { border-inline: none; border-radius: 0; margin-inline: -12px; }
+	.dict-frame { margin-inline: -12px; }
+	.dict-stage { border-inline: none; border-radius: 0; }
 }
 
 /* Edge hints while swiping */
