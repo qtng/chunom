@@ -12,8 +12,8 @@ const ZOOMS = [1, 1.5, 2, 3];
 const SEARCH_DELAY = 350;
 const SWIPE_COMMIT = 80; // px a swipe must travel to turn the page
 const SWIPE_DAMPING = 0.6; // the page follows the finger at this fraction
-const SWIPE_MAX_TILT = 6; // degrees, reached once the finger has travelled half the page width
-const SWIPE_OUT_MS = 220; // old page slides out and fades
+const SWIPE_MAX_TILT = 15; // degrees, reached once the finger has travelled the full page width
+const SWIPE_OUT_MS = 260; // old page slides out and fades
 const SWIPE_IN_MS = 280; // new page slides in and fades in
 const WIDE = '(min-width: 1200px)'; // sidebar instead of tabs; keep in sync with dict.css
 
@@ -73,8 +73,10 @@ export class DictionaryViewer {
 				el('a', { className: `nav-link py-1 px-2${d.id == c.id ? ' active' : ''}`, href: `${d.id}.html`, textContent: d.short }))));
 
 		const header = el('header', { className: 'mb-2' }, switcher,
-			el('h1', { className: 'h5 mb-0', textContent: c.title }),
-			el('p', { className: 'text-secondary small mb-0', textContent: [c.subtitle, c.note].filter(Boolean).join(' · ') }));
+			el('h1', { className: 'h5 mb-0', lang: c.titleLang || c.lang, textContent: c.title }),
+			el('p', { className: 'text-secondary small mb-0' },
+				el('span', { lang: c.lang, textContent: c.subtitle }),
+				c.note ? el('span', { lang: c.noteLang || c.lang, textContent: ` · ${c.note}` }) : ''));
 
 		ui.search = el('input', {
 			type: 'search', className: 'form-control', placeholder: 'Search', autocomplete: 'off', enterKeyHint: 'search',
@@ -143,9 +145,9 @@ export class DictionaryViewer {
 	buildContents() {
 		const { config: c } = this;
 		const ui = this.ui;
-		ui.tocLinks = c.toc.map(([page, label, note]) => {
+		ui.tocLinks = c.toc.map(([page, label, note, lang]) => {
 			const a = el('a', { className: 'list-group-item list-group-item-action d-flex justify-content-between align-items-start gap-3', href: `#${page}` },
-				el('span', {}, label, note ? el('small', { className: 'text-secondary d-block', textContent: note }) : ''),
+				el('span', {}, el('span', { lang: lang || c.lang, textContent: label }), note ? el('small', { className: 'text-secondary d-block', textContent: note }) : ''),
 				el('span', { className: 'badge text-bg-secondary rounded-pill', textContent: `p. ${page}` }));
 			a.dataset.page = page;
 			return a;
@@ -264,7 +266,7 @@ export class DictionaryViewer {
 		const target = this.page + (dx < 0 ? 1 : -1);
 		const valid = target >= this.min && target <= this.max;
 		const damping = valid ? SWIPE_DAMPING : 0.2; // resists at the first and last page
-		const tilt = this.reducedMotion() ? 0 : Math.max(-SWIPE_MAX_TILT, Math.min(SWIPE_MAX_TILT, dx / (ui.stage.clientWidth / 2) * SWIPE_MAX_TILT * (valid ? 1 : 0.3)));
+		const tilt = this.reducedMotion() ? 0 : Math.max(-SWIPE_MAX_TILT, Math.min(SWIPE_MAX_TILT, dx / ui.stage.clientWidth * SWIPE_MAX_TILT * (valid ? 1 : 0.3)));
 		ui.img.style.transition = 'none';
 		ui.img.style.transformOrigin = `50% ${this.pivotY}px`;
 		ui.img.style.transform = `translateX(${dx * damping}px) rotate(${tilt}deg)`;
@@ -313,7 +315,7 @@ export class DictionaryViewer {
 	slideIn(dir) {
 		const { ui } = this;
 		ui.img.style.transition = 'none';
-		ui.img.style.transform = `translateX(${dir * ui.stage.clientWidth * 0.35}px) rotate(${dir * SWIPE_MAX_TILT}deg)`;
+		ui.img.style.transform = `translateX(${dir * ui.stage.clientWidth * 0.35}px) rotate(${dir * SWIPE_MAX_TILT / 2}deg)`;
 		ui.img.style.opacity = '0';
 		return () => { // call after the new src is set
 			ui.img.offsetWidth; // commit the start position
