@@ -10,6 +10,7 @@ import { DICTIONARIES } from './dictionaries.js';
 
 const ZOOMS = [1, 1.5, 2, 3];
 const SEARCH_DELAY = 350;
+const WIDE = '(min-width: 1200px)'; // keep in sync with dict.css
 
 const store = {
 	get(key) { try { return localStorage.getItem(`dict:${key}`); } catch { return null; } },
@@ -88,7 +89,7 @@ export class DictionaryViewer {
 		ui.tools = el('div', { className: 'btn-group dict-tools' }, ui.zoomOut, ui.zoomLabel, ui.zoomIn, ui.night);
 
 		const toolbar = el('div', { className: 'dict-toolbar' },
-			el('div', { className: 'container-xxl d-flex flex-wrap gap-2 align-items-center py-2' }, ui.searchForm, ui.pager, ui.tools));
+			el('div', { className: 'd-flex flex-wrap gap-2 align-items-center py-2' }, ui.searchForm, ui.pager, ui.tools));
 
 		ui.hint = el('div', { className: 'dict-hint text-secondary small', role: 'status', ariaLive: 'polite' });
 
@@ -112,13 +113,13 @@ export class DictionaryViewer {
 			tab('pages', 'bi-book', 'Pages'), tab('contents', 'bi-list-ul', 'Contents'));
 
 		ui.panePages = el('div', { className: 'dict-pane', id: 'dict-pane-pages', role: 'tabpanel', ariaLabelledby: 'dict-tab-pages' },
-			toolbar, el('div', { className: 'container-xxl' }, ui.hint, ui.stage, ui.stageBottom));
-		ui.paneContents = el('div', { className: 'dict-pane', id: 'dict-pane-contents', role: 'tabpanel', ariaLabelledby: 'dict-tab-contents', hidden: true },
-			el('div', { className: 'container-xxl py-3' }, this.buildContents()));
+			toolbar, ui.hint, ui.stage, ui.stageBottom);
+		ui.paneContents = el('div', { className: 'dict-pane', id: 'dict-pane-contents', role: 'tabpanel', ariaLabelledby: 'dict-tab-contents' },
+			this.buildContents());
 
-		root.replaceChildren(
-			el('div', { className: 'container-xxl pt-3' }, header, ui.tabs),
-			ui.panePages, ui.paneContents);
+		// Wide screens show the contents as a sidebar next to the pages (see dict.css), narrow ones use the tabs
+		root.replaceChildren(el('div', { className: 'dict-wrap pt-3' }, header, ui.tabs,
+			el('div', { className: 'dict-layout' }, ui.paneContents, ui.panePages)));
 	}
 
 	buildContents() {
@@ -136,7 +137,7 @@ export class DictionaryViewer {
 		const side = el('div', { className: 'col-md-5' },
 			el('h2', { className: 'h6 text-uppercase text-secondary', textContent: 'Legend' }), legend);
 		if (c.source) side.append(el('p', { className: 'small text-secondary mt-4 mb-0' }, 'Source: ', el('a', { href: c.source[1], textContent: c.source[0], target: '_blank', rel: 'noopener' })));
-		return el('div', { className: 'row g-4' },
+		return el('div', { className: 'row g-4 dict-contents' },
 			el('div', { className: 'col-md-7' },
 				el('h2', { className: 'h6 text-uppercase text-secondary', textContent: 'Contents' }),
 				el('div', { className: 'list-group' }, ...ui.tocLinks)),
@@ -198,7 +199,7 @@ export class DictionaryViewer {
 	}
 
 	onKey(e) {
-		if (this.ui.panePages.hidden || e.ctrlKey || e.metaKey || e.altKey || e.target.closest('input, textarea, select, [contenteditable]')) return;
+		if ((!matchMedia(WIDE).matches && this.ui.panePages.classList.contains('is-off')) || e.ctrlKey || e.metaKey || e.altKey || e.target.closest('input, textarea, select, [contenteditable]')) return;
 		if (e.key == 'ArrowLeft') this.go(this.page - 1, 'replace');
 		else if (e.key == 'ArrowRight') this.go(this.page + 1, 'replace');
 		else if (e.key == '/') { e.preventDefault(); this.ui.search.focus(); }
@@ -224,8 +225,8 @@ export class DictionaryViewer {
 
 	showTab(name) {
 		const { ui } = this;
-		ui.panePages.hidden = name != 'pages';
-		ui.paneContents.hidden = name != 'contents';
+		ui.panePages.classList.toggle('is-off', name != 'pages');
+		ui.paneContents.classList.toggle('is-off', name != 'contents');
 		for (const button of ui.tabs.querySelectorAll('[data-tab]')) {
 			const on = button.dataset.tab == name;
 			button.classList.toggle('active', on);
