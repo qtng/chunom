@@ -7,15 +7,29 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link type="text/css" href="https://chunom.org/media/css/fonts/all.css" rel="stylesheet"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="../vietime/vietime.js"></script>
-    <script src="../qatt/js/navigation.js"></script>
+    <script defer src="js/ime.js"></script>
+    <script defer src="../qatt/js/navigation.js"></script>
     
     <style>
         body {
             background-color: #121212;
             color: #e0e0e0;
             font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        #typer-candidates {
+            --vietime-bg: transparent;
+            --vietime-color: #ddd;
+            --vietime-border: none;
+            --vietime-grid: #333;
+            --vietime-active: rgba(10, 120, 255, .35);
+            --vietime-remainder: #6cf;
+        }
+
+        /* ime.js positions its list under the field; here it fills the left pane instead */
+        #typer-candidates .vietime {
+            position: static;
+            max-width: none;
         }
 
         #typer-text {
@@ -79,47 +93,26 @@
 </div>
 
 <script>
-    $(document).ready(function() {
-        const $typer = $("#typer-text");
-        const candidatesArea = document.getElementById("typer-candidates");
+    window.addEventListener('DOMContentLoaded', () => {
+        const typer = document.getElementById('typer-text');
+        const switches = {
+            telex: document.getElementById('telex-select'),
+            returnSelect: document.getElementById('return-select'),
+            spaceSelect: document.getElementById('space-select')
+        };
+        const options = () => Object.fromEntries(Object.entries(switches).map(([name, box]) => [name, box.checked]));
 
-        const imeOptions = () => ({
-            method: $('#telex-select').is(':checked') ? 1 : 0,
-            return_select: $('#return-select').is(':checked'),
-            space_select: $('#space-select').is(':checked')
-        });
+        const ime = new VietIme(typer, options());
+        document.getElementById('typer-candidates').append(ime.list);
 
-        // Instance is created once; later option changes must go through 'update'
-        $typer.vietime($.extend({
-            candidate_list: true,
-            position: "bottom",
-            background: "transparent",
-            border: "none",
-            grid_color: "#333",
-            text_color: "#ddd",
-            glyph_color: "#fff",
-            autocomplete_color: "#6cf",
-            hover_color: "rgba(10, 120, 255, .35)",
-            glyph_hover_background: "transparent",
-            definition_hover_background: "#222",
-            cached_dictionary: 'https://chunom.org/entry/base_chars/',
-            dictionaries: ['https://chunom.org/entry/generated_chars/'],
-            list_changed: function(container, items, page, pages, candidates){
-                candidatesArea.innerHTML = "";
-                container.appendTo(candidatesArea)
-            },
-            candidate_selected: function(glyph, word){
-                setTimeout(() => $typer.focus(), 100);
-                return glyph;
-            }
-        }, imeOptions()));
+        for (const box of Object.values(switches)) {
+            box.addEventListener('change', () => {
+                ime.update(options());
+                typer.focus();
+            });
+        }
 
-        $('.form-check-input').on('change', function() {
-            $typer.vietime('update', imeOptions());
-            $typer.focus();
-        });
-
-        $typer.focus();
+        typer.focus();
     });
 </script>
 
