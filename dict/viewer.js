@@ -10,6 +10,8 @@ import { DICTIONARIES } from './dictionaries.js';
 
 const ZOOMS = [1, 1.5, 2, 3];
 const SEARCH_DELAY = 350;
+// Browser (pinch) zoom above this factor: a drag pans the zoomed page instead of turning it
+const PINCH_LIMIT = 1.15;
 const SWIPE_COMMIT = 80; // px a swipe must travel to turn the page
 const SWIPE_DAMPING = 0.6; // the page follows the finger at this fraction
 const SWIPE_MAX_TILT = 10; // degrees, reached once the finger has travelled the full page width
@@ -220,6 +222,10 @@ export class DictionaryViewer {
 		addEventListener('keydown', e => this.onKey(e));
 		matchMedia(WIDE).addEventListener('change', () => this.applyTabs());
 		this.bindSwipe();
+		// touch-action is read when a finger lands, so keep the class current as soon as the zoom changes
+		const syncPinch = () => this.ui.stage.classList.toggle('is-pinched', this.isPinched());
+		window.visualViewport?.addEventListener('resize', syncPinch);
+		syncPinch();
 	}
 
 	onKey(e) {
@@ -232,12 +238,17 @@ export class DictionaryViewer {
 		else if (e.key == 'n' || e.key == 'N') this.ui.night.click();
 	}
 
+	/** Browser zoom (pinch): visualViewport.scale is 1 unzoomed, 1.15 at 15 % */
+	isPinched() {
+		return (window.visualViewport?.scale || 1) > PINCH_LIMIT;
+	}
+
 	// A horizontal swipe turns the page: the page follows the finger and an edge hint shows the target page.
 	// Only while the page is not zoomed or pinched, so panning and pinch-zoom keep working.
 	bindSwipe() {
 		const { stage } = this.ui;
 		let drag = null;
-		const usable = () => !this.turning && this.zoom == 1 && (window.visualViewport?.scale || 1) <= 1.05;
+		const usable = () => !this.turning && this.zoom == 1 && !this.isPinched();
 
 		stage.addEventListener('touchstart', e => {
 			drag = e.touches.length == 1 && usable() ? { x: e.touches[0].clientX, y: e.touches[0].clientY, dx: 0, horizontal: null } : null;
