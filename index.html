@@ -67,7 +67,7 @@
     }
     .tile {
       transition: transform 0.15s, border-color 0.15s;
-      background: #fff;
+      background: papayawhip;
     }
     #discovery .nav-link:not(.active) .tab-count {
       display: none;
@@ -545,7 +545,7 @@ class ChunomDict {
   createTile(r) {
     const tile = el('div', { className: 'pt-4 p-2 rounded text-center h-100 d-flex flex-column justify-content-center border border-secondary border-opacity-25 position-relative shadow-sm tile', style: 'cursor: pointer' },
       r[5] && el('span', { className: 'position-absolute top-0 start-0 m-1 badge badge-rank', style: 'opacity: 0.8', textContent: `#${r[5]}` }),
-      el('div', { className: 'h3 font-serif mb-0' }, this.nomChars(r[1]), 50),
+      el('div', { className: 'h3 font-serif mb-0' }, this.nomChars(r[1], 50)),
       el('div', { className: 'd-flex align-items-center justify-content-center gap-1 mt-1 overflow-hidden flex-wrap' }, this.qattCodes(r[0], '0.7rem')),
       el('div', { className: 'text-secondary small opacity-75 text-truncate w-100 qn-text', lang: 'vi', textContent: r[0] }));
     this.makeActivatable(tile, () => this.showDetails(r[5], r[1]));
