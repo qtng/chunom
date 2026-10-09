@@ -12,7 +12,7 @@ const ZOOMS = [1, 1.5, 2, 3];
 const SEARCH_DELAY = 350;
 const SWIPE_COMMIT = 80; // px a swipe must travel to turn the page
 const SWIPE_DAMPING = 0.6; // the page follows the finger at this fraction
-const SWIPE_MAX_TILT = 15; // degrees, reached once the finger has travelled the full page width
+const SWIPE_MAX_TILT = 10; // degrees, reached once the finger has travelled the full page width
 // How a page turn looks: the old page slides out and fades (out*), the new one slides in and fades in (in*).
 // Travel is a fraction of the page width (capped at maxPx), tilt is in degrees.
 const TURN_SWIPE = { outTravel: 0.6, outTilt: SWIPE_MAX_TILT, outMs: 260, inTravel: 0.35, inTilt: SWIPE_MAX_TILT / 2, inMs: 280 };
