@@ -64,6 +64,8 @@ body { background: #121212; color: #e0e0e0; font-family: system-ui, -apple-syste
 	touch-action: pan-y pinch-zoom; /* horizontal swipes are ours (page turn); zoomed pages may pan both ways */
 }
 .dict-stage.is-zoomed { touch-action: pan-x pan-y pinch-zoom; }
+/* tilting or sliding pages must not widen the scrollable area; zoomed pages scroll sideways */
+.dict-stage:not(.is-zoomed) { overflow-x: hidden; }
 .dict-image {
 	display: block;
 	width: calc(var(--zoom, 1) * 100%);
