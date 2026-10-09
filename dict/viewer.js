@@ -8,7 +8,10 @@
 import { COLLATORS } from './collate.js';
 import { DICTIONARIES } from './dictionaries.js';
 
-const ZOOMS = [1, 1.5, 2, 3];
+const ZOOMS = [1, 1.5, 2, 3, 4]; // steps of the zoom buttons
+const ZOOM_MAX = 4;
+const ZOOM_SNAP = 1.08; // a pinch that ends below this zoom returns to 1
+const ZOOM_MS = 180; // animated zoom (buttons, double tap, snapping back)
 const SEARCH_DELAY = 350;
 // Browser (pinch) zoom above this factor: a drag pans the zoomed page instead of turning it
 const PINCH_LIMIT = 1.15;
@@ -48,6 +51,8 @@ export class DictionaryViewer {
 		this.night = store.get('night') == '1';
 		this.words = [];
 		this.keys = [];
+		this.zoomFrame = 0;
+		this.zoomTarget = 1; // where a running zoom animation is heading, so quick clicks add up
 		this.loadToken = 0;
 		this.enter = null; // the page turn the next loaded image has to slide in for ({ dir, ...style })
 		this.turning = false; // a page turn is animating
@@ -176,10 +181,10 @@ export class DictionaryViewer {
 		ui.prev.onclick = ui.prev2.onclick = () => this.flip(-1);
 		ui.next.onclick = ui.next2.onclick = () => this.flip(1);
 		ui.retry.onclick = () => this.loadImage();
-		ui.zoomIn.onclick = () => this.setZoom(ZOOMS[Math.min(ZOOMS.indexOf(this.zoom) + 1, ZOOMS.length - 1)]);
-		ui.zoomOut.onclick = () => this.setZoom(ZOOMS[Math.max(ZOOMS.indexOf(this.zoom) - 1, 0)]);
+		ui.zoomIn.onclick = () => this.setZoom(ZOOMS.find(z => z > this.zoomTarget + 0.01) ?? ZOOM_MAX, { animate: true });
+		ui.zoomOut.onclick = () => this.setZoom([...ZOOMS].reverse().find(z => z < this.zoomTarget - 0.01) ?? 1, { animate: true });
 		ui.night.onclick = () => this.setNight(!this.night);
-		ui.img.ondblclick = () => this.setZoom(this.zoom == 1 ? 2 : 1);
+		ui.img.ondblclick = e => this.setZoom(this.zoom > 1.01 ? 1 : 2, { x: e.clientX, y: e.clientY, animate: true }); // zooms around the tapped point
 
 		ui.pager.onsubmit = e => {
 			e.preventDefault();
@@ -222,6 +227,7 @@ export class DictionaryViewer {
 		addEventListener('keydown', e => this.onKey(e));
 		matchMedia(WIDE).addEventListener('change', () => this.applyTabs());
 		this.bindSwipe();
+		this.bindPinch();
 		// touch-action is read when a finger lands, so keep the class current as soon as the zoom changes
 		const syncPinch = () => this.ui.stage.classList.toggle('is-pinched', this.isPinched());
 		window.visualViewport?.addEventListener('resize', syncPinch);
@@ -238,6 +244,38 @@ export class DictionaryViewer {
 		else if (e.key == 'n' || e.key == 'N') this.ui.night.click();
 	}
 
+	/*
+		Two fingers zoom the image, not the page: the browser's own pinch zoom is switched off on the viewer
+		(touch-action in dict.css) and handled here. The image point under the fingers stays under them.
+	*/
+	bindPinch() {
+		const { stage, img } = this.ui;
+		let pinch = null;
+		const distance = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+		const middle = t => ({ x: (t[0].clientX + t[1].clientX) / 2, y: (t[0].clientY + t[1].clientY) / 2 });
+
+		stage.addEventListener('touchstart', e => {
+			if (e.touches.length != 2) { pinch = null; return; }
+			cancelAnimationFrame(this.zoomFrame);
+			const m = middle(e.touches), r = img.getBoundingClientRect();
+			pinch = { d0: distance(e.touches), z0: this.zoom, anchor: { x: (m.x - r.left) / r.width, y: (m.y - r.top) / r.height } };
+		}, { passive: true });
+		stage.addEventListener('touchmove', e => {
+			if (!pinch || e.touches.length != 2) return;
+			e.preventDefault();
+			const m = middle(e.touches);
+			this.applyZoom(pinch.z0 * distance(e.touches) / pinch.d0, m.x, m.y, pinch.anchor);
+			this.zoomTarget = this.zoom;
+		}, { passive: false });
+		const end = e => {
+			if (!pinch || e.touches.length >= 2) return;
+			pinch = null;
+			if (this.zoom < ZOOM_SNAP) this.setZoom(1, { animate: true });
+		};
+		stage.addEventListener('touchend', end, { passive: true });
+		stage.addEventListener('touchcancel', end, { passive: true });
+	}
+
 	/** Browser zoom (pinch): visualViewport.scale is 1 unzoomed, 1.15 at 15 % */
 	isPinched() {
 		return (window.visualViewport?.scale || 1) > PINCH_LIMIT;
@@ -248,7 +286,7 @@ export class DictionaryViewer {
 	bindSwipe() {
 		const { stage } = this.ui;
 		let drag = null;
-		const usable = () => !this.turning && this.zoom == 1 && !this.isPinched();
+		const usable = () => !this.turning && this.zoom <= 1.01 && !this.isPinched();
 
 		stage.addEventListener('touchstart', e => {
 			drag = e.touches.length == 1 && usable() ? { x: e.touches[0].clientX, y: e.touches[0].clientY, dx: 0, horizontal: null } : null;
@@ -524,14 +562,44 @@ export class DictionaryViewer {
 
 	// ---------- View settings ----------
 
-	setZoom(zoom) {
+	/**
+		Zoom the image. (x, y) is the point on the screen that stays put, default the middle of the screen.
+		animate: glide to the new zoom instead of jumping.
+	*/
+	setZoom(zoom, { x, y, animate = false } = {}) {
+		zoom = Math.max(1, Math.min(ZOOM_MAX, zoom));
+		this.zoomTarget = zoom;
+		cancelAnimationFrame(this.zoomFrame);
+		if (!animate || this.reducedMotion() || !this.ui.img.naturalWidth) return this.applyZoom(zoom, x, y);
+		const from = this.zoom, t0 = performance.now();
+		const step = now => {
+			const t = Math.min(1, (now - t0) / ZOOM_MS);
+			this.applyZoom(from + (zoom - from) * (1 - (1 - t) ** 3), x, y); // ease-out
+			if (t < 1) this.zoomFrame = requestAnimationFrame(step);
+		};
+		this.zoomFrame = requestAnimationFrame(step);
+	}
+
+	/** anchor: the point of the image (0..1) that should end up under (x, y); default: the one that is there now */
+	applyZoom(zoom, x = innerWidth / 2, y = innerHeight / 2, anchor = null) {
+		const { ui } = this;
+		zoom = Math.max(1, Math.min(ZOOM_MAX, zoom));
+		const before = ui.img.getBoundingClientRect();
+		const at = anchor || { x: (x - before.left) / before.width, y: (y - before.top) / before.height };
+
 		this.zoom = zoom;
-		store.set('zoom', zoom);
-		this.ui.stage.style.setProperty('--zoom', zoom);
-		this.ui.stage.classList.toggle('is-zoomed', zoom > 1);
-		this.ui.zoomLabel.textContent = `${Math.round(zoom * 100)}%`;
-		this.ui.zoomOut.disabled = zoom == ZOOMS[0];
-		this.ui.zoomIn.disabled = zoom == ZOOMS.at(-1);
+		store.set('zoom', Math.round(zoom * 100) / 100);
+		ui.stage.style.setProperty('--zoom', zoom);
+		ui.stage.classList.toggle('is-zoomed', zoom > 1.01);
+		ui.zoomLabel.textContent = `${Math.round(zoom * 100)}%`;
+		ui.zoomOut.disabled = zoom <= 1.01;
+		ui.zoomIn.disabled = zoom >= ZOOM_MAX - 0.01;
+
+		if (before.width && before.height && ui.img.naturalWidth) { // scroll so that the anchor point is under (x, y) again
+			const after = ui.img.getBoundingClientRect();
+			ui.stage.scrollLeft += after.left + at.x * after.width - x;
+			scrollBy(0, after.top + at.y * after.height - y);
+		}
 	}
 
 	setNight(on) {
