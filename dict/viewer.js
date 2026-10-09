@@ -255,26 +255,31 @@ export class DictionaryViewer {
 		const distance = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
 		const middle = t => ({ x: (t[0].clientX + t[1].clientX) / 2, y: (t[0].clientY + t[1].clientY) / 2 });
 
-		stage.addEventListener('touchstart', e => {
-			if (e.touches.length != 2) { pinch = null; return; }
-			cancelAnimationFrame(this.zoomFrame);
-			const m = middle(e.touches), r = img.getBoundingClientRect();
-			pinch = { d0: distance(e.touches), z0: this.zoom, anchor: { x: (m.x - r.left) / r.width, y: (m.y - r.top) / r.height } };
-		}, { passive: true });
-		stage.addEventListener('touchmove', e => {
+		const move = e => {
 			if (!pinch || e.touches.length != 2) return;
 			e.preventDefault();
 			const m = middle(e.touches);
 			this.applyZoom(pinch.z0 * distance(e.touches) / pinch.d0, m.x, m.y, pinch.anchor);
 			this.zoomTarget = this.zoom;
-		}, { passive: false });
-		const end = e => {
-			if (!pinch || e.touches.length >= 2) return;
+		};
+		const stop = () => {
+			if (!pinch) return;
 			pinch = null;
+			document.removeEventListener('touchmove', move);
 			if (this.zoom < ZOOM_SNAP) this.setZoom(1, { animate: true });
 		};
-		stage.addEventListener('touchend', end, { passive: true });
-		stage.addEventListener('touchcancel', end, { passive: true });
+
+		// On the document, not the image: the second finger may land outside the image and the gesture still
+		// zooms the image. It counts as an image pinch as soon as one of the two fingers started on the image.
+		document.addEventListener('touchstart', e => {
+			if (e.touches.length != 2 || ![...e.touches].some(t => stage.contains(t.target))) return stop();
+			cancelAnimationFrame(this.zoomFrame);
+			const m = middle(e.touches), r = img.getBoundingClientRect();
+			pinch = { d0: distance(e.touches), z0: this.zoom, anchor: { x: (m.x - r.left) / r.width, y: (m.y - r.top) / r.height } };
+			document.addEventListener('touchmove', move, { passive: false }); // only while pinching: plain scrolling stays unblocked
+		}, { passive: true });
+		document.addEventListener('touchend', e => { if (e.touches.length < 2) stop(); }, { passive: true });
+		document.addEventListener('touchcancel', stop, { passive: true });
 	}
 
 	/** Browser zoom (pinch): visualViewport.scale is 1 unzoomed, 1.15 at 15 % */
@@ -359,7 +364,7 @@ export class DictionaryViewer {
 		const dir = dx < 0 ? 1 : -1;
 		if (this.reducedMotion()) {
 			ui.img.style.transform = '';
-			this.go(this.page + dir, 'replace');
+			this.go(this.page + dir, 'replace', { keepScroll: true });
 			return;
 		}
 		this.slideOut(dir, TURN_SWIPE);
@@ -373,7 +378,7 @@ export class DictionaryViewer {
 		}
 		const target = this.page + dir;
 		if (target < this.min || target > this.max) return;
-		if (this.reducedMotion() || this.turning) this.go(target, 'replace'); // no animation; a running one just continues with the new image
+		if (this.reducedMotion() || this.turning) this.go(target, 'replace', { keepScroll: true }); // no animation; a running one just continues with the new image
 		else this.slideOut(dir, TURN_FLIP);
 	}
 
@@ -398,7 +403,7 @@ export class DictionaryViewer {
 				return;
 			}
 			this.enter = { dir, ...turn };
-			this.go(target, 'replace');
+			this.go(target, 'replace', { keepScroll: true });
 		}, turn.outMs);
 	}
 
@@ -453,7 +458,7 @@ export class DictionaryViewer {
 	}
 
 	/** mode: 'push' adds a history entry, 'replace' rewrites it, 'none' leaves the URL alone */
-	go(page, mode) {
+	go(page, mode, { keepScroll = false } = {}) { // keepScroll: a page turn leaves the scroll position alone, jumps start at the top
 		page = Math.max(this.min, Math.min(this.max, Math.round(page)));
 		const changed = page != this.page;
 		this.page = page;
@@ -475,7 +480,7 @@ export class DictionaryViewer {
 		if (mode != 'none' && this.hashPage() != page) history[mode == 'push' ? 'pushState' : 'replaceState'](null, '', `#${page}`);
 		if (changed || !ui.img.src) {
 			this.loadImage();
-			scrollTo(0, 0);
+			if (!keepScroll) scrollTo(0, 0);
 		}
 	}
 
