@@ -31,7 +31,6 @@ body { background: #121212; color: #e0e0e0; font-family: system-ui, -apple-syste
 .dict-tabs { border-bottom-color: #2c2c2c; }
 .dict-tabs .nav-link { color: #adb5bd; }
 .dict-tabs .nav-link.active { background: #121212; color: #fff; border-color: #2c2c2c #2c2c2c #121212; }
-.dict-pane.is-off { display: none; } /* not [hidden]: Bootstrap forces that with !important */
 
 .dict-wrap { max-width: 1600px; margin-inline: auto; padding-inline: 12px; }
 .dict-layout { padding-top: 1rem; }
@@ -39,9 +38,7 @@ body { background: #121212; color: #e0e0e0; font-family: system-ui, -apple-syste
 
 /* Wide screens: contents and legend as a sidebar next to the pages, no tabs */
 @media (min-width: 1200px) {
-	.dict-tabs { display: none; }
 	.dict-layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 1.5rem; align-items: start; padding-top: .5rem; }
-	#dict-pane-contents.is-off { display: block; }
 	#dict-pane-contents {
 		position: sticky;
 		top: calc(var(--nav-h) + .5rem);

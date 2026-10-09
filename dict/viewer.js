@@ -10,7 +10,7 @@ import { DICTIONARIES } from './dictionaries.js';
 
 const ZOOMS = [1, 1.5, 2, 3];
 const SEARCH_DELAY = 350;
-const WIDE = '(min-width: 1200px)'; // keep in sync with dict.css
+const WIDE = '(min-width: 1200px)'; // sidebar instead of tabs; keep in sync with dict.css
 
 const store = {
 	get(key) { try { return localStorage.getItem(`dict:${key}`); } catch { return null; } },
@@ -195,11 +195,12 @@ export class DictionaryViewer {
 			if (n != null) this.showTab('pages');
 		});
 		addEventListener('keydown', e => this.onKey(e));
+		matchMedia(WIDE).addEventListener('change', () => this.applyTabs());
 		this.bindSwipe();
 	}
 
 	onKey(e) {
-		if ((!matchMedia(WIDE).matches && this.ui.panePages.classList.contains('is-off')) || e.ctrlKey || e.metaKey || e.altKey || e.target.closest('input, textarea, select, [contenteditable]')) return;
+		if ((!matchMedia(WIDE).matches && this.tab != 'pages') || e.ctrlKey || e.metaKey || e.altKey || e.target.closest('input, textarea, select, [contenteditable]')) return;
 		if (e.key == 'ArrowLeft') this.go(this.page - 1, 'replace');
 		else if (e.key == 'ArrowRight') this.go(this.page + 1, 'replace');
 		else if (e.key == '/') { e.preventDefault(); this.ui.search.focus(); }
@@ -225,14 +226,24 @@ export class DictionaryViewer {
 
 	showTab(name) {
 		const { ui } = this;
-		ui.panePages.classList.toggle('is-off', name != 'pages');
-		ui.paneContents.classList.toggle('is-off', name != 'contents');
+		this.tab = name;
+		this.applyTabs();
 		for (const button of ui.tabs.querySelectorAll('[data-tab]')) {
 			const on = button.dataset.tab == name;
 			button.classList.toggle('active', on);
 			button.setAttribute('aria-selected', String(on));
 		}
 		scrollTo(0, 0);
+	}
+
+	// Panes are hidden with the hidden attribute from here, not with CSS classes: a stylesheet that is
+	// cached from an older deployment (GitHub Pages caches for hours) must not leave both panes visible.
+	applyTabs() {
+		const { ui } = this;
+		const wide = matchMedia(WIDE).matches;
+		ui.tabs.hidden = wide;
+		ui.panePages.hidden = !wide && this.tab != 'pages';
+		ui.paneContents.hidden = !wide && this.tab != 'contents';
 	}
 
 	// ---------- Navigation ----------
