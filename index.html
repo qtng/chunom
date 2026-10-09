@@ -272,7 +272,7 @@ class ChunomDict {
   setTelex(on) {
     if (!window.VietIme) return;
     if (!this.ime) {
-      this.ime = new VietIme(this.searchInput, { defer: true, fontList: ['nom na tong supplement'] });
+      this.ime = new VietIme(this.searchInput, { candidates: false });
       // Die Suche nutzt die Wörterbücher auch ohne Telex: beim ersten Fokus laden, dann um IME-Treffer ergänzen
       this.searchInput.addEventListener('focus', () => VietIme.load().then(() => {
         if (!this.showingBookmarks) this.search(this.searchInput.value);
