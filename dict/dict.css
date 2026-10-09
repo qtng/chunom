@@ -32,7 +32,7 @@ body { background: #121212; color: #e0e0e0; font-family: system-ui, -apple-syste
 .dict-tabs .nav-link { color: #adb5bd; }
 .dict-tabs .nav-link.active { background: #121212; color: #fff; border-color: #2c2c2c #2c2c2c #121212; }
 
-.dict-wrap { max-width: 1600px; margin-inline: auto; padding-inline: 12px; }
+.dict-wrap { touch-action: pan-x pan-y; /* the browser does not zoom this page, only the image */ max-width: 1600px; margin-inline: auto; padding-inline: 12px; }
 .dict-layout { padding-top: 1rem; }
 .dict-contents { padding-bottom: 1rem; }
 
@@ -61,9 +61,9 @@ body { background: #121212; color: #e0e0e0; font-family: system-ui, -apple-syste
 	background: #1c1c1c;
 	border: 1px solid #2c2c2c;
 	border-radius: .375rem;
-	touch-action: pan-y pinch-zoom; /* horizontal swipes are ours (page turn); zoomed pages may pan both ways */
+	touch-action: pan-y; /* horizontal swipes are ours (page turn); pinch is ours too (image zoom, see viewer.js) */
 }
-.dict-stage.is-zoomed { touch-action: pan-x pan-y pinch-zoom; }
+.dict-stage.is-zoomed, .dict-stage.is-pinched { touch-action: pan-x pan-y; } /* zoomed: panning must work sideways too */
 /* tilting or sliding pages must not widen the scrollable area; zoomed pages scroll sideways */
 .dict-stage:not(.is-zoomed) { overflow-x: hidden; }
 .dict-image {
