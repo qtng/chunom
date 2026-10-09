@@ -15,6 +15,7 @@ const ZOOM_MS = 180; // animated zoom (buttons, double tap, snapping back)
 const SEARCH_DELAY = 350;
 // Browser (pinch) zoom above this factor: a drag pans the zoomed page instead of turning it
 const PINCH_LIMIT = 1.15;
+const EDGE_PX = 2; // tolerance for "the zoomed image touches the left / right edge"
 const SWIPE_COMMIT = 80; // px a swipe must travel to turn the page
 const SWIPE_DAMPING = 0.6; // the page follows the finger at this fraction
 const SWIPE_MAX_TILT = 10; // degrees, reached once the finger has travelled the full page width
@@ -57,7 +58,7 @@ export class DictionaryViewer {
 		this.enter = null; // the page turn the next loaded image has to slide in for ({ dir, ...style })
 		this.turning = false; // a page turn is animating
 		this.turnTarget = null; // page the turn is heading to while the old page is still sliding out
-		this.pivotY = 0; // where the finger holds the page; it tilts around this point
+		this.pivot = { x: 0, y: 0 }; // where the finger holds the page (relative to the image); it tilts around this point
 		this.searchTimer = null;
 
 		this.build();
@@ -286,17 +287,25 @@ export class DictionaryViewer {
 	bindSwipe() {
 		const { stage } = this.ui;
 		let drag = null;
-		const usable = () => !this.turning && this.zoom <= 1.01 && !this.isPinched();
+		const usable = () => !this.turning && !this.isPinched();
 
 		stage.addEventListener('touchstart', e => {
-			drag = e.touches.length == 1 && usable() ? { x: e.touches[0].clientX, y: e.touches[0].clientY, dx: 0, horizontal: null } : null;
-			if (drag) this.pivotY = drag.y - this.ui.img.getBoundingClientRect().top;
+			drag = null;
+			if (e.touches.length != 1 || !usable()) return;
+			// Decided when the finger lands: a zoomed image that already touches an edge may turn the page by a drag
+			// outwards; otherwise the drag only moves the image (native scrolling). Unzoomed, both edges are "touched".
+			const t = e.touches[0], r = this.ui.img.getBoundingClientRect(), max = stage.scrollWidth - stage.clientWidth;
+			drag = { x: t.clientX, y: t.clientY, dx: 0, horizontal: null, atLeft: stage.scrollLeft <= EDGE_PX, atRight: stage.scrollLeft >= max - EDGE_PX };
+			this.pivot = { x: t.clientX - r.left, y: t.clientY - r.top };
 		}, { passive: true });
 		stage.addEventListener('touchmove', e => {
 			if (!drag) return;
 			if (e.touches.length != 1 || !usable()) { this.swipeEnd(drag.dx, false); drag = null; return; }
 			const dx = e.touches[0].clientX - drag.x, dy = e.touches[0].clientY - drag.y;
-			if (drag.horizontal == null && Math.hypot(dx, dy) > 10) drag.horizontal = Math.abs(dx) > Math.abs(dy) * 1.5; // else it is a scroll
+			if (drag.horizontal == null && Math.hypot(dx, dy) > 10) {
+				drag.horizontal = Math.abs(dx) > Math.abs(dy) * 1.5 // else it is a scroll
+					&& ((dx > 0 && drag.atLeft) || (dx < 0 && drag.atRight)); // else it only moves the zoomed image
+			}
 			if (!drag.horizontal) return;
 			drag.dx = dx;
 			this.swipeMove(dx);
@@ -320,7 +329,7 @@ export class DictionaryViewer {
 		const damping = valid ? SWIPE_DAMPING : 0.2; // resists at the first and last page
 		const tilt = this.reducedMotion() ? 0 : Math.max(-SWIPE_MAX_TILT, Math.min(SWIPE_MAX_TILT, dx / ui.stage.clientWidth * SWIPE_MAX_TILT * (valid ? 1 : 0.3)));
 		ui.img.style.transition = 'none';
-		ui.img.style.transformOrigin = `50% ${this.pivotY}px`;
+		ui.img.style.transformOrigin = `${this.pivot.x}px ${this.pivot.y}px`;
 		ui.img.style.transform = `translateX(${dx * damping}px) rotate(${tilt}deg)`;
 		for (const [hint, side] of [[ui.hintPrev, 1], [ui.hintNext, -1]]) {
 			const active = valid && dx * side > 0;
@@ -497,6 +506,7 @@ export class DictionaryViewer {
 			}
 			ui.img.src = url;
 			ui.img.alt = `${c.short}, page ${this.page}`;
+			if (turn) ui.stage.scrollLeft = turn.dir > 0 ? 0 : ui.stage.scrollWidth; // zoomed: next page starts at its left edge, previous page at its right edge
 			ui.stage.classList.remove('is-loading');
 			glide?.();
 			// preload the neighbours; keep the objects so the browser does not drop the requests
