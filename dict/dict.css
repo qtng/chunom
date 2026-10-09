@@ -55,10 +55,8 @@ body { background: #121212; color: #e0e0e0; font-family: system-ui, -apple-syste
 }
 
 /* Page image */
+.dict-frame { position: relative; max-width: 1000px; margin-inline: auto; } /* holds the scrolling stage and the overlays */
 .dict-stage {
-	position: relative;
-	max-width: 1000px;
-	margin-inline: auto;
 	min-height: 60vh;
 	overflow-x: auto;
 	background: #1c1c1c;
@@ -85,7 +83,7 @@ body { background: #121212; color: #e0e0e0; font-family: system-ui, -apple-syste
 .dict-image:not([src]) { visibility: hidden; min-height: 60vh; }
 
 .dict-spinner { position: absolute; top: 40vh; left: 50%; margin: -1rem 0 0 -1rem; display: none; }
-.dict-stage.is-loading .dict-spinner { display: block; }
+.dict-stage.is-loading ~ .dict-spinner { display: block; }
 .dict-error { position: absolute; top: 2rem; left: 50%; transform: translateX(-50%); text-align: center; z-index: 2; }
 .dict-error[hidden] { display: none; }
 
@@ -93,7 +91,8 @@ body { background: #121212; color: #e0e0e0; font-family: system-ui, -apple-syste
 
 @media (max-width: 575.98px) {
 	.dict-toolbar > div { gap: .5rem !important; padding-block: .5rem !important; }
-	.dict-stage { border-inline: none; border-radius: 0; margin-inline: -12px; }
+	.dict-frame { margin-inline: -12px; }
+	.dict-stage { border-inline: none; border-radius: 0; }
 }
 
 /* Edge hints while swiping */
