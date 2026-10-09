@@ -12,9 +12,11 @@ const ZOOMS = [1, 1.5, 2, 3];
 const SEARCH_DELAY = 350;
 const SWIPE_COMMIT = 80; // px a swipe must travel to turn the page
 const SWIPE_DAMPING = 0.6; // the page follows the finger at this fraction
-const SWIPE_MAX_TILT = 15; // degrees, reached once the finger has travelled the full page width
-const SWIPE_OUT_MS = 260; // old page slides out and fades
-const SWIPE_IN_MS = 280; // new page slides in and fades in
+const SWIPE_MAX_TILT = 10; // degrees, reached once the finger has travelled the full page width
+// How a page turn looks: the old page slides out and fades (out*), the new one slides in and fades in (in*).
+// Travel is a fraction of the page width (capped at maxPx), tilt is in degrees.
+const TURN_SWIPE = { outTravel: 0.6, outTilt: SWIPE_MAX_TILT, outMs: 260, inTravel: 0.35, inTilt: SWIPE_MAX_TILT / 2, inMs: 280 };
+const TURN_FLIP = { outTravel: 0.12, outTilt: 0, outMs: 140, inTravel: 0.12, inTilt: 0, inMs: 200, maxPx: 70 }; // buttons, arrow keys
 const WIDE = '(min-width: 1200px)'; // sidebar instead of tabs; keep in sync with dict.css
 
 const store = {
@@ -45,8 +47,9 @@ export class DictionaryViewer {
 		this.words = [];
 		this.keys = [];
 		this.loadToken = 0;
-		this.enter = 0; // direction of a page turn in progress: 1 = next (new page comes from the right)
-		this.turning = false;
+		this.enter = null; // the page turn the next loaded image has to slide in for ({ dir, ...style })
+		this.turning = false; // a page turn is animating
+		this.turnTarget = null; // page the turn is heading to while the old page is still sliding out
 		this.pivotY = 0; // where the finger holds the page; it tilts around this point
 		this.searchTimer = null;
 
@@ -168,8 +171,8 @@ export class DictionaryViewer {
 
 	bind() {
 		const ui = this.ui;
-		ui.prev.onclick = ui.prev2.onclick = () => this.go(this.page - 1, 'replace');
-		ui.next.onclick = ui.next2.onclick = () => this.go(this.page + 1, 'replace');
+		ui.prev.onclick = ui.prev2.onclick = () => this.flip(-1);
+		ui.next.onclick = ui.next2.onclick = () => this.flip(1);
 		ui.retry.onclick = () => this.loadImage();
 		ui.zoomIn.onclick = () => this.setZoom(ZOOMS[Math.min(ZOOMS.indexOf(this.zoom) + 1, ZOOMS.length - 1)]);
 		ui.zoomOut.onclick = () => this.setZoom(ZOOMS[Math.max(ZOOMS.indexOf(this.zoom) - 1, 0)]);
@@ -221,8 +224,8 @@ export class DictionaryViewer {
 
 	onKey(e) {
 		if ((!matchMedia(WIDE).matches && this.tab != 'pages') || e.ctrlKey || e.metaKey || e.altKey || e.target.closest('input, textarea, select, [contenteditable]')) return;
-		if (e.key == 'ArrowLeft') this.go(this.page - 1, 'replace');
-		else if (e.key == 'ArrowRight') this.go(this.page + 1, 'replace');
+		if (e.key == 'ArrowLeft') this.flip(-1);
+		else if (e.key == 'ArrowRight') this.flip(1);
 		else if (e.key == '/') { e.preventDefault(); this.ui.search.focus(); }
 		else if (e.key == '+' || e.key == '=') this.ui.zoomIn.click();
 		else if (e.key == '-') this.ui.zoomOut.click();
@@ -301,28 +304,59 @@ export class DictionaryViewer {
 			this.go(this.page + dir, 'replace');
 			return;
 		}
-		this.turning = true;
-		ui.img.style.transition = `transform ${SWIPE_OUT_MS}ms ease-in, opacity ${SWIPE_OUT_MS}ms ease-in`;
-		ui.img.style.transform = `translateX(${-dir * ui.stage.clientWidth * 0.6}px) rotate(${-dir * SWIPE_MAX_TILT}deg)`;
-		ui.img.style.opacity = '0';
-		setTimeout(() => {
-			this.enter = dir;
-			this.go(this.page + dir, 'replace');
-		}, SWIPE_OUT_MS);
+		this.slideOut(dir, TURN_SWIPE);
 	}
 
-	/** Called when the next image is ready after a swipe: place it on the far side, then glide to the middle */
-	slideIn(dir) {
+	/** Prev / next buttons and arrow keys: the same page turn as a swipe, only shorter and without tilt */
+	flip(dir) {
+		if (this.turnTarget != null) { // the old page is still sliding out: queue one more page
+			this.turnTarget = Math.max(this.min, Math.min(this.max, this.turnTarget + dir));
+			return;
+		}
+		const target = this.page + dir;
+		if (target < this.min || target > this.max) return;
+		if (this.reducedMotion() || this.turning) this.go(target, 'replace'); // no animation; a running one just continues with the new image
+		else this.slideOut(dir, TURN_FLIP);
+	}
+
+	/**
+		The old page keeps moving in the turn direction and fades out. It stays invisible while the next image
+		loads (see loadImage), then the new page slides in from the opposite side. Nothing jumps back in between.
+	*/
+	slideOut(dir, turn) {
 		const { ui } = this;
+		const distance = Math.min(ui.stage.clientWidth * turn.outTravel, turn.maxPx ?? Infinity);
+		this.turning = true;
+		this.turnTarget = this.page + dir;
+		ui.img.style.transition = `transform ${turn.outMs}ms ease-in, opacity ${turn.outMs}ms ease-in`;
+		ui.img.style.transform = `translateX(${-dir * distance}px) rotate(${-dir * turn.outTilt}deg)`;
+		ui.img.style.opacity = '0';
+		setTimeout(() => {
+			const target = this.turnTarget;
+			this.turnTarget = null;
+			if (target == this.page) { // queued flips cancelled each other out: bring the page back
+				ui.img.style.transition = ui.img.style.transform = ui.img.style.opacity = '';
+				this.turning = false;
+				return;
+			}
+			this.enter = { dir, ...turn };
+			this.go(target, 'replace');
+		}, turn.outMs);
+	}
+
+	/** Called when the next image is ready after a page turn: place it on the far side, then glide to the middle */
+	slideIn({ dir, inTravel, inTilt, inMs, maxPx }) {
+		const { ui } = this;
+		const distance = Math.min(ui.stage.clientWidth * inTravel, maxPx ?? Infinity);
 		ui.img.style.transition = 'none';
-		ui.img.style.transform = `translateX(${dir * ui.stage.clientWidth * 0.35}px) rotate(${dir * SWIPE_MAX_TILT / 2}deg)`;
+		ui.img.style.transform = `translateX(${dir * distance}px) rotate(${dir * inTilt}deg)`;
 		ui.img.style.opacity = '0';
 		return () => { // call after the new src is set
 			ui.img.offsetWidth; // commit the start position
-			ui.img.style.transition = `transform ${SWIPE_IN_MS}ms ease-out, opacity ${SWIPE_IN_MS}ms ease-out`;
+			ui.img.style.transition = `transform ${inMs}ms ease-out, opacity ${inMs}ms ease-out`;
 			ui.img.style.transform = '';
 			ui.img.style.opacity = '';
-			setTimeout(() => { ui.img.style.transition = ''; this.turning = false; }, SWIPE_IN_MS);
+			setTimeout(() => { ui.img.style.transition = ''; this.turning = false; }, inMs);
 		};
 	}
 
@@ -405,21 +439,28 @@ export class DictionaryViewer {
 		const probe = new Image();
 		probe.onload = () => {
 			if (token != this.loadToken) return;
-			const dir = this.enter;
-			this.enter = 0;
-			const glide = dir ? this.slideIn(dir) : null; // after a swipe: new page slides in from the far side
+			const turn = this.enter;
+			this.enter = null;
+			const glide = turn ? this.slideIn(turn) : null; // after a page turn: the new page slides in from the far side
+			if (!turn) { // a plain jump: show the image as it is, whatever a turn left behind
+				ui.img.style.transition = ui.img.style.transform = ui.img.style.opacity = '';
+				this.turning = false;
+			}
 			ui.img.src = url;
 			ui.img.alt = `${c.short}, page ${this.page}`;
 			ui.stage.classList.remove('is-loading');
 			glide?.();
-			for (const n of [this.page + 1, this.page - 1]) if (n >= this.min && n <= this.max) new Image().src = c.pageUrl(n + c.offset);
+			// preload the neighbours; keep the objects so the browser does not drop the requests
+			this.preloaded = [this.page + 1, this.page - 1].filter(n => n >= this.min && n <= this.max)
+				.map(n => Object.assign(new Image(), { src: c.pageUrl(n + c.offset) }));
 		};
 		probe.onerror = () => {
 			if (token != this.loadToken) return;
 			ui.stage.classList.remove('is-loading');
 			ui.error.hidden = false;
 			// leave nothing half-animated behind
-			this.enter = 0;
+			this.enter = null;
+			this.turnTarget = null;
 			this.turning = false;
 			ui.img.style.transition = ui.img.style.transform = ui.img.style.opacity = '';
 		};
