@@ -93,9 +93,15 @@
         $typer.vietime($.extend({
             candidate_list: true,
             position: "bottom",
-            background: "rgba(255, 255, 255, .8)",
-            grid_color: "#000",
-            text_color: "#222",
+            background: "transparent",
+            border: "none",
+            grid_color: "#333",
+            text_color: "#ddd",
+            glyph_color: "#fff",
+            autocomplete_color: "#6cf",
+            hover_color: "rgba(10, 120, 255, .35)",
+            glyph_hover_background: "transparent",
+            definition_hover_background: "#222",
             cached_dictionary: 'https://chunom.org/entry/base_chars/',
             dictionaries: ['https://chunom.org/entry/generated_chars/'],
             list_changed: function(container, items, page, pages, candidates){
