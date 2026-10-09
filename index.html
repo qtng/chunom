@@ -67,6 +67,7 @@
     }
     .tile {
       transition: transform 0.15s, border-color 0.15s;
+      background: #fff;
     }
     #discovery .nav-link:not(.active) .tab-count {
       display: none;
@@ -145,7 +146,7 @@
     }
   </style>
 </head>
-<body>
+<body class="bg-light">
   <div id="copy-toast">Copied</div>
 
   <div class="container mt-4">
@@ -167,7 +168,7 @@
       </div>
       <div class="input-group">
         <label class="input-group-text" for="search">Search</label>
-        <input type="search" id="search" class="form-control" placeholder="Type Quốc Ngữ or Chữ Nôm..." disabled>
+        <input type="search" id="search" class="form-control" disabled>
         <div id="search-preview" class="input-group-text bg-warning border"></div>
         <div id="dict-status" class="input-group-text">
           <div class="spinner-border spinner-border-sm text-info" role="status"></div>
@@ -480,7 +481,7 @@ class ChunomDict {
   nomChars(text, size) {
     return [...(text || '')].map(ch => {
       if (!NOM_CHAR.test(ch)) return ch;
-      if (!size) size = 65;
+      if (!size) size = 32;
       const imgSize = size > 40 ? 220 : 32;
       const hex = ch.codePointAt(0).toString(16).toUpperCase();
       return el('span', { className: 'font-serif nom-char', 'data-char': ch },
@@ -544,7 +545,7 @@ class ChunomDict {
   createTile(r) {
     const tile = el('div', { className: 'pt-4 p-2 rounded text-center h-100 d-flex flex-column justify-content-center border border-secondary border-opacity-25 position-relative shadow-sm tile', style: 'cursor: pointer' },
       r[5] && el('span', { className: 'position-absolute top-0 start-0 m-1 badge badge-rank', style: 'opacity: 0.8', textContent: `#${r[5]}` }),
-      el('div', { className: 'h3 font-serif mb-0' }, this.nomChars(r[1])),
+      el('div', { className: 'h3 font-serif mb-0' }, this.nomChars(r[1]), 50),
       el('div', { className: 'd-flex align-items-center justify-content-center gap-1 mt-1 overflow-hidden flex-wrap' }, this.qattCodes(r[0], '0.7rem')),
       el('div', { className: 'text-secondary small opacity-75 text-truncate w-100 qn-text', lang: 'vi', textContent: r[0] }));
     this.makeActivatable(tile, () => this.showDetails(r[5], r[1]));
@@ -706,7 +707,7 @@ class ChunomDict {
         const item = el('div', { className: `list-group-item ${r[1] !== mainNom ? 'list-group-item-action' : ''} py-3 px-0` },
           el('div', { className: 'd-flex align-items-center justify-content-between mb-1' },
             el('div', { className: 'd-flex align-items-center flex-wrap' },
-              el('span', { className: 'fs-3 me-2' }, this.nomChars(r[1], 50)),
+              el('span', { className: 'fs-3 me-2' }, this.nomChars(r[1])),
               el('span', { className: 'text-secondary fw-bold fs-5 qn-text', lang: 'vi', textContent: r[0] })),
             el('div', { className: 'text-end d-flex align-items-center gap-2 flex-wrap justify-content-end' }, this.qattCodes(r[0]))),
           el('div', { className: 'd-flex justify-content-between align-items-center w-100' },
