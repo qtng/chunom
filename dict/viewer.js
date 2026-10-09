@@ -12,8 +12,7 @@ const ZOOMS = [1, 1.5, 2, 3];
 const SEARCH_DELAY = 350;
 const SWIPE_COMMIT = 80; // px a swipe must travel to turn the page
 const SWIPE_DAMPING = 0.6; // the page follows the finger at this fraction
-const SWIPE_TILT = 0.04; // degrees of tilt per px of finger travel
-const SWIPE_MAX_TILT = 6; // degrees
+const SWIPE_MAX_TILT = 6; // degrees, reached once the finger has travelled half the page width
 const SWIPE_OUT_MS = 220; // old page slides out and fades
 const SWIPE_IN_MS = 280; // new page slides in and fades in
 const WIDE = '(min-width: 1200px)'; // sidebar instead of tabs; keep in sync with dict.css
@@ -265,7 +264,7 @@ export class DictionaryViewer {
 		const target = this.page + (dx < 0 ? 1 : -1);
 		const valid = target >= this.min && target <= this.max;
 		const damping = valid ? SWIPE_DAMPING : 0.2; // resists at the first and last page
-		const tilt = this.reducedMotion() ? 0 : Math.max(-SWIPE_MAX_TILT, Math.min(SWIPE_MAX_TILT, dx * SWIPE_TILT * (valid ? 1 : 0.3)));
+		const tilt = this.reducedMotion() ? 0 : Math.max(-SWIPE_MAX_TILT, Math.min(SWIPE_MAX_TILT, dx / (ui.stage.clientWidth / 2) * SWIPE_MAX_TILT * (valid ? 1 : 0.3)));
 		ui.img.style.transition = 'none';
 		ui.img.style.transformOrigin = `50% ${this.pivotY}px`;
 		ui.img.style.transform = `translateX(${dx * damping}px) rotate(${tilt}deg)`;
@@ -302,7 +301,7 @@ export class DictionaryViewer {
 		}
 		this.turning = true;
 		ui.img.style.transition = `transform ${SWIPE_OUT_MS}ms ease-in, opacity ${SWIPE_OUT_MS}ms ease-in`;
-		ui.img.style.transform = `translateX(${-dir * ui.stage.clientWidth * 0.6}px) rotate(${-dir * SWIPE_MAX_TILT * 1.5}deg)`;
+		ui.img.style.transform = `translateX(${-dir * ui.stage.clientWidth * 0.6}px) rotate(${-dir * SWIPE_MAX_TILT}deg)`;
 		ui.img.style.opacity = '0';
 		setTimeout(() => {
 			this.enter = dir;
