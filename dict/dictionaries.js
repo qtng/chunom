@@ -1,6 +1,9 @@
 /*
 	The scanned dictionaries. Page images stay on chunom.org and are hot-linked.
 
+	lang = language of the printed text; titleLang, noteLang and the optional 4th entry of a contents row
+	override it where the text is English (these only set lang attributes).
+
 	displayed page = image number - offset   (entries start at displayed page 1)
 	data/<id>.json = last headword on each dictionary page, starting at displayed page 1 (used by the search)
 */
@@ -10,6 +13,7 @@ const CHUNOM = 'https://chunom.org/media/dict';
 export const DICTIONARIES = {
 	genibrel: {
 		id: 'genibrel',
+		lang: 'fr', // language of the printed text (title, contents), not of the viewer
 		short: 'Génibrel 1898',
 		title: 'Génibrel, J.F.M., 1898',
 		subtitle: 'Dictionnaire Annamite-Français',
@@ -26,7 +30,7 @@ export const DICTIONARIES = {
 			['=', 'same as']
 		],
 		toc: [
-			[-3, 'Title'],
+			[-3, 'Title', null, 'en'],
 			[-2, 'Signes et abbréviations', 'full legend'],
 			[-1, 'Au lecteur'],
 			[1, 'Dictionnaire Annamite-Français']
@@ -35,6 +39,7 @@ export const DICTIONARIES = {
 
 	bonet: {
 		id: 'bonet',
+		lang: 'fr',
 		short: 'Bonet 1899',
 		title: 'Bonet, Jean, 1899',
 		subtitle: 'Dictionnaire Annamite-Français',
@@ -49,8 +54,8 @@ export const DICTIONARIES = {
 		],
 		source: ['gallica.BnF.fr Bibliothèque Numérique', 'https://gallica.bnf.fr'],
 		toc: [
-			[-27, 'Title'],
-			[-25, 'Preface'],
+			[-27, 'Title', null, 'en'],
+			[-25, 'Preface', null, 'en'],
 			[-21, 'Avertissement Grammatical'],
 			[0, 'Signes de convention pour les abbréviations', 'full legend'],
 			[1, 'Dictionnaire Annamite-Français'],
@@ -63,6 +68,9 @@ export const DICTIONARIES = {
 
 	tdcntd: {
 		id: 'tdcntd',
+		lang: 'vi',
+		titleLang: 'en',
+		noteLang: 'en',
 		short: 'TĐCNTD 2009',
 		title: 'Institute of Vietnamese Studies, 2009',
 		subtitle: 'Từ Điển Chữ Nôm Trích Dẫn',
