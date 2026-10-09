@@ -83,33 +83,34 @@
         const $typer = $("#typer-text");
         const candidatesArea = document.getElementById("typer-candidates");
 
-        const setupIME = () => {
-            $typer.vietime({
-                method: $('#telex-select').is(':checked') ? 1 : 0,
-                candidate_list: true,
-                position: "bottom",
-                background: "rgba(255, 255, 255, .8)",
-                grid_color: "#000",
-                text_color: "#222",
-                return_select: $('#return-select').is(':checked'),
-                space_select: $('#space-select').is(':checked'),
-                cached_dictionary: 'https://chunom.org/entry/base_chars/',
-                dictionaries: ['https://chunom.org/entry/generated_chars/'],
-                list_changed: function(container, items, page, pages, candidates){
-                    candidatesArea.innerHTML = "";
-                    container.appendTo(candidatesArea)
-                },
-                candidate_selected: function(glyph, word){
-                    setTimeout(() => $typer.focus(), 100);
-                    return glyph;
-                }
-            });
-        };
+        const imeOptions = () => ({
+            method: $('#telex-select').is(':checked') ? 1 : 0,
+            return_select: $('#return-select').is(':checked'),
+            space_select: $('#space-select').is(':checked')
+        });
 
-        setupIME();
+        // Instance is created once; later option changes must go through 'update'
+        $typer.vietime($.extend({
+            candidate_list: true,
+            position: "bottom",
+            background: "rgba(255, 255, 255, .8)",
+            grid_color: "#000",
+            text_color: "#222",
+            cached_dictionary: 'https://chunom.org/entry/base_chars/',
+            dictionaries: ['https://chunom.org/entry/generated_chars/'],
+            list_changed: function(container, items, page, pages, candidates){
+                candidatesArea.innerHTML = "";
+                container.appendTo(candidatesArea)
+            },
+            candidate_selected: function(glyph, word){
+                setTimeout(() => $typer.focus(), 100);
+                return glyph;
+            }
+        }, imeOptions()));
 
         $('.form-check-input').on('change', function() {
-            setupIME()
+            $typer.vietime('update', imeOptions());
+            $typer.focus();
         });
 
         $typer.focus();
