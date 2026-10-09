@@ -1,0 +1,68 @@
+:root { --nav-h: 62px; }
+
+body { background: #121212; color: #e0e0e0; font-family: system-ui, -apple-system, sans-serif; }
+
+/* Toolbar sticks below the fixed site navigation */
+.dict-toolbar {
+	position: sticky;
+	top: var(--nav-h);
+	z-index: 1020;
+	background: rgba(18, 18, 18, .94);
+	backdrop-filter: blur(10px);
+	border-block: 1px solid #2c2c2c;
+}
+.dict-search { flex: 1 1 100%; min-width: 0; width: auto; }
+.dict-pager { flex: 1 1 8rem; max-width: 11rem; width: auto; }
+.dict-pager input { min-width: 0; font-variant-numeric: tabular-nums; }
+.dict-tools { flex: 0 0 auto; margin-left: auto; }
+.dict-zoom-label { min-width: 3.4rem; opacity: 1 !important; color: #adb5bd; font-variant-numeric: tabular-nums; }
+.dict-tools .btn.active, .dict-search .btn.active { background: #495057; color: #fff; }
+
+@media (min-width: 768px) {
+	/* one row: search | page | tools */
+	.dict-search { flex: 1 1 22rem; }
+	.dict-tools { margin-left: 0; }
+}
+
+.dict-hint { min-height: 1.5rem; padding: .35rem 0 .25rem; }
+
+/* Page image */
+.dict-stage {
+	position: relative;
+	max-width: 1000px;
+	margin-inline: auto;
+	min-height: 60vh;
+	overflow-x: auto;
+	background: #1c1c1c;
+	border: 1px solid #2c2c2c;
+	border-radius: .375rem;
+	touch-action: manipulation;
+}
+.dict-image {
+	display: block;
+	width: calc(var(--zoom, 1) * 100%);
+	max-width: none;
+	height: auto;
+	background: #fff;
+	cursor: zoom-in;
+	transition: opacity .15s;
+}
+.dict-stage.is-zoomed .dict-image { cursor: zoom-out; }
+.dict-stage.is-inverted .dict-image { filter: invert(1) hue-rotate(180deg); background: #111; }
+.dict-stage.is-loading .dict-image { opacity: .35; }
+.dict-image:not([src]) { visibility: hidden; min-height: 60vh; }
+
+.dict-spinner { position: absolute; top: 40vh; left: 50%; margin: -1rem 0 0 -1rem; display: none; }
+.dict-stage.is-loading .dict-spinner { display: block; }
+.dict-error { position: absolute; top: 2rem; left: 50%; transform: translateX(-50%); text-align: center; z-index: 2; }
+.dict-error[hidden] { display: none; }
+
+.dict-pager-bottom { max-width: 1000px; margin-inline: auto; }
+
+@media (max-width: 575.98px) {
+	.dict-toolbar .container-xxl { gap: .5rem !important; padding-block: .5rem !important; }
+	.dict-stage { border-inline: none; border-radius: 0; margin-inline: -12px; }
+}
+
+/* Candidate list is not used here (headword search only needs Telex), but keep ime.js dark when shown */
+.vietime { --vietime-bg: #222; --vietime-color: #eee; --vietime-border: 1px solid #555; --vietime-grid: #444; }
