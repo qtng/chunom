@@ -349,6 +349,12 @@ class ChunomDict {
         this.searchInput.focus();
         this.searchInput.value = [...this.searchInput.value].slice(0, -1).join('');
         this.searchInput.dispatchEvent(new Event('input'));
+      } else if (e.key == 'Enter') {
+        this.searchInput.dispatchEvent(new KeyboardEvent('keydown', {
+          key: 'Escape',
+          code: 'Escape',
+          keyCode: 27
+        }));
       } else if (e.key.length === 1 && e.key !== ' ') {
         this.searchInput.focus();
       }
