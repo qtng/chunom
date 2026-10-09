@@ -8,9 +8,21 @@
     <meta name="description" content="Scanned dictionary of Nôm characters with excerpts (Institute of Vietnamese Studies, 2009) with headword search.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="dict.css">
+    <!--
+        Cache busting: GitHub Pages lets browsers keep files for hours. The version number after v= (same in all lines
+        below and in the three dict pages; bump it with dict/bump-version.sh whenever a file in dict/ or js/ime.js
+        changes) makes browsers fetch the new files at once. The import map adds it to the module imports.
+    -->
+    <script type="importmap">
+    { "imports": {
+        "./viewer.js": "./viewer.js?v=20261009-1940",
+        "./collate.js": "./collate.js?v=20261009-1940",
+        "./dictionaries.js": "./dictionaries.js?v=20261009-1940"
+    } }
+    </script>
+    <link rel="stylesheet" href="dict.css?v=20261009-1940">
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-    <script defer src="../js/ime.js"></script>
+    <script defer src="../js/ime.js?v=20261009-1940"></script>
     <script defer src="../../qatt/js/navigation.js"></script>
 </head>
 <body>
