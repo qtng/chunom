@@ -69,7 +69,7 @@ export class DictionaryViewer {
 			el('p', { className: 'text-secondary small mb-0', textContent: [c.subtitle, c.note].filter(Boolean).join(' · ') }));
 
 		ui.search = el('input', {
-			type: 'search', className: 'form-control', placeholder: 'Headword…', autocomplete: 'off', enterKeyHint: 'search',
+			type: 'search', className: 'form-control', placeholder: 'Search', autocomplete: 'off', enterKeyHint: 'search',
 			ariaLabel: 'Search headword', disabled: true
 		});
 		ui.telex = el('button', { type: 'button', className: 'btn btn-outline-secondary', title: 'Telex typing (aa → â, ow → ơ)', ariaLabel: 'Telex typing' },
