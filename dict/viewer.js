@@ -47,6 +47,7 @@ export class DictionaryViewer {
 		this.setTelex(store.get('telex') != '0');
 		this.bind();
 		this.loadIndex();
+		this.showTab('pages');
 		this.go(this.startPage(), 'replace');
 		window.addEventListener('load', () => this.attachIme());
 		if (window.VietIme) this.attachIme();
@@ -66,18 +67,13 @@ export class DictionaryViewer {
 			el('h1', { className: 'h5 mb-0', textContent: c.title }),
 			el('p', { className: 'text-secondary small mb-0', textContent: [c.subtitle, c.note].filter(Boolean).join(' · ') }));
 
-		ui.contents = el('button', { type: 'button', className: 'btn btn-outline-secondary', title: 'Contents and legend', ariaLabel: 'Contents and legend' },
-			el('i', { className: 'bi bi-list' }));
-		ui.contents.dataset.bsToggle = 'offcanvas';
-		ui.contents.dataset.bsTarget = '#dict-contents';
-
 		ui.search = el('input', {
 			type: 'search', className: 'form-control', placeholder: 'Headword…', autocomplete: 'off', enterKeyHint: 'search',
 			ariaLabel: 'Search headword', disabled: true
 		});
 		ui.telex = el('button', { type: 'button', className: 'btn btn-outline-secondary', title: 'Telex typing (aa → â, ow → ơ)', ariaLabel: 'Telex typing' },
 			el('i', { className: 'bi bi-keyboard' }));
-		ui.searchForm = el('form', { className: 'input-group dict-search', role: 'search' }, ui.contents, ui.search, ui.telex,
+		ui.searchForm = el('form', { className: 'input-group dict-search', role: 'search' }, ui.search, ui.telex,
 			el('button', { type: 'submit', className: 'btn btn-primary', ariaLabel: 'Go to headword' }, el('i', { className: 'bi bi-search' })));
 
 		ui.prev = el('button', { type: 'button', className: 'btn btn-outline-secondary', title: 'Previous page (←)', ariaLabel: 'Previous page' }, el('i', { className: 'bi bi-chevron-left' }));
@@ -106,11 +102,23 @@ export class DictionaryViewer {
 			ui.prev2 = el('button', { type: 'button', className: 'btn btn-outline-secondary' }, el('i', { className: 'bi bi-chevron-left' }), ' Previous'),
 			ui.next2 = el('button', { type: 'button', className: 'btn btn-outline-secondary' }, 'Next ', el('i', { className: 'bi bi-chevron-right' })));
 
+		const tab = (name, icon, label) => {
+			const button = el('button', { type: 'button', className: 'nav-link', role: 'tab', id: `dict-tab-${name}`, ariaControls: `dict-pane-${name}` },
+				el('i', { className: `bi ${icon} me-1` }), label);
+			button.dataset.tab = name;
+			return el('li', { className: 'nav-item', role: 'presentation' }, button);
+		};
+		ui.tabs = el('ul', { className: 'nav nav-tabs dict-tabs', role: 'tablist' },
+			tab('pages', 'bi-book', 'Pages'), tab('contents', 'bi-list-ul', 'Contents'));
+
+		ui.panePages = el('div', { className: 'dict-pane', id: 'dict-pane-pages', role: 'tabpanel', ariaLabelledby: 'dict-tab-pages' },
+			toolbar, el('div', { className: 'container-xxl' }, ui.hint, ui.stage, ui.stageBottom));
+		ui.paneContents = el('div', { className: 'dict-pane', id: 'dict-pane-contents', role: 'tabpanel', ariaLabelledby: 'dict-tab-contents', hidden: true },
+			el('div', { className: 'container-xxl py-3' }, this.buildContents()));
+
 		root.replaceChildren(
-			el('div', { className: 'container-xxl pt-3' }, header),
-			toolbar,
-			el('div', { className: 'container-xxl' }, ui.hint, ui.stage, ui.stageBottom),
-			this.buildContents());
+			el('div', { className: 'container-xxl pt-3' }, header, ui.tabs),
+			ui.panePages, ui.paneContents);
 	}
 
 	buildContents() {
@@ -125,19 +133,14 @@ export class DictionaryViewer {
 		});
 		const legend = el('dl', { className: 'row small mb-0' },
 			...c.legend.flatMap(([symbol, text]) => [el('dt', { className: 'col-3 font-monospace', textContent: symbol }), el('dd', { className: 'col-9', textContent: text })]));
-		const body = el('div', { className: 'offcanvas-body' },
-			el('h3', { className: 'h6 text-uppercase text-secondary', textContent: 'Contents' }),
-			el('div', { className: 'list-group mb-4' }, ...ui.tocLinks),
-			el('h3', { className: 'h6 text-uppercase text-secondary', textContent: 'Legend' }),
-			legend);
-		if (c.source) body.append(el('p', { className: 'small text-secondary mt-4 mb-0' }, 'Source: ', el('a', { href: c.source[1], textContent: c.source[0], target: '_blank', rel: 'noopener' })));
-		const canvas = el('div', { className: 'offcanvas offcanvas-start', tabIndex: -1, id: 'dict-contents', ariaLabel: 'Contents' },
-			el('div', { className: 'offcanvas-header' }, el('h2', { className: 'offcanvas-title h5', textContent: c.short }),
-				el('button', { type: 'button', className: 'btn-close', ariaLabel: 'Close' })),
-			body);
-		canvas.querySelector('.btn-close').dataset.bsDismiss = 'offcanvas';
-		ui.canvas = canvas;
-		return canvas;
+		const side = el('div', { className: 'col-md-5' },
+			el('h2', { className: 'h6 text-uppercase text-secondary', textContent: 'Legend' }), legend);
+		if (c.source) side.append(el('p', { className: 'small text-secondary mt-4 mb-0' }, 'Source: ', el('a', { href: c.source[1], textContent: c.source[0], target: '_blank', rel: 'noopener' })));
+		return el('div', { className: 'row g-4' },
+			el('div', { className: 'col-md-7' },
+				el('h2', { className: 'h6 text-uppercase text-secondary', textContent: 'Contents' }),
+				el('div', { className: 'list-group' }, ...ui.tocLinks)),
+			side);
 	}
 
 	// ---------- Events ----------
@@ -173,24 +176,29 @@ export class DictionaryViewer {
 		};
 		ui.telex.onclick = () => this.setTelex(store.get('telex') == '0');
 
-		ui.canvas.addEventListener('click', e => {
+		ui.tabs.addEventListener('click', e => {
+			const tab = e.target.closest('[data-tab]');
+			if (tab) this.showTab(tab.dataset.tab);
+		});
+		ui.paneContents.addEventListener('click', e => {
 			const link = e.target.closest('a[data-page]');
 			if (!link) return;
 			e.preventDefault();
 			this.go(Number(link.dataset.page), 'push');
-			window.bootstrap?.Offcanvas.getInstance(ui.canvas)?.hide();
+			this.showTab('pages');
 		});
 
 		addEventListener('hashchange', () => {
 			const n = this.hashPage();
 			if (n != null && n != this.page) this.go(n, 'none');
+			if (n != null) this.showTab('pages');
 		});
 		addEventListener('keydown', e => this.onKey(e));
 		this.bindSwipe();
 	}
 
 	onKey(e) {
-		if (e.ctrlKey || e.metaKey || e.altKey || e.target.closest('input, textarea, select, [contenteditable]')) return;
+		if (this.ui.panePages.hidden || e.ctrlKey || e.metaKey || e.altKey || e.target.closest('input, textarea, select, [contenteditable]')) return;
 		if (e.key == 'ArrowLeft') this.go(this.page - 1, 'replace');
 		else if (e.key == 'ArrowRight') this.go(this.page + 1, 'replace');
 		else if (e.key == '/') { e.preventDefault(); this.ui.search.focus(); }
@@ -212,6 +220,18 @@ export class DictionaryViewer {
 			start = null;
 			if (Math.abs(dx) > 70 && Math.abs(dy) < 50) this.go(this.page + (dx < 0 ? 1 : -1), 'replace');
 		}, { passive: true });
+	}
+
+	showTab(name) {
+		const { ui } = this;
+		ui.panePages.hidden = name != 'pages';
+		ui.paneContents.hidden = name != 'contents';
+		for (const button of ui.tabs.querySelectorAll('[data-tab]')) {
+			const on = button.dataset.tab == name;
+			button.classList.toggle('active', on);
+			button.setAttribute('aria-selected', String(on));
+		}
+		scrollTo(0, 0);
 	}
 
 	// ---------- Navigation ----------

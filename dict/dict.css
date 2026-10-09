@@ -26,6 +26,11 @@ body { background: #121212; color: #e0e0e0; font-family: system-ui, -apple-syste
 
 .dict-hint { min-height: 1.5rem; padding: .35rem 0 .25rem; }
 
+.dict-tabs { border-bottom-color: #2c2c2c; }
+.dict-tabs .nav-link { color: #adb5bd; }
+.dict-tabs .nav-link.active { background: #121212; color: #fff; border-color: #2c2c2c #2c2c2c #121212; }
+.dict-pane[hidden] { display: none; }
+
 /* Page image */
 .dict-stage {
 	position: relative;
