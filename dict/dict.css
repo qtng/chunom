@@ -10,6 +10,8 @@ body { background: #121212; color: #e0e0e0; font-family: system-ui, -apple-syste
 	background: rgba(18, 18, 18, .94);
 	backdrop-filter: blur(10px);
 	border-block: 1px solid #2c2c2c;
+	margin-inline: -12px;
+	padding-inline: 12px;
 }
 .dict-search { flex: 1 1 100%; min-width: 0; width: auto; }
 .dict-pager { flex: 1 1 8rem; max-width: 11rem; width: auto; }
@@ -25,6 +27,32 @@ body { background: #121212; color: #e0e0e0; font-family: system-ui, -apple-syste
 }
 
 .dict-hint { min-height: 1.5rem; padding: .35rem 0 .25rem; }
+
+.dict-tabs { border-bottom-color: #2c2c2c; }
+.dict-tabs .nav-link { color: #adb5bd; }
+.dict-tabs .nav-link.active { background: #121212; color: #fff; border-color: #2c2c2c #2c2c2c #121212; }
+.dict-pane.is-off { display: none; } /* not [hidden]: Bootstrap forces that with !important */
+
+.dict-wrap { max-width: 1600px; margin-inline: auto; padding-inline: 12px; }
+.dict-layout { padding-top: 1rem; }
+.dict-contents { padding-bottom: 1rem; }
+
+/* Wide screens: contents and legend as a sidebar next to the pages, no tabs */
+@media (min-width: 1200px) {
+	.dict-tabs { display: none; }
+	.dict-layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 1.5rem; align-items: start; padding-top: .5rem; }
+	#dict-pane-contents.is-off { display: block; }
+	#dict-pane-contents {
+		position: sticky;
+		top: calc(var(--nav-h) + .5rem);
+		max-height: calc(100vh - var(--nav-h) - 1rem);
+		overflow-y: auto;
+	}
+	.dict-contents { --bs-gutter-x: 0; margin-inline: 0; padding-right: .25rem; }
+	.dict-contents > * { flex: 0 0 100%; width: 100%; max-width: 100%; }
+	.dict-contents dl.row { --bs-gutter-x: 0; margin-inline: 0; }
+	#dict-pane-contents { overflow-x: hidden; }
+}
 
 /* Page image */
 .dict-stage {
@@ -60,7 +88,7 @@ body { background: #121212; color: #e0e0e0; font-family: system-ui, -apple-syste
 .dict-pager-bottom { max-width: 1000px; margin-inline: auto; }
 
 @media (max-width: 575.98px) {
-	.dict-toolbar .container-xxl { gap: .5rem !important; padding-block: .5rem !important; }
+	.dict-toolbar > div { gap: .5rem !important; padding-block: .5rem !important; }
 	.dict-stage { border-inline: none; border-radius: 0; margin-inline: -12px; }
 }
 
