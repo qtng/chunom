@@ -12,7 +12,10 @@ const ZOOMS = [1, 1.5, 2, 3];
 const SEARCH_DELAY = 350;
 const SWIPE_COMMIT = 80; // px a swipe must travel to turn the page
 const SWIPE_DAMPING = 0.6; // the page follows the finger at this fraction
-const SWIPE_MS = 150; // keep in sync with the transform transition in dict.css
+const SWIPE_TILT = 0.04; // degrees of tilt per px of finger travel
+const SWIPE_MAX_TILT = 6; // degrees
+const SWIPE_OUT_MS = 220; // old page slides out and fades
+const SWIPE_IN_MS = 280; // new page slides in and fades in
 const WIDE = '(min-width: 1200px)'; // sidebar instead of tabs; keep in sync with dict.css
 
 const store = {
@@ -43,7 +46,9 @@ export class DictionaryViewer {
 		this.words = [];
 		this.keys = [];
 		this.loadToken = 0;
-		this.enter = 0;
+		this.enter = 0; // direction of a page turn in progress: 1 = next (new page comes from the right)
+		this.turning = false;
+		this.pivotY = 0; // where the finger holds the page; it tilts around this point
 		this.searchTimer = null;
 
 		this.build();
@@ -228,10 +233,11 @@ export class DictionaryViewer {
 	bindSwipe() {
 		const { stage } = this.ui;
 		let drag = null;
-		const usable = () => this.zoom == 1 && (window.visualViewport?.scale || 1) <= 1.05;
+		const usable = () => !this.turning && this.zoom == 1 && (window.visualViewport?.scale || 1) <= 1.05;
 
 		stage.addEventListener('touchstart', e => {
 			drag = e.touches.length == 1 && usable() ? { x: e.touches[0].clientX, y: e.touches[0].clientY, dx: 0, horizontal: null } : null;
+			if (drag) this.pivotY = drag.y - this.ui.img.getBoundingClientRect().top;
 		}, { passive: true });
 		stage.addEventListener('touchmove', e => {
 			if (!drag) return;
@@ -258,8 +264,11 @@ export class DictionaryViewer {
 		const { ui } = this;
 		const target = this.page + (dx < 0 ? 1 : -1);
 		const valid = target >= this.min && target <= this.max;
+		const damping = valid ? SWIPE_DAMPING : 0.2; // resists at the first and last page
+		const tilt = this.reducedMotion() ? 0 : Math.max(-SWIPE_MAX_TILT, Math.min(SWIPE_MAX_TILT, dx * SWIPE_TILT * (valid ? 1 : 0.3)));
 		ui.img.style.transition = 'none';
-		ui.img.style.transform = `translateX(${dx * (valid ? SWIPE_DAMPING : 0.2)}px)`; // resists at the first and last page
+		ui.img.style.transformOrigin = `50% ${this.pivotY}px`;
+		ui.img.style.transform = `translateX(${dx * damping}px) rotate(${tilt}deg)`;
 		for (const [hint, side] of [[ui.hintPrev, 1], [ui.hintNext, -1]]) {
 			const active = valid && dx * side > 0;
 			hint.style.opacity = active ? Math.min(1, Math.abs(dx) / SWIPE_COMMIT) : 0;
@@ -268,6 +277,15 @@ export class DictionaryViewer {
 		}
 	}
 
+	reducedMotion() {
+		return matchMedia('(prefers-reduced-motion: reduce)').matches;
+	}
+
+	/*
+		Releasing a swipe: either spring back, or turn the page. Turning: the old page keeps moving in the
+		swipe direction and fades out, stays invisible while the next image loads, and the new page then
+		slides in from the opposite side. It never jumps back to the middle in between.
+	*/
 	swipeEnd(dx, commit) {
 		const { ui } = this;
 		for (const hint of [ui.hintPrev, ui.hintNext]) {
@@ -277,18 +295,34 @@ export class DictionaryViewer {
 		ui.img.style.transition = ''; // back to the stylesheet transition
 		if (!commit) { ui.img.style.transform = ''; return; } // spring back
 		const dir = dx < 0 ? 1 : -1;
-		const animate = !matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const turn = () => {
-			ui.img.style.transition = 'none';
+		if (this.reducedMotion()) {
+			ui.img.style.transform = '';
+			this.go(this.page + dir, 'replace');
+			return;
+		}
+		this.turning = true;
+		ui.img.style.transition = `transform ${SWIPE_OUT_MS}ms ease-in, opacity ${SWIPE_OUT_MS}ms ease-in`;
+		ui.img.style.transform = `translateX(${-dir * ui.stage.clientWidth * 0.6}px) rotate(${-dir * SWIPE_MAX_TILT * 1.5}deg)`;
+		ui.img.style.opacity = '0';
+		setTimeout(() => {
+			this.enter = dir;
+			this.go(this.page + dir, 'replace');
+		}, SWIPE_OUT_MS);
+	}
+
+	/** Called when the next image is ready after a swipe: place it on the far side, then glide to the middle */
+	slideIn(dir) {
+		const { ui } = this;
+		ui.img.style.transition = 'none';
+		ui.img.style.transform = `translateX(${dir * ui.stage.clientWidth * 0.35}px) rotate(${dir * SWIPE_MAX_TILT}deg)`;
+		ui.img.style.opacity = '0';
+		return () => { // call after the new src is set
+			ui.img.offsetWidth; // commit the start position
+			ui.img.style.transition = `transform ${SWIPE_IN_MS}ms ease-out, opacity ${SWIPE_IN_MS}ms ease-out`;
 			ui.img.style.transform = '';
 			ui.img.style.opacity = '';
-			this.enter = animate ? dir : 0;
-			this.go(this.page + dir, 'replace');
+			setTimeout(() => { ui.img.style.transition = ''; this.turning = false; }, SWIPE_IN_MS);
 		};
-		if (!animate) return turn();
-		ui.img.style.transform = `translateX(${-dir * ui.stage.clientWidth * 0.35}px)`; // old page slides out
-		ui.img.style.opacity = '0.2';
-		setTimeout(turn, SWIPE_MS);
 	}
 
 	showTab(name) {
@@ -370,23 +404,23 @@ export class DictionaryViewer {
 		const probe = new Image();
 		probe.onload = () => {
 			if (token != this.loadToken) return;
+			const dir = this.enter;
+			this.enter = 0;
+			const glide = dir ? this.slideIn(dir) : null; // after a swipe: new page slides in from the far side
 			ui.img.src = url;
 			ui.img.alt = `${c.short}, page ${this.page}`;
-			if (this.enter) { // after a swipe the new page slides in from the side the finger moved to
-				ui.img.style.transition = 'none';
-				ui.img.style.transform = `translateX(${this.enter * 40}px)`;
-				ui.img.offsetWidth; // apply the start position before animating
-				ui.img.style.transition = '';
-				ui.img.style.transform = '';
-				this.enter = 0;
-			}
 			ui.stage.classList.remove('is-loading');
+			glide?.();
 			for (const n of [this.page + 1, this.page - 1]) if (n >= this.min && n <= this.max) new Image().src = c.pageUrl(n + c.offset);
 		};
 		probe.onerror = () => {
 			if (token != this.loadToken) return;
 			ui.stage.classList.remove('is-loading');
 			ui.error.hidden = false;
+			// leave nothing half-animated behind
+			this.enter = 0;
+			this.turning = false;
+			ui.img.style.transition = ui.img.style.transform = ui.img.style.opacity = '';
 		};
 		probe.src = url;
 	}
