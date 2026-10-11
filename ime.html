@@ -3,93 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chữ Nôm Editor | VietIME</title>
+    <title>Chữ Nôm Writer | Qatt.org</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link type="text/css" href="https://chunom.org/media/css/fonts/all.css" rel="stylesheet"/>
     <script defer src="js/ime.js"></script>
     <script defer src="../qatt/js/navigation.js"></script>
-    
+
     <style>
+        :root { --ink: #2b2118; --accent: #a8362a; --paper: #f7efdc; --line: #e4d9c0; }
+
         body {
-            background-color: #fff;
-            color: #212529;
+            background: linear-gradient(180deg, var(--paper) 0, #fffdf8 16rem) no-repeat, #fffdf8;
+            color: var(--ink);
             font-family: system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
         }
 
-        #typer-candidates {
-            --vietime-bg: transparent;
-            --vietime-color: #212529;
-            --vietime-border: none;
-            --vietime-grid: #dee2e6;
-            --vietime-active: rgba(10, 120, 255, .15);
-            --vietime-remainder: #0d6efd;
-        }
+        .writer-head h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(1.7rem, 6vw, 2.4rem); }
+        .writer-head p { color: #5b4d3d; max-width: 36rem; margin-inline: auto; }
 
-        /* ime.js positions its list under the field; here it fills the left pane instead */
-        #typer-candidates .vietime {
-            position: static;
-            max-width: none;
+        /* the writing card */
+        .writer {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 1rem;
+            box-shadow: 0 .5rem 1.5rem rgba(60, 40, 20, .08);
+            overflow: hidden;
         }
-
+        .writer-pad { padding: .25rem; }
         #typer-text {
+            display: block;
             width: 100%;
-            height: 100%;
-            padding: 15px;
-            font-size: 20pt;
+            min-height: 9.5rem;
+            padding: .75rem .9rem;
+            font-size: 1.5rem;
+            line-height: 1.5;
             border: none;
             outline: none;
             background: transparent;
-            color: #212529;
+            color: var(--ink);
             resize: none;
+        }
+        .writer-bar {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .4rem .6rem;
+            border-top: 1px solid var(--line);
+            background: #fcf8ee;
+        }
+        .writer-bar .btn { border-radius: 2rem; font-size: .85rem; padding: .25rem .8rem; }
+        .btn-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+        .btn-accent:hover, .btn-accent:focus-visible { background: #8c2c22; border-color: #8c2c22; color: #fff; }
+        .btn-quiet { border-color: #cdbf9f; color: #5b4d3d; background: #fff; }
+        .btn-quiet:hover { background: #f1e8d2; color: var(--ink); border-color: #b9a982; }
+
+        /* candidate list: ime.js creates it, the page only styles it */
+        .writer-cands { border-top: 1px solid var(--line); min-height: 7rem; }
+        .cands-title { padding: .45rem .9rem .1rem; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: #9a8a70; }
+        #typer-empty { padding: .5rem .9rem 1rem; color: #7b6c58; font-size: .95rem; }
+        #typer-empty b { color: var(--ink); font-weight: 600; }
+        #typer-empty .ex { font-size: 1.15rem; white-space: nowrap; }
+
+        #typer-candidates {
+            --vietime-bg: transparent;
+            --vietime-color: var(--ink);
+            --vietime-border: none;
+            --vietime-grid: transparent;
+            --vietime-active: rgba(168, 54, 42, .10);
+            --vietime-remainder: var(--accent);
+        }
+        #typer-candidates .vietime { position: static; max-width: none; padding: .25rem .4rem .5rem; font-family: system-ui, -apple-system, sans-serif; }
+        #typer-candidates .vietime:not([hidden]) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .25rem; }
+        #typer-candidates .vietime-option {
+            border-top: none;
+            border-radius: .6rem;
+            min-height: 2.9rem;
+            line-height: 1.2;
+            padding: .2rem .6rem;
+            gap: .45rem;
+            overflow: hidden;
+        }
+        #typer-candidates .vietime-option[aria-selected="true"] { box-shadow: inset 0 0 0 1.5px rgba(168, 54, 42, .45); }
+        #typer-candidates .vietime-number { flex: none; width: 1.3rem; text-align: right; font-size: .75rem; color: #9a8a70; font-variant-numeric: tabular-nums; }
+        #typer-candidates .vietime-glyph { flex: none; font-size: 1.7rem; line-height: 1; }
+        #typer-candidates .vietime-reading { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+        #typer-candidates .vietime-definition { display: none; }
+
+        .keys { color: #9a8a70; font-size: .8rem; }
+        .keys kbd { background: #f1e8d2; color: #5b4d3d; font-size: .75rem; padding: .05rem .35rem; }
+
+        .opts { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem 1.2rem; }
+        .opts .form-check { margin: 0; }
+        .opts .form-check-input:checked { background-color: var(--accent); border-color: var(--accent); }
+        .opts .form-check-label { font-size: .9rem; color: #5b4d3d; }
+
+        @media (min-width: 576px) {
+            #typer-candidates .vietime-definition { display: block; max-width: 7em; }
+        }
+
+        /* wide screens: writing pad and candidates side by side */
+        @media (min-width: 992px) {
+            .writer { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-rows: 1fr auto; grid-template-areas: "pad cands" "bar cands"; }
+            .writer-pad { display: flex; }
+            #typer-text { flex: 1; }
+            .writer-pad { grid-area: pad; }
+            .writer-bar { grid-area: bar; }
+            .writer-cands { grid-area: cands; border-top: none; border-left: 1px solid var(--line); min-height: 22rem; }
+            #typer-text { min-height: 17rem; font-size: 1.7rem; }
+            #typer-candidates .vietime:not([hidden]) { grid-template-columns: 1fr; gap: .1rem; }
+            #typer-candidates .vietime-definition { max-width: 11em; }
         }
     </style>
 </head>
 <body>
 
-<div class="container py-3">
-    <div class="row justify-content-center">
-        <div class="col-12 col-lg-11">
-            
-            <header class="text-center mb-3">
-                <h1 class="h4 mb-1">Chữ Nôm Online Writer</h1>
-            </header>
+<div class="container py-3 pb-5" style="max-width: 62rem">
 
-            <div class="row g-0 border rounded overflow-hidden" style="min-height:300px; height:60vh">
-                <div id="typer-candidates" class="col-7 p-0">
-                </div>
-                <div id="typer-pad" class="col-5 border-start h-100">
-                    <textarea id="typer-text"></textarea>
-                </div>
-            </div>
+    <header class="writer-head text-center my-3">
+        <h1 class="mb-1">Chữ Nôm Writer</h1>
+        <p class="mb-0">Type Vietnamese with Telex, then pick the Nôm character that fits.</p>
+    </header>
 
-            <div class="card mt-3 bg-body-tertiary">
-                <div class="card-body p-2">
-                    <div class="row g-2 text-center align-items-center">
-                        <div class="col-4">
-                            <div class="form-check form-switch d-inline-block">
-                                <input class="form-check-input" type="checkbox" id="telex-select" checked>
-                                <label class="form-check-label small" for="telex-select">Telex</label>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-check form-switch d-inline-block">
-                                <input class="form-check-input" type="checkbox" id="return-select" checked>
-                                <label class="form-check-label small" for="return-select">Enter</label>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-check form-switch d-inline-block">
-                                <input class="form-check-input" type="checkbox" id="space-select" checked>
-                                <label class="form-check-label small" for="space-select">Space</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="writer">
+        <div class="writer-pad">
+            <textarea id="typer-text" placeholder="Type here…" aria-label="Text"></textarea>
+        </div>
 
+        <div class="writer-bar">
+            <button type="button" class="btn btn-accent" id="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+            <button type="button" class="btn btn-quiet" id="clear-btn"><i class="bi bi-x-lg"></i> Clear</button>
+            <span class="keys ms-auto d-none d-lg-block"><kbd>1</kbd>–<kbd>0</kbd> pick · <kbd>↑</kbd><kbd>↓</kbd> move · <kbd>Esc</kbd> close</span>
+        </div>
+
+        <div class="writer-cands">
+            <div class="cands-title">Candidates</div>
+            <div id="typer-empty">Type a syllable, for example <b>viet</b> → <span class="ex">việt → 越</span></div>
+            <div id="typer-candidates"></div>
         </div>
     </div>
+
+    <div class="opts mt-3">
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="telex-select" checked>
+            <label class="form-check-label" for="telex-select">Telex</label>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="return-select" checked>
+            <label class="form-check-label" for="return-select">Enter picks the first</label>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="space-select" checked>
+            <label class="form-check-label" for="space-select">Space picks the first</label>
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -103,7 +172,14 @@
         const options = () => Object.fromEntries(Object.entries(switches).map(([name, box]) => [name, box.checked]));
 
         const ime = new VietIme(typer, options());
-        document.getElementById('typer-candidates').append(ime.list);
+        const candidates = document.getElementById('typer-candidates');
+        candidates.append(ime.list);
+
+        // the hint stays visible while the candidate list is hidden
+        const empty = document.getElementById('typer-empty');
+        const syncEmpty = () => { empty.hidden = !ime.list.hidden; };
+        new MutationObserver(syncEmpty).observe(ime.list, { attributes: true, attributeFilter: ['hidden'] });
+        syncEmpty();
 
         for (const box of Object.values(switches)) {
             box.addEventListener('change', () => {
@@ -111,6 +187,25 @@
                 typer.focus();
             });
         }
+
+        const copyBtn = document.getElementById('copy-btn');
+        copyBtn.addEventListener('click', async () => {
+            const label = copyBtn.innerHTML;
+            try {
+                await navigator.clipboard.writeText(typer.value);
+            } catch {
+                typer.select();
+                document.execCommand('copy');
+            }
+            copyBtn.innerHTML = '<i class="bi bi-check-lg"></i> Copied';
+            setTimeout(() => { copyBtn.innerHTML = label; }, 1400);
+        });
+
+        document.getElementById('clear-btn').addEventListener('click', () => {
+            typer.value = '';
+            typer.dispatchEvent(new Event('input', { bubbles: true }));
+            typer.focus();
+        });
 
         typer.focus();
     });
