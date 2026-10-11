@@ -347,6 +347,7 @@
 @media (max-width: 575.98px) {
 	.vietime { width: calc(100vw - 24px); max-width: none }
 	.vietime:not([hidden]) { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(5, auto); grid-auto-flow: column } /* 1-5 down the left column, 6-0 down the right one */
+	.vietime-option:nth-child(n+6) .vietime-glyph { transform: scale(.8); transform-origin: left center } /* the right column is smaller: the best candidates are on the left */
 }`;
 
 	let count = 0;
