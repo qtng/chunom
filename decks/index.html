@@ -29,6 +29,8 @@
         .page-title { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2rem, 7vw, 2.8rem); }
         .page-han { color: var(--cinnabar); letter-spacing: .5em; padding-left: .5em; font-size: 1.05rem; }
         .accent { color: var(--cinnabar) !important; }
+        .btn-outline-accent { color: var(--cinnabar); border-color: var(--cinnabar); }
+        .btn-outline-accent:hover { background: var(--cinnabar); border-color: var(--cinnabar); color: #fff; }
         .text-secondary { color: var(--muted) !important; }
 
         /* quiet text buttons without hover or focus highlights */
@@ -266,6 +268,7 @@
                                 <small class="text-secondary">${d.words ? d.words.length : 0} items</small>
                             </div>
                             <div class="d-flex align-items-center">
+                                <button type="button" class="btn btn-sm btn-outline-accent rounded-pill me-3" onclick="event.preventDefault(); event.stopPropagation(); location.href='quiz.html?id=${d.id}'"><i class="bi bi-lightning-charge-fill"></i> Quiz</button>
                                 <span class="small text-secondary me-2 d-none d-sm-inline">${label}</span>
                                 <i class="bi ${iconClass} fs-4 opacity-75"></i>
                             </div>
