@@ -10,7 +10,8 @@
     <link href="https://chunom.org/media/css/fonts/all.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../qatt/js/navigation.js"></script>
-    <script src="../qatt/js/supabase.js"></script>
+    <script src="../qatt/js/supabase.js?v=2"></script>
+    <script src="../qatt/js/login.js"></script>
     <script src="../qatt/js/parser.js?v=2"></script>
     <script src="../qatt/js/qatt.js"></script>
     
@@ -449,6 +450,11 @@
         const externalModal = new bootstrap.Modal(document.getElementById('externalDeckModal'));
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
 
+        // new decks only with a login: anonymous users get the sign-in dialog instead
+        const signedIn = () => !!sp && !!sp.user && !sp.isAnonymous;
+        const askLogin = () => QattLogin.open(sp, 'Sign in to add decks. The decks you have so far stay with your account.');
+        document.getElementById('createDeckModal').addEventListener('show.bs.modal', e => { if (!signedIn()) { e.preventDefault(); askLogin(); } });
+
         async function initApp() {
             toggleLoading(true);
             try {
@@ -506,6 +512,7 @@
         }
         window.copyExternalDeck = async () => {
             if (!currentDeck) return;
+            if (!signedIn()) return askLogin();
             toggleLoading(true);
             try {
                 const newId = crypto.randomUUID();
@@ -616,6 +623,7 @@
             const input = document.getElementById('deckTitle');
             const title = input.value.trim();
             if (!title) return;
+            if (!signedIn()) return askLogin();
             toggleLoading(true);
             const id = crypto.randomUUID();
             try {

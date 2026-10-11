@@ -15,7 +15,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../../qatt/js/navigation.js"></script>
-    <script src="../../qatt/js/supabase.js"></script>
+    <script src="../../qatt/js/supabase.js?v=2"></script>
+    <script src="../../qatt/js/login.js"></script>
 
     <style>
         :root { --ink: #2b2118; --cinnabar: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
@@ -112,7 +113,8 @@
                             </button>
                         </div>
                     </div>
-                    
+                    <div id="account" class="mb-3"></div>
+
                     <div id="deck-list" class="list-group">
                         <div class="text-center p-5 text-secondary rounded">
                             <div class="spinner-border spinner-border-sm accent mb-2" role="status"></div>
@@ -177,6 +179,7 @@
             async init() {
                 try {
                     await this.sp.init();
+                    QattLogin.status(this.sp, document.getElementById('account'));
                     this.setupEventListeners();
                     await this.loadLists();
                 } catch (e) {
@@ -192,6 +195,13 @@
                 const editIcon = document.getElementById('edit-icon');
                 const editIndicator = document.getElementById('edit-indicator');
 
+                // new decks only with a login: anonymous users get the sign-in dialog instead
+                modalEl.addEventListener('show.bs.modal', e => {
+                    if (!this.signedIn()) {
+                        e.preventDefault();
+                        QattLogin.open(this.sp, 'Sign in to create decks. The decks you have so far stay with your account.');
+                    }
+                });
                 modalEl.addEventListener('shown.bs.modal', () => titleInput.focus());
                 modalEl.addEventListener('hidden.bs.modal', () => {
                     if (!this.isCreating) {
@@ -297,8 +307,13 @@
                 }
             }
 
+            signedIn() {
+                return !!this.sp.user && !this.sp.isAnonymous;
+            }
+
             async handleCreateDeck() {
                 if (this.isCreating) return;
+                if (!this.signedIn()) return QattLogin.open(this.sp, 'Sign in to create decks. The decks you have so far stay with your account.');
                 const titleInput = document.getElementById('deckTitleInput');
                 const title = titleInput.value.trim();
                 if (!title) {
