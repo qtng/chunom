@@ -12,7 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../../qatt/js/navigation.js"></script>
-    <script src="../../qatt/js/parser.js"></script>
+    <script src="../../qatt/js/parser.js?v=2"></script>
     <script src="../../qatt/js/qatt.js"></script>
     <script src="../../qatt/js/supabase.js"></script>
     <script src="./audiomanager.js"></script>
@@ -545,12 +545,12 @@
                 const codes = [];
                 for (const word of (quocNgu || '').split(/\s+/)) {
                     const parsed = word && this.parser.parse(word);
-                    if (parsed) {
+                    if (parsed?.qatt) { // the glyph after the rhyme table of the decoding
                         const code = document.createElement('qatt-code');
                         code.title = word;
-                        code.textContent = parsed.code;
+                        code.textContent = parsed.qatt;
                         codes.push(code);
-                    }
+                    } // a syllable without a glyph is left out
                 }
                 return codes;
             }

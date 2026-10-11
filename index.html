@@ -11,7 +11,7 @@
   <script defer src="https://qatt.org/chunom/js/ime.js?v=20261011-0535"></script>
   <script defer src="https://qatt.org/qatt/js/navigation.js"></script>
   <script defer src="https://qatt.org/qatt/js/qatt.js"></script>
-  <script defer src="https://qatt.org/qatt/js/parser.js"></script>
+  <script defer src="https://qatt.org/qatt/js/parser.js?v=2"></script>
   <style>
     svg {
       stroke: currentColor;
@@ -478,7 +478,8 @@ class ChunomDict {
     const codes = [];
     for (const word of (quocNgu && parser ? quocNgu.split(/\s+/) : [])) {
       const parsed = word && parser.parse(word);
-      if (parsed) codes.push(' ', el('qatt-code', { title: word, style: `font-size: ${fontSize}`, textContent: parsed.code }));
+      // the glyph after the rhyme table of the decoding; a syllable without a glyph is left out
+      if (parsed?.qatt) codes.push(' ', el('qatt-code', { title: word, style: `font-size: ${fontSize}`, textContent: parsed.qatt }));
     }
     return codes.slice(1);
   }
