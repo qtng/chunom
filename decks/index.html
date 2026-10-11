@@ -18,68 +18,86 @@
     <script src="../../qatt/js/supabase.js"></script>
 
     <style>
-        body { 
+        :root { --ink: #2b2118; --cinnabar: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
+
+        body {
             min-height: 100vh;
-            background-color: #000; /* Pure black background */
+            color: var(--ink);
+            background: linear-gradient(180deg, var(--paper) 0, #fffdf8 18rem) no-repeat, #fffdf8;
         }
 
-        /* Pure custom button class without any hover or focus highlights */
+        .page-title { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2rem, 7vw, 2.8rem); }
+        .page-han { color: var(--cinnabar); letter-spacing: .5em; padding-left: .5em; font-size: 1.05rem; }
+        .accent { color: var(--cinnabar) !important; }
+        .text-secondary { color: var(--muted) !important; }
+
+        /* quiet text buttons without hover or focus highlights */
         .btn-subtle {
             all: unset;
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
-            padding: 0.25rem 0.5rem;
+            padding: 0.25rem 0.6rem;
             cursor: pointer;
-            color: var(--bs-secondary);
+            color: var(--muted);
             font-size: 0.925rem;
             font-weight: 500;
             user-select: none;
+            border-radius: 2rem;
         }
+        .btn-subtle:hover { color: var(--cinnabar); }
+        .btn-subtle:focus-visible { outline: 2px solid var(--cinnabar); outline-offset: 2px; }
 
-        /* Visual state for active Edit mode icon */
-        .edit-active-icon {
-            color: var(--bs-warning) !important;
-        }
+        /* visual state for active Edit mode icon */
+        .edit-active-icon { color: var(--cinnabar) !important; }
 
-        /* Clean list items with secondary background and NO borders */
+        /* deck cards */
+        .list-group { border: none !important; }
         .list-group-item {
-            background-color: var(--bs-secondary-bg) !important;
-            border: none !important;
-            margin-bottom: 0.5rem;
+            background-color: rgba(255, 255, 255, .8) !important;
+            border: 1px solid var(--line) !important;
+            border-radius: .8rem !important;
+            color: var(--ink);
+            margin-bottom: 0.6rem;
+            transition: border-color .15s, box-shadow .15s;
         }
+        .list-group-item-action:hover, .list-group-item-action:focus {
+            background-color: #fff !important;
+            border-color: var(--cinnabar) !important;
+            box-shadow: 0 .3rem 1rem rgba(60, 40, 20, .1);
+        }
+        .deck-title { font-weight: 600; color: var(--ink); }
+        .empty-box { background: rgba(255, 255, 255, .6); border: 1px dashed var(--field); }
 
-        .list-group-item-action:focus {
-            background-color: var(--bs-secondary-bg);
-            box-shadow: none;
-        }
+        .section-header { border: none !important; }
+        .section-header h6 { letter-spacing: .12em; }
 
-        /* Clean list container */
-        .list-group {
-            border: none !important;
-        }
-
-        /* Helper for section headers */
-        .section-header {
-            border: none !important;
-        }
+        /* modal */
+        .modal-content { background: #fffdf8; color: var(--ink); border-radius: 1rem; }
+        .modal-content .form-control { border-color: var(--field); background-color: #fff; color: var(--ink); }
+        .modal-content .form-control:focus { border-color: var(--cinnabar); box-shadow: 0 0 0 .2rem rgba(168, 54, 42, .15) !important; }
+        .btn-cinnabar { background: var(--cinnabar); border-color: var(--cinnabar); color: #fff; border-radius: 2rem; }
+        .btn-cinnabar:hover, .btn-cinnabar:focus-visible { background: #8c2c22; border-color: #8c2c22; color: #fff; }
+        .btn-cancel { border-radius: 2rem; background: #fff; border: 1px solid var(--field); color: var(--ink); }
+        .btn-cancel:hover { background: #f1e8d2; color: var(--ink); }
     </style>
 </head>
-<body class="text-light" data-bs-theme="dark">
+<body>
 
     <div class="container py-3">
         <div class="row justify-content-center text-center">
             <div class="col-md-8 col-lg-6">
                 
                 <!-- Header -->
-                <h1 class="display-4 mb-5 fw-bold">Flashcards</h1>
+                <div class="page-han mt-2">國音新字</div>
+                <h1 class="page-title mb-5">Flashcards</h1>
                 
                 <!-- Personal Decks Section -->
                 <div class="text-start mb-5">
                     <div class="d-flex justify-content-between align-items-center pb-2 mb-3 section-header">
                         <div class="d-flex align-items-center gap-2">
-                            <h6 class="text-secondary text-uppercase mb-0 small" style="letter-spacing: 0.1em;">My Decks</h6>
-                            <span id="edit-indicator" class="badge rounded-pill text-bg-warning d-none" style="font-size: 0.7em;">EDIT MODE</span>
+                            <h6 class="text-secondary text-uppercase mb-0 small">My Decks</h6>
+                            <span id="edit-indicator" class="badge rounded-pill d-none" style="font-size: 0.7em; background: var(--cinnabar);">EDIT MODE</span>
                         </div>
                         <div class="d-flex gap-2">
                             <button class="btn-subtle" data-bs-toggle="modal" data-bs-target="#createDeckModal">
@@ -95,7 +113,7 @@
                     
                     <div id="deck-list" class="list-group">
                         <div class="text-center p-5 text-secondary rounded">
-                            <div class="spinner-border spinner-border-sm text-warning mb-2" role="status"></div>
+                            <div class="spinner-border spinner-border-sm accent mb-2" role="status"></div>
                             <div class="small">Loading personal decks...</div>
                         </div>
                     </div>
@@ -103,12 +121,12 @@
 
                 <!-- Public Decks Section -->
                 <div class="text-start mb-5">
-                    <h6 class="text-secondary text-uppercase pb-2 mb-3 small section-header" style="letter-spacing: 0.1em;">
+                    <h6 class="text-secondary text-uppercase pb-2 mb-3 small section-header">
                         Public Decks
                     </h6>
                     <div id="public-deck-list" class="list-group">
                         <div class="text-center p-5 text-secondary">
-                            <div class="spinner-border spinner-border-sm text-warning mb-2" role="status"></div>
+                            <div class="spinner-border spinner-border-sm accent mb-2" role="status"></div>
                             <div class="small">Loading public decks...</div>
                         </div>
                     </div>
@@ -121,7 +139,7 @@
     <!-- Create Deck Modal -->
     <div class="modal fade" id="createDeckModal" data-bs-backdrop="static" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg bg-dark">
+            <div class="modal-content border-0 shadow-lg">
                 <div class="modal-header border-0">
                     <h5 class="modal-title">New Deck</h5>
                     <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
@@ -129,14 +147,13 @@
                 <div class="modal-body border-0">
                     <div class="mb-3">
                         <label for="deckTitleInput" class="form-label text-secondary small text-uppercase">Deck Title</label>
-                        <input type="text" class="form-control bg-dark border-secondary shadow-none" id="deckTitleInput" placeholder="e.g. Basic Verbs">
+                        <input type="text" class="form-control shadow-none" id="deckTitleInput" placeholder="e.g. Basic Verbs">
                         <div class="invalid-feedback">Please enter a title.</div>
                     </div>
                 </div>
                 <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-secondary border-0 shadow-none" data-bs-dismiss="modal">Cancel</button>
-                    <!-- Button changed to btn-warning -->
-                    <button type="button" class="btn btn-warning px-4 fw-bold text-dark border-0 shadow-none" id="submitCreateBtn">
+                    <button type="button" class="btn btn-cancel shadow-none" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-cinnabar px-4 fw-bold shadow-none" id="submitCreateBtn">
                         <span id="btnText">Create & Edit</span>
                         <div id="btnSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"></div>
                     </button>
@@ -218,13 +235,13 @@
                 const el = document.getElementById(containerId);
                 if (!data || data.length === 0) {
                     let emptyHtml = `
-                        <div class="p-4 text-center text-secondary rounded-3 small bg-body-secondary">
+                        <div class="p-4 text-center text-secondary rounded-3 small empty-box">
                             No decks found.`;
                     
                     if (containerId === 'deck-list') {
                         emptyHtml += `
                             <div class="mt-2">
-                                <button class="btn btn-sm btn-link text-warning text-decoration-none p-0 border-0 shadow-none" 
+                                <button class="btn btn-sm btn-link accent text-decoration-none p-0 border-0 shadow-none" 
                                         data-bs-toggle="modal" data-bs-target="#createDeckModal">
                                     Create your first deck now
                                 </button>
@@ -238,14 +255,14 @@
                 el.innerHTML = data.map(d => {
                     const useEditMode = isPersonal && this.editMode;
                     const url = useEditMode ? `edit.html?id=${d.id}` : `immersive.html?id=${d.id}`;
-                    // Icon and accents set to text-warning
-                    const iconClass = useEditMode ? 'bi-pencil-fill text-warning' : 'bi-play-circle-fill text-warning';
+                    // icon and accents in the accent colour
+                    const iconClass = useEditMode ? 'bi-pencil-fill accent' : 'bi-play-circle-fill accent';
                     const label = useEditMode ? 'Edit' : 'Play';
 
                     return `
                         <a href="${url}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 mb-2 rounded shadow-none">
                             <div class="text-start">
-                                <div class="fw-bold text-light">${d.title}</div>
+                                <div class="deck-title">${d.title}</div>
                                 <small class="text-secondary">${d.words ? d.words.length : 0} items</small>
                             </div>
                             <div class="d-flex align-items-center">

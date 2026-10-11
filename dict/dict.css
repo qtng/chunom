@@ -1,18 +1,24 @@
-:root { --nav-h: 62px; }
+:root { --nav-h: 60px; --ink: #2b2118; --cinnabar: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
 
 /* The browser does not zoom these pages (also not with a finger on the navigation bar); the page image zooms itself, see viewer.js */
 html { touch-action: pan-x pan-y; }
 
-body { font-family: system-ui, -apple-system, sans-serif; }
+body {
+	font-family: system-ui, -apple-system, sans-serif;
+	color: var(--ink);
+	background: linear-gradient(180deg, var(--paper) 0, #fffdf8 18rem) no-repeat, #fffdf8;
+	min-height: 100vh;
+}
 
 /* Toolbar sticks below the fixed site navigation */
 .dict-toolbar {
 	position: sticky;
 	top: var(--nav-h);
 	z-index: 1020;
-	background: rgba(255, 255, 255, .94);
+	background: rgba(250, 244, 230, .95);
 	backdrop-filter: blur(10px);
-	border-block: 1px solid #dee2e6;
+	border-block: 1px solid var(--line);
+	--bs-border-radius: .6rem;
 	margin-inline: -12px;
 	padding-inline: 12px;
 }
@@ -20,8 +26,8 @@ body { font-family: system-ui, -apple-system, sans-serif; }
 .dict-pager { flex: 1 1 8rem; max-width: 11rem; width: auto; }
 .dict-pager input { min-width: 0; font-variant-numeric: tabular-nums; }
 .dict-tools { flex: 0 0 auto; margin-left: auto; }
-.dict-zoom-label { min-width: 3.4rem; opacity: 1 !important; color: #6c757d; font-variant-numeric: tabular-nums; }
-.dict-tools .btn.active, .dict-search .btn.active { background: #dee2e6; color: #212529; }
+.dict-zoom-label { min-width: 3.4rem; opacity: 1 !important; color: var(--muted); font-variant-numeric: tabular-nums; }
+.dict-tools .btn.active, .dict-search .btn.active { background: #eadfc4; color: var(--ink); }
 
 @media (min-width: 768px) {
 	/* one row: search | page | tools */
@@ -31,9 +37,10 @@ body { font-family: system-ui, -apple-system, sans-serif; }
 
 .dict-hint { min-height: 1.5rem; padding: .35rem 0 .25rem; }
 
-.dict-tabs { border-bottom-color: #dee2e6; }
-.dict-tabs .nav-link { color: #6c757d; }
-.dict-tabs .nav-link.active { background: #fff; color: #212529; border-color: #dee2e6 #dee2e6 #fff; }
+.dict-tabs { border-bottom-color: var(--line); }
+.dict-tabs .nav-link { color: var(--muted); }
+.dict-tabs .nav-link:hover { color: var(--ink); border-color: transparent transparent var(--line); }
+.dict-tabs .nav-link.active { background: #fffdf8; color: var(--ink); border-color: var(--line) var(--line) #fffdf8; box-shadow: inset 0 2px 0 var(--cinnabar); }
 
 .dict-wrap { max-width: 1600px; margin-inline: auto; padding-inline: 12px; }
 .dict-layout { padding-top: 1rem; }
@@ -60,8 +67,8 @@ body { font-family: system-ui, -apple-system, sans-serif; }
 	min-height: 60vh;
 	overflow-x: auto;
 	background: var(--dict-stage-bg, #e3e0d9); /* a little darker than the paper (set per dictionary, see dictionaries.js) */
-	border: 1px solid #dee2e6;
-	border-radius: .375rem;
+	border: 1px solid var(--line);
+	border-radius: .6rem;
 	touch-action: pan-y; /* horizontal swipes are ours (page turn); pinch is ours too (image zoom, see viewer.js) */
 }
 .dict-stage.is-zoomed, .dict-stage.is-pinched { touch-action: pan-x pan-y; } /* zoomed: panning must work sideways too */
@@ -128,3 +135,28 @@ body { font-family: system-ui, -apple-system, sans-serif; }
 
 /* Candidate list is not used here (headword search only needs Telex), but keep ime.js light when shown */
 .vietime { --vietime-bg: #fff; --vietime-color: #212529; --vietime-border: 1px solid #ced4da; --vietime-grid: #dee2e6; --vietime-active: rgba(10, 120, 255, .15); --vietime-remainder: #0d6efd; }
+
+
+/* ---------- look of the site: paper, ink and cinnabar ---------- */
+.dict-wrap header h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.6rem; line-height: 1.25; }
+.dict-wrap header p { color: var(--muted) !important; }
+.dict-hint, .dict-wrap .text-secondary { color: var(--muted) !important; }
+
+.dict-switch { --bs-nav-pills-link-active-bg: var(--cinnabar); --bs-nav-link-color: var(--ink); --bs-nav-link-hover-color: var(--cinnabar); gap: .25rem; }
+.dict-switch .nav-link { border-radius: 2rem; }
+
+.dict-toolbar .form-control { border-color: var(--field); background-color: #fff; color: var(--ink); }
+.dict-toolbar .form-control:focus { border-color: var(--cinnabar); box-shadow: 0 0 0 .2rem rgba(168, 54, 42, .15); }
+.dict-toolbar .btn-outline-secondary { --bs-btn-color: var(--ink); --bs-btn-border-color: var(--field); --bs-btn-hover-bg: #f1e8d2; --bs-btn-hover-color: var(--ink); --bs-btn-hover-border-color: #b9a982;
+	--bs-btn-active-bg: #eadfc4; --bs-btn-active-color: var(--ink); --bs-btn-active-border-color: #b9a982; --bs-btn-disabled-color: var(--muted); --bs-btn-disabled-border-color: var(--field); background-color: #fff; }
+.dict-toolbar .btn-primary, .dict-pane .btn-primary { --bs-btn-bg: var(--cinnabar); --bs-btn-border-color: var(--cinnabar); --bs-btn-hover-bg: #8c2c22; --bs-btn-hover-border-color: #8c2c22; --bs-btn-active-bg: #7a261d; --bs-btn-active-border-color: #7a261d; }
+.dict-pager-bottom .btn-outline-secondary { --bs-btn-color: var(--ink); --bs-btn-border-color: var(--field); --bs-btn-hover-bg: #f1e8d2; --bs-btn-hover-color: var(--ink); --bs-btn-hover-border-color: #b9a982; --bs-btn-border-radius: 2rem; padding-inline: 1.1rem; background-color: #fff; }
+
+.dict-contents h2 { color: var(--muted) !important; letter-spacing: .12em; }
+.dict-contents .list-group { --bs-list-group-border-color: var(--line); --bs-list-group-bg: rgba(255, 255, 255, .7); --bs-list-group-color: var(--ink);
+	--bs-list-group-action-hover-bg: #f6edd6; --bs-list-group-action-hover-color: var(--ink); --bs-list-group-active-bg: var(--cinnabar); --bs-list-group-active-border-color: var(--cinnabar); --bs-list-group-border-radius: .7rem; }
+.dict-contents .badge.text-bg-secondary { background-color: #8a7660 !important; }
+.dict-contents .active .badge.text-bg-secondary { background-color: rgba(255, 255, 255, .25) !important; }
+.dict-contents a { color: inherit; }
+.dict-contents dt { color: var(--cinnabar); }
+.dict-contents .small a { color: var(--cinnabar); }
