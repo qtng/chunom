@@ -14,6 +14,7 @@
 		returnSelect [false]   Enter selects the first candidate
 		spaceSelect [false]    Space selects the first candidate
 		showDefinitions [true]
+		timeout [0]            milliseconds without typing or key presses after which the list closes itself; 0: never
 
 	Keys: 1–9, 0 select a candidate, ↑/↓ move, Enter selects the marked one, PageUp/PageDown page, Esc closes.
 	Every change to the field fires a regular input event and can be undone.
@@ -361,7 +362,7 @@
 		constructor(input, options = {}) {
 			this.input = input;
 			this.options = { telex: true, candidates: true, defer: false, dictionaries: DICTIONARIES, fontList: [],
-				returnSelect: false, spaceSelect: false, showDefinitions: true, ...options };
+				returnSelect: false, spaceSelect: false, showDefinitions: true, timeout: 0, ...options };
 			this.dict = dictionaryFor(this.options.dictionaries);
 			this.items = [];
 			this.page = 0;
@@ -462,6 +463,7 @@
 
 		onKeyDown(e) {
 			if (!this.visible || e.isComposing) return;
+			this.keepOpen();
 			if (e.key == 'Escape') {
 				this.hide();
 			} else if (e.key == 'PageDown' || e.key == 'PageUp') {
@@ -526,6 +528,7 @@
 			this.page = Math.max(0, Math.min(page, pages - 1));
 			this.list.replaceChildren(...this.items.slice(this.page * 10, this.page * 10 + 10).map((item, i) => this.option(item, this.page * 10 + i)));
 			this.list.hidden = false;
+			this.keepOpen();
 			this.place();
 			this.input.setAttribute('aria-expanded', 'true');
 			if (this.active >= 0) this.input.setAttribute('aria-activedescendant', `${this.list.id}-${this.active}`);
@@ -609,7 +612,14 @@
 			this.replace(current.start, current.end, item.glyph);
 		}
 
+		// with the option timeout the list closes itself after that time without typing or key presses
+		keepOpen() {
+			clearTimeout(this.idleTimer);
+			if (this.options.timeout > 0) this.idleTimer = setTimeout(() => this.hide(), this.options.timeout);
+		}
+
 		hide() {
+			clearTimeout(this.idleTimer);
 			this.items = [];
 			this.active = -1;
 			this.list.hidden = true;
