@@ -118,7 +118,7 @@ export class DictionaryViewer {
 		ui.spinner = el('div', { className: 'dict-spinner spinner-border text-secondary', role: 'status' }, el('span', { className: 'visually-hidden', textContent: 'Loading…' }));
 		ui.error = el('div', { className: 'dict-error alert alert-danger', hidden: true },
 			el('div', { textContent: 'The page image could not be loaded.' }),
-			ui.retry = el('button', { type: 'button', className: 'btn btn-sm btn-outline-light mt-2', textContent: 'Try again' }));
+			ui.retry = el('button', { type: 'button', className: 'btn btn-sm btn-outline-danger mt-2', textContent: 'Try again' }));
 		ui.stage = el('div', { className: 'dict-stage' }, ui.img); // scrolls sideways when zoomed
 		if (c.stageColor) ui.stage.style.setProperty('--dict-stage-bg', c.stageColor); // a little darker than this dictionary's paper
 		ui.frame = el('div', { className: 'dict-frame' }, ui.stage, ui.spinner, ui.error); // does not scroll: the overlays stay centred on the visible part
