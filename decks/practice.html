@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Deck Quiz | Chunom.org</title>
+  <title>Deck Practice | Chunom.org</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://chunom.org/media/css/fonts/all.css">
   <script src="../../qatt/js/navigation.js"></script>
@@ -12,17 +12,18 @@
   <script src="../../qatt/js/supabase.js?v=2"></script>
   <script src="../../qatt/js/login.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link  href="../css/quiz.css?v=4" rel="stylesheet">
-  <script src="../js/quiz.js?v=5"></script>
+  <link  href="../css/practice.css?v=1" rel="stylesheet">
+  <script src="../js/practice.js?v=1"></script>
 </head>
 <body>
   <div id="app"></div>
   <script>
-// Quiz of a deck (?id=…): the quiz of qatt.org with the words of the deck as one lesson.
+// Practice of a deck (?id=…): the practice of qatt.org with the words of the deck as one lesson.
 // Questions and answers come in the forms Nôm characters and quốc ngữ; the score goes to the same leaderboard.
 async function main() {
-  const FORMS = ["nom", "text"]; // the quiz of chunom asks Nôm characters and quốc ngữ, no glyphs
-  const app = await App.init(document.getElementById("app"), { forms: FORMS });
+  const FORMS = ["nom", "text"]; // the practice of chunom asks Nôm characters and quốc ngữ, no glyphs
+  const app = await App.init(document.getElementById("app"), { forms: FORMS, requireLogin: true });
+  if (!app) return; // not signed in: the page asks for the login
   window.app = app;
   app.backUrl = "index.html";
   const box = document.getElementById("app-container");
@@ -47,7 +48,7 @@ async function main() {
     return;
   }
 
-  document.title = `${deck.title} | Quiz | Chunom.org`;
+  document.title = `${deck.title} | Practice | Chunom.org`;
   app.addLesson({
     id: "deck-" + deck.id,
     category: "Deck",
