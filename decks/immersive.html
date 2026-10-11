@@ -24,13 +24,14 @@
             --ui-bg-alpha: rgba(255, 255, 255, 0.1);
             --ui-border: rgba(255, 255, 255, 0.15);
             --ui-shadow: rgba(0, 0, 0, 0.3); 
+            --glyph-filter: invert(1); /* the glyph images are black on transparent: white on dark backgrounds */
             --accent-start: #FF69B4; 
             --danger-color: #dc3545; 
         }
 
         /* Responsive UI themes */
-        .ui-theme-dark-bg { --ui-color: white; --ui-bg-alpha: rgba(255, 255, 255, 0.1); --ui-border: rgba(255, 255, 255, 0.15); --ui-shadow: rgba(0, 0, 0, 0.3); }
-        .ui-theme-light-bg { --ui-color: black; --ui-bg-alpha: rgba(0, 0, 0, 0.05); --ui-border: rgba(0, 0, 0, 0.1); --ui-shadow: transparent; }
+        .ui-theme-dark-bg { --glyph-filter: invert(1); --ui-color: white; --ui-bg-alpha: rgba(255, 255, 255, 0.1); --ui-border: rgba(255, 255, 255, 0.15); --ui-shadow: rgba(0, 0, 0, 0.3); }
+        .ui-theme-light-bg { --glyph-filter: none; --ui-color: black; --ui-bg-alpha: rgba(0, 0, 0, 0.05); --ui-border: rgba(0, 0, 0, 0.1); --ui-shadow: transparent; }
 
         body { 
             background-color: #000; 
@@ -113,6 +114,11 @@
 
         .nom-display-large { font-family: var(--nom-font-stack); font-size: 9rem; line-height: 1; }
         .nom-display-mini { font-family: var(--nom-font-stack); font-size: 4.5rem; margin-bottom: 1.5rem; opacity: 0.6; }
+        /* the characters as images; the width of the screen is shared between them */
+        .nom-display-large, .nom-display-mini { display: flex; justify-content: center; align-items: center; }
+        .nom-display-large img, .nom-display-mini img { width: auto; max-width: none; filter: var(--glyph-filter) drop-shadow(0 4px 15px var(--ui-shadow)); }
+        .nom-display-large img { height: min(9rem, calc(88vw / var(--n, 1))); }
+        .nom-display-mini img { height: min(4.5rem, calc(88vw / var(--n, 1))); }
         .qatt-container { display: flex; gap: 0.5rem; justify-content: center; align-items: center; }
         /* QATT glyphs: qatt.js draws <qatt-code> elements as SVG */
         qatt-code svg { stroke: currentColor; stroke-linecap: round; fill: none; display: inline-block; }
@@ -515,16 +521,23 @@
             }
 
             // Nôm characters as chunom.org images (the font as fallback)
-            nomChars(text) {
+            nomChars(text, size = 32) {
                 return [...(text || '')].map(ch => {
                     if (!/[一-鿿㐀-䶿\u{20000}-\u{323af}]/u.test(ch)) return document.createTextNode(ch);
                     const img = document.createElement('img');
                     img.alt = ch;
                     img.loading = 'lazy';
                     img.addEventListener('error', () => img.replaceWith(document.createTextNode(ch)));
-                    img.src = `https://chunom.org/media/generated/${ch.codePointAt(0).toString(16).toUpperCase()}-32.png`;
+                    img.src = `https://chunom.org/media/generated/${ch.codePointAt(0).toString(16).toUpperCase()}-${size}.png`;
                     return img;
                 });
+            }
+
+            // the big characters of the card: images (220px) with the font as fallback
+            showNom(target, text) {
+                const chars = this.nomChars(text, 220);
+                target.style.setProperty('--n', Math.max(1, chars.length));
+                target.replaceChildren(...chars);
             }
 
             // one <qatt-code> element per syllable; qatt.js renders them
@@ -545,7 +558,7 @@
             updateCard() {
                 const w = this.deck.words[this.idx]; 
                 this.isFlipped = false;
-                document.getElementById('nom-display').textContent = w.n;
+                this.showNom(document.getElementById('nom-display'), w.n);
                 document.getElementById('nom-layer').classList.add('layer-show');
                 document.getElementById('details-layer').classList.remove('layer-show');
             }
@@ -553,7 +566,7 @@
             flip() {
                 const w = this.deck.words[this.idx]; 
                 this.isFlipped = true;
-                document.getElementById('nom-mini').textContent = w.n;
+                this.showNom(document.getElementById('nom-mini'), w.n);
                 document.getElementById('quocngu-display').textContent = w.qn;
                 
                 document.getElementById('qatt-display').replaceChildren(...this.qattCodes(w.qn));
