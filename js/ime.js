@@ -25,8 +25,8 @@
 		VietIme.lookupGlyph('越')    entries whose glyphs contain the characters
 		VietIme.telex('vieetj')      'việt'
 
-	Styling via CSS variables on .vietime: --vietime-bg, --vietime-color, --vietime-border,
-	--vietime-grid, --vietime-active, --vietime-remainder
+	Styling via CSS variables on .vietime (or an ancestor): --vietime-bg, --vietime-color, --vietime-border,
+	--vietime-active, --vietime-ring, --vietime-remainder
 
 	The Telex engine is ported from VietUni.
 */
@@ -328,18 +328,26 @@
 		'letterSpacing', 'wordSpacing', 'lineHeight', 'textTransform', 'textIndent', 'tabSize', 'direction'];
 
 	const STYLE = `
-.vietime { position: absolute; z-index: 1070; min-width: 14em; max-width: 28em; font-family: sans-serif;
-	background: var(--vietime-bg, #eee); color: var(--vietime-color, #000); border: var(--vietime-border, 2px solid #000) }
+.vietime { position: absolute; z-index: 1070; min-width: 14em; max-width: 28em; box-sizing: border-box; padding: .3em; font-family: system-ui, -apple-system, sans-serif;
+	background: var(--vietime-bg, #fff); color: var(--vietime-color, #212529); border: var(--vietime-border, 1px solid #ced4da);
+	border-radius: .8em; box-shadow: 0 .4em 1.2em rgba(0, 0, 0, .2) }
 .vietime[hidden] { display: none }
-.vietime-option { display: flex; align-items: center; gap: .5em; padding: 2px .5em 2px 10px; line-height: 30px;
-	border-top: 1px solid var(--vietime-grid, #333); white-space: nowrap; cursor: pointer }
-.vietime-option:first-child { border-top: none }
-.vietime-option:hover, .vietime-option[aria-selected="true"] { background: var(--vietime-active, rgba(10, 120, 255, .4)) }
-.vietime-glyph { font-size: 1.5em; padding: 0 .1em; font-family: var(--vietime-font, sans-serif) }
-.vietime-reading { flex: 1 }
-.vietime-remainder { font-weight: bold; color: var(--vietime-remainder, #00f) }
+.vietime:not([hidden]) { display: grid; grid-template-columns: minmax(0, 1fr); gap: .1em }
+.vietime-option { display: grid; grid-template-columns: auto auto minmax(0, 1fr); grid-template-areas: "number glyph reading" "number glyph definition";
+	align-items: center; column-gap: .45em; min-height: 2.7em; padding: .15em .5em; line-height: 1.2; border-radius: .6em; overflow: hidden; cursor: pointer }
+.vietime-option:hover, .vietime-option[aria-selected="true"] { background: var(--vietime-active, rgba(10, 120, 255, .14)) }
+.vietime-option[aria-selected="true"] { box-shadow: inset 0 0 0 1.5px var(--vietime-ring, rgba(10, 120, 255, .45)) }
+.vietime-number { grid-area: number; width: 1.3em; text-align: right; font-size: .75em; opacity: .6; font-variant-numeric: tabular-nums }
+.vietime-glyph { grid-area: glyph; font-size: 1.6em; line-height: 1; font-family: var(--vietime-font, sans-serif) }
+.vietime-reading { grid-area: reading; align-self: end; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.vietime-reading:last-child { grid-row: 1 / span 2; align-self: center }
+.vietime-remainder { font-weight: bold; color: var(--vietime-remainder, #0d6efd) }
 .vietime-hyphen { opacity: .5 }
-.vietime-definition { max-width: 8em; overflow: hidden; text-overflow: ellipsis; font-size: .7em; opacity: .8 }`;
+.vietime-definition { grid-area: definition; align-self: start; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .75em; opacity: .75 }
+@media (max-width: 575.98px) {
+	.vietime { width: calc(100vw - 1.2rem); max-width: none }
+	.vietime:not([hidden]) { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+}`;
 
 	let count = 0;
 
