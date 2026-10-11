@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deck Quiz | Chunom.org</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://chunom.org/media/css/fonts/all.css">
+  <script src="../../qatt/js/navigation.js"></script>
+  <script src="../../qatt/js/qatt.js"></script>
+  <script src="../../qatt/js/parser.js?v=2"></script>
+  <script src="../../qatt/js/supabase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link  href="../../qatt/quiz/quiz.css?v=2" rel="stylesheet">
+  <link  href="../../qatt/quiz/theme.css?v=2" rel="stylesheet">
+  <script src="../js/quiz.js?v=1"></script>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+// Quiz of a deck (?id=…): the quiz of qatt.org with the words of the deck as one lesson.
+// Questions and answers come in the forms Nôm characters, Qatt glyphs and quốc ngữ; the score goes to the same leaderboard.
+async function main() {
+  const app = await App.init(document.getElementById("app"));
+  window.app = app;
+  app.backUrl = "index.html";
+  const box = document.getElementById("app-container");
+
+  const id = new URLSearchParams(location.search).get("id");
+  const deck = id ? await app.db.getDeck(id) : null;
+
+  // one item per word: the key identifies it, the same quốc ngữ with different characters stay apart
+  const items = {};
+  (deck?.words || []).forEach(w => {
+    const n = (w.n || "").trim(), qn = (w.qn || "").trim().replace(/\s+/g, " ");
+    if (!qn || n === ".config") return;
+    items[qn + "|" + n] = { n, qn };
+  });
+  Object.assign(app.items, items);
+  // a word needs Nôm characters or a Qatt glyph besides its quốc ngữ, or there is nothing to ask for
+  const symbols = Object.keys(items).filter(key => ["nom", "qatt"].some(form => app.formValue(key, form) !== null));
+
+  if (symbols.length < 4) {
+    box.innerHTML = `<div class="card p-4 text-center"><h5 class="mb-3">${deck ? "Das Deck braucht mindestens 4 Wörter mit Nôm oder Qatt-Zeichen." : "Deck not found."}</h5>
+      <a class="btn btn-info" href="index.html">← Decks</a></div>`;
+    return;
+  }
+
+  document.title = `${deck.title} | Quiz | Chunom.org`;
+  app.addLesson({
+    id: "deck-" + deck.id,
+    category: "Deck",
+    name: deck.title,
+    classes: "bg-primary",
+    forms: ["nom", "qatt", "text"],
+    items,
+    symbols
+  });
+  app.renderLessonPreview("deck-" + deck.id, true);
+}
+main();
+  </script>
+</body>
+</html>
