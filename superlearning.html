@@ -143,9 +143,10 @@
         .qatt-container svg {
             height: clamp(3.5rem, 12vw, 5rem);
             stroke: var(--ui-color);
-            stroke-width: 9;
-            stroke-linecap: square; 
+            stroke-width: 3px;
+            stroke-linecap: round;
             fill: none;
+            display: inline-block;
             filter: drop-shadow(0 4px 8px var(--ui-shadow));
         }
 
@@ -294,9 +295,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="qatt-dc/js/parser.js"></script>
-    <script src="qatt-dc/js/renderer.js"></script>
-    <script src="qatt-dc/js/supabase.js"></script>
+    <script src="qatt/js/parser.js?v=2"></script>
+    <script src="qatt/js/qatt.js"></script>
+    <script src="qatt/js/supabase.js"></script>
 
     <script>
         /**
@@ -447,7 +448,7 @@
             constructor() {
                 this.sp = new SupabaseService();
                 this.parser = new VietnameseParser();
-                this.renderer = new SvgGlyphRenderer();
+                new Qatt().observe('qatt-code');
                 this.audio = new AudioManager(document.getElementById('bg-audio'));
                 this.visual = new VisualManager(
                     document.getElementById('bg-video'),
@@ -459,7 +460,6 @@
                 this.idx = 0;
                 this.isFlipped = false;
                 this.loop = null;
-                this.qattType = "1";
                 this.currentVideoKey = localStorage.getItem('videoKey') || 'luminous_spirit';
                 this.bindEvents();
             }
@@ -532,6 +532,20 @@
                 document.getElementById('details-layer').className = 'layer';
             }
 
+            // one <qatt-code> element per syllable; qatt.js draws them (after the rhyme table of the decoding, a syllable without a glyph is left out)
+            qattCodes(quocNgu) {
+                const codes = [];
+                for (const word of (quocNgu || '').split(/\s+/)) {
+                    const parsed = word && this.parser.parse(word);
+                    if (!parsed?.qatt) continue;
+                    const code = document.createElement('qatt-code');
+                    code.title = word;
+                    code.textContent = parsed.qatt;
+                    codes.push(code);
+                }
+                return codes;
+            }
+
             flip() {
                 this.isFlipped = !this.isFlipped;
                 const w = this.currentDeck.words[this.idx];
@@ -540,14 +554,7 @@
                 if (this.isFlipped) {
                     document.getElementById('nom-mini').textContent = w.n;
                     document.getElementById('quocngu-display').textContent = w.qn;
-                    const parts = this.parser.parse(w.qn);
-                    const qContainer = document.getElementById('qatt-display');
-                    if (parts) {
-                        let code = this.qattType === "0" ? parts.code.replace(",", ",+") : parts.code;
-                        const tmp = document.createElement('div');
-                        this.renderer.renderText(code, tmp, this.qattType);
-                        qContainer.innerHTML = tmp.innerHTML;
-                    } else qContainer.innerHTML = "";
+                    document.getElementById('qatt-display').replaceChildren(...this.qattCodes(w.qn));
                     nomL.className = 'layer';
                     detL.className = 'layer layer-show';
                     this.audio.speak(w.qn);
@@ -583,8 +590,7 @@
                 const menu = document.getElementById('settings-menu');
                 const createItem = (label, type, val, action) => {
                     const active = (type === 'video' && this.currentVideoKey === val) ||
-                                 (type === 'binaural' && this.audio.binauralType === val) ||
-                                 (type === 'qatt' && this.qattType === val);
+                                 (type === 'binaural' && this.audio.binauralType === val);
                     return `<li><button class="dropdown-item ${active?'fw-bold':''}" onclick="${action}">${active?'✓ ':''}${label}</button></li>`;
                 };
                 let visualItems = Object.entries(APP_CONFIG.visuals).map(([k, v]) => createItem(v.label, 'video', k, `app.visual.setSource('${k}')`)).join('');
@@ -595,14 +601,9 @@
                     <li class="dropdown-divider"></li>
                     <li class="dropdown-header small text-uppercase">Focus</li>
                     ${binauralItems}
-                    <li class="dropdown-divider"></li>
-                    <li class="dropdown-header small text-uppercase">Script Style</li>
-                    ${createItem('Standard', 'qatt', '0', "app.setQattType('0')")}
-                    ${createItem('Simplified', 'qatt', '1', "app.setQattType('1')")}
                 `;
             }
 
-            setQattType(t) { this.qattType = t; if (this.isFlipped) { this.isFlipped = false; this.flip(); } this.renderSettings(); }
             async loadSharedDeckById() { const id = document.getElementById('share-id-input').value.trim(); if (id) this.start(id); }
         }
 

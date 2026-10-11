@@ -11,8 +11,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../qatt/js/navigation.js"></script>
     <script src="../qatt/js/supabase.js"></script>
-    <script src="../qatt/js/parser.js"></script>
-    <script src="../qatt/js/renderer.js"></script>
+    <script src="../qatt/js/parser.js?v=2"></script>
+    <script src="../qatt/js/qatt.js"></script>
     
     <style>
         :root {
@@ -158,6 +158,7 @@
         }
 
         .card-face.is-light { color: #111; border-color: rgba(0, 0, 0, 0.1); }
+        .qatt-preview-large svg { height: clamp(3.5rem, 12vw, 5rem); stroke: currentColor; stroke-width: 3px; stroke-linecap: round; fill: none; display: inline-block; }
         .card-face.is-light .qatt-preview-large svg { stroke: #003366; }
         .card-face.is-light #preview-qn { color: #003366 !important; }
 
@@ -778,13 +779,18 @@
                 document.getElementById('preview-counter').textContent = `${previewIndex + 1} / ${currentDeck.previewWords.length}`;
                 const qatt = document.getElementById('preview-qatt-container');
                 try {
+                    if (!window.qattRenderer) { window.qattRenderer = new Qatt(); window.qattRenderer.observe('qatt-code'); } // draws the <qatt-code> elements
                     const parser = new VietnameseParser();
-                    const renderer = new SvgGlyphRenderer();
-                    const qattType = localStorage.getItem('qattType') || '0';
-                    const parts = parser.parse(w.qn);
-                    qatt.innerHTML = '';
-                    if (parts && parts.code) renderer.renderText(parts.code, qatt, qattType);
-                    else qatt.textContent = w.qn;
+                    qatt.replaceChildren();
+                    for (const word of (w.qn || '').split(/\s+/)) {
+                        const parts = word && parser.parse(word);
+                        if (!parts?.qatt) continue; // a syllable without a glyph is left out
+                        const code = document.createElement('qatt-code');
+                        code.title = word;
+                        code.textContent = parts.qatt;
+                        qatt.append(code, ' ');
+                    }
+                    if (!qatt.childNodes.length) qatt.textContent = w.qn;
                 } catch(e) { qatt.textContent = w.qn; }
                 requestAnimationFrame(() => cardEl.classList.remove('no-transition'));
             };
