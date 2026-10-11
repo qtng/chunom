@@ -14,6 +14,7 @@
 		returnSelect [false]   Enter selects the first candidate
 		spaceSelect [false]    Space selects the first candidate
 		showDefinitions [true]
+		timeout [0]            milliseconds without typing or key presses after which the list closes itself; 0: never
 
 	Keys: 1–9, 0 select a candidate, ↑/↓ move, Enter selects the marked one, PageUp/PageDown page, Esc closes.
 	Every change to the field fires a regular input event and can be undone.
@@ -361,7 +362,7 @@
 		constructor(input, options = {}) {
 			this.input = input;
 			this.options = { telex: true, candidates: true, defer: false, dictionaries: DICTIONARIES, fontList: [],
-				returnSelect: false, spaceSelect: false, showDefinitions: true, ...options };
+				returnSelect: false, spaceSelect: false, showDefinitions: true, timeout: 0, ...options };
 			this.dict = dictionaryFor(this.options.dictionaries);
 			this.items = [];
 			this.page = 0;
@@ -611,10 +612,10 @@
 			this.replace(current.start, current.end, item.glyph);
 		}
 
-		// the list closes itself after 10 seconds without typing or key presses
+		// with the option timeout the list closes itself after that time without typing or key presses
 		keepOpen() {
 			clearTimeout(this.idleTimer);
-			this.idleTimer = setTimeout(() => this.hide(), 10000);
+			if (this.options.timeout > 0) this.idleTimer = setTimeout(() => this.hide(), this.options.timeout);
 		}
 
 		hide() {
