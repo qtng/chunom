@@ -12,15 +12,16 @@
   <script src="../../qatt/js/supabase.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link  href="../css/quiz.css?v=3" rel="stylesheet">
-  <script src="../js/quiz.js?v=2"></script>
+  <script src="../js/quiz.js?v=3"></script>
 </head>
 <body>
   <div id="app"></div>
   <script>
 // Quiz of a deck (?id=…): the quiz of qatt.org with the words of the deck as one lesson.
-// Questions and answers come in the forms Nôm characters, Qatt glyphs and quốc ngữ; the score goes to the same leaderboard.
+// Questions and answers come in the forms Nôm characters and quốc ngữ; the score goes to the same leaderboard.
 async function main() {
-  const app = await App.init(document.getElementById("app"));
+  const FORMS = ["nom", "text"]; // the quiz of chunom asks Nôm characters and quốc ngữ, no glyphs
+  const app = await App.init(document.getElementById("app"), { forms: FORMS });
   window.app = app;
   app.backUrl = "index.html";
   const box = document.getElementById("app-container");
@@ -36,11 +37,11 @@ async function main() {
     items[qn + "|" + n] = { n, qn };
   });
   Object.assign(app.items, items);
-  // a word needs Nôm characters or a Qatt glyph besides its quốc ngữ, or there is nothing to ask for
-  const symbols = Object.keys(items).filter(key => ["nom", "qatt"].some(form => app.formValue(key, form) !== null));
+  // a word needs one of the other forms besides its quốc ngữ, or there is nothing to ask for
+  const symbols = Object.keys(items).filter(key => FORMS.some(form => form !== "text" && app.formValue(key, form) !== null));
 
   if (symbols.length < 4) {
-    box.innerHTML = `<div class="card p-4 text-center"><h5 class="mb-3">${deck ? "Das Deck braucht mindestens 4 Wörter mit Nôm oder Qatt-Zeichen." : "Deck not found."}</h5>
+    box.innerHTML = `<div class="card p-4 text-center"><h5 class="mb-3">${deck ? "Das Deck braucht mindestens 4 Wörter mit Nôm-Zeichen." : "Deck not found."}</h5>
       <a class="btn btn-info" href="index.html">← Decks</a></div>`;
     return;
   }
@@ -51,7 +52,6 @@ async function main() {
     category: "Deck",
     name: deck.title,
     classes: "bg-primary",
-    forms: ["nom", "qatt", "text"],
     items,
     symbols
   });

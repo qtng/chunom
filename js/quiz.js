@@ -1,8 +1,14 @@
 // The quiz: lessons of the script (qatt.org/quiz) and the words of a deck (decks/quiz.html) as questions with four answers,
 // with energy, progress, score and leaderboard.
 // Needs the scripts qatt/js/navigation.js, qatt.js, parser.js, supabase.js and the style css/quiz.css.
+//
+// Options of App.init(container, options):
+//   forms: the forms in which words are asked and answered, a list of "nom" (Nôm characters), "qatt" (glyphs) and "text" (quốc ngữ).
+//          The quiz of chunom uses ["nom", "text"], the quiz of qatt ["qatt", "text"]. Without it the lessons of the script
+//          ask glyph and text, decks all three forms.
 class App {
-  constructor(container, db) {
+  constructor(container, db, options = {}) {
+    this.forms = options.forms || null;
     this.opts = { 
       requiredCorrect: 4,
       maxErrors: 3,
@@ -64,7 +70,7 @@ class App {
     this.updateGlobalCounters();
   }
   
-  static async init(container) {
+  static async init(container, options) {
     const db = new SupabaseService();
     await db.init();
     //db.signInWithGoogle()
@@ -73,7 +79,7 @@ class App {
     		clearInterval(int);
     	}
     }, 500);
-  	return new App(container, db);
+  	return new App(container, db, options);
   }
   
   refreshCurrentView(state = null) {
@@ -560,10 +566,15 @@ class App {
     return null;
   }
 
+  // the forms a lesson is asked in: its own, else those of the options, else all three for a deck (null: the lessons of the script)
+  formsOf(lesson) {
+    return lesson.forms || this.forms || (lesson.items ? ["nom", "qatt", "text"] : null);
+  }
+
   // The forms of the question and of the answers. Lessons of the script: a glyph asked for its text or the other way round.
   // Decks: any two of the forms the word has, so both the characters and the glyphs come up.
   pickForms(word) {
-    const forms = this.currentLesson.forms;
+    const forms = this.formsOf(this.currentLesson);
     if (!forms) return Math.random() < 0.5 ? { q: "qatt", a: "text" } : { q: "text", a: "qatt" };
     const have = forms.filter(form => this.formValue(word, form) !== null).sort(() => 0.5 - Math.random());
     return have.length > 1 ? { q: have[0], a: have[1] } : { q: "text", a: "text" };
@@ -571,7 +582,7 @@ class App {
 
   // can the word be one of the wrong answers? It needs the form of the answer, and must not look like the right one.
   isDistractor(word, correctWord, form) {
-    if (!this.currentLesson.forms) return word !== correctWord;
+    if (!this.formsOf(this.currentLesson)) return word !== correctWord;
     const value = this.formValue(word, form);
     return value !== null && value !== this.formValue(correctWord, form);
   }
@@ -613,9 +624,10 @@ class App {
   // style and skipReference are left from the former styles of the script and no longer used.
   renderToElement(word, style, element, skipReference = false, withHint = true) {
     element.innerHTML = "";
-    const codes = this.getCodes(word);
     const item = this.items[word];
-    if (item && withHint && this.formValue(word, "nom")) { // overview of a deck: the characters above the glyphs
+    const forms = item ? this.formsOf(this.currentLesson) : null; // a deck shows only the forms it asks for
+    const codes = !forms || forms.includes("qatt") ? this.getCodes(word) : [];
+    if (item && withHint && forms.includes("nom") && this.formValue(word, "nom")) { // overview of a deck: the characters above the glyphs
       const nom = document.createElement("div");
       nom.className = "nom-chars w-100 text-center";
       nom.append(...this.nomChars(item.n, 32));
