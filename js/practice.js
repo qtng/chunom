@@ -14,6 +14,7 @@ class App {
       requiredCorrect: 4,
       maxErrors: 3,
       learningWindow: 4,
+      sessionWords: 10,   // new words of one learning session (all of them if only one more would be left over)
       hintDelay: 10000,
     };
     this.db = db;
@@ -303,7 +304,7 @@ class App {
         const card = document.createElement("div"); 
         card.className = "word-grid-item";
         
-        if (this.stats[word].c >= 3) {
+        if (this.stats[word].c >= this.opts.requiredCorrect) {
           card.style.borderColor = "rgba(74, 222, 128, 0.4)";
         }
 
@@ -324,7 +325,7 @@ class App {
       return;
     }
     if (!this.currentLesson) return;
-    let unfinishedSymbols = this.currentLesson.symbols.filter(symbol => this.stats[symbol].c < this.opts.requiredCorrect);
+    let unfinishedSymbols = (this.currentLesson.sessionSymbols || this.currentLesson.symbols).filter(symbol => this.stats[symbol].c < this.opts.requiredCorrect);
     if (unfinishedSymbols.length === 0) {
       if ((this.currentLesson.practiceModeItems||[]).length == 0) {
         this.renderLessonPreview(this.currentLesson.id, true);
@@ -399,7 +400,7 @@ class App {
     // only words that can be shown in the form of the answer, and not twice the same answer
     const symbols = this.currentLesson.symbols.filter(s => s === correctWord || this.isDistractor(s, correctWord, forms.a));
     
-    let unfinishedSymbols = symbols.filter(s => this.stats[s].c < 3);
+    let unfinishedSymbols = symbols.filter(s => this.stats[s].c < this.opts.requiredCorrect);
     (this.currentLesson.practiceModeItems||[]).forEach(itm => {
         if (unfinishedSymbols.length < this.opts.learningWindow && itm != correctWord) unfinishedSymbols.push(itm);
     });
@@ -586,18 +587,16 @@ class App {
         doneCount = this.currentLesson.practiceLength - afterFinishRemaining;
         practiceLength = this.currentLesson.practiceLength;
       } else {
-		// THESE ARE NOT POINTS!!!!
-		// THIS IS ONLY FOR DECIDING
-		// THE AMOUNT OF VISUAL FEEDBACK
-		// ON THE PROGRESS BAR
-        // Learning mode, in learning mode practice length is calculated dynamically
-        doneCount = 65 * this.currentLesson.symbols.filter(symbol => this.stats[symbol].c >= 4).length;
-		doneCount = 15 * this.currentLesson.symbols.filter(symbol => this.stats[symbol].c >= 3).length;
-        doneCount += 10 * this.currentLesson.symbols.filter(symbol => this.stats[symbol].c >= 2).length;
-        doneCount += 10 * this.currentLesson.symbols.filter(symbol => this.stats[symbol].c >= 1).length;
-        practiceLength = 100 * this.currentLesson.symbols.length;
+        // Learning mode: every correct answer up to requiredCorrect counts the same; in a session only its words count,
+        // from where they stood when it began, so the bar goes from 0 to 100 % in every session
+        const R = this.opts.requiredCorrect, start = this.currentLesson.sessionStart || {};
+        for (const symbol of this.currentLesson.sessionSymbols || this.currentLesson.symbols) {
+          const before = Math.min(+start[symbol] || 0, R);
+          doneCount += Math.min(+this.stats[symbol].c || 0, R) - before;
+          practiceLength += R - before;
+        }
       }
-      const percentage = Math.round((doneCount / practiceLength) * 100);
+      const percentage = practiceLength ? Math.round((doneCount / practiceLength) * 100) : 100;
       progressBar.style.width = `${percentage}%`;
     }
 
@@ -645,7 +644,7 @@ class App {
   getLessonProgress(lessonId) {
     const lesson = this.lessons[lessonId]; 
     if (!lesson) return 0; 
-    const finishedCount = lesson.symbols.filter(symbol => this.stats[symbol].c >= 3).length;
+    const finishedCount = lesson.symbols.filter(symbol => this.stats[symbol].c >= this.opts.requiredCorrect).length;
     return Math.round((finishedCount / lesson.symbols.length) * 100); 
   }
   
@@ -845,12 +844,18 @@ class App {
     this.currentEnergy = 5;
 	  console.log(this.curentLesson);
     const lesson = JSON.parse(JSON.stringify(this.currentLesson));
-    let unfinishedSymbols = lesson.symbols.filter(symbol => this.stats[symbol].c < 3);
+    let unfinishedSymbols = lesson.symbols.filter(symbol => this.stats[symbol].c < this.opts.requiredCorrect);
     if (unfinishedSymbols.length == 0) {
       lesson.isFinished = true;
       lesson.practiceModeItems = JSON.parse(JSON.stringify(lesson.symbols));
       lesson.practiceLength = lesson.practiceModeItems.length;
-    } else lesson.practiceLength = unfinishedSymbols.length;
+    } else {
+      // one session learns sessionWords of the unfinished words, all of them if fewer than two would be left for the next one
+      if (unfinishedSymbols.length > this.opts.sessionWords + 1) unfinishedSymbols = unfinishedSymbols.slice(0, this.opts.sessionWords);
+      lesson.sessionSymbols = unfinishedSymbols;
+      lesson.sessionStart = Object.fromEntries(unfinishedSymbols.map(symbol => [symbol, +this.stats[symbol].c || 0]));
+      lesson.practiceLength = unfinishedSymbols.length;
+    }
     this.currentLesson = lesson;
     this.renderPractice(); 
   }
