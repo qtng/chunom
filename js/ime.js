@@ -322,6 +322,11 @@
 	const fontFamily = list => list.map(f => /^(serif|sans-serif|monospace|system-ui)$/.test(f) ? f : `"${f}"`).join(', ');
 	const TYPING_ATTRIBUTES = { autocomplete: 'off', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'false' };
 
+	// styles a textarea mirror needs to wrap its text exactly like the textarea
+	const MIRROR_STYLES = ['boxSizing', 'width', 'borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth', 'borderStyle',
+		'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'fontVariant',
+		'letterSpacing', 'wordSpacing', 'lineHeight', 'textTransform', 'textIndent', 'tabSize', 'direction'];
+
 	const STYLE = `
 .vietime { position: absolute; z-index: 1070; min-width: 14em; max-width: 28em; font-family: sans-serif;
 	background: var(--vietime-bg, #eee); color: var(--vietime-color, #000); border: var(--vietime-border, 2px solid #000) }
@@ -510,13 +515,44 @@
 			if (!pages) return this.hide();
 			this.page = Math.max(0, Math.min(page, pages - 1));
 			this.list.replaceChildren(...this.items.slice(this.page * 10, this.page * 10 + 10).map((item, i) => this.option(item, this.page * 10 + i)));
-			const r = this.input.getBoundingClientRect();
-			this.list.style.left = `${r.left + scrollX}px`;
-			this.list.style.top = `${r.bottom + scrollY}px`;
 			this.list.hidden = false;
+			this.place();
 			this.input.setAttribute('aria-expanded', 'true');
 			if (this.active >= 0) this.input.setAttribute('aria-activedescendant', `${this.list.id}-${this.active}`);
 			else this.input.removeAttribute('aria-activedescendant');
+		}
+
+		// Rectangle of the caret in viewport coordinates. A textarea has no caret API: its text up to the caret is
+		// copied into an invisible element with the same font and wrapping and the end of that text is measured.
+		// A single-line input uses the whole field.
+		caretRect() {
+			const input = this.input, r = input.getBoundingClientRect();
+			if (input.tagName != 'TEXTAREA') return r;
+			const style = getComputedStyle(input), mirror = document.createElement('div'), mark = document.createElement('span');
+			for (const name of MIRROR_STYLES) mirror.style[name] = style[name];
+			Object.assign(mirror.style, { position: 'absolute', top: '0', left: '-9999px', visibility: 'hidden', whiteSpace: 'pre-wrap', overflowWrap: 'break-word' });
+			mark.textContent = '\u200b';
+			mirror.append(input.value.slice(0, input.selectionEnd), mark);
+			document.body.append(mirror);
+			const lineHeight = mark.offsetHeight || parseFloat(style.lineHeight) || parseFloat(style.fontSize) * 1.2;
+			const x = r.left + input.clientLeft + mark.offsetLeft - input.scrollLeft;
+			const y = r.top + input.clientTop + mark.offsetTop - input.scrollTop;
+			mirror.remove();
+			const top = Math.max(r.top, Math.min(y, r.bottom - lineHeight));
+			return { left: Math.max(r.left, Math.min(x, r.right)), top, bottom: top + lineHeight };
+		}
+
+		// The list floats under the caret; where the visible area ends (on a phone: above the keyboard) it moves above the caret.
+		place() {
+			const c = this.caretRect(), list = this.list, view = window.visualViewport;
+			const viewTop = view ? view.offsetTop : 0, viewBottom = view ? view.offsetTop + view.height : innerHeight;
+			const viewLeft = view ? view.offsetLeft : 0, viewRight = view ? view.offsetLeft + view.width : innerWidth;
+			const width = list.offsetWidth, height = list.offsetHeight;
+			let top = c.bottom;
+			if (top + height > viewBottom && c.top - height >= viewTop) top = c.top - height;
+			const left = Math.max(viewLeft, Math.min(c.left, viewRight - width));
+			list.style.left = `${left + scrollX}px`;
+			list.style.top = `${top + scrollY}px`;
 		}
 
 		setActive(index) {
