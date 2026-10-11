@@ -26,7 +26,11 @@ class App {
     this.currentEnergy = 5;
     this.parser = new VietnameseParser();
     if (!window.qattObserved) { window.qattObserved = true; new Qatt().observe('qatt-code'); } // draws the <qatt-code> elements, once per page
-    this.stats = JSON.parse(localStorage.getItem('qatt_stats')) || { _score: 0 };
+    // progress and score: from the server of the signed-in user (init); without it from the browser, as before
+    this.serverMode = !!options.progress;
+    this.answerSeq = 0;
+    this.stats = this.serverMode ? App.statsFromRows(options.progress, options.score)
+      : (JSON.parse(localStorage.getItem('qatt_stats')) || { _score: 0 });
     this.hintInterval = null;
     this.activePracticeWord = null;
     this.lastPracticeWord = null; 
@@ -85,7 +89,7 @@ class App {
       // the name in the leaderboard belongs to the profile: choose it once, after that it is loaded from there
       let name = await db.getDisplayName();
       if (!name && window.QattLogin) name = await QattLogin.chooseName(db, { required: true });
-      options = { ...options, username: name };
+      options = { ...options, username: name, ...(await App.loadProgress(db)) };
     }
     //db.signInWithGoogle()
     const int = setInterval(() => {
@@ -116,6 +120,38 @@ class App {
       await this.db.signOut();
       location.reload();
     }
+  }
+
+  // { _score, key: { c, w } } from the rows of the server
+  static statsFromRows(rows, score) {
+    const stats = { _score: score || 0 };
+    rows.forEach(row => { stats[row.key] = { c: row.correct, w: row.wrong }; });
+    return stats;
+  }
+
+  // Progress and score of the user from the server: { progress, score }; {} if that does not work (then the browser keeps them).
+  // The first time, the progress of this browser moves to the account.
+  static async loadProgress(db) {
+    let { rows, error } = await db.getProgress();
+    if (error) return {};
+    if (!rows.length) {
+      let local = null;
+      try { local = JSON.parse(localStorage.getItem('qatt_stats')); } catch (e) { /* no usable data */ }
+      if (local && typeof local == 'object' && Object.keys(local).length) {
+        const result = await db.importProgress(local);
+        if (result.error) return {};
+        if (result.data && result.data.imported) {
+          try {
+            localStorage.setItem('qatt_stats_imported', JSON.stringify(local)); // stays as a copy, but is not used any more
+            localStorage.removeItem('qatt_stats');
+          } catch (e) { /* storage blocked */ }
+          ({ rows, error } = await db.getProgress());
+          if (error) return {};
+        }
+      }
+    }
+    const profile = await db.getProfile();
+    return { progress: rows, score: profile ? profile.score : 0 };
   }
 
   // the page for users who are not signed in (the practice is for signed-in users only)
@@ -437,7 +473,6 @@ class App {
 			  animations.gem = true;
 			  this.stats._score += 20;
 			}
-            this.syncScore();
             document.getElementById("emoji-c").innerHTML = this.getProgressEmoji(correctWord, true, 'practice');
         } else { 
             this.stats[correctWord].w++; 
@@ -446,7 +481,7 @@ class App {
             this.triggerHeartLossAnimation(); 
         }
 
-        localStorage.setItem('qatt_stats', JSON.stringify(this.stats)); 
+        this.saveAnswer(correctWord, isCorrect);
         this.renderStatus(document.querySelector(".practice-container"), animations);
         
         document.querySelectorAll("#opts .btn").forEach(btn => { 
@@ -479,6 +514,24 @@ class App {
       }
 
       // --- HELPERS ---
+  // Keeps an answer. The screen has counted it already; the server counts it too and its numbers win (only those of the last answer).
+  // Without the server: in the browser and the score of the profile, as before.
+  saveAnswer(word, isCorrect) {
+    if (!this.serverMode) {
+      localStorage.setItem('qatt_stats', JSON.stringify(this.stats));
+      if (isCorrect) this.syncScore();
+      return;
+    }
+    const seq = ++this.answerSeq;
+    this.db.recordAnswer(word, isCorrect).then(({ data }) => {
+      if (!data || seq !== this.answerSeq) return; // failed (the local numbers stay) or an older answer
+      this.stats[word].c = data.correct;
+      this.stats[word].w = data.wrong;
+      if (typeof data.score == 'number') this.stats._score = data.score;
+      this.updateGlobalCounters();
+    });
+  }
+
   async syncScore() {
   	if (!this.db.user) return; // Wait, until Auth is ready 
   	await this.db.saveScore(this.getUsername(), this.stats._score || 0, 0);
