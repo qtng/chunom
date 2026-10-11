@@ -134,8 +134,8 @@ svg use[href^="#qt"] { stroke-width: calc(var(--stroke-width) * 3 / 4) }
 
 .qatt-container { margin: auto; margin-top: var(--external-nav-height) }
 .category-title { font-weight: 800; text-transform: uppercase; margin-top: 2rem; margin-bottom: 1rem; font-size: 0.8rem; letter-spacing: .08em; color: var(--muted); }
-.progress { background-color: var(--line); border-radius: 10px; height: 6px !important; }
-.progress-bar { background-color: var(--accent) !important; }
+#app .progress { background-color: var(--line); border-radius: 10px; height: 6px !important; }
+#app .progress-bar { background-color: var(--accent) !important; }
 
 .options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 .options .btn { 
@@ -279,21 +279,21 @@ svg use[href^="#qt"] { stroke-width: calc(var(--stroke-width) * 3 / 4) }
 [class*="lesson-deck-"] .word-grid-item { height: auto; min-height: 85px; flex-direction: column; padding: 8px 4px; }
 
 /* the page: links, buttons and the parts of the glyphs, in the colours of the site */
-.back-link, .text-white-50 { color: var(--muted) !important; }
-.back-link:hover, .text-white-50:hover { color: var(--ink) !important; }
-.text-warning { color: var(--accent) !important; }
-#quiz-navbar { padding-top: 16px !important; background: #fcf8ee; border: 1px solid var(--line); color: var(--ink); }
-.btn-info, .btn-primary { --bs-btn-bg: var(--accent); --bs-btn-border-color: var(--accent); --bs-btn-color: #fff;
+#app .back-link, #app .text-white-50 { color: var(--muted) !important; }
+#app .back-link:hover, #app .text-white-50:hover { color: var(--ink) !important; }
+#app .text-warning { color: var(--accent) !important; }
+#app #quiz-navbar { padding-top: 16px !important; background: #fcf8ee; border: 1px solid var(--line); color: var(--ink); }
+#app .btn-info, #app .btn-primary { --bs-btn-bg: var(--accent); --bs-btn-border-color: var(--accent); --bs-btn-color: #fff;
   --bs-btn-hover-bg: var(--accent-dark); --bs-btn-hover-border-color: var(--accent-dark); --bs-btn-hover-color: #fff;
   --bs-btn-active-bg: var(--accent-dark); --bs-btn-active-border-color: var(--accent-dark); --bs-btn-active-color: #fff; }
-.btn-outline-warning { --bs-btn-color: var(--accent); --bs-btn-border-color: var(--accent);
+#app .btn-outline-warning { --bs-btn-color: var(--accent); --bs-btn-border-color: var(--accent);
   --bs-btn-hover-bg: var(--accent); --bs-btn-hover-border-color: var(--accent); --bs-btn-hover-color: #fff;
   --bs-btn-active-bg: var(--accent-dark); --bs-btn-active-border-color: var(--accent-dark); --bs-btn-active-color: #fff; }
-.btn-outline-light { --bs-btn-color: #5b4d3d; --bs-btn-border-color: var(--field);
+#app .btn-outline-light { --bs-btn-color: #5b4d3d; --bs-btn-border-color: var(--field);
   --bs-btn-hover-bg: #f1e8d2; --bs-btn-hover-border-color: #b9a982; --bs-btn-hover-color: var(--ink);
   --bs-btn-active-bg: #f1e8d2; --bs-btn-active-border-color: #b9a982; --bs-btn-active-color: var(--ink); }
-.btn-info, .btn-primary, .btn-outline-warning, .btn-outline-light { border-radius: 2rem; }
-.table { --bs-table-bg: transparent; --bs-table-color: var(--ink); --bs-table-border-color: var(--line); }
+#app .btn-info, #app .btn-primary, #app .btn-outline-warning, #app .btn-outline-light { border-radius: 2rem; }
+#app .table { --bs-table-bg: transparent; --bs-table-color: var(--ink); --bs-table-border-color: var(--line); }
 
 /* Highlighting of the parts of a glyph (qatt.js: <qatt-code> with <use href="#v2-…">):
    onset = the small shape on the left, rhyme = the shape with its marking stroke on the right, tone = the mark in a corner */
