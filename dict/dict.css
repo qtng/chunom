@@ -1,4 +1,4 @@
-:root { --nav-h: 62px; }
+:root { --nav-h: 60px; }
 
 /* The browser does not zoom these pages (also not with a finger on the navigation bar); the page image zooms itself, see viewer.js */
 html { touch-action: pan-x pan-y; }
