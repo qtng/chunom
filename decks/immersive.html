@@ -13,7 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../../qatt/js/navigation.js"></script>
     <script src="../../qatt/js/parser.js"></script>
-    <script src="../../qatt/js/renderer.js"></script>
+    <script src="../../qatt/js/qatt.js"></script>
     <script src="../../qatt/js/supabase.js"></script>
     <script src="./audiomanager.js"></script>
     
@@ -114,8 +114,10 @@
         .nom-display-large { font-family: var(--nom-font-stack); font-size: 9rem; line-height: 1; }
         .nom-display-mini { font-family: var(--nom-font-stack); font-size: 4.5rem; margin-bottom: 1.5rem; opacity: 0.6; }
         .qatt-container { display: flex; gap: 0.5rem; justify-content: center; align-items: center; }
-        .qatt-container svg { height: 5rem; stroke: var(--ui-color); stroke-width: 8px; fill: none; filter: drop-shadow(0 4px 15px var(--ui-shadow)); }
-        .qatt-container svg use[href*="qt"] {stroke-width: 4px}
+        /* QATT glyphs: qatt.js draws <qatt-code> elements as SVG */
+        qatt-code svg { stroke: currentColor; stroke-linecap: round; fill: none; display: inline-block; }
+        .qatt-container { color: var(--ui-color); }
+        .qatt-container svg { height: 5rem; stroke-width: 3px; filter: drop-shadow(0 4px 15px var(--ui-shadow)); }
         
         .quocngu-text { 
             font-size: 1.6em; 
@@ -163,10 +165,11 @@
 
         .deck-index-card { background: rgba(20, 20, 20, 0.7) !important; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.15) !important; max-height: 45vh; overflow-y: auto; border-radius: 16px !important; }
         .index-item { border-color: rgba(255,255,255,0.08) !important; background: transparent !important; color: white !important; padding: 0.75rem 1.25rem !important; gap: 1rem; }
-        .index-nom-cell { font-family: var(--nom-font-stack); font-size: 1.4rem; line-height: 1; min-width: 2.5rem; }
+        .index-nom-cell { font-family: var(--nom-font-stack); font-size: 1.4rem; line-height: 1; min-width: 2.5rem; display: flex; align-items: center; gap: 2px; }
+        .index-nom-cell img { width: 1.9rem; height: 1.9rem; filter: invert(1); } /* the glyph images are black on transparent */
         .index-qn-cell { color: rgba(255,255,255,0.6); font-size: 0.95rem; font-weight: 300; flex: 1; text-align: right; }
-        .index-qatt-cell { display: flex; align-items: center; justify-content: center; min-width: 3.5rem; }
-        .index-qatt-cell svg { height: 1.8rem; stroke: rgba(255,255,255,0.8); stroke-width: 10; fill: none; }
+        .index-qatt-cell { display: flex; align-items: center; justify-content: center; gap: .25rem; min-width: 3.5rem; color: rgba(255,255,255,0.85); }
+        .index-qatt-cell svg { height: 1.8rem; stroke-width: 1.5px; }
     </style>
 </head>
 <body>
@@ -373,7 +376,7 @@
             constructor() {
                 this.sp = new SupabaseService(); 
                 this.parser = new VietnameseParser(); 
-                this.renderer = new SvgGlyphRenderer();
+                new Qatt().observe('qatt-code');
                 
                 // Audio configuration
                 this.audio = new AudioManager(document.getElementById('bg-audio'), { 
@@ -392,7 +395,6 @@
                     document.getElementById('learning-view')
                 );
 
-                this.qattType = localStorage.getItem('qattType') || "1"; 
                 this.idx = 0; 
                 this.isFlipped = false;
                 this.navTimer = null; 
@@ -410,21 +412,19 @@
                     document.getElementById('deck-meta').textContent = `${this.deck.words.length} items`;
                     
                     const indexList = document.getElementById('deck-index-list');
-                    indexList.innerHTML = this.deck.words.map((w, i) => `
-                        <li class="list-group-item index-item d-flex justify-content-between align-items-center">
-                            <span class="index-nom-cell">${w.n}</span>
-                            <span class="index-qatt-cell" id="idx-qatt-${i}"></span>
-                            <span class="index-qn-cell">${w.qn}</span>
-                        </li>
-                    `).join('');
-
-                    this.deck.words.forEach((w, i) => {
-                        const target = document.getElementById(`idx-qatt-${i}`);
-                        if (target) {
-                            const parsed = this.parser.parse(w.qn);
-                            this.renderer.renderText(parsed ? parsed.code.split(' ')[0] : w.qn, target, "1");
-                        }
-                    });
+                    indexList.replaceChildren(...this.deck.words.map(w => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item index-item d-flex justify-content-between align-items-center';
+                        const nom = document.createElement('span'), qatt = document.createElement('span'), qn = document.createElement('span');
+                        nom.className = 'index-nom-cell';
+                        nom.append(...this.nomChars(w.n));
+                        qatt.className = 'index-qatt-cell';
+                        qatt.append(...this.qattCodes(w.qn));
+                        qn.className = 'index-qn-cell';
+                        qn.textContent = w.qn;
+                        li.append(nom, qatt, qn);
+                        return li;
+                    }));
 
                     document.getElementById('loading-spinner').style.display = 'none';
                     document.getElementById('deck-info').style.display = 'block';
@@ -514,6 +514,34 @@
                 setInterval(() => this.isFlipped ? this.next() : this.flip(), 4500);
             }
 
+            // Nôm characters as chunom.org images (the font as fallback)
+            nomChars(text) {
+                return [...(text || '')].map(ch => {
+                    if (!/[一-鿿㐀-䶿\u{20000}-\u{323af}]/u.test(ch)) return document.createTextNode(ch);
+                    const img = document.createElement('img');
+                    img.alt = ch;
+                    img.loading = 'lazy';
+                    img.addEventListener('error', () => img.replaceWith(document.createTextNode(ch)));
+                    img.src = `https://chunom.org/media/generated/${ch.codePointAt(0).toString(16).toUpperCase()}-32.png`;
+                    return img;
+                });
+            }
+
+            // one <qatt-code> element per syllable; qatt.js renders them
+            qattCodes(quocNgu) {
+                const codes = [];
+                for (const word of (quocNgu || '').split(/\s+/)) {
+                    const parsed = word && this.parser.parse(word);
+                    if (parsed) {
+                        const code = document.createElement('qatt-code');
+                        code.title = word;
+                        code.textContent = parsed.code;
+                        codes.push(code);
+                    }
+                }
+                return codes;
+            }
+
             updateCard() {
                 const w = this.deck.words[this.idx]; 
                 this.isFlipped = false;
@@ -528,16 +556,7 @@
                 document.getElementById('nom-mini').textContent = w.n;
                 document.getElementById('quocngu-display').textContent = w.qn;
                 
-                const qCont = document.getElementById('qatt-display');
-                const parts = this.parser.parse(w.qn);
-                if (parts) {
-                    qCont.innerHTML = "";
-                    parts.code.split(' ').forEach(word => {
-                        const div = document.createElement('div');
-                        this.renderer.renderText(word, div, this.qattType);
-                        qCont.innerHTML += div.innerHTML;
-                    });
-                }
+                document.getElementById('qatt-display').replaceChildren(...this.qattCodes(w.qn));
                 
                 document.getElementById('nom-layer').classList.remove('layer-show');
                 document.getElementById('details-layer').classList.add('layer-show');
@@ -576,19 +595,9 @@
                     ${item('enabled', state.isSpeechOn, "if(!app.audio.state.isSpeechOn) app.audio.toggleSpeech()")}
                     ${item('disabled', !state.isSpeechOn, "if(app.audio.state.isSpeechOn) app.audio.toggleSpeech()")}
                     
-                    <div class="dropdown-divider"></div>
-                    <div class="px-3 py-2 text-secondary small text-uppercase">QATT style</div>
-                    ${item('Chính thể', this.qattType === "0", "app.setQattType('0')")}
-                    ${item('Giản thể', this.qattType === "1", "app.setQattType('1')")}
-                    ${item('Giản thể+', this.qattType === "2", "app.setQattType('2')")}
                 `;
             }
 
-            setQattType(t) { 
-                this.qattType = t; 
-                localStorage.setItem('qattType', t); 
-                this.renderSettings(); 
-            }
         }
 
         // Bootstrapping
