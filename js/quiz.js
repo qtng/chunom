@@ -593,7 +593,7 @@ class App {
     if (form === "qatt") return this.renderToElement(word, null, element, !asQuestion, false);
     if (form === "nom") {
       element.className = "nom-chars" + (asQuestion ? " nom-question" : "");
-      element.append(...this.nomChars(this.items[word].n, asQuestion ? 180 : 64));
+      element.append(...this.nomChars(this.items[word].n, 220));
       return;
     }
     const text = this.textOf(word);
@@ -608,8 +608,8 @@ class App {
     }
   }
 
-  // Nôm characters as images of chunom.org (the Nôm font as fallback, see decks/quiz.html)
-  nomChars(text, size = 64) {
+  // Nôm characters as images of chunom.org (the Nôm font as fallback); the images exist in the sizes 32 and 220 only
+  nomChars(text, size = 220) {
     return [...(text || "")].map(ch => {
       if (!/[一-鿿㐀-䶿\u{20000}-\u{323af}]/u.test(ch)) return document.createTextNode(ch);
       const img = document.createElement("img");
