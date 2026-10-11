@@ -458,7 +458,7 @@ class ChunomDict {
     newBtn.addEventListener('click', () => this.renderDeckSheet(true));
     this.deckSheetBody.replaceChildren(
       el('div', { className: 'd-flex align-items-center gap-3 mb-2' },
-        el('span', { className: 'fs-1', textContent: this.currentNom }),
+        el('span', {}, this.nomChars(this.currentNom, 32)),
         el('span', { className: 'text-secondary', lang: 'vi', textContent: this.currentQn })),
       ...(rows.length ? rows : [el('p', { className: 'text-secondary small my-3', textContent: 'You have no decks yet.' })]),
       el('div', { className: 'mt-3' }, creating ? el('div', { className: 'd-flex gap-2' }, nameInput, createBtn) : newBtn));

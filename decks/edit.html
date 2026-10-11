@@ -9,6 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
+    <link rel="stylesheet" href="https://chunom.org/media/css/fonts/all.css">
+
     <style>
         body { 
             background-color: #050505; 
@@ -92,21 +94,15 @@
 
                     <!-- Word List Section -->
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="text-secondary text-uppercase mb-0">Word Pairs</h6>
-                        <button class="btn btn-outline-primary btn-sm" id="addWordBtn">
-                            <i class="bi bi-plus-lg me-1"></i> Add Pair
-                        </button>
+                        <h6 class="text-secondary text-uppercase mb-0">Characters</h6>
+                        <span id="word-count" class="text-secondary small"></span>
                     </div>
 
                     <div id="wordListContainer" class="mb-4">
                         <!-- Rows injected here -->
                     </div>
 
-                    <div class="d-grid gap-2" id="bottomActions">
-                        <button class="btn btn-dark border-secondary border-opacity-25 text-secondary py-3" id="bottomAddBtn">
-                            <i class="bi bi-plus-circle me-2"></i> Add another word pair
-                        </button>
-                    </div>
+                    <p class="text-secondary small">Add characters from the dictionary: open a character and tap the heart.</p>
 
                 </div>
             </div>
@@ -185,77 +181,77 @@
                 document.getElementById('read-only-badge').classList.remove('d-none');
                 document.getElementById('save-status').classList.add('d-none');
                 document.getElementById('deckTitle').disabled = true;
-                document.getElementById('addWordBtn').classList.add('d-none');
-                document.getElementById('bottomActions').classList.add('d-none');
-                
-                // Disable all inputs in rows
-                document.querySelectorAll('.word-row input').forEach(input => input.disabled = true);
-                document.querySelectorAll('.remove-row-btn').forEach(btn => btn.classList.add('d-none'));
+            }
+
+            // words of the deck without the internal config entry
+            visibleWords() {
+                return (this.deckData.words || []).filter(word => word.n !== ".config");
             }
 
             renderEditor() {
                 document.getElementById('deckTitle').value = this.deckData.title || "Untitled Deck";
                 const container = document.getElementById('wordListContainer');
-                container.innerHTML = "";
-
-                if (this.deckData.words && this.deckData.words.length > 0) {
-                    this.deckData.words.forEach(word => {
-                        if (word.n === ".config") return;
-                        this.createWordRow(word.n, word.qn);
-                    });
-                }
-                
-                if (container.children.length === 0 && !this.isReadOnly) {
-                    this.createWordRow("", "");
+                const words = this.visibleWords();
+                document.getElementById('word-count').textContent = `${words.length} items`;
+                container.replaceChildren(...words.map(word => this.createWordRow(word)));
+                if (!words.length) {
+                    const empty = document.createElement('div');
+                    empty.className = 'text-secondary small border border-secondary border-opacity-10 rounded-3 p-4 text-center';
+                    empty.textContent = 'This deck is empty.';
+                    container.append(empty);
                 }
             }
 
-            createWordRow(nom = "", qn = "") {
-                const container = document.getElementById('wordListContainer');
-                const row = document.createElement('div');
-                row.className = "row g-2 mb-2 p-2 border border-secondary border-opacity-10 rounded-3 word-row align-items-center";
-                
-                const disabledAttr = this.isReadOnly ? 'disabled' : '';
-                const removeBtnHidden = this.isReadOnly ? 'd-none' : '';
+            // a character as image with the font as fallback, like in the dictionary
+            glyph(nom) {
+                const box = document.createElement('span');
+                box.className = 'nom-font';
+                const showText = () => { box.textContent = nom; };
+                if (!/^[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{323af}]$/u.test(nom)) {
+                    showText();
+                    return box;
+                }
+                const img = new Image(32, 32);
+                img.alt = nom;
+                img.style.verticalAlign = 'middle';
+                img.addEventListener('error', () => img.replaceWith(nom));
+                img.src = `https://chunom.org/media/generated/${nom.codePointAt(0).toString(16).toUpperCase()}-32.png`;
+                box.append(img);
+                return box;
+            }
 
-                row.innerHTML = `
-                    <div class="col-5">
-                        <input type="text" ${disabledAttr} class="form-control nom-input nom-font" placeholder="Nom" value="${nom}">
-                    </div>
-                    <div class="col-5">
-                        <input type="text" ${disabledAttr} class="form-control qn-input" placeholder="Quốc Ngữ" value="${qn}">
-                    </div>
-                    <div class="col-2 text-end">
-                        <button class="btn btn-outline-danger border-0 remove-row-btn ${removeBtnHidden}" title="Remove">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>
-                `;
+            createWordRow(word) {
+                const row = document.createElement('div');
+                row.className = "d-flex align-items-center gap-3 mb-2 p-2 border border-secondary border-opacity-10 rounded-3 word-row";
+
+                const nom = document.createElement('div');
+                nom.className = 'fs-4 text-center';
+                nom.style.minWidth = '3rem';
+                nom.append(this.glyph(word.n || ''));
+                const qn = document.createElement('div');
+                qn.className = 'flex-grow-1';
+                qn.lang = 'vi';
+                qn.textContent = word.qn || '';
+                row.append(nom, qn);
 
                 if (!this.isReadOnly) {
-                    row.querySelector('.remove-row-btn').addEventListener('click', () => {
-                        row.remove();
+                    const remove = document.createElement('button');
+                    remove.type = 'button';
+                    remove.className = 'btn btn-outline-danger border-0 remove-row-btn';
+                    remove.title = 'Remove';
+                    remove.setAttribute('aria-label', 'Remove');
+                    remove.innerHTML = '<i class="bi bi-trash"></i>';
+                    remove.addEventListener('click', () => {
+                        this.deckData.words = this.deckData.words.filter(w => w !== word);
+                        this.renderEditor();
                         this.triggerAutoSave();
                     });
-                    
-                    // Trigger save on change
-                    row.querySelectorAll('input').forEach(input => {
-                        input.addEventListener('input', () => this.triggerAutoSave());
-                    });
+                    row.append(remove);
                 }
-
-                container.appendChild(row);
+                return row;
             }
 
             setupEventListeners() {
-                document.getElementById('addWordBtn').addEventListener('click', () => {
-                    this.createWordRow();
-                    this.triggerAutoSave();
-                });
-                document.getElementById('bottomAddBtn').addEventListener('click', () => {
-                    this.createWordRow();
-                    this.triggerAutoSave();
-                });
                 document.getElementById('deckTitle').addEventListener('input', () => this.triggerAutoSave());
             }
 
@@ -276,21 +272,10 @@
                 status.innerHTML = `<div class="spinner-border spinner-border-sm me-1"></div> Saving...`;
 
                 const title = document.getElementById('deckTitle').value.trim() || "Untitled Deck";
-                const rows = document.querySelectorAll('.word-row');
-                const words = [];
-
-                rows.forEach(row => {
-                    const n = row.querySelector('.nom-input').value.trim();
-                    const qn = row.querySelector('.qn-input').value.trim();
-                    if (n || qn) {
-                        words.push({ n, qn });
-                    }
-                });
-
                 const updatedDeck = {
                     ...this.deckData,
                     title: title,
-                    words: words
+                    words: this.deckData.words || []
                 };
 
                 try {
