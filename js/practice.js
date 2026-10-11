@@ -166,6 +166,11 @@ class App {
         </div>
       </div>`;
     const button = document.getElementById("practice-login");
+    if (db.authError) { // the sign-in came back with an error
+      const message = document.getElementById("practice-login-note");
+      message.textContent = "The sign-in did not work: " + db.authError.replace(/\+/g, " ");
+      message.hidden = false;
+    }
     if (!window.QattLogin || !db.client) {
       button.disabled = true;
       const note = document.getElementById("practice-login-note");
