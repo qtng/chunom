@@ -155,7 +155,10 @@
     .page-head { text-align: center; padding: .4rem 0 0; }
     .page-head .han { color: var(--cinnabar); font-size: 1.3rem; }
     .page-head h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(1.9rem, 6vw, 2.6rem); margin: .1rem 0 .2rem; }
-    .page-head p { color: var(--muted); margin: 0; }
+    .page-head p { color: var(--muted); margin: 0 auto; max-width: 40rem; }
+    .home-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; margin-top: 1rem; }
+    .home-links a { display: inline-flex; align-items: center; gap: .4rem; padding: .3rem .95rem; border: 1px solid var(--field); border-radius: 2rem; background: #fff; color: var(--ink); text-decoration: none; font-size: .9rem; }
+    .home-links a:hover, .home-links a:focus-visible { background: var(--cinnabar); border-color: var(--cinnabar); color: #fff; }
     .text-secondary { color: var(--muted) !important; }
 
     .search-card { background: rgba(255, 255, 255, .8); border: 1px solid var(--line); border-radius: 1rem; box-shadow: 0 .4rem 1.2rem rgba(60, 40, 20, .07); color: var(--ink); }
@@ -196,7 +199,13 @@
     <header class="page-head">
       <div class="han">喃</div>
       <h1>Chữ Nôm</h1>
-      <p>Look up a reading or a character.</p>
+      <p>The Vietnamese script of Chữ Nôm: look up characters and readings, write Nôm with a Telex keyboard, practise with flashcards and browse scanned historical dictionaries.</p>
+      <nav class="home-links" aria-label="Chunom.org">
+        <a href="ime.html"><i class="bi bi-pencil-square"></i> Nôm Writer</a>
+        <a href="decks/index.html"><i class="bi bi-layers-half"></i> Flashcards</a>
+        <a href="dict/genibrel.html"><i class="bi bi-journal-richtext"></i> Dictionaries</a>
+        <a href="../qatt/index.html"><i class="bi bi-brush"></i> Quốc Âm Tân Tự</a>
+      </nav>
     </header>
 
     <div class="mt-4 p-3 search-card">
