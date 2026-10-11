@@ -14,7 +14,7 @@ class App {
       requiredCorrect: 4,
       maxErrors: 3,
       learningWindow: 4,
-      sessionWords: 10,   // new words of one learning session (all of them if only one more would be left over)
+      sessionWords: 8,    // new words of one learning session (all of them if only one more would be left over)
       hintDelay: 10000,
     };
     this.db = db;
