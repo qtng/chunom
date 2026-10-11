@@ -12,6 +12,9 @@
   <script defer src="https://qatt.org/qatt/js/navigation.js"></script>
   <script defer src="https://qatt.org/qatt/js/qatt.js"></script>
   <script defer src="https://qatt.org/qatt/js/parser.js?v=20261011-1022"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="https://qatt.org/qatt/js/supabase.js"></script>
+  <script defer src="https://qatt.org/qatt/js/login.js"></script>
   <style>
     svg {
       stroke: currentColor;
@@ -181,7 +184,16 @@
 
     #results .list-group-item { background: rgba(255, 255, 255, .85); border: 1px solid var(--line); border-radius: .8rem !important; margin-bottom: .6rem; color: var(--ink); }
     #results .list-group-item-action:hover { background: #fff; border-color: var(--cinnabar); }
-    #bookmarks-title { background: transparent !important; color: var(--muted); letter-spacing: .12em; font-size: .85rem; }
+    #deck-sheet { position: fixed; inset: 0; z-index: 5; display: flex; align-items: flex-end; justify-content: center; background: rgba(43, 33, 24, .45); opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; }
+    #deck-sheet.open { opacity: 1; visibility: visible; }
+    #deck-sheet .sheet { width: min(100%, 32rem); max-height: 80vh; overflow-y: auto; background: #fffdf8; border-radius: 1.2rem 1.2rem 0 0; padding: .8rem 1.2rem 1.4rem; transform: translateY(100%); transition: transform .25s ease-out; }
+    #deck-sheet.open .sheet { transform: none; }
+    #deck-sheet .sheet-title { font: 400 1.15rem Georgia, "Times New Roman", serif; }
+    #deck-sheet .deck-row { display: flex; align-items: center; gap: .8rem; width: 100%; padding: .65rem .3rem; border: 0; border-bottom: 1px solid var(--line); background: none; color: var(--ink); text-align: left; }
+    #deck-sheet .deck-row:hover { background: rgba(168, 54, 42, .06); }
+    #deck-sheet .deck-row .bi { font-size: 1.25rem; color: var(--cinnabar); }
+    #deck-sheet .btn-new { background: var(--cinnabar); border-color: var(--cinnabar); color: #fff; border-radius: 2rem; }
+    #deck-sheet .btn-new:hover { background: #8c2c22; border-color: #8c2c22; color: #fff; }
     .badge-rank { border-color: var(--field); color: var(--muted); }
 
     .modal-content { background: #fffdf8; color: var(--ink); border-radius: 1rem; border: 1px solid var(--line); }
@@ -222,7 +234,6 @@
             <label class="form-check-label text-secondary" for="toggle-telex">Telex</label>
           </div>
         </div>
-        <button id="bookmarks-btn" type="button" class="btn btn-sm btn-link" disabled>My Bookmarks</button>
       </div>
       <div class="input-group">
         <label class="input-group-text justify-content-center" style="width:110px">Search</label>
@@ -237,7 +248,6 @@
     <!-- Tabs nach Rang und Level, aufgebaut in renderDiscoveryLists() -->
     <div id="discovery" class="mt-4 mb-5"></div>
 
-    <div id="bookmarks-title" class="d-none mt-4 alert alert-light shadow-sm py-1 border-0 text-uppercase fw-bold">My Bookmarks</div>
     <div id="results" class="list-group w-100"></div>
   </div>
 
@@ -247,13 +257,23 @@
         <div class="modal-header">
           <h5 class="modal-title" id="modalTitle">Details</h5>
           <div class="d-flex align-items-center">
-            <button type="button" id="bookmark-toggle" class="btn p-0 border-0 text-danger" aria-label="Bookmark" aria-pressed="false"><i class="bi bi-heart"></i></button>
+            <button type="button" id="deck-toggle" class="btn p-0 border-0 text-danger" aria-label="Add to deck" title="Add to deck"><i class="bi bi-heart"></i></button>
             <button type="button" class="ms-4 btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
         </div>
         <div class="modal-body" id="modalBody"></div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+        <!-- Bottom-Sheet: Zeichen einem eigenen Deck zuordnen (liegt im Popup, damit der Fokus-Trap von Bootstrap nicht stört) -->
+        <div id="deck-sheet" role="dialog" aria-modal="true" aria-labelledby="deck-sheet-title" aria-hidden="true">
+          <div class="sheet">
+            <div class="d-flex align-items-center mb-2">
+              <button type="button" id="deck-sheet-close" class="btn-close" aria-label="Close"></button>
+              <div id="deck-sheet-title" class="sheet-title flex-grow-1 text-center pe-4">Add to deck</div>
+            </div>
+            <div id="deck-sheet-body"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -300,7 +320,7 @@ class ChunomDict {
     localStorage.removeItem('chunom_dict_timestamp');
 
     this.initSettings();
-    this.initBookmarks();
+    this.initDecks();
     this.initHistoryHandler(modalEl);
     this.init();
     this.initGlobalClickHandlers();
@@ -336,51 +356,146 @@ class ChunomDict {
       phone.addEventListener('change', () => this.ime.update({ timeout: phone.matches ? 10000 : 0 }));
       // Die Suche nutzt die Wörterbücher auch ohne Telex: beim ersten Fokus laden, dann um IME-Treffer ergänzen
       this.searchInput.addEventListener('focus', () => VietIme.load().then(() => {
-        if (!this.showingBookmarks) this.search(this.searchInput.value);
+        this.search(this.searchInput.value);
       }), { once: true });
     }
     this.ime.update({ telex: on, candidates: on });
   }
 
-  initBookmarks() {
-    this.bookmarksKey = 'chunom_bookmarks';
-    this.bookmarks = JSON.parse(localStorage.getItem(this.bookmarksKey) || '[]');
-    this.bookmarkToggle = document.getElementById('bookmark-toggle');
-    this.bookmarksBtn = document.getElementById('bookmarks-btn');
-    this.bookmarksTitle = document.getElementById('bookmarks-title');
-    this.bookmarkToggle.addEventListener('click', () => {
-      this.toggleBookmark(this.currentNom);
-      this.bookmarkToggle.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.5)' }, { transform: 'scale(1)' }], { duration: 300, easing: 'ease-out' });
+  // Decks: das Zeichen im Popup einem Deck der Flashcards zuordnen (Daten in Supabase, angemeldet)
+  initDecks() {
+    this.deckToggle = document.getElementById('deck-toggle');
+    this.deckSheet = document.getElementById('deck-sheet');
+    this.deckSheetBody = document.getElementById('deck-sheet-body');
+    this.deckToggle.addEventListener('click', () => {
+      this.openDeckSheet();
+      this.deckToggle.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.5)' }, { transform: 'scale(1)' }], { duration: 300, easing: 'ease-out' });
     });
-    this.bookmarksBtn.addEventListener('click', () => this.showingBookmarks ? this.search(this.searchInput.value) : this.showBookmarks());
+    this.deckSheet.addEventListener('click', e => { if (e.target === this.deckSheet) this.closeDeckSheet(); });
+    document.getElementById('deck-sheet-close').addEventListener('click', () => this.closeDeckSheet());
+    this.deckSheet.addEventListener('keydown', e => {
+      if (e.key !== 'Escape') return;
+      e.stopPropagation();
+      this.closeDeckSheet();
+    });
+    document.getElementById('detailModal').addEventListener('hidden.bs.modal', () => this.closeDeckSheet());
+    // Der Login-Dialog liegt außerhalb des Popups; Bootstraps Fokus-Trap würde ihm den Fokus (E-Mail-Feld) wegnehmen
+    window.addEventListener('focusin', e => {
+      if (e.target.closest?.('dialog.qatt-login')) e.stopImmediatePropagation();
+    }, true);
   }
 
-  toggleBookmark(nom) {
-    const i = this.bookmarks.indexOf(nom);
-    if (i < 0) this.bookmarks.unshift(nom); else this.bookmarks.splice(i, 1);
-    localStorage.setItem(this.bookmarksKey, JSON.stringify(this.bookmarks));
-    this.updateBookmarkUi();
-    if (this.showingBookmarks) this.showBookmarks();
+  showToast(text) {
+    this.toast.textContent = text;
+    this.toast.style.display = 'block';
+    clearTimeout(this.toastTimer);
+    this.toastTimer = setTimeout(() => { this.toast.style.display = 'none'; }, 2500);
   }
 
-  updateBookmarkUi() {
-    const bookmarked = this.bookmarks.includes(this.currentNom);
-    this.bookmarkToggle.querySelector('i').className = `bi ${bookmarked ? 'bi-heart-fill' : 'bi-heart'}`;
-    this.bookmarkToggle.setAttribute('aria-pressed', bookmarked);
-    this.bookmarksBtn.disabled = !this.bookmarks.length;
+  signedIn() {
+    return !!this.sp?.user && !this.sp.isAnonymous;
   }
 
-  showBookmarks() {
-    if (!this.bookmarks.length) return this.search(this.searchInput.value);
-    this.discoveryContainer.classList.add('d-none');
-    this.bookmarksTitle.classList.remove('d-none');
-    this.showingBookmarks = true;
-    this.bookmarksBtn.classList.add('active');
-    // Zeichen, die nur in Komposita vorkommen, haben keine eigene Zeile
-    this.resultsContainer.replaceChildren(...this.bookmarks.flatMap(nom => {
-      const rows = this.data.filter(r => r[1] === nom);
-      return (rows.length ? rows : [['', nom, '', '']]).map(r => this.createResultItem(r, true));
-    }));
+  // true, wenn angemeldet; sonst öffnet sich der Login-Dialog (der Dienst wird erst jetzt gestartet, damit Besucher nicht anonym angelegt werden)
+  async ensureSignedIn() {
+    if (typeof SupabaseService === 'undefined' || typeof QattLogin === 'undefined') {
+      this.showToast('Decks are not available right now.');
+      return false;
+    }
+    this.sp ??= new SupabaseService();
+    if (!this.sp.client) await this.sp.init();
+    if (this.signedIn()) return true;
+    QattLogin.open(this.sp, 'Sign in to save characters to your decks.');
+    return false;
+  }
+
+  // Herz gefüllt, wenn das Zeichen in einem eigenen Deck liegt
+  updateDeckUi() {
+    const inDeck = this.deckIdsNom === this.currentNom && this.deckIds.size > 0;
+    this.deckToggle.querySelector('i').className = `bi ${inDeck ? 'bi-heart-fill' : 'bi-heart'}`;
+  }
+
+  async loadDeckIds() {
+    const nom = this.currentNom;
+    const ids = await this.sp.getDeckIdsWithWord(nom);
+    if (nom !== this.currentNom) return;
+    this.deckIds = new Set(ids);
+    this.deckIdsNom = nom;
+    this.updateDeckUi();
+  }
+
+  async openDeckSheet() {
+    if (!await this.ensureSignedIn()) return;
+    this.deckSheet.classList.add('open');
+    this.deckSheet.setAttribute('aria-hidden', 'false');
+    this.deckSheetBody.replaceChildren(el('div', { className: 'text-center text-secondary py-4' }, el('div', { className: 'spinner-border spinner-border-sm' })));
+    const [decks] = await Promise.all([this.sp.getDecks(), this.loadDeckIds()]);
+    this.decks = decks;
+    this.renderDeckSheet();
+  }
+
+  closeDeckSheet() {
+    this.deckSheet.classList.remove('open');
+    this.deckSheet.setAttribute('aria-hidden', 'true');
+  }
+
+  renderDeckSheet(creating = false) {
+    const rows = this.decks.map(deck => {
+      const has = this.deckIds.has(deck.id);
+      const row = el('button', { type: 'button', className: 'deck-row', 'aria-pressed': has },
+        el('i', { className: `bi ${has ? 'bi-check-circle-fill' : 'bi-circle'}` }),
+        el('span', { className: 'flex-grow-1' }, el('span', { className: 'd-block fw-semibold', textContent: deck.title }),
+          el('small', { className: 'text-secondary', textContent: `${deck.count || 0} items` })));
+      row.addEventListener('click', () => this.toggleInDeck(deck, row));
+      return row;
+    });
+    const nameInput = el('input', { type: 'text', className: 'form-control', placeholder: 'Deck title', maxLength: 80, 'aria-label': 'Deck title' });
+    const create = () => this.createDeck(nameInput.value);
+    nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') create(); });
+    const createBtn = el('button', { type: 'button', className: 'btn btn-new fw-bold px-4', textContent: 'Create' });
+    createBtn.addEventListener('click', create);
+    const newBtn = el('button', { type: 'button', className: 'btn btn-new w-100 py-2 fw-bold', textContent: 'New deck' });
+    newBtn.addEventListener('click', () => this.renderDeckSheet(true));
+    this.deckSheetBody.replaceChildren(
+      el('div', { className: 'd-flex align-items-center gap-3 mb-2' },
+        el('span', { className: 'fs-1', textContent: this.currentNom }),
+        el('span', { className: 'text-secondary', lang: 'vi', textContent: this.currentQn })),
+      ...(rows.length ? rows : [el('p', { className: 'text-secondary small my-3', textContent: 'You have no decks yet.' })]),
+      el('div', { className: 'mt-3' }, creating ? el('div', { className: 'd-flex gap-2' }, nameInput, createBtn) : newBtn));
+    if (creating) nameInput.focus();
+  }
+
+  async toggleInDeck(deck, row) {
+    const nom = this.currentNom, qn = this.currentQn;
+    const add = !this.deckIds.has(deck.id);
+    row.disabled = true;
+    const { error } = await this.sp.setWordInDeck(deck.id, { n: nom, qn }, add);
+    if (error) {
+      this.showToast('Could not save, please try again.');
+      row.disabled = false;
+      return;
+    }
+    if (nom !== this.currentNom) return;
+    this.deckIds[add ? 'add' : 'delete'](deck.id);
+    deck.count = Math.max(0, (deck.count || 0) + (add ? 1 : -1));
+    this.updateDeckUi();
+    this.renderDeckSheet();
+    this.showToast(add ? `Added to “${deck.title}”` : `Removed from “${deck.title}”`);
+  }
+
+  async createDeck(title) {
+    title = title.trim();
+    if (!title) return this.deckSheetBody.querySelector('input')?.focus();
+    const nom = this.currentNom;
+    this.deckSheetBody.querySelectorAll('input, button').forEach(node => { node.disabled = true; });
+    const { error } = await this.sp.saveDeck({ id: crypto.randomUUID(), title, words: [{ n: nom, qn: this.currentQn }] });
+    if (error) {
+      this.showToast('Could not create the deck, please try again.');
+      return this.renderDeckSheet(true);
+    }
+    this.closeDeckSheet();
+    this.showToast(`Added to “${title}”`);
+    if (nom === this.currentNom) this.loadDeckIds();
   }
 
   initHistoryHandler(modalEl) {
@@ -495,7 +610,6 @@ class ChunomDict {
     // type="search" leert das Feld bei Esc; es soll nur das IME-Fenster schließen
     this.searchInput.addEventListener('keydown', (e) => { if (e.key === 'Escape') e.preventDefault(); });
     this.renderDiscoveryLists();
-    this.updateBookmarkUi();
     // Link-fähig wie die alte App: ?search=... oder ?detail=<Zeichen>
     const params = new URLSearchParams(location.search);
     const search = params.get('search');
@@ -628,9 +742,6 @@ class ChunomDict {
     const query = this.codePointChar(term, true) || term.trim().toLowerCase();
     // Bei offenem Popup gehört die Adresse dem Popup; nach dem Schließen setzt popstate sie
     if (!history.state?.modalOpen) this.updateUrl(term.trim());
-    this.showingBookmarks = false;
-    this.bookmarksBtn.classList.remove('active');
-    this.bookmarksTitle.classList.add('d-none');
 
     if (this.searchPreview) {
       const codes = query && !/[一-鿿]/.test(query) ? this.qattCodes(query, '1.4em') : [];
@@ -665,18 +776,14 @@ class ChunomDict {
     this.resultsContainer.append(...rows.slice(0, 80).map(row => this.createResultItem(row)));
   }
 
-  createResultItem(row, removable = false) {
+  createResultItem(row) {
     const [quocNgu, nom, meaning, id] = [row[0], row[1], row[2], row[5]];
     const item = el('div', { className: 'list-group-item list-group-item-action py-3' },
       el('div', { className: 'd-flex w-100 align-items-center mb-1' },
         el('div', { className: 'me-auto d-flex align-items-center' },
           el('span', { className: 'fs-2 me-2' }, this.nomChars(nom)),
           el('span', { className: 'text-secondary fw-bold qn-text', lang: 'vi', textContent: quocNgu })),
-        el('div', { className: 'text-end d-flex align-items-center gap-2 flex-wrap justify-content-end' }, this.qattCodes(quocNgu)),
-        removable && el('button', {
-          type: 'button', className: 'btn p-0 border-0 text-secondary ms-3 remove-bookmark', title: 'Remove', 'aria-label': 'Remove bookmark',
-          onclick: (e) => { e.stopPropagation(); this.toggleBookmark(nom); }
-        }, el('i', { className: 'bi bi-trash' }))),
+        el('div', { className: 'text-end d-flex align-items-center gap-2 flex-wrap justify-content-end' }, this.qattCodes(quocNgu))),
       el('div', { className: 'd-flex justify-content-between align-items-center w-100' },
         el('p', { className: 'mb-0 text-secondary small text-truncate flex-grow-1', textContent: meaning }),
         id && el('span', { className: 'badge badge-rank ms-2', textContent: `#${id}` })));
@@ -730,8 +837,10 @@ class ChunomDict {
       history.replaceState(history.state, "", this.linkUrl('detail', mainNom));
     }
 
+    if (mainNom !== this.currentNom) this.deckIds = new Set();
     this.currentNom = mainNom;
-    this.updateBookmarkUi();
+    this.closeDeckSheet();
+    this.updateDeckUi();
     const mainEntry = sortedRelated.find(r => r[1] === mainNom && !r[0].trim().includes(' '));
     const codes = [...mainNom].map(c => c.codePointAt(0).toString(16).toUpperCase());
     // Bilder gibt es nur für Einzelzeichen; der Codepunkt kommt direkt vom Zeichen, nicht aus der CSV
@@ -741,6 +850,9 @@ class ChunomDict {
 
     const exactMatches = sortedRelated.filter(r => r[1] === mainNom);
     const uniqueReadings = [...new Set(exactMatches.map(r => r[0]))];
+    this.currentQn = (mainEntry ? mainEntry[0] : uniqueReadings[0] || '').trim();
+    // Ist der Nutzer schon angemeldet, zeigt das Herz gleich, ob das Zeichen in einem Deck liegt
+    if (this.signedIn() && this.deckIdsNom !== mainNom) this.loadDeckIds();
     const qattParts = uniqueReadings.map(read => this.qattCodes(read)).filter(part => part.length);
 
     // Großes Bild: Animation, dann zwei SVG-Varianten, sonst das Zeichen als Schrift
