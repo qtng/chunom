@@ -345,7 +345,7 @@
 .vietime-hyphen { opacity: .5 }
 .vietime-definition { grid-area: definition; align-self: start; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .75em; opacity: .75 }
 @media (max-width: 575.98px) {
-	.vietime { width: calc(100vw - 1.2rem); max-width: none }
+	.vietime { width: calc(100vw - 2.4rem); max-width: none }
 	.vietime:not([hidden]) { grid-template-columns: repeat(2, minmax(0, 1fr)) }
 }`;
 
@@ -388,6 +388,8 @@
 			input.addEventListener('keydown', e => this.onKeyDown(e));
 			input.addEventListener('click', () => this.refresh());
 			input.addEventListener('blur', () => this.hide());
+			// a touch or click anywhere outside the list and the field closes it, e.g. to scroll the page
+			document.addEventListener('pointerdown', e => { if (!this.list.hidden && e.target != this.input && !this.list.contains(e.target)) this.hide(); }, true);
 			this.update();
 		}
 
@@ -558,7 +560,8 @@
 			const width = list.offsetWidth, height = list.offsetHeight;
 			let top = c.bottom;
 			if (top + height > viewBottom && c.top - height >= viewTop) top = c.top - height;
-			const left = Math.max(viewLeft, Math.min(c.left, viewRight - width));
+			const gap = 8; // keeps the list off the screen edges
+			const left = Math.max(viewLeft + gap, Math.min(c.left, viewRight - gap - width));
 			list.style.left = `${left + scrollX}px`;
 			list.style.top = `${top + scrollY}px`;
 		}
@@ -591,7 +594,7 @@
 			el.append(Object.assign(document.createElement('span'), { className: 'vietime-number', textContent: `${(index % 10 + 1) % 10}.` }),
 				Object.assign(document.createElement('span'), { className: 'vietime-glyph', textContent: item.glyph }), reading);
 			if (this.options.showDefinitions && item.definition) {
-				el.append(Object.assign(document.createElement('span'), { className: 'vietime-definition', textContent: `→ ${item.definition.trim()}`, title: item.definition.trim() }));
+				el.append(Object.assign(document.createElement('span'), { className: 'vietime-definition', textContent: item.definition.trim(), title: item.definition.trim() }));
 			}
 			el.addEventListener('mousedown', e => e.preventDefault()); // keep the focus in the field
 			el.addEventListener('click', () => this.select(index));
