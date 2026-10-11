@@ -6,6 +6,7 @@
 //   forms: the forms in which words are asked and answered, a list of "nom" (Nôm characters), "qatt" (glyphs) and "text" (quốc ngữ).
 //          The quiz of chunom uses ["nom", "text"], the quiz of qatt ["qatt", "text"]. Without it the lessons of the script
 //          ask glyph and text, decks all three forms.
+//   requireLogin: true  only signed-in users play; the others get a page with the sign-in dialog and init() gives null.
 class App {
   constructor(container, db, options = {}) {
     this.forms = options.forms || null;
@@ -76,6 +77,10 @@ class App {
   static async init(container, options) {
     const db = new SupabaseService();
     await db.init();
+    if (options && options.requireLogin && !(db.user && !db.isAnonymous)) {
+      App.renderLoginGate(container, db);
+      return null;
+    }
     //db.signInWithGoogle()
     const int = setInterval(() => {
     	if (db.user) {
@@ -105,6 +110,32 @@ class App {
       await this.db.signOut();
       location.reload();
     }
+  }
+
+  // the page for users who are not signed in (the quiz is for signed-in users only)
+  static renderLoginGate(container, db) {
+    container.innerHTML = `
+      <div class="container qatt-container" style="max-width: 32rem">
+        <div class="card p-4 text-center mt-4">
+          <h4 class="fw-bold mb-3">Quiz</h4>
+          <p class="mb-4">Sign in to play the quiz. Your score goes to the leaderboard and stays with your account.</p>
+          <button id="quiz-login" class="btn btn-info btn-lg fw-bold">Sign in</button>
+          <p id="quiz-login-note" class="small text-secondary mt-3 mb-0" hidden></p>
+        </div>
+      </div>`;
+    const button = document.getElementById("quiz-login");
+    if (!window.QattLogin || !db.client) {
+      button.disabled = true;
+      const note = document.getElementById("quiz-login-note");
+      note.textContent = "The sign-in is not available right now. Please try again later.";
+      note.hidden = false;
+      return;
+    }
+    button.addEventListener("click", () => QattLogin.open(db, "Sign in to play the quiz. What you have so far stays with your account."));
+    // the link of an email opened in another tab signs in here as well
+    db.client.auth.onAuthStateChange((event, session) => {
+      if (session && session.user && session.user.is_anonymous === false) location.reload();
+    });
   }
 
   refreshCurrentView(state = null) {
