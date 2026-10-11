@@ -334,7 +334,7 @@
 .vietime[hidden] { display: none }
 .vietime:not([hidden]) { display: grid; grid-template-columns: minmax(0, 1fr); gap: .1em }
 .vietime-option { display: grid; grid-template-columns: auto auto minmax(0, 1fr); grid-template-areas: "number glyph reading" "number glyph definition";
-	align-items: center; column-gap: .45em; min-height: 2.7em; padding: .15em .5em; line-height: 1.2; border-radius: .6em; overflow: hidden; cursor: pointer }
+	align-items: center; column-gap: .45em; min-height: 2.7em; padding: .15em .5em .15em .75em; line-height: 1.2; border-radius: .6em; overflow: hidden; cursor: pointer }
 .vietime-option:hover, .vietime-option[aria-selected="true"] { background: var(--vietime-active, rgba(10, 120, 255, .14)) }
 .vietime-option[aria-selected="true"] { box-shadow: inset 0 0 0 1.5px var(--vietime-ring, rgba(10, 120, 255, .45)) }
 .vietime-number { grid-area: number; width: 1.3em; text-align: right; font-size: .75em; opacity: .6; font-variant-numeric: tabular-nums }
