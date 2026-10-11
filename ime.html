@@ -59,61 +59,55 @@
         .btn-quiet { border-color: #cdbf9f; color: #5b4d3d; background: #fff; }
         .btn-quiet:hover { background: #f1e8d2; color: var(--ink); border-color: #b9a982; }
 
-        /* candidate list: ime.js creates it, the page only styles it */
-        .writer-cands { border-top: 1px solid var(--line); min-height: 7rem; }
-        .cands-title { padding: .45rem .9rem .1rem; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: #9a8a70; }
-        #typer-empty { padding: .5rem .9rem 1rem; color: #7b6c58; font-size: .95rem; }
-        #typer-empty b { color: var(--ink); font-weight: 600; }
-        #typer-empty .ex { font-size: 1.15rem; white-space: nowrap; }
+        /* info box under the writing card */
+        .info { margin-top: 1rem; padding: .8rem 1rem; border: 1px solid var(--line); border-radius: .8rem; background: rgba(255, 255, 255, .7); color: #5b4d3d; font-size: .92rem; }
+        .info b { color: var(--ink); font-weight: 600; }
+        .info .ex { font-size: 1.15rem; white-space: nowrap; }
+        .info ol { margin: 0; padding-left: 1.2rem; }
+        .info li + li { margin-top: .2rem; }
 
-        #typer-candidates {
-            --vietime-bg: transparent;
+        /* floating candidate list: ime.js puts it under the text field, the page only styles it */
+        :root {
+            --vietime-bg: #fff;
             --vietime-color: var(--ink);
-            --vietime-border: none;
+            --vietime-border: 1px solid var(--line);
             --vietime-grid: transparent;
             --vietime-active: rgba(168, 54, 42, .10);
             --vietime-remainder: var(--accent);
         }
-        #typer-candidates .vietime { position: static; max-width: none; padding: .25rem .4rem .5rem; font-family: system-ui, -apple-system, sans-serif; }
-        #typer-candidates .vietime:not([hidden]) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .25rem; }
-        #typer-candidates .vietime-option {
-            border-top: none;
-            border-radius: .6rem;
-            min-height: 2.9rem;
-            line-height: 1.2;
-            padding: .2rem .6rem;
-            gap: .45rem;
-            overflow: hidden;
+        .vietime {
+            padding: .3rem;
+            border-radius: .8rem;
+            box-shadow: 0 .6rem 1.6rem rgba(60, 40, 20, .22);
+            font-family: system-ui, -apple-system, sans-serif;
+            width: calc(100vw - 2.1rem);
         }
-        #typer-candidates .vietime-option[aria-selected="true"] { box-shadow: inset 0 0 0 1.5px rgba(168, 54, 42, .45); }
-        #typer-candidates .vietime-number { flex: none; width: 1.3rem; text-align: right; font-size: .75rem; color: #9a8a70; font-variant-numeric: tabular-nums; }
-        #typer-candidates .vietime-glyph { flex: none; font-size: 1.7rem; line-height: 1; }
-        #typer-candidates .vietime-reading { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-        #typer-candidates .vietime-definition { display: none; }
+        .vietime:not([hidden]) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .15rem; }
+        .vietime-option { border-top: none; border-radius: .6rem; min-height: 2.7rem; line-height: 1.2; padding: .15rem .5rem; gap: .4rem; overflow: hidden; }
+        .vietime-option[aria-selected="true"] { box-shadow: inset 0 0 0 1.5px rgba(168, 54, 42, .45); }
+        .vietime-number { flex: none; width: 1.3rem; text-align: right; font-size: .75rem; color: #9a8a70; font-variant-numeric: tabular-nums; }
+        .vietime-glyph { flex: none; font-size: 1.7rem; line-height: 1; }
+        .vietime-reading { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+        .vietime-definition { display: none; }
 
-        .keys { color: #9a8a70; font-size: .8rem; }
-        .keys kbd { background: #f1e8d2; color: #5b4d3d; font-size: .75rem; padding: .05rem .35rem; }
+        .info kbd { background: #f1e8d2; color: #5b4d3d; font-size: .75rem; padding: .05rem .35rem; }
 
         .opts { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem 1.2rem; }
         .opts .form-check { margin: 0; }
         .opts .form-check-input:checked { background-color: var(--accent); border-color: var(--accent); }
         .opts .form-check-label { font-size: .9rem; color: #5b4d3d; }
 
-        @media (min-width: 576px) {
-            #typer-candidates .vietime-definition { display: block; max-width: 7em; }
+        /* phones: compact top so the list under the field stays above the keyboard */
+        @media (max-width: 575.98px) {
+            .writer-head { margin-block: .5rem !important; }
+            .writer-head p { display: none; }
+            #typer-text { min-height: 6.2rem; }
         }
-
-        /* wide screens: writing pad and candidates side by side */
-        @media (min-width: 992px) {
-            .writer { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-rows: 1fr auto; grid-template-areas: "pad cands" "bar cands"; }
-            .writer-pad { display: flex; }
-            #typer-text { flex: 1; }
-            .writer-pad { grid-area: pad; }
-            .writer-bar { grid-area: bar; }
-            .writer-cands { grid-area: cands; border-top: none; border-left: 1px solid var(--line); min-height: 22rem; }
-            #typer-text { min-height: 17rem; font-size: 1.7rem; }
-            #typer-candidates .vietime:not([hidden]) { grid-template-columns: 1fr; gap: .1rem; }
-            #typer-candidates .vietime-definition { max-width: 11em; }
+        @media (min-width: 576px) {
+            .vietime { width: auto; min-width: 16em; max-width: 28em; }
+            .vietime:not([hidden]) { grid-template-columns: 1fr; gap: .05rem; }
+            .vietime-definition { display: block; max-width: 10em; }
+            #typer-text { min-height: 9rem; font-size: 1.7rem; }
         }
     </style>
 </head>
@@ -134,14 +128,16 @@
         <div class="writer-bar">
             <button type="button" class="btn btn-accent" id="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
             <button type="button" class="btn btn-quiet" id="clear-btn"><i class="bi bi-x-lg"></i> Clear</button>
-            <span class="keys ms-auto d-none d-lg-block"><kbd>1</kbd>–<kbd>0</kbd> pick · <kbd>↑</kbd><kbd>↓</kbd> move · <kbd>Esc</kbd> close</span>
         </div>
 
-        <div class="writer-cands">
-            <div class="cands-title">Candidates</div>
-            <div id="typer-empty">Type a syllable, for example <b>viet</b> → <span class="ex">việt → 越</span></div>
-            <div id="typer-candidates"></div>
-        </div>
+    </div>
+
+    <div class="info">
+        <ol>
+            <li>Type a syllable with Telex, for example <b>viet</b> → <span class="ex">việt</span>.</li>
+            <li>A list of Nôm characters appears below the text field: tap one, or press <kbd>1</kbd>–<kbd>0</kbd>.
+                <span class="d-none d-lg-inline">With <kbd>↑</kbd><kbd>↓</kbd> you move through the list, <kbd>Esc</kbd> closes it.</span></li>
+        </ol>
     </div>
 
     <div class="opts mt-3">
@@ -172,15 +168,6 @@
         const options = () => Object.fromEntries(Object.entries(switches).map(([name, box]) => [name, box.checked]));
 
         const ime = new VietIme(typer, options());
-        const candidates = document.getElementById('typer-candidates');
-        candidates.append(ime.list);
-
-        // the hint stays visible while the candidate list is hidden
-        const empty = document.getElementById('typer-empty');
-        const syncEmpty = () => { empty.hidden = !ime.list.hidden; };
-        new MutationObserver(syncEmpty).observe(ime.list, { attributes: true, attributeFilter: ['hidden'] });
-        syncEmpty();
-
         for (const box of Object.values(switches)) {
             box.addEventListener('change', () => {
                 ime.update(options());
