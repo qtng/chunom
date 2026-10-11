@@ -43,6 +43,7 @@ class App {
         <div id="badge-sunflower" class="score-badge badge-sunflower" title="Hoa">🌻 <span id="val-sunflower">0</span></div>
         <div id="badge-coin" class="score-badge badge-coin" title="Vàng">🪙 <span id="val-coin">0</span></div>
       </div>
+      <div id="account-btn" class="nav-icon-btn me-2" role="button"></div>
     </div>
   </header>
 
@@ -63,6 +64,8 @@ class App {
     this.bottomBar = document.getElementById("fixed-bottom-controls");
 	  
     document.getElementById("main-action-btn").addEventListener("click", () => this.startLessonDirectly());
+    document.getElementById("account-btn").addEventListener("click", () => this.onAccount());
+    this.updateAccountButton();
     document.getElementById("library-btn").addEventListener("click", () => this.backUrl ? (location.href = this.backUrl) : this.renderLibrary());
 	  
     this.setupAudio();
@@ -82,6 +85,28 @@ class App {
   	return new App(container, db, options);
   }
   
+  // --- account: 👤 not signed in, ✅ signed in (login dialog and sign-out in js/login.js, qatt/js/supabase.js) ---
+  isSignedIn() {
+    return !!this.db.user && !this.db.isAnonymous;
+  }
+
+  updateAccountButton() {
+    const button = document.getElementById("account-btn");
+    if (!button) return;
+    const signedIn = this.isSignedIn();
+    button.textContent = signedIn ? "✅" : "👤";
+    button.title = signedIn ? `Signed in as ${this.db.user.email || "you"}` : "Not signed in";
+  }
+
+  async onAccount() {
+    if (!window.QattLogin) return;
+    if (!this.isSignedIn()) return QattLogin.open(this.db, "Sign in to keep your score and your decks on every device. What you have so far stays with your account.");
+    if (confirm(`Signed in as ${this.db.user.email || "you"}.\nSign out?`)) {
+      await this.db.signOut();
+      location.reload();
+    }
+  }
+
   refreshCurrentView(state = null) {
     const currentState = state || history.state || { view: 'library' };
     const view = currentState.view || 'library';
@@ -815,6 +840,7 @@ renderLeaderboard(isPop = false) {
 	
     this.mainContainer.innerHTML = `
     	
+    <div id="quiz-account" class="mx-2 mt-3"></div>
     <div class="mx-2 my-3">
       Tên của bạn: <b>${this.getUsername()}</b> (<span class="text-decoration-underline" onclick="app.setNickname()" class="text-light cursor-pointer">chỉnh sửa tên</span>)
     </div>
@@ -827,6 +853,7 @@ renderLeaderboard(isPop = false) {
     		</tr>
     		${html}
     	</table>`;
+    if (window.QattLogin) QattLogin.status(this.db, document.getElementById('quiz-account'));
   });
 }
 
