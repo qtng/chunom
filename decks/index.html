@@ -269,7 +269,7 @@
                     const url = useEditMode ? `edit.html?id=${d.id}` : `immersive.html?id=${d.id}`;
                     // icon and accents in the accent colour
                     const iconClass = useEditMode ? 'bi-pencil-fill accent' : 'bi-play-circle-fill accent';
-                    const label = useEditMode ? 'Edit' : 'Play';
+                    const label = useEditMode ? 'Edit' : 'Start';
 
                     return `
                         <a href="${url}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 mb-2 rounded shadow-none">
@@ -278,7 +278,7 @@
                                 <small class="text-secondary">${d.words ? d.words.length : 0} items</small>
                             </div>
                             <div class="d-flex align-items-center">
-                                <button type="button" class="btn btn-sm btn-outline-accent rounded-pill me-3" onclick="event.preventDefault(); event.stopPropagation(); location.href='quiz.html?id=${d.id}'"><i class="bi bi-lightning-charge-fill"></i> Quiz</button>
+                                <button type="button" class="btn btn-sm btn-outline-accent rounded-pill me-3" onclick="event.preventDefault(); event.stopPropagation(); location.href='practice.html?id=${d.id}'"><i class="bi bi-lightning-charge-fill"></i> Practice</button>
                                 <span class="small text-secondary me-2 d-none d-sm-inline">${label}</span>
                                 <i class="bi ${iconClass} fs-4 opacity-75"></i>
                             </div>

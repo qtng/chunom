@@ -1,12 +1,12 @@
-// The quiz: lessons of the script (qatt.org/quiz) and the words of a deck (decks/quiz.html) as questions with four answers,
+// The practice: lessons of the script (qatt.org/practice) and the words of a deck (decks/practice.html) as questions with four answers,
 // with energy, progress, score and leaderboard.
-// Needs the scripts qatt/js/navigation.js, qatt.js, parser.js, supabase.js and the style css/quiz.css.
+// Needs the scripts qatt/js/navigation.js, qatt.js, parser.js, supabase.js and the style css/practice.css.
 //
 // Options of App.init(container, options):
 //   forms: the forms in which words are asked and answered, a list of "nom" (Nôm characters), "qatt" (glyphs) and "text" (quốc ngữ).
-//          The quiz of chunom uses ["nom", "text"], the quiz of qatt ["qatt", "text"]. Without it the lessons of the script
+//          The practice of chunom uses ["nom", "text"], the practice of qatt ["qatt", "text"]. Without it the lessons of the script
 //          ask glyph and text, decks all three forms.
-//   requireLogin: true  only signed-in users play; the others get a page with the sign-in dialog and init() gives null.
+//   requireLogin: true  only signed-in users practice; the others get a page with the sign-in dialog and init() gives null.
 class App {
   constructor(container, db, options = {}) {
     this.forms = options.forms || null;
@@ -28,8 +28,8 @@ class App {
     if (!window.qattObserved) { window.qattObserved = true; new Qatt().observe('qatt-code'); } // draws the <qatt-code> elements, once per page
     this.stats = JSON.parse(localStorage.getItem('qatt_stats')) || { _score: 0 };
     this.hintInterval = null;
-    this.activeQuizWord = null;
-    this.lastQuizWord = null; 
+    this.activePracticeWord = null;
+    this.lastPracticeWord = null; 
     this.categories = [];
     this.items = {};      // words of decks: key -> { n: Nôm, qn: quốc ngữ }, see addLesson()
     this.backUrl = null;  // set for a single deck: where the way back leads, instead of the list of lessons
@@ -112,26 +112,26 @@ class App {
     }
   }
 
-  // the page for users who are not signed in (the quiz is for signed-in users only)
+  // the page for users who are not signed in (the practice is for signed-in users only)
   static renderLoginGate(container, db) {
     container.innerHTML = `
       <div class="container qatt-container" style="max-width: 32rem">
         <div class="card p-4 text-center mt-4">
-          <h4 class="fw-bold mb-3">Quiz</h4>
-          <p class="mb-4">Sign in to play the quiz. Your score goes to the leaderboard and stays with your account.</p>
-          <button id="quiz-login" class="btn btn-info btn-lg fw-bold">Sign in</button>
-          <p id="quiz-login-note" class="small text-secondary mt-3 mb-0" hidden></p>
+          <h4 class="fw-bold mb-3">Practice</h4>
+          <p class="mb-4">Sign in to practice. Your score goes to the leaderboard and stays with your account.</p>
+          <button id="practice-login" class="btn btn-info btn-lg fw-bold">Sign in</button>
+          <p id="practice-login-note" class="small text-secondary mt-3 mb-0" hidden></p>
         </div>
       </div>`;
-    const button = document.getElementById("quiz-login");
+    const button = document.getElementById("practice-login");
     if (!window.QattLogin || !db.client) {
       button.disabled = true;
-      const note = document.getElementById("quiz-login-note");
+      const note = document.getElementById("practice-login-note");
       note.textContent = "The sign-in is not available right now. Please try again later.";
       note.hidden = false;
       return;
     }
-    button.addEventListener("click", () => QattLogin.open(db, "Sign in to play the quiz. What you have so far stays with your account."));
+    button.addEventListener("click", () => QattLogin.open(db, "Sign in to practice. What you have so far stays with your account."));
     // the link of an email opened in another tab signs in here as well
     db.client.auth.onAuthStateChange((event, session) => {
       if (session && session.user && session.user.is_anonymous === false) location.reload();
@@ -144,7 +144,7 @@ class App {
     
     if (view === 'library') this.renderLibrary(true);
     else if (view === 'preview') this.renderLessonPreview(currentState.lessonId, true);
-    else if (view === 'quiz') this.renderQuiz(true);
+    else if (view === 'practice') this.renderPractice(true);
     else if (view === 'full') this.renderFullView(true);
     else if (view === 'leaderboard') this.renderLeaderboard(true);
   }
@@ -160,7 +160,7 @@ class App {
     let html = "";
     
     if (this.useDB) html += `
-      <div id="quiz-navbar" class="fade-in alert py-0 shadow">
+      <div id="practice-navbar" class="fade-in alert py-0 shadow">
        		<div class="text-center mb-3">
 		         <div class="me-2 btn btn-sm btn-outline-warning" onclick="app.renderLeaderboard()">Bảng xếp hạng</div>
          		<button class="btn btn-sm btn-outline-light" onclick="app.renderFullView()">
@@ -213,8 +213,8 @@ class App {
     this.updateGlobalCounters();
   }
 
-  // from the quiz back to the overview of the lesson (a single deck) or to the list of lessons
-  leaveQuiz() {
+  // from the practice back to the overview of the lesson (a single deck) or to the list of lessons
+  leavePractice() {
     this.clearHintTimer();
     if (this.backUrl && this.currentLesson) this.renderLessonPreview(this.currentLesson.id);
     else this.renderLibrary();
@@ -267,7 +267,7 @@ class App {
   }
 
 
-  renderQuiz(isPop = false, keepWord = false) {
+  renderPractice(isPop = false, keepWord = false) {
     if (this.currentEnergy <= 0) {
       this.mainContainer.innerHTML = `
         <div class="card p-5 text-center">
@@ -286,7 +286,7 @@ class App {
       else unfinishedSymbols = this.currentLesson.practiceModeItems;
     }
 
-    if (!isPop) history.pushState({ view: 'quiz' }, '');
+    if (!isPop) history.pushState({ view: 'practice' }, '');
     this.bottomBar.style.display = "none";
     
     if (!keepWord) {
@@ -298,26 +298,26 @@ class App {
         do {
           tries++;
           selectedWord = unfinishedSymbols[Math.floor(Math.random() * poolLimit)];
-        } while (tries < 20 && selectedWord === this.lastQuizWord);
+        } while (tries < 20 && selectedWord === this.lastPracticeWord);
       } else {
         selectedWord = unfinishedSymbols[0];
       }
       
-      this.activeQuizWord = selectedWord;
-      this.lastQuizWord = selectedWord;
+      this.activePracticeWord = selectedWord;
+      this.lastPracticeWord = selectedWord;
 	}
 	  
-    const correctWord = this.activeQuizWord;
+    const correctWord = this.activePracticeWord;
     const forms = this.pickForms(correctWord);
     const activeStyle = this.getActiveStyle(this.currentLesson);
     const lessonClass = `lesson-${this.currentLesson.id}`;
 
     this.mainContainer.innerHTML = `
       <div class="fade-in ${lessonClass}">
-        <button onclick="app.leaveQuiz()" class="btn btn-link text-white-50 text-decoration-none mb-2 p-0">
+        <button onclick="app.leavePractice()" class="btn btn-link text-white-50 text-decoration-none mb-2 p-0">
           ← Quay lại
         </button>
-        <div class="card p-4 quiz-container overflow-hidden">
+        <div class="card p-4 practice-container overflow-hidden">
           <div class="d-flex justify-content-between mb-1">
             <h5 class="fw-bold opacity-50">${this.currentLesson.name}</h5>
             
@@ -327,15 +327,15 @@ class App {
             <div class="progress-bar bg-info"></div>
           </div>
           <div class="symbol-card mb-4" id="q-box">
-            <button class="reload-quiz-btn" onclick="app.renderQuiz(true)">↻</button>
-            <div id="emoji-c">${this.getProgressEmoji(correctWord, false, 'quiz')}</div>
+            <button class="reload-practice-btn" onclick="app.renderPractice(true)">↻</button>
+            <div id="emoji-c">${this.getProgressEmoji(correctWord, false, 'practice')}</div>
             <div id="feedback" class="feedback-area"></div>
           </div>
           <div class="options" id="opts"></div>
         </div>
       </div>`;
 
-    this.renderStatus(document.querySelector(".quiz-container"));
+    this.renderStatus(document.querySelector(".practice-container"));
     
     const questionBox = document.getElementById("q-box");
     const questionWrapper = document.createElement("div");
@@ -391,7 +391,7 @@ class App {
       button.onclick = () => {
         this.clearHintTimer(); 
         const isCorrect = option === correctWord; 
-        this.playTone(isCorrect ? 'success' : 'error');
+        this.makeSound(isCorrect ? 'success' : 'error');
         let isMilestone = false;
         
         if ((this.currentLesson.practiceModeItems||[]).includes(correctWord)){
@@ -432,7 +432,7 @@ class App {
 			  this.stats._score += 20;
 			}
             this.syncScore();
-            document.getElementById("emoji-c").innerHTML = this.getProgressEmoji(correctWord, true, 'quiz');
+            document.getElementById("emoji-c").innerHTML = this.getProgressEmoji(correctWord, true, 'practice');
         } else { 
             this.stats[correctWord].w++; 
             this.stats._score = Math.max(0, this.stats._score - 1); 
@@ -441,7 +441,7 @@ class App {
         }
 
         localStorage.setItem('qatt_stats', JSON.stringify(this.stats)); 
-        this.renderStatus(document.querySelector(".quiz-container"), animations);
+        this.renderStatus(document.querySelector(".practice-container"), animations);
         
         document.querySelectorAll("#opts .btn").forEach(btn => { 
           btn.disabled = true; 
@@ -466,7 +466,7 @@ class App {
         feedbackArea.innerHTML = feedbackHtml;
         feedbackArea.classList.add("float-up-fade");
         
-        setTimeout(() => this.renderQuiz(true), isMilestone ? 1800 : 1200);
+        setTimeout(() => this.renderPractice(true), isMilestone ? 1800 : 1200);
       };
       optionsContainer.appendChild(button);
     });
@@ -516,25 +516,25 @@ class App {
 
     if (progressBar && this.currentLesson) {
       let doneCount = 0;
-      let quizLength = 0;
+      let practiceLength = 0;
       let afterFinishRemaining = (this.currentLesson.practiceModeItems||[]).length;
       if (afterFinishRemaining) {
         // Practice mode
-        doneCount = this.currentLesson.quizLength - afterFinishRemaining;
-        quizLength = this.currentLesson.quizLength;
+        doneCount = this.currentLesson.practiceLength - afterFinishRemaining;
+        practiceLength = this.currentLesson.practiceLength;
       } else {
 		// THESE ARE NOT POINTS!!!!
 		// THIS IS ONLY FOR DECIDING
 		// THE AMOUNT OF VISUAL FEEDBACK
 		// ON THE PROGRESS BAR
-        // Learning mode, in learning mode quiz length is calculated dynamically
+        // Learning mode, in learning mode practice length is calculated dynamically
         doneCount = 65 * this.currentLesson.symbols.filter(symbol => this.stats[symbol].c >= 4).length;
 		doneCount = 15 * this.currentLesson.symbols.filter(symbol => this.stats[symbol].c >= 3).length;
         doneCount += 10 * this.currentLesson.symbols.filter(symbol => this.stats[symbol].c >= 2).length;
         doneCount += 10 * this.currentLesson.symbols.filter(symbol => this.stats[symbol].c >= 1).length;
-        quizLength = 100 * this.currentLesson.symbols.length;
+        practiceLength = 100 * this.currentLesson.symbols.length;
       }
-      const percentage = Math.round((doneCount / quizLength) * 100);
+      const percentage = Math.round((doneCount / practiceLength) * 100);
       progressBar.style.width = `${percentage}%`;
     }
 
@@ -573,7 +573,7 @@ class App {
     
     document.body.appendChild(flyHeart);
     setTimeout(() => flyHeart.remove(), 1100);
-    this.playTone('error');
+    this.makeSound('error');
   }
 
 
@@ -711,7 +711,7 @@ class App {
   getProgressEmoji(word, shouldAnimate, locationType) { 
     const correctCount = parseInt(this.stats[word].c) || 0; 
     const emoji = correctCount === 0 ? "" : correctCount === 1 ? "💧" : correctCount === 2 ? "🌱" : correctCount == 3 ? "🌿" : correctCount == 4 ? "🌻" : correctCount < 10 ? "🪙" : "💎"; 
-    const positionClass = locationType === 'quiz' ? 'quiz-pos' : 'grid-pos';
+    const positionClass = locationType === 'practice' ? 'practice-pos' : 'grid-pos';
     const emptyClass = correctCount === 0 ? 'emoji-empty' : '';
     
     let animationClass = '';
@@ -730,8 +730,8 @@ class App {
         setTimeout(() => correctBtn.classList.remove('hint-shake'), 800); 
         this.currentEnergy--; 
         this.triggerHeartLossAnimation(); 
-        this.renderStatus(document.querySelector(".quiz-container")); 
-        if (this.currentEnergy <= 0) this.renderQuiz(true); 
+        this.renderStatus(document.querySelector(".practice-container")); 
+        if (this.currentEnergy <= 0) this.renderPractice(true); 
       } 
     }, 10000); 
   }
@@ -746,7 +746,7 @@ class App {
     }, { once: true }); 
   }
 
-  playTone(toneType) { 
+  makeSound(toneType) { 
     if (!this.audioCtx) return; 
     const oscillator = this.audioCtx.createOscillator(); 
     const gainNode = this.audioCtx.createGain(); 
@@ -786,10 +786,10 @@ class App {
     if (unfinishedSymbols.length == 0) {
       lesson.isFinished = true;
       lesson.practiceModeItems = JSON.parse(JSON.stringify(lesson.symbols));
-      lesson.quizLength = lesson.practiceModeItems.length;
-    } else lesson.quizLength = unfinishedSymbols.length;
+      lesson.practiceLength = lesson.practiceModeItems.length;
+    } else lesson.practiceLength = unfinishedSymbols.length;
     this.currentLesson = lesson;
-    this.renderQuiz(); 
+    this.renderPractice(); 
   }
 
   renderFullView(isPop = false) {
@@ -871,7 +871,7 @@ renderLeaderboard(isPop = false) {
 	
     this.mainContainer.innerHTML = `
     	
-    <div id="quiz-account" class="mx-2 mt-3"></div>
+    <div id="practice-account" class="mx-2 mt-3"></div>
     <div class="mx-2 my-3">
       Tên của bạn: <b>${this.getUsername()}</b> (<span class="text-decoration-underline" onclick="app.setNickname()" class="text-light cursor-pointer">chỉnh sửa tên</span>)
     </div>
@@ -884,7 +884,7 @@ renderLeaderboard(isPop = false) {
     		</tr>
     		${html}
     	</table>`;
-    if (window.QattLogin) QattLogin.status(this.db, document.getElementById('quiz-account'));
+    if (window.QattLogin) QattLogin.status(this.db, document.getElementById('practice-account'));
   });
 }
 

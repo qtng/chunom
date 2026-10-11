@@ -130,7 +130,7 @@ svg use[href^="#qt"] { stroke-width: calc(var(--stroke-width) * 3 / 4) }
     }
 
 .symbol-card { min-height: 200px; border-radius: 18px; padding: 30px; svg { height: 6em; margin-top: -1.75em; }; }
-.reload-quiz-btn { position: absolute; top: 15px; left: 15px; background: none; border: none; color: var(--ink); opacity: 0.3; font-size: 1.4rem; padding: 10px; z-index: 10; }
+.reload-practice-btn { position: absolute; top: 15px; left: 15px; background: none; border: none; color: var(--ink); opacity: 0.3; font-size: 1.4rem; padding: 10px; z-index: 10; }
 
 .qatt-container { margin: auto; margin-top: var(--external-nav-height) }
 .category-title { font-weight: 800; text-transform: uppercase; margin-top: 2rem; margin-bottom: 1rem; font-size: 0.8rem; letter-spacing: .08em; color: var(--muted); }
@@ -187,7 +187,7 @@ svg use[href^="#qt"] { stroke-width: calc(var(--stroke-width) * 3 / 4) }
     }
 
 .word-progress-emoji { position: absolute; font-size: 1.4rem; pointer-events: none; }
-.quiz-pos { top: 10px; right: 10px; }
+.practice-pos { top: 10px; right: 10px; }
 .grid-pos { bottom: 4px; right: 4px; font-size: 0.9rem; }
 
 .fade-in { animation: fadeIn 0.4s ease-out; }
@@ -282,7 +282,7 @@ svg use[href^="#qt"] { stroke-width: calc(var(--stroke-width) * 3 / 4) }
 #app .back-link, #app .text-white-50 { color: var(--muted) !important; }
 #app .back-link:hover, #app .text-white-50:hover { color: var(--ink) !important; }
 #app .text-warning { color: var(--accent) !important; }
-#app #quiz-navbar { padding-top: 16px !important; background: #fcf8ee; border: 1px solid var(--line); color: var(--ink); }
+#app #practice-navbar { padding-top: 16px !important; background: #fcf8ee; border: 1px solid var(--line); color: var(--ink); }
 #app .btn-info, #app .btn-primary { --bs-btn-bg: var(--accent); --bs-btn-border-color: var(--accent); --bs-btn-color: #fff;
   --bs-btn-hover-bg: var(--accent-dark); --bs-btn-hover-border-color: var(--accent-dark); --bs-btn-hover-color: #fff;
   --bs-btn-active-bg: var(--accent-dark); --bs-btn-active-border-color: var(--accent-dark); --bs-btn-active-color: #fff; }
