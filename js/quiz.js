@@ -1,6 +1,6 @@
 // The quiz: lessons of the script (qatt.org/quiz) and the words of a deck (decks/quiz.html) as questions with four answers,
 // with energy, progress, score and leaderboard.
-// Needs the scripts qatt/js/navigation.js, qatt.js, parser.js, supabase.js and the styles qatt/quiz/quiz.css, theme.css.
+// Needs the scripts qatt/js/navigation.js, qatt.js, parser.js, supabase.js and the style css/quiz.css.
 class App {
   constructor(container, db) {
     this.opts = { 
@@ -384,16 +384,16 @@ class App {
         document.querySelectorAll("#opts .btn").forEach(btn => { 
           btn.disabled = true; 
           if (btn.dataset.word === correctWord) {
-            btn.style.backgroundColor = "#82e99e";
-            btn.style.borderColor = "#4ade80";
+            btn.style.backgroundColor = "var(--good-bg)";
+            btn.style.borderColor = "var(--good)";
           } else if (btn.dataset.word === option) {
-            btn.style.backgroundColor = "#ff8e8e";
-            btn.style.borderColor = "#f87171";
+            btn.style.backgroundColor = "var(--bad-bg)";
+            btn.style.borderColor = "var(--accent)";
           }
         });
 
         const feedbackArea = document.getElementById("feedback"); 
-        let feedbackHtml = `<h2 class="fw-bold" style="color:${isCorrect ? '#82e99e' : '#ff8e8e'}">
+        let feedbackHtml = `<h2 class="fw-bold" style="color:${isCorrect ? 'var(--good)' : 'var(--accent)'}">
             ${isCorrect ? 'Đúng! ✨' : 'Sai 😅'}
           </h2>`;
         
