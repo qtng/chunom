@@ -18,7 +18,7 @@ class App {
     };
     this.db = db;
     this.useDB = true;
-    this.username = localStorage.username || "Anonymous";
+    this.username = options.username || "Anonymous"; // the name in the leaderboard, from the profile (see init)
     this.lessons = {};
     this.currentLesson = null;
     this.globalStyle = localStorage.getItem('qattType') || "-1";
@@ -80,6 +80,12 @@ class App {
     if (options && options.requireLogin && !(db.user && !db.isAnonymous)) {
       App.renderLoginGate(container, db);
       return null;
+    }
+    if (options && options.requireLogin) {
+      // the name in the leaderboard belongs to the profile: choose it once, after that it is loaded from there
+      let name = await db.getDisplayName();
+      if (!name && window.QattLogin) name = await QattLogin.chooseName(db, { required: true });
+      options = { ...options, username: name };
     }
     //db.signInWithGoogle()
     const int = setInterval(() => {
@@ -475,8 +481,7 @@ class App {
       // --- HELPERS ---
   async syncScore() {
   	if (!this.db.user) return; // Wait, until Auth is ready 
-	const username = this.getUsername();
-  	await this.db.saveScore(username, this.stats._score || 0, 0);
+  	await this.db.saveScore(this.getUsername(), this.stats._score || 0, 0);
   }
   
   updateGlobalCounters(animations = {}) {
@@ -888,54 +893,18 @@ renderLeaderboard(isPop = false) {
   });
 }
 
-getUsername(username, uuid) {
-	if (username == null && uuid == null) {
-		username = this.username;
-		uuid = this.db.user ? this.db.user.id : null;
-		if (!uuid) return username || "Anonymous";
-	}
-	if (username && username != "Anonymous") return  username;
-	if (!uuid) return "Anonymous";
-    const adjectives = [
-        "Fast", "Cool", "Wild", "Smart", "Glad", 
-        "Brave", "Soft", "Bold", "Bright", "Swift",
-        "Tiny", "Fluffy", "Quick", "Light", "Noble", 
-        "Sharp", "Keen", "True", "Lucky", "Free"
-    ];
-
-    const nouns = [
-        "Cat", "Eagle", "Fox", "Bear", "Lion", 
-        "Goose", "Camel", "Wolf", "Hare", "Owl",
-        "Lynx", "Koala", "Deer", "Dino", "Squirrel", 
-        "Hippo", "Raven", "Pug", "Seal", "Gecko"
-    ];
-
-    const hexPart = uuid.substring(0, 5);
-    const val = parseInt(hexPart.substring(0, 3), 16);
-
-    const adjIndex = val % adjectives.length;
-    const nounIndex = Math.floor(val / adjectives.length) % nouns.length;
-    const suffix = parseInt(hexPart.slice(3, 5), 16) || 1;
-    return `${adjectives[adjIndex]}${nouns[nounIndex]}_${suffix}`;
+// name for the leaderboard: the one of the profile ("Anonymous" for old entries without a name)
+getUsername(username) {
+	if (username === undefined) username = this.username;
+	return username && username != "Anonymous" ? username : "Anonymous";
 }
 
-
-	
-  setNickname() {
-    let newname = prompt('Chọn tên mới', localStorage.username || this.username);
-	console.log("about to change username to", newname);
-	if (!newname) return;
-	  console.log("changing...");
-	  newname = newname.trim().replace(/[^\p{L}\p{N}\-_\s]/ug, "").replace(/[\x00-\x1F\x7F&<>"']/g, "").replace(/\s+/g, " ");
-	  console.log("cleaned name", newname);
-	  if (newname.length < 2) return;
-	  if (newname.length > 40) newname = newname.substr(0, 30);
-	  console.log("truncating to", newname);
-	this.username = newname;
-	localStorage.username = newname;
-	console.log("username changed to", localStorage.username);
-    setTimeout(() => this.refreshCurrentView(),1000);
-	this.db.setNickname(newname);
+  // the name can be changed, it stays unique (db.setDisplayName)
+  async setNickname() {
+    const name = await QattLogin.chooseName(this.db, { current: this.username });
+    if (!name) return;
+    this.username = name;
+    this.refreshCurrentView();
   }
 	
 	
