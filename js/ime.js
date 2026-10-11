@@ -345,7 +345,7 @@
 .vietime-hyphen { opacity: .5 }
 .vietime-definition { grid-area: definition; align-self: start; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .75em; opacity: .75 }
 @media (max-width: 575.98px) {
-	.vietime { width: calc(100vw - 2.4rem); max-width: none }
+	.vietime { width: calc(100vw - 24px); max-width: none }
 	.vietime:not([hidden]) { grid-template-columns: repeat(2, minmax(0, 1fr)) }
 }`;
 
@@ -560,7 +560,7 @@
 			const width = list.offsetWidth, height = list.offsetHeight;
 			let top = c.bottom;
 			if (top + height > viewBottom && c.top - height >= viewTop) top = c.top - height;
-			const gap = 8; // keeps the list off the screen edges
+			const gap = 12; // keeps the list off the screen edges
 			const left = Math.max(viewLeft + gap, Math.min(c.left, viewRight - gap - width));
 			list.style.left = `${left + scrollX}px`;
 			list.style.top = `${top + scrollY}px`;
