@@ -479,8 +479,9 @@ class ChunomDict {
     this.deckIds[add ? 'add' : 'delete'](deck.id);
     deck.count = Math.max(0, (deck.count || 0) + (add ? 1 : -1));
     this.updateDeckUi();
-    this.renderDeckSheet();
     this.showToast(add ? `Added to “${deck.title}”` : `Removed from “${deck.title}”`);
+    // after adding the sheet closes by itself; after removing it stays open for further changes
+    if (add) this.closeDeckSheet(); else this.renderDeckSheet();
   }
 
   async createDeck(title) {
