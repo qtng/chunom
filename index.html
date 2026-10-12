@@ -320,6 +320,7 @@ class ChunomDict {
     localStorage.removeItem('chunom_dict_timestamp');
 
     this.initSettings();
+    this.initRelations();
     this.initDecks();
     this.initHistoryHandler(modalEl);
     this.init();
@@ -360,6 +361,38 @@ class ChunomDict {
       }), { once: true });
     }
     this.ime.update({ telex: on, candidates: on });
+  }
+
+  // Verwandte Zeichen: Varianten, vereinfachte und traditionelle Formen (js/glyph_relations.json, siehe build_glyph_relations.py)
+  initRelations() {
+    this.relatedBox = el('div', { className: 'related mt-2 text-center' });
+    fetch('https://qatt.org/chunom/js/glyph_relations.json')
+      .then(response => response.ok ? response.json() : Promise.reject(new Error(`HTTP ${response.status}`)))
+      .then(relations => {
+        this.mainOf = relations;
+        this.variantsOf = {};
+        for (const [variant, [kind, main]] of Object.entries(relations)) (this.variantsOf[main] ??= []).push([variant, kind]);
+        // Popup schon offen: Abschnitt nachtragen
+        if (this.currentNom) this.renderRelated(this.currentNom);
+      })
+      .catch(err => console.error('Related characters not available', err));
+  }
+
+  // Das Hauptzeichen und alle seine Formen, ohne das Zeichen selbst
+  renderRelated(nom) {
+    const KINDS = { v: 'Variant', s: 'Simplified', t: 'Traditional' };
+    const main = this.mainOf?.[nom]?.[1] || nom;
+    const items = [];
+    if (main !== nom) items.push([main, 'Standard form']);
+    for (const [variant, kind] of this.variantsOf?.[main] || []) if (variant !== nom) items.push([variant, KINDS[kind]]);
+    this.relatedBox.replaceChildren(...(items.length ? [
+      el('div', { className: 'small text-secondary mb-1', textContent: 'Related' }),
+      el('div', { className: 'd-flex flex-wrap justify-content-center gap-2' }, items.map(([ch, title]) => {
+        const link = el('button', { type: 'button', className: 'btn btn-link text-body p-0 border-0 text-decoration-none', title: `${title}: ${ch}`, 'aria-label': `${title}: ${ch}` }, this.nomChars(ch, 32));
+        link.addEventListener('click', () => this.showDetails(null, ch));
+        return link;
+      }))
+    ] : []));
   }
 
   // Decks: das Zeichen im Popup einem Deck der Flashcards zuordnen (Daten in Supabase, angemeldet)
@@ -851,6 +884,7 @@ class ChunomDict {
 
     const exactMatches = sortedRelated.filter(r => r[1] === mainNom);
     const uniqueReadings = [...new Set(exactMatches.map(r => r[0]))];
+    this.renderRelated(mainNom);
     this.currentQn = (mainEntry ? mainEntry[0] : uniqueReadings[0] || '').trim();
     // Ist der Nutzer schon angemeldet, zeigt das Herz gleich, ob das Zeichen in einem Deck liegt
     if (this.signedIn() && this.deckIdsNom !== mainNom) this.loadDeckIds();
@@ -869,7 +903,8 @@ class ChunomDict {
     this.modalBody.replaceChildren(
       el('div', { className: 'd-flex align-items-start gap-4 mb-4 p-2' },
         el('div', { className: 'd-flex flex-column align-items-center' },
-          el('div', { className: 'd-flex align-items-center justify-content-center rounded border glyph-box px-2', title: 'Click to copy glyph', 'data-copy': mainNom }, glyph)),
+          el('div', { className: 'd-flex align-items-center justify-content-center rounded border glyph-box px-2', title: 'Click to copy glyph', 'data-copy': mainNom }, glyph),
+          this.relatedBox),
         el('div', { className: 'flex-grow-1' },
           // Kopfzeile nur Quốc Ngữ, QATT steht darunter
           el('div', { className: 'd-flex flex-column w-100' }, uniqueReadings.length
