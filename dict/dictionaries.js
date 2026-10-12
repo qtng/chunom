@@ -1,5 +1,5 @@
 /*
-	The scanned dictionaries. Page images are hot-linked (chunom.org, Génibrel from chunom-assets).
+	The scanned dictionaries. Page images are hot-linked (chunom-assets as WebP; TĐCNTD still on chunom.org).
 
 	stageColor = background behind the page image: just a little darker than the scanned paper (about 1.3:1),
 	so tilting pages do not flicker between light and dark. Paper: Génibrel #c2c2c2, Bonet and TĐCNTD #ffffff.
@@ -50,7 +50,7 @@ export const DICTIONARIES = {
 		title: 'Bonet, Jean, 1899',
 		subtitle: 'Dictionnaire Annamite-Français',
 		note: 'Langue officielle et langue vulgaire',
-		pageUrl: n => `${CHUNOM}/bonnet/pages/bonnet%20(${n}).png`,
+		pageUrl: n => `${ASSETS}/bonnet/pages/bonnet%20(${n}).webp`,
 		offset: 39,
 		lastImage: 1032,
 		legend: [
