@@ -33,8 +33,8 @@ for name in ('base_chars.json', 'generated_chars.json'):
         print('  fehlend (Beispiele):', ' '.join(miss[:40]))
 
 if len(sys.argv) > 2:
+    # Django-Dump von chunom.org/media/glyphs.json: [{"fields": {"text_nom": ..., "is_draft": ...}}]
     data = json.load(open(sys.argv[2], encoding='utf-8'))
-    glyphs = data if isinstance(data, list) else data.get('glyphs', [])
-    chars = {chr(int(g['reference'])) for g in glyphs if not g.get('is_draft') and str(g.get('reference', '')).isdigit()}
+    chars = {g['fields']['text_nom'] for g in data if not g['fields'].get('is_draft') and g['fields'].get('text_nom')}
     miss = report('glyphs.json', chars)
     print('  fehlend (Beispiele):', ' '.join(miss[:40]))
