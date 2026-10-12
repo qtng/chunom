@@ -906,12 +906,12 @@ class ChunomDict {
 
     // Großes Bild: Animation, dann zwei SVG-Varianten, sonst das Zeichen als Schrift
     const glyph = this.image(
-      hex ? ['animations/anim-' + hex + '.gif', 'glyph-composer/new/' + hex + '.svg', 'glyph-composer/svg/' + hex + '.svg'].map(path => `https://chunom.org/media/${path}`) : [],
+      hex ? ['animations/anim-' + hex + '.gif', 'glyph-composer/new/' + hex + '.svg', 'glyph-composer/svg/' + hex + '.svg'].map(path => `https://qatt.org/chunom-assets/${path}`) : [],
       { style: 'height:150px;width:150px' },
       () => el('div', { className: 'text-center' },
         el('div', { className: 'display-1 font-serif text-nowrap', textContent: mainNom }),
         hex && el('div', { className: 'small text-secondary font-monospace', textContent: `U+${hex}` })),
-      img => Object.assign(img.style, { visibility: 'hidden', marginTop: '-40px', height: '200px' }));
+      img => Object.assign(img.style, { visibility: 'hidden', marginTop: '-32px', height: '160px' }));
     glyph.addEventListener('load', () => { glyph.style.visibility = 'visible'; });
 
     this.modalBody.replaceChildren(
