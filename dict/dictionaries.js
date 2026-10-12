@@ -72,9 +72,10 @@ export const DICTIONARIES = {
 		]
 	},
 
-	/* TĐCNTD: pages are not in chunom-assets yet (too large), disabled for now
+	// TĐCNTD: pages are not in chunom-assets yet (too large), so it is not linked; open tdcntd.html directly
 	tdcntd: {
 		id: 'tdcntd',
+		hidden: true,
 		lang: 'vi',
 		stageColor: '#e3e0d9',
 		titleLang: 'en',
@@ -107,5 +108,4 @@ export const DICTIONARIES = {
 			[1, 'Từ điển', 'Dictionary']
 		]
 	}
-	*/
 };
