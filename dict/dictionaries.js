@@ -72,6 +72,7 @@ export const DICTIONARIES = {
 		]
 	},
 
+	/* TĐCNTD: pages are not in chunom-assets yet (too large), disabled for now
 	tdcntd: {
 		id: 'tdcntd',
 		lang: 'vi',
@@ -106,4 +107,5 @@ export const DICTIONARIES = {
 			[1, 'Từ điển', 'Dictionary']
 		]
 	}
+	*/
 };
