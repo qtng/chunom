@@ -80,7 +80,7 @@ export class DictionaryViewer {
 		const ui = this.ui = {};
 
 		const switcher = el('ul', { className: 'nav nav-pills dict-switch mb-2' },
-			...Object.values(DICTIONARIES).map(d => el('li', { className: 'nav-item' },
+			...Object.values(DICTIONARIES).filter(d => !d.hidden).map(d => el('li', { className: 'nav-item' },
 				el('a', { className: `nav-link py-1 px-2${d.id == c.id ? ' active' : ''}`, href: `${d.id}.html`, textContent: d.short }))));
 
 		const header = el('header', { className: 'mb-2' }, switcher,
