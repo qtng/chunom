@@ -1,5 +1,5 @@
 /*
-	The scanned dictionaries. Page images stay on chunom.org and are hot-linked.
+	The scanned dictionaries. Page images are hot-linked (chunom.org, Génibrel from chunom-assets).
 
 	stageColor = background behind the page image: just a little darker than the scanned paper (about 1.3:1),
 	so tilting pages do not flicker between light and dark. Paper: Génibrel #c2c2c2, Bonet and TĐCNTD #ffffff.
@@ -12,6 +12,7 @@
 */
 
 const CHUNOM = 'https://chunom.org/media/dict';
+const ASSETS = 'https://qtng.github.io/chunom-assets/dict'; // converted to WebP, moved dictionary by dictionary
 
 export const DICTIONARIES = {
 	genibrel: {
@@ -21,7 +22,7 @@ export const DICTIONARIES = {
 		short: 'Génibrel 1898',
 		title: 'Génibrel, J.F.M., 1898',
 		subtitle: 'Dictionnaire Annamite-Français',
-		pageUrl: n => `${CHUNOM}/genibrel/pages/genibrel%20(${n}).jpg`,
+		pageUrl: n => `${ASSETS}/genibrel/pages/genibrel%20(${n}).webp`,
 		offset: 10,
 		lastImage: 998,
 		legend: [
