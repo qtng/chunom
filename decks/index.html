@@ -318,8 +318,12 @@
                 const img = new Image(32, 32);
                 img.alt = nom;
                 img.style.verticalAlign = 'middle';
-                img.addEventListener('error', () => img.replaceWith(nom));
-                img.src = `https://chunom.org/media/generated/${nom.codePointAt(0).toString(16).toUpperCase()}-32.png`;
+                const hex = nom.codePointAt(0).toString(16).toUpperCase();
+                img.addEventListener('error', () => {
+                    if (img.src.includes('chunom.org')) img.replaceWith(nom);
+                    else img.src = `https://chunom.org/media/generated/${hex}-32.png`;
+                });
+                img.src = `https://qatt.org/chunom-assets/generated/32/${hex}.webp`;
                 box.append(img);
                 return box;
             }

@@ -520,15 +520,19 @@
                 setInterval(() => this.isFlipped ? this.next() : this.flip(), 4500);
             }
 
-            // Nôm characters as chunom.org images (the font as fallback)
+            // Nôm characters as chunom-assets images, then chunom.org (the font as fallback)
             nomChars(text, size = 32) {
                 return [...(text || '')].map(ch => {
                     if (!/[一-鿿㐀-䶿\u{20000}-\u{323af}]/u.test(ch)) return document.createTextNode(ch);
                     const img = document.createElement('img');
                     img.alt = ch;
                     img.loading = 'lazy';
-                    img.addEventListener('error', () => img.replaceWith(document.createTextNode(ch)));
-                    img.src = `https://chunom.org/media/generated/${ch.codePointAt(0).toString(16).toUpperCase()}-${size}.png`;
+                    const hex = ch.codePointAt(0).toString(16).toUpperCase();
+                    img.addEventListener('error', () => {
+                        if (img.src.includes('chunom.org')) img.replaceWith(document.createTextNode(ch));
+                        else img.src = `https://chunom.org/media/generated/${hex}-${size}.png`;
+                    });
+                    img.src = `https://qatt.org/chunom-assets/generated/${size > 40 ? 160 : 32}/${hex}.webp`;
                     return img;
                 });
             }
