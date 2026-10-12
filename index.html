@@ -693,16 +693,15 @@ class ChunomDict {
     return codes.slice(1);
   }
 
-  // Nôm-Zeichen als chunom.org-Bild (Schrift als Ersatz), einzeln anklickbar
+  // Nôm-Zeichen als Bild aus chunom-assets (Schrift als Ersatz), einzeln anklickbar
   nomChars(text, size) {
     return [...(text || '')].map(ch => {
       if (!NOM_CHAR.test(ch)) return ch;
       if (!size) size = 32;
-      const imgSize = size > 40 ? 220 : 32;
       const assetSize = size > 40 ? 160 : 32;
       const hex = ch.codePointAt(0).toString(16).toUpperCase();
       return el('span', { className: 'font-serif nom-char', 'data-char': ch },
-        this.image([`https://qatt.org/chunom-assets/generated/${assetSize}/${hex}.webp`, `https://chunom.org/media/generated/${hex}-${imgSize}.png`], { alt: ch, width: size, height: size, loading: 'lazy', style: 'vertical-align: middle' }, () => ch));
+        this.image([`https://qatt.org/chunom-assets/generated/${assetSize}/${hex}.webp`], { alt: ch, width: size, height: size, loading: 'lazy', style: 'vertical-align: middle' }, () => ch));
     });
   }
 

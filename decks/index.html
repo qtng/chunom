@@ -319,10 +319,7 @@
                 img.alt = nom;
                 img.style.verticalAlign = 'middle';
                 const hex = nom.codePointAt(0).toString(16).toUpperCase();
-                img.addEventListener('error', () => {
-                    if (img.src.includes('chunom.org')) img.replaceWith(nom);
-                    else img.src = `https://chunom.org/media/generated/${hex}-32.png`;
-                });
+                img.addEventListener('error', () => img.replaceWith(nom));
                 img.src = `https://qatt.org/chunom-assets/generated/32/${hex}.webp`;
                 box.append(img);
                 return box;

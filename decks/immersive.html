@@ -520,7 +520,7 @@
                 setInterval(() => this.isFlipped ? this.next() : this.flip(), 4500);
             }
 
-            // Nôm characters as chunom-assets images, then chunom.org (the font as fallback)
+            // Nôm characters as chunom-assets images (the font as fallback)
             nomChars(text, size = 32) {
                 return [...(text || '')].map(ch => {
                     if (!/[一-鿿㐀-䶿\u{20000}-\u{323af}]/u.test(ch)) return document.createTextNode(ch);
@@ -528,18 +528,15 @@
                     img.alt = ch;
                     img.loading = 'lazy';
                     const hex = ch.codePointAt(0).toString(16).toUpperCase();
-                    img.addEventListener('error', () => {
-                        if (img.src.includes('chunom.org')) img.replaceWith(document.createTextNode(ch));
-                        else img.src = `https://chunom.org/media/generated/${hex}-${size}.png`;
-                    });
-                    img.src = `https://qatt.org/chunom-assets/generated/${size > 40 ? 160 : 32}/${hex}.webp`;
+                    img.addEventListener('error', () => img.replaceWith(document.createTextNode(ch)));
+                    img.src = `https://qatt.org/chunom-assets/generated/${size}/${hex}.webp`;
                     return img;
                 });
             }
 
-            // the big characters of the card: images (220px) with the font as fallback
+            // the big characters of the card: images (160px) with the font as fallback
             showNom(target, text) {
-                const chars = this.nomChars(text, 220);
+                const chars = this.nomChars(text, 160);
                 target.style.setProperty('--n', Math.max(1, chars.length));
                 target.replaceChildren(...chars);
             }
