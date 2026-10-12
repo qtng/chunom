@@ -711,7 +711,7 @@ class App {
     if (form === "qatt") return this.renderToElement(word, null, element, !asQuestion, false);
     if (form === "nom") {
       element.className = "nom-chars" + (asQuestion ? " nom-question" : "");
-      element.append(...this.nomChars(this.items[word].n, 220));
+      element.append(...this.nomChars(this.items[word].n, 160));
       return;
     }
     const text = this.textOf(word);
@@ -726,14 +726,15 @@ class App {
     }
   }
 
-  // Nôm characters as images of chunom.org (the Nôm font as fallback); the images exist in the sizes 32 and 220 only
-  nomChars(text, size = 220) {
+  // Nôm characters as images of chunom-assets (the Nôm font as fallback); the sizes are 32 and 160
+  nomChars(text, size = 160) {
     return [...(text || "")].map(ch => {
       if (!/[一-鿿㐀-䶿\u{20000}-\u{323af}]/u.test(ch)) return document.createTextNode(ch);
       const img = document.createElement("img");
       img.alt = ch;
+      const hex = ch.codePointAt(0).toString(16).toUpperCase();
       img.addEventListener("error", () => img.replaceWith(document.createTextNode(ch)));
-      img.src = `https://chunom.org/media/generated/${ch.codePointAt(0).toString(16).toUpperCase()}-${size}.png`;
+      img.src = `https://qatt.org/chunom-assets/generated/${size}/${hex}.webp`;
       return img;
     });
   }
