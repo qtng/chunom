@@ -840,10 +840,24 @@ class ChunomDict {
     setTimeout(() => { this.toast.style.display = 'none'; }, 2000);
   }
 
+  // Einträge der IME-Wörterbücher mit genau diesem Zeichen, im Format der CSV-Zeilen [Lesung, Zeichen, Bedeutung]
+  imeRows(nom) {
+    return (window.VietIme?.lookupGlyph?.(nom) || []).filter(entry => entry.glyph === nom).map(entry => [entry.reading, entry.glyph, entry.definition]);
+  }
+
   showDetails(clickedId, mainNom, row) {
     let related = this.data.filter(row => row[1] && row[1].includes(mainNom));
     // IME-Treffer stehen nicht in der CSV
     if (row?.[0] && !related.includes(row)) related.unshift(row);
+    else if (!row && !related.some(r => r[1] === mainNom)) {
+      // Ohne Zeile (Link aus "Related" oder ?detail=): Einträge aus den IME-Wörterbüchern suchen, falls sie schon geladen sind, sonst nachladen
+      related.unshift(...this.imeRows(mainNom));
+      if (!related.some(r => r[1] === mainNom) && window.VietIme) {
+        VietIme.load().then(() => {
+          if (this.currentNom === mainNom && this.imeRows(mainNom).length) this.showDetails(clickedId, mainNom);
+        });
+      }
+    }
     const seenEntries = new Set();
     related = related.filter(r => {
       const key = `${r[0].trim().toLowerCase()}|${r[1].trim()}|${r[2].trim()}`;
