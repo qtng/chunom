@@ -17,6 +17,9 @@
     <script src="../../qatt/js/navigation.js"></script>
     <script src="../../qatt/js/supabase.js"></script>
     <script src="../../qatt/js/login.js"></script>
+    <script src="../../qatt/js/qatt.js"></script>
+    <script src="../../qatt/js/parser.js"></script>
+    <script src="../js/detail.js"></script>
 
     <style>
         :root { --ink: #2b2118; --cinnabar: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
@@ -261,6 +264,11 @@
                     row.className = 'deck-item';
                     row.href = `../index.html?detail=${encodeURIComponent(word.n || '')}`; // opens the character in the dictionary
                     row.title = 'Show in the dictionary';
+                    row.addEventListener('click', e => { // the popup of the character; the link above is the fallback (middle click, no script)
+                        if (e.ctrlKey || e.metaKey || e.shiftKey || e.button) return;
+                        e.preventDefault();
+                        ChunomDetail.open(word.n || '');
+                    });
                     row.append(this.glyph(word.n || ''), qn);
                     return row;
                 });

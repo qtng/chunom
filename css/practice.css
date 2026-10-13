@@ -305,3 +305,6 @@ svg use[href^="#qt"] { stroke-width: calc(var(--stroke-width) * 3 / 4) }
 qatt-code { --stroke-width: 2px; }
 .symbol-card qatt-code { --stroke-width: 3px; }
 qatt-code svg { height: var(--svg-height); width: auto; }
+
+.nom-chars.nom-link { cursor: pointer; }
+.nom-chars.nom-link:hover { filter: brightness(.9); }
