@@ -281,7 +281,7 @@
             // who published a public deck: "Chunom" for the decks of the site, else the user name
             byline(d, isPersonal) {
                 if (isPersonal && !d.saved) return d.is_public ? ' · Published' : '';
-                if (d.official) return ' · <span class="badge text-bg-warning align-text-bottom">Chunom</span>';
+                if (d.official) return ' · <span class="badge text-bg-warning align-text-bottom">chunom.org</span>';
                 const name = this.owners && this.owners[d.user_id];
                 return ` · by ${this.escape(name || 'a user')}`;
             }
