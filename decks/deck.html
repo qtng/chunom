@@ -98,17 +98,14 @@
         .modal-content .form-control:focus { border-color: var(--cinnabar); box-shadow: 0 0 0 .2rem rgba(168, 54, 42, .15) !important; }
         .btn-cinnabar { background: var(--cinnabar); border-color: var(--cinnabar); color: #fff; border-radius: 2rem; }
         .btn-cinnabar:hover, .btn-cinnabar:focus-visible { background: #8c2c22; border-color: #8c2c22; color: #fff; }
-        /* phone: the image is a full-width header; desktop: a square next to the title */
-        .deck-cover { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 1rem; margin-bottom: 1rem; }
-        @media (min-width: 768px) {
-            .deck-head { display: flex; align-items: center; gap: 1.5rem; text-align: left; }
-            .deck-cover-slot { flex: none; }
-            .deck-cover { width: 10rem; height: 10rem; aspect-ratio: 1; flex: none; margin: 0; }
-            .deck-head-text { flex: 1; min-width: 0; }
-            .deck-head-text p { margin-left: 0 !important; }
-            .deck-head-text #deck-actions { justify-content: flex-start !important; }
-        }
-        .cover-preview { width: 8rem; height: 8rem; object-fit: cover; border-radius: .6rem; margin-bottom: .5rem; }
+        /* like a profile picture: a rounded square next to the title */
+        .deck-head { display: flex; align-items: center; gap: 1rem; text-align: left; }
+        .deck-cover-slot { flex: none; }
+        .deck-cover { display: block; width: 5rem; height: 5rem; object-fit: cover; border-radius: 1.1rem; }
+        .deck-head-text { flex: 1; min-width: 0; }
+        .deck-head-text .page-title { font-size: clamp(1.6rem, 6vw, 2.4rem); overflow-wrap: anywhere; }
+        @media (min-width: 768px) { .deck-head { gap: 1.5rem; } .deck-cover { width: 6.5rem; height: 6.5rem; border-radius: 1.4rem; } }
+        .cover-preview { width: 5rem; height: 5rem; object-fit: cover; border-radius: 1.1rem; margin-bottom: .5rem; }
         .btn-cancel { border-radius: 2rem; background: #fff; border: 1px solid var(--field); color: var(--ink); }
         .btn-cancel:hover { background: #f1e8d2; color: var(--ink); }
     </style>
@@ -121,14 +118,14 @@
                 
                 <!-- Header -->
                 <div class="text-start mt-2"><a href="index.html" class="btn-subtle"><i class="bi bi-arrow-left"></i> Practice / Decks</a></div>
-                <div class="deck-head mt-1 mb-4">
+                <div class="deck-head mt-2 mb-3">
                     <div id="deck-cover-slot" class="deck-cover-slot"></div>
                     <div class="deck-head-text">
-                        <h1 class="page-title mb-2" id="deck-title">Deck</h1>
-                        <p class="text-secondary mx-auto mb-3" id="deck-meta" style="max-width: 36rem"></p>
-                        <div class="d-flex flex-wrap justify-content-center gap-2" id="deck-actions"></div>
+                        <h1 class="page-title mb-1" id="deck-title">Deck</h1>
+                        <p class="text-secondary mb-0" id="deck-meta"></p>
                     </div>
                 </div>
+                <div class="d-flex flex-wrap justify-content-start gap-2 mb-4" id="deck-actions"></div>
                 <div class="text-start mb-5">
                     <h6 class="text-secondary text-uppercase pb-2 mb-2 small section-header">Characters</h6>
                     <div id="deck-words">
@@ -353,14 +350,14 @@
                 document.getElementById('coverRemove').classList.toggle('d-none', !url);
             }
 
-            // cuts the middle square out of the chosen photo and scales it to 400 x 400 px (JPEG, about 30 KB)
+            // cuts the middle square out of the chosen photo and scales it to 128 x 128 px (JPEG, under 10 KB): it is only shown as a small picture
             async pickCover(file) {
                 if (!file) return;
                 try {
                     const bmp = await createImageBitmap(file);
                     const side = Math.min(bmp.width, bmp.height);
                     const canvas = document.createElement('canvas');
-                    canvas.width = canvas.height = Math.min(400, side);
+                    canvas.width = canvas.height = Math.min(128, side);
                     canvas.getContext('2d').drawImage(bmp, (bmp.width - side) / 2, (bmp.height - side) / 2, side, side, 0, 0, canvas.width, canvas.height);
                     const blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', 0.85));
                     if (!blob) throw new Error('empty');
