@@ -60,6 +60,7 @@
             margin-bottom: 0.6rem;
             transition: border-color .15s, box-shadow .15s;
         }
+        .deck-thumb { width: 4rem; height: 4rem; object-fit: cover; border-radius: .6rem; flex: none; }
         .deck-title { font-weight: 600; color: var(--ink); }
         .empty-box { background: rgba(255, 255, 255, .6); border: 1px dashed var(--field); }
 
@@ -240,7 +241,8 @@
 
                 el.innerHTML = data.map(d => `
                     <div class="list-group-item py-3 mb-2 rounded shadow-none">
-                        <div class="d-flex justify-content-between align-items-start">
+                        <div class="d-flex align-items-start gap-3">
+                            ${d.image_path ? `<img class="deck-thumb" loading="lazy" alt="" src="${this.escape(this.sp.deckImageUrl(d.image_path))}">` : ''}
                             <div class="text-start">
                                 <div class="deck-title">${this.escape(d.title)}</div>
                                 <small class="text-secondary">${d.words ? d.words.length : (d.count || 0)} items</small>
