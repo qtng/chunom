@@ -218,7 +218,7 @@
                     menu.innerHTML = `
                         <button type="button" class="deck-menu-btn" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Deck options" title="Deck options"><i class="bi bi-three-dots"></i></button>
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                            <li><button type="button" class="dropdown-item" data-act="edit"><i class="bi bi-pencil me-2"></i>Rename deck or remove characters</button></li>
+                            <li><button type="button" class="dropdown-item" data-act="edit"><i class="bi bi-pencil me-2"></i>Edit deck or items</button></li>
                             <li><button type="button" class="dropdown-item text-danger" data-act="delete"><i class="bi bi-trash me-2"></i>Delete the whole deck</button></li>
                         </ul>`;
                     menu.querySelector('[data-act=edit]').addEventListener('click', () => this.openEdit());
