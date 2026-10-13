@@ -595,7 +595,7 @@ class ChunomDetail {
         el('div', { className: 'flex-grow-1' },
           // Kopfzeile nur Quốc Ngữ, QATT steht darunter
           el('div', { className: 'd-flex flex-column w-100' }, uniqueReadings.length
-            ? uniqueReadings.map(read => el('span', { className: 'fs-2 fw-bold lh-sm' }, el('span', { lang: 'vi', textContent: read }), ChunomDetail.speakButton(read)))
+            ? uniqueReadings.map(read => el('span', { className: 'fs-2 fw-bold lh-sm d-flex justify-content-between align-items-center' }, el('span', { lang: 'vi', textContent: read }), ChunomDetail.speakButton(read)))
             : el('span', { className: 'text-secondary fst-italic', textContent: 'Part of compound words' })),
           el('div', { className: 'd-flex flex-column gap-1 mt-3 small text-secondary' },
             uniqueReadings.length > 0 && el('div', {}, 'Quốc Ngữ: ', el('span', { lang: 'vi', textContent: uniqueReadings.join('; ') })),
