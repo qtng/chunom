@@ -59,7 +59,9 @@ const STYLE = `
 #detailModal .deck-toggle { display: inline-flex; align-items: center; gap: .35rem; border-radius: 2rem; border: 1.5px solid var(--cinnabar); background: #fff; color: var(--cinnabar); font-size: .9rem; line-height: 1.2; padding: .3rem .8rem; white-space: nowrap; }
 #detailModal .ipa-box { color: #4f9a5a; font-size: 1.05rem; line-height: 1.35; }
 #detailModal .ipa-box sup { font-size: .65em; }
-#detailModal .speak-btn, .speak-btn { border: 0; background: none; color: var(--cinnabar, #a8372b); padding: 0 .35rem; line-height: 1; font-size: 1.2rem; cursor: pointer; }
+#detailModal .speak-btn { width: 2.2rem; height: 2.2rem; padding: 0; border: 1.5px solid var(--cinnabar); border-radius: 50%; background: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 1.05rem; flex: none; }
+#detailModal .speak-btn:hover { background: var(--cinnabar); color: #fff; opacity: 1; }
+.speak-btn { border: 0; background: none; color: var(--cinnabar, #a8372b); padding: 0 .35rem; line-height: 1; font-size: 1.2rem; cursor: pointer; }
 .speak-btn:hover, .speak-btn:focus-visible { opacity: .7; }
 #detailModal .modal-footer .deck-toggle { padding: .375rem .9rem; font-size: 1rem; }
 #detailModal .deck-toggle:hover, #detailModal .deck-toggle:focus-visible, #detailModal .deck-toggle.in-deck { background: var(--cinnabar); color: #fff; }
