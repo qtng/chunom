@@ -538,8 +538,7 @@ export class DictionaryViewer {
 	async loadIndex() {
 		const { config: c, ui } = this;
 		try {
-			const version = new URL(import.meta.url).search; // the ?v=… of this file, so new data is fetched with new code
-			const r = await fetch(new URL(`data/${c.id}.json${version}`, import.meta.url));
+			const r = await fetch(new URL(`data/${c.id}.json`, import.meta.url));
 			if (!r.ok) throw new Error(r.status);
 			this.words = await r.json();
 			const collate = COLLATORS[c.id];
