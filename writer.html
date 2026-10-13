@@ -62,8 +62,8 @@
         .btn-quiet:hover { background: #f1e8d2; color: var(--ink); border-color: #b9a982; }
 
         /* QATT: toolbar above the field, QATT fonts, reading of the cells */
-        .qatt-bar { display: none; flex-wrap: nowrap; justify-content: center; align-items: center; gap: .4rem 1.2rem; padding: .5rem .6rem 0; font-size: .78rem; }
-        .qatt-on .qatt-bar { display: flex; }
+        .qatt-bar { display: flex; flex-wrap: nowrap; justify-content: center; align-items: center; gap: .4rem 1.2rem; padding: .5rem .6rem 0; font-size: .78rem; }
+        body:not(.qatt-on) .qatt-bar .group { display: none; }
         .qatt-bar .group { display: flex; align-items: center; gap: .4rem .8rem; white-space: nowrap; min-width: 0; }
         .qatt-bar select { font-size: .78rem; padding-top: .1rem; padding-bottom: .1rem; min-width: 0; }
         .qatt-bar label { display: flex; align-items: center; gap: .3rem; white-space: nowrap; margin: 0; flex: 1 1 8rem; max-width: 15rem; min-width: 5rem; }
@@ -77,6 +77,9 @@
         .qatt-on .qatt-only { display: inline-block; }
         .qatt-on li.qatt-only { display: list-item; }
         .reading-out { margin: .6rem .8rem 0; padding: .4rem .7rem; border: 1px dashed #cdbf9f; border-radius: .5rem; font-size: 1.05rem; white-space: pre-wrap; word-break: break-word; }
+        .opts { text-align: center; }
+        .opt-row { display: flex; flex-wrap: wrap; justify-content: center; gap: .2rem 2rem; }
+        .opt-row .form-check { margin: 0; }
         .opts .form-check-input:checked { background-color: var(--accent); border-color: var(--accent); }
         .opts .form-check-input:disabled ~ label { opacity: .55; }
 
@@ -133,40 +136,44 @@
         <div id="reading-out" class="reading-out" hidden aria-live="polite"></div>
 
         <div class="writer-bar">
-            <button type="button" class="btn btn-accent" id="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
-            <button type="button" class="btn btn-quiet" id="clear-btn"><i class="bi bi-x-lg"></i> Clear</button>
-            <button type="button" class="btn btn-quiet qatt-only" id="convert-btn" title="Convert every Quốc Ngữ word in the field, e.g. after pasting"><i class="bi bi-arrow-repeat"></i> Convert all</button>
-            <button type="button" class="btn btn-quiet qatt-only" id="reading-btn" title="Read the QATT characters of the field as Quốc Ngữ"><i class="bi bi-book"></i> Reading</button>
+            <button type="button" class="btn btn-accent" id="copy-btn">Copy</button>
+            <button type="button" class="btn btn-quiet" id="clear-btn">Clear</button>
+            <button type="button" class="btn btn-quiet qatt-only" id="convert-btn" title="Convert every Quốc Ngữ word in the field, e.g. after pasting">Convert QATT</button>
+            <button type="button" class="btn btn-quiet qatt-only" id="reading-btn" title="Read the QATT characters of the field as Quốc Ngữ">Decode QATT</button>
         </div>
 
     </div>
 
-    <div class="info">
+    <div class="opts mt-3">
+        <div class="opt-row">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="telex-select" checked>
+                <label class="form-check-label" for="telex-select">Telex</label>
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="qatt-select" checked>
+                <label class="form-check-label" for="qatt-select">QATT <span class="text-secondary">(Quốc Âm Tân Tự)</span></label>
+            </div>
+        </div>
+        <div class="opt-row mt-1">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="return-select" checked>
+                <label class="form-check-label" for="return-select">Enter picks the first Nôm</label>
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="space-select" checked>
+                <label class="form-check-label" for="space-select">Space picks the first Nôm</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="info mt-4">
         <ol>
             <li>Type a syllable with Telex, for example <b>viet</b> → <span class="ex">việt</span>.</li>
             <li>A list of Nôm characters appears below the text field: tap one, or press <kbd>1</kbd>–<kbd>0</kbd>.
                 <span class="d-none d-lg-inline">With <kbd>↑</kbd><kbd>↓</kbd> you move through the list, <kbd>Esc</kbd> closes it.</span></li>
-            <li class="qatt-only">With <b>QATT</b> on, a syllable you do not pick a Nôm character for stays in Quốc Ngữ until you press <kbd>Space</kbd> or <kbd>Enter</kbd>: then it turns into Quốc Âm Tân Tự. <b>Space picks the first</b> is switched off for this and <b>Enter picks the first</b> is off as well: pick a Nôm character with its number, with <kbd>↑</kbd><kbd>↓</kbd> and <kbd>Enter</kbd>, or by tap.</li>
+            <li class="qatt-only">With <b>QATT</b> on, a syllable you do not pick a Nôm character for stays in Quốc Ngữ until you press <kbd>Space</kbd> or <kbd>Enter</kbd>: then it turns into Quốc Âm Tân Tự. <b>Space</b> converts to QATT and <b>Enter picks the first Nôm</b> is off as well: pick a Nôm character with its number, with <kbd>↑</kbd><kbd>↓</kbd> and <kbd>Enter</kbd>, or by tap.</li>
         </ol>
-    </div>
-
-    <div class="opts mt-3">
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="qatt-select">
-            <label class="form-check-label" for="qatt-select">QATT <span class="text-secondary">(Quốc Âm Tân Tự)</span></label>
-        </div>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="telex-select" checked>
-            <label class="form-check-label" for="telex-select">Telex</label>
-        </div>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="return-select" checked>
-            <label class="form-check-label" for="return-select">Enter picks the first</label>
-        </div>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="space-select" checked>
-            <label class="form-check-label" for="space-select">Space picks the first</label>
-        </div>
     </div>
 
 </div>
@@ -184,7 +191,8 @@
             returnSelect: $('return-select'),
             spaceSelect: $('space-select')
         };
-        const options = () => Object.fromEntries(Object.entries(switches).map(([name, box]) => [name, box.checked]));
+        let on = false;   // QATT
+        const options = () => ({ ...Object.fromEntries(Object.entries(switches).map(([name, box]) => [name, box.checked])), spaceSelect: switches.spaceSelect.checked && !on });
 
         const ime = new VietIme(typer, options());
         for (const box of Object.values(switches)) {
@@ -210,17 +218,16 @@
         for (const [name, label] of [['qatt', 'qatt.org'], ['omniglot', 'omniglot']]) decoding.append(new Option(label, name, name === 'qatt', name === 'qatt'));
         for (const [family, label] of FONTS) font.append(new Option(label, family, family === 'QATT Gothic', family === 'QATT Gothic'));
         const heading = (select, label) => { const value = select.value, g = document.createElement('optgroup'); g.label = label; g.append(...select.options); select.append(g); select.value = value; };
-        heading(decoding, 'Choose decoding');
+        heading(decoding, 'Choose QATT decoding');
         heading(font, 'Choose font');
 
         const NOT_LETTER = /[^\p{Script=Latin}\p{M}]/u, WORD_END = /[\p{Script=Latin}\p{M}]+$/u;   // Han characters are letters too, but no Quốc Ngữ
-        let on = false;
 
         // QATT characters are in the private use area: the field needs a QATT font in front of the Nôm fonts
         function applyFont() {
             document.documentElement.style.setProperty('--qfont', `"${font.value}"`);
             ime.update({ fontList: on ? [font.value] : [] });
-            typer.style.fontSize = on ? Math.round(size.value * 0.363) + 'px' : '';
+            typer.style.fontSize = Math.round(size.value * 0.363) + 'px';
             $('size-label').textContent = size.value + '%';
         }
         decoding.addEventListener('change', () => { parser.setDecoding(decoding.value); showPending(); });
@@ -236,13 +243,15 @@
             if (on) {
                 spaceWas = switches.spaceSelect.checked;
                 returnWas = switches.returnSelect.checked;
-                switches.spaceSelect.checked = switches.returnSelect.checked = false;
+                switches.spaceSelect.checked = true;
+                switches.returnSelect.checked = false;
             } else {
                 switches.spaceSelect.checked = spaceWas;
                 switches.returnSelect.checked = returnWas;
                 $('reading-out').hidden = true;
             }
             switches.spaceSelect.disabled = on;
+            $('space-select').nextElementSibling.textContent = on ? 'Space converts to QATT' : 'Space picks the first Nôm';
             ime.update(options());
             applyFont();
             showPending();
@@ -390,7 +399,7 @@
                 typer.select();
                 document.execCommand('copy');
             }
-            copyBtn.innerHTML = '<i class="bi bi-check-lg"></i> Copied';
+            copyBtn.textContent = 'Copied';
             setTimeout(() => { copyBtn.innerHTML = label; }, 1400);
         });
 
@@ -403,7 +412,7 @@
 
         font.value = store.get('font', 'QATT Gothic');
         size.value = store.get('size', '100');
-        qattSwitch.checked = store.get('qatt', 'false') === 'true' && !qattSwitch.closest('.form-check').hidden;
+        qattSwitch.checked = store.get('qatt', 'true') === 'true' && !qattSwitch.closest('.form-check').hidden;
         setQatt(qattSwitch.checked);
         typer.focus();
     });
