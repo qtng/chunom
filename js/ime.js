@@ -2,7 +2,7 @@
 	VietIme – Telex input and Chữ Nôm candidates for text fields, no dependencies.
 
 	Usage:
-		<script src="https://qatt.org/chunom/js/ime.js"></script>
+		<script src="https://chunom.org/chunom/js/ime.js"></script>
 		const ime = new VietIme(document.querySelector('input'), { defer: true });
 
 	Options:
@@ -206,7 +206,7 @@
 
 	// ---------- Dictionaries ----------
 
-	const DICTIONARIES = ['https://qatt.org/chunom/js/generated_chars.json', 'https://qatt.org/chunom/js/base_chars.json'];
+	const DICTIONARIES = ['https://chunom.org/chunom/js/generated_chars.json', 'https://chunom.org/chunom/js/base_chars.json'];
 	// typed punctuation → ideographic forms, plus a few symbols
 	const BUILTIN = "|-_ideographicHyphen:－|&_ideographicAmpersand:＆|\"_ideographicQuoteEnd:」|\"_ideographicQuoteStart:「|\"_ideographicDoubleQuote:＂|<_ideographicBracket:〈|>_ideographicBracket:〉|<_ideographicBracket:《|>_ideographicBracket:》|[_ideographicBracket:【|]_ideographicBracket:】|(_ideographicBracket:（|)_ideographicBracket:）|__ideographicSpace:　|._ideographicDot:。|,_ideographicList:、|?_ideographicQuestionMark:？|!_ideographicExclamationMark:！|=_unknownCharacterSymbol:〓|;_ideographicSemicolon:；|*_ideographicAsterisk:＊|/_ideographicSlash:／|:_ideographicColon:：|__backslash:\\|__iterationMark:ヌ,ㇶ,〻,ゝ,々|__unknownSymbol:〓|__nhayMark:𡿨|\\_plus:+|\\_iterationMark:ヌ,ㇶ,〻,ゝ,々|\\_unknownSymbol:〓|\\_nhayMark:𡿨|\\_idsSymbol:⿰,⿱,⿻,⿴,⿺,⿸,⿹,⿵,⿷,⿶,⿳,⿲|__idsSymbol:⿰,⿱,⿻,⿴,⿺,⿸,⿹,⿵,⿷,⿶,⿳,⿲|%_idsSymbol:⿰,⿱,⿻,⿴,⿺,⿸,⿹,⿵,⿷,⿶,⿳,⿲|idsSymbol:⿰,⿱,⿻,⿴,⿺,⿸,⿹,⿵,⿷,⿶,⿳,⿲|nháy:𡿨,口,亇,厶|nhayMark:𡿨,口,亇,厶|geta:〓|iteration:ヌ,ㇶ,〻,ゝ,々|nôm:喃";
 

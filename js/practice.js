@@ -734,7 +734,7 @@ class App {
       img.alt = ch;
       const hex = ch.codePointAt(0).toString(16).toUpperCase();
       img.addEventListener("error", () => img.replaceWith(document.createTextNode(ch)));
-      img.src = `https://qatt.org/chunom-assets/generated/${size}/${hex}.webp`;
+      img.src = `https://chunom.org/chunom-assets/generated/${size}/${hex}.webp`;
       return img;
     });
   }

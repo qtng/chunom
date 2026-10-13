@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" integrity="sha384-tViUnnbYAV00FLIhhi3v/dWt3Jxw4gZQcNoSCxCIFNJVCx7/D55/wXsrNIRANwdD" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://qatt.org/chunom-assets/fonts/fonts.css">
+  <link rel="stylesheet" href="https://chunom.org/chunom-assets/fonts/fonts.css">
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-  <script defer src="https://qatt.org/chunom/js/ime.js?v=20261011-1022"></script>
+  <script defer src="https://chunom.org/chunom/js/ime.js?v=20261011-1022"></script>
   <script defer src="https://qatt.org/qatt/js/navigation.js"></script>
   <script defer src="https://qatt.org/qatt/js/qatt.js"></script>
   <script defer src="https://qatt.org/qatt/js/parser.js?v=20261011-1022"></script>
@@ -217,7 +217,7 @@
         <a href="ime.html"><i class="bi bi-pencil-square"></i> Nôm Writer</a>
         <a href="decks/index.html"><i class="bi bi-layers-half"></i> Flashcards</a>
         <a href="dict/genibrel.html"><i class="bi bi-journal-richtext"></i> Dictionaries</a>
-        <a href="../qatt/index.html"><i class="bi bi-brush"></i> Quốc Âm Tân Tự</a>
+        <a href="https://qatt.org/qatt/index.html"><i class="bi bi-brush"></i> Quốc Âm Tân Tự</a>
       </nav>
     </header>
 
@@ -366,7 +366,7 @@ class ChunomDict {
   // Verwandte Zeichen: Varianten, vereinfachte und traditionelle Formen (js/glyph_relations.json, siehe build_glyph_relations.py)
   initRelations() {
     this.relatedBox = el('div', { className: 'related mt-2 text-center' });
-    fetch('https://qatt.org/chunom/js/glyph_relations.json')
+    fetch('https://chunom.org/chunom/js/glyph_relations.json')
       .then(response => response.ok ? response.json() : Promise.reject(new Error(`HTTP ${response.status}`)))
       .then(relations => {
         this.mainOf = relations;
@@ -701,7 +701,7 @@ class ChunomDict {
       const assetSize = size > 40 ? 160 : 32;
       const hex = ch.codePointAt(0).toString(16).toUpperCase();
       return el('span', { className: 'font-serif nom-char', 'data-char': ch },
-        this.image([`https://qatt.org/chunom-assets/generated/${assetSize}/${hex}.webp`], { alt: ch, width: size, height: size, loading: 'lazy', style: 'vertical-align: middle' }, () => ch));
+        this.image([`https://chunom.org/chunom-assets/generated/${assetSize}/${hex}.webp`], { alt: ch, width: size, height: size, loading: 'lazy', style: 'vertical-align: middle' }, () => ch));
     });
   }
 
@@ -906,7 +906,7 @@ class ChunomDict {
 
     // Großes Bild: Animation, dann zwei SVG-Varianten, sonst das Zeichen als Schrift
     const glyph = this.image(
-      hex ? ['animations/anim-' + hex + '.gif', 'glyph-composer/new/' + hex + '.svg', 'glyph-composer/svg/' + hex + '.svg'].map(path => `https://qatt.org/chunom-assets/${path}`) : [],
+      hex ? ['animations/anim-' + hex + '.gif', 'glyph-composer/new/' + hex + '.svg', 'glyph-composer/svg/' + hex + '.svg'].map(path => `https://chunom.org/chunom-assets/${path}`) : [],
       { style: 'height:150px;width:150px' },
       () => el('div', { className: 'text-center' },
         el('div', { className: 'display-1 font-serif text-nowrap', textContent: mainNom }),
@@ -963,7 +963,7 @@ window.addEventListener("load", () => {
   try {
     parser = new VietnameseParser();
     new Qatt().observe("qatt-code");
-    dict = new ChunomDict('https://qatt.org/chunom/dict.csv', 'search', 'results', 'dict-status');
+    dict = new ChunomDict('https://chunom.org/chunom/dict.csv', 'search', 'results', 'dict-status');
   } catch (e) {
     console.error("Initialization error", e);
   }

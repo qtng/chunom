@@ -12,7 +12,7 @@
 */
 
 const CHUNOM = 'https://chunom.org/media/dict';
-const ASSETS = 'https://qatt.org/chunom-assets/dict'; // converted to WebP, moved dictionary by dictionary
+const ASSETS = 'https://chunom.org/chunom-assets/dict'; // converted to WebP, moved dictionary by dictionary
 
 export const DICTIONARIES = {
 	genibrel: {
