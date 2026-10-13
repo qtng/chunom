@@ -904,7 +904,7 @@ renderLeaderboard(isPop = false) {
     </div>`;
   
   let html = "";
-  this.db.getHybridLeaderboard(10, 3).then(data => {
+  this.db.getHybridLeaderboard(50, 3).then(data => {
     html = "";
     let rankBefore = 0;
     data.forEach((row, i) => {
