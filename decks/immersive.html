@@ -415,6 +415,7 @@
                 const deck = await this.sp.getDeck(urlParams.get('id') || "9222f66f-6d0e-4b2d-bfdd-f31ebea71337");
                 
                 if (deck) {
+                    this.sp.saveDeckLink?.(deck); // learning a public deck of somebody else takes it over into "My decks"
                     this.deck = { ...deck, words: deck.words.filter(w => w.n !== ".config") };
                     document.getElementById('deck-title').textContent = this.deck.title;
                     document.getElementById('deck-meta').textContent = `${this.deck.words.length} items`;
