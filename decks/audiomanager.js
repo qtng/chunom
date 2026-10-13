@@ -1,6 +1,6 @@
 /**
  * AUDIO MANAGER (Stable Routing Version with Cloud Fallback)
- * https://qtng.github.io/chunom/superlearning/audiomanager.js
+ * https://qtng.github.io/chunom/decks/audiomanager.js
  * Call initMusicEngine() to use background audio and binaural beats.
  * To only use speak(str, mode='auto', rate=0.8), don't call initMusicEngine().
  */
