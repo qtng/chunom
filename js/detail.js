@@ -57,6 +57,8 @@ const STYLE = `
 #detailModal qatt-code:hover { filter: brightness(1.3); }
 #detailModal qatt-code svg { stroke: currentColor; stroke-linecap: round; fill: transparent; vertical-align: baseline; display: inline-block; height: 2em; position: relative; top: -.25em; }
 #detailModal .deck-toggle { display: inline-flex; align-items: center; gap: .35rem; border-radius: 2rem; border: 1.5px solid var(--cinnabar); background: #fff; color: var(--cinnabar); font-size: .9rem; line-height: 1.2; padding: .3rem .8rem; white-space: nowrap; }
+#detailModal .speak-btn, .speak-btn { border: 0; background: none; color: var(--cinnabar, #a8372b); padding: 0 .35rem; line-height: 1; font-size: 1.2rem; cursor: pointer; }
+.speak-btn:hover, .speak-btn:focus-visible { opacity: .7; }
 #detailModal .modal-footer .deck-toggle { padding: .375rem .9rem; font-size: 1rem; }
 #detailModal .deck-toggle:hover, #detailModal .deck-toggle:focus-visible, #detailModal .deck-toggle.in-deck { background: var(--cinnabar); color: #fff; }
 #deck-sheet { position: fixed; inset: 0; z-index: 5; display: flex; align-items: flex-end; justify-content: center; background: rgba(43, 33, 24, .45); opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; }
@@ -107,10 +109,32 @@ const MODAL = `
 class ChunomDetail {
   static #instance;
   static #data;
+  static #audio;
 
   static get() { return ChunomDetail.#instance ??= new ChunomDetail(); }
 
   /** Opens the popup for a character or word (Nôm). */
+  // Pronounce Vietnamese text: the browser voice if there is one, else Google TTS through audiomanager.js
+  static async speak(text) {
+    if (!text) return;
+    if (!ChunomDetail.#audio) {
+      await ChunomDetail.loadScript(new URL('../decks/audiomanager.js', BASE).href, () => typeof AudioManager !== 'undefined' && AudioManager);
+      ChunomDetail.#audio = new AudioManager(new Audio(), {});
+    }
+    return ChunomDetail.#audio.speak(text, 'auto');
+  }
+  // A small speaker button for a reading
+  static speakButton(text) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'speak-btn';
+    b.title = 'Pronounce';
+    b.setAttribute('aria-label', 'Pronounce');
+    b.innerHTML = '<i class="bi bi-volume-up-fill"></i>';
+    b.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); ChunomDetail.speak(text); });
+    return b;
+  }
+
   static open(nom, clickedId = null, row = null) { return ChunomDetail.get().open(nom, clickedId, row); }
 
   /** The rows of the dictionary [reading, nom, meaning, …, rank] (loaded once). */
@@ -571,7 +595,7 @@ class ChunomDetail {
         el('div', { className: 'flex-grow-1' },
           // Kopfzeile nur Quốc Ngữ, QATT steht darunter
           el('div', { className: 'd-flex flex-column w-100' }, uniqueReadings.length
-            ? uniqueReadings.map(read => el('span', { className: 'fs-2 fw-bold lh-sm', lang: 'vi', textContent: read }))
+            ? uniqueReadings.map(read => el('span', { className: 'fs-2 fw-bold lh-sm d-flex justify-content-between align-items-center' }, el('span', { lang: 'vi', textContent: read }), ChunomDetail.speakButton(read)))
             : el('span', { className: 'text-secondary fst-italic', textContent: 'Part of compound words' })),
           el('div', { className: 'd-flex flex-column gap-1 mt-3 small text-secondary' },
             uniqueReadings.length > 0 && el('div', {}, 'Quốc Ngữ: ', el('span', { lang: 'vi', textContent: uniqueReadings.join('; ') })),

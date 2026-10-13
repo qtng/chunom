@@ -272,6 +272,7 @@
                         ChunomDetail.open(word.n || '');
                     });
                     row.append(this.glyph(word.n || ''), qn);
+                    if (word.qn) row.append(ChunomDetail.speakButton(word.qn));
                     return row;
                 });
                 if (!rows.length) {
