@@ -16,6 +16,7 @@
     <script src="https://qatt.org/qatt/vendor/supabase/supabase.min.js"></script>
     <script src="../../qatt/js/navigation.js"></script>
     <script src="../../qatt/js/supabase.js"></script>
+    <script src="cover.js"></script>
     <script src="../../qatt/js/login.js"></script>
     <script src="../../qatt/js/qatt.js"></script>
     <script src="../../qatt/js/parser.js"></script>
@@ -101,6 +102,7 @@
         .deck-cover { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 1rem; margin-bottom: 1rem; }
         @media (min-width: 768px) {
             .deck-head { display: flex; align-items: center; gap: 1.5rem; text-align: left; }
+            .deck-cover-slot { flex: none; }
             .deck-cover { width: 10rem; height: 10rem; aspect-ratio: 1; flex: none; margin: 0; }
             .deck-head-text { flex: 1; min-width: 0; }
             .deck-head-text p { margin-left: 0 !important; }
@@ -120,7 +122,7 @@
                 <!-- Header -->
                 <div class="text-start mt-2"><a href="index.html" class="btn-subtle"><i class="bi bi-arrow-left"></i> Practice / Decks</a></div>
                 <div class="deck-head mt-1 mb-4">
-                    <img id="deck-cover" class="deck-cover d-none" alt="">
+                    <div id="deck-cover-slot" class="deck-cover-slot"></div>
                     <div class="deck-head-text">
                         <h1 class="page-title mb-2" id="deck-title">Deck</h1>
                         <p class="text-secondary mx-auto mb-3" id="deck-meta" style="max-width: 36rem"></p>
@@ -224,6 +226,7 @@
             async load() {
                 this.deck = this.id ? await this.sp.getDeck(this.id) : {};
                 if (!this.deck?.id) {
+                    document.getElementById('deck-cover-slot').replaceChildren();
                     document.getElementById('deck-title').textContent = 'Deck not found';
                     document.getElementById('deck-actions').replaceChildren(this.link('index.html', 'bi-arrow-left', 'All decks', 'btn btn-sm btn-outline-accent rounded-pill px-3'));
                     document.getElementById('deck-words').replaceChildren();
@@ -233,10 +236,7 @@
                 document.title = `${this.deck.title} | Qatt.org`;
                 document.getElementById('deck-title').textContent = this.deck.title;
                 document.getElementById('deck-meta').textContent = `${words.length} items`;
-                const cover = document.getElementById('deck-cover');
-                const url = this.sp.deckImageUrl(this.deck.image_path);
-                cover.classList.toggle('d-none', !url);
-                if (url) cover.src = url;
+                document.getElementById('deck-cover-slot').replaceChildren(DeckCover.element(this.deck, this.sp.deckImageUrl(this.deck.image_path), 'deck-cover'));
                 this.renderActions();
                 this.renderWords(words);
             }

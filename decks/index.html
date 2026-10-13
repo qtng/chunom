@@ -16,6 +16,7 @@
     <script src="https://qatt.org/qatt/vendor/supabase/supabase.min.js"></script>
     <script src="../../qatt/js/navigation.js"></script>
     <script src="../../qatt/js/supabase.js"></script>
+    <script src="cover.js"></script>
     <script src="../../qatt/js/login.js"></script>
 
     <style>
@@ -242,7 +243,7 @@
                 el.innerHTML = data.map(d => `
                     <div class="list-group-item py-3 mb-2 rounded shadow-none">
                         <div class="d-flex align-items-start gap-3">
-                            ${d.image_path ? `<img class="deck-thumb" loading="lazy" alt="" src="${this.escape(this.sp.deckImageUrl(d.image_path))}">` : ''}
+                            <span class="deck-thumb-slot" data-deck="${d.id}"></span>
                             <div class="text-start">
                                 <div class="deck-title">${this.escape(d.title)}</div>
                                 <small class="text-secondary">${d.words ? d.words.length : (d.count || 0)} items</small>
@@ -255,6 +256,10 @@
                         </div>
                     </div>
                 `).join('');
+                el.querySelectorAll('.deck-thumb-slot').forEach(slot => {
+                    const d = data.find(x => x.id === slot.dataset.deck);
+                    slot.replaceWith(DeckCover.element(d, this.sp.deckImageUrl(d.image_path), 'deck-thumb'));
+                });
             }
 
             escape(text) {
