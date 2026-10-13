@@ -198,6 +198,8 @@
 
     .modal-content { background: #fffdf8; color: var(--ink); border-radius: 1rem; border: 1px solid var(--line); }
     .modal-header, .modal-footer { border-color: var(--line); }
+    .deck-toggle { display: inline-flex; align-items: center; gap: .35rem; border-radius: 2rem; border: 1.5px solid var(--cinnabar); background: #fff; color: var(--cinnabar); font-size: .9rem; line-height: 1.2; padding: .3rem .8rem; white-space: nowrap; }
+    .deck-toggle:hover, .deck-toggle:focus-visible, .deck-toggle.in-deck { background: var(--cinnabar); color: #fff; }
     .modal-title { font-family: Georgia, "Times New Roman", serif; font-weight: 400; }
     .modal-footer .btn-secondary { background: #fff; border: 1px solid var(--field); color: var(--ink); border-radius: 2rem; }
     .modal-footer .btn-secondary:hover { background: #f1e8d2; }
@@ -257,7 +259,7 @@
         <div class="modal-header">
           <h5 class="modal-title" id="modalTitle">Details</h5>
           <div class="d-flex align-items-center ms-auto">
-            <button type="button" id="deck-toggle" class="btn p-0 border-0" style="color: var(--cinnabar)" aria-label="Add to deck" title="Add to deck"><i class="bi bi-bookmark-star"></i></button>
+            <button type="button" id="deck-toggle" class="deck-toggle"><i class="bi bi-plus-lg"></i> <span>Add to deck</span></button>
             <button type="button" class="ms-4 btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
         </div>
@@ -442,10 +444,12 @@ class ChunomDict {
     return false;
   }
 
-  // Herz gefüllt, wenn das Zeichen in einem eigenen Deck liegt
+  // "Added" mit Haken auf gefülltem Button, wenn das Zeichen in einem eigenen Deck liegt
   updateDeckUi() {
     const inDeck = this.deckIdsNom === this.currentNom && this.deckIds.size > 0;
-    this.deckToggle.querySelector('i').className = `bi ${inDeck ? 'bi-bookmark-star-fill' : 'bi-bookmark-star'}`;
+    this.deckToggle.classList.toggle('in-deck', inDeck);
+    this.deckToggle.querySelector('i').className = `bi ${inDeck ? 'bi-check-lg' : 'bi-plus-lg'}`;
+    this.deckToggle.querySelector('span').textContent = inDeck ? 'Added' : 'Add to deck';
   }
 
   async loadDeckIds() {
