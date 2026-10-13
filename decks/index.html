@@ -64,6 +64,9 @@
         .empty-box { background: rgba(255, 255, 255, .6); border: 1px dashed var(--field); }
 
         .section-header { border: none !important; }
+        .account-footer { margin-top: 3rem; text-align: center; font-size: .85rem; color: var(--muted); }
+        .account-footer a { color: var(--cinnabar); text-decoration: none; }
+        .account-footer a:hover { text-decoration: underline; }
         .section-header h6 { letter-spacing: .12em; }
 
         /* modal */
@@ -86,7 +89,6 @@
                 <h1 class="page-title mt-2 mb-2">Practice / Decks</h1>
                 <p class="text-secondary mx-auto mb-5" style="max-width: 36rem">Practice Chữ Nôm with the words of your own and public decks.</p>
                 
-                <div id="account" role="alert"></div>
 
                 <!-- Personal Decks Section -->
                 <div class="text-start mb-5">
@@ -125,6 +127,7 @@
                 
             </div>
         </div>
+        <footer id="account" class="account-footer"></footer>
     </div>
 
     <!-- Create Deck Modal -->
@@ -276,24 +279,16 @@
                 }
             }
 
-            // the login as an alert at the top: sign in, or who is signed in
+            // footer: who is signed in, with a sign-out link (nothing when not signed in)
             renderAccount() {
                 const box = document.getElementById('account');
-                box.className = 'alert py-2 px-3 mb-4 d-flex flex-wrap align-items-center justify-content-center gap-2 text-center small ' + (this.signedIn() ? 'alert-success' : 'alert-warning');
-                const text = document.createElement('span');
-                const action = document.createElement('button');
-                action.type = 'button';
-                action.className = 'btn btn-sm rounded-pill px-3 ' + (this.signedIn() ? 'btn-outline-secondary' : 'btn-cinnabar');
-                if (this.signedIn()) {
-                    text.textContent = `Signed in as ${this.sp.user.email || 'you'}`;
-                    action.textContent = 'Sign out';
-                    action.addEventListener('click', async () => { await this.sp.signOut(); location.reload(); });
-                } else {
-                    text.textContent = 'Not signed in. Sign in to see your own decks and to keep them on every device.';
-                    action.textContent = 'Sign in';
-                    action.addEventListener('click', () => QattLogin.open(this.sp));
-                }
-                box.replaceChildren(text, action);
+                box.replaceChildren();
+                if (!this.signedIn()) return;
+                const out = document.createElement('a');
+                out.href = '#';
+                out.textContent = 'Sign out';
+                out.addEventListener('click', async e => { e.preventDefault(); await this.sp.signOut(); location.reload(); });
+                box.append(`Signed in as ${this.sp.user.email || 'you'} · `, out);
             }
 
             signedIn() {
