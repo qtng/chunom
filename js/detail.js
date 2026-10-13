@@ -57,6 +57,8 @@ const STYLE = `
 #detailModal qatt-code:hover { filter: brightness(1.3); }
 #detailModal qatt-code svg { stroke: currentColor; stroke-linecap: round; fill: transparent; vertical-align: baseline; display: inline-block; height: 2em; position: relative; top: -.25em; }
 #detailModal .deck-toggle { display: inline-flex; align-items: center; gap: .35rem; border-radius: 2rem; border: 1.5px solid var(--cinnabar); background: #fff; color: var(--cinnabar); font-size: .9rem; line-height: 1.2; padding: .3rem .8rem; white-space: nowrap; }
+#detailModal .ipa-box { color: #4f9a5a; font-size: 1.05rem; line-height: 1.35; }
+#detailModal .ipa-box sup { font-size: .65em; }
 #detailModal .speak-btn, .speak-btn { border: 0; background: none; color: var(--cinnabar, #a8372b); padding: 0 .35rem; line-height: 1; font-size: 1.2rem; cursor: pointer; }
 .speak-btn:hover, .speak-btn:focus-visible { opacity: .7; }
 #detailModal .modal-footer .deck-toggle { padding: .375rem .9rem; font-size: 1rem; }
@@ -185,6 +187,7 @@ class ChunomDetail {
       await ChunomDetail.loadScript(BOOTSTRAP_JS, () => window.bootstrap);
       if (typeof Qatt != 'undefined') new Qatt().observe('qatt-code'); // draws the glyphs of the popup (an element is drawn only once)
       this.data = await ChunomDetail.loadData();
+      await ChunomDetail.loadScript(new URL('ipa.js', BASE).href, () => window.ChunomIpa).catch(() => {}); // the IPA is optional
       document.body.insertAdjacentHTML('beforeend', MODAL);
       this.toast = document.getElementById('copy-toast') || document.body.appendChild(el('div', { id: 'copy-toast' }));
       const modalEl = document.getElementById('detailModal');
@@ -598,6 +601,10 @@ class ChunomDetail {
             ? uniqueReadings.map(read => el('span', { className: 'fs-2 fw-bold lh-sm d-flex justify-content-between align-items-center' }, el('span', { lang: 'vi', textContent: read }), ChunomDetail.speakButton(read)))
             : el('span', { className: 'text-secondary fst-italic', textContent: 'Part of compound words' })),
           el('div', { className: 'd-flex flex-column gap-1 mt-3 small text-secondary' },
+            window.ChunomIpa && uniqueReadings.length > 0 && el('div', { className: 'ipa-box' }, uniqueReadings.flatMap(read => {
+              const { north, south } = ChunomIpa.fromQuocNgu(read);
+              return north ? [el('div', {}, `[ ${north} ] `, el('sup', { textContent: 'north' })), el('div', {}, `[ ${south} ] `, el('sup', { textContent: 'south' }))] : [];
+            })),
             uniqueReadings.length > 0 && el('div', {}, 'Quốc Ngữ: ', el('span', { lang: 'vi', textContent: uniqueReadings.join('; ') })),
             qattParts.length > 0 && el('div', {}, 'Quốc Âm Tân Tự: ', qattParts.map((part, i) => [i ? ' / ' : '', part])),
             el('div', {},
