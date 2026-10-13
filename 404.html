@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Page not found</title>
+  <!-- GitHub Pages serves this file for every address under /chunom/ that does not exist, at any depth: everything here is absolute. -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+  <script src="https://qatt.org/qatt/js/navigation.js"></script>
+  <style>
+    :root { --ink: #2b2118; --cinnabar: #a8362a; --paper: #f7efdc; }
+    body { background: #fffdf8; color: var(--ink); }
+    .hero {
+      background:
+        radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%),
+        linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%);
+      border-bottom: 1px solid #e8dcc0;
+      min-height: calc(100vh - 60px);
+    }
+    .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: .01em; }
+    .hero .han { color: var(--cinnabar); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; }
+    .hero .lead { max-width: 38rem; color: #4a3d30; }
+    .hero .code { font-family: Georgia, "Times New Roman", serif; font-size: clamp(4rem, 18vw, 8rem); line-height: 1; color: var(--cinnabar); opacity: .85; }
+    .btn-pill { border-radius: 2rem; padding: .5rem 1.3rem; }
+    .btn-cinnabar { background: var(--cinnabar); border-color: var(--cinnabar); color: #fff; }
+    .btn-cinnabar:hover { background: #8c2c22; border-color: #8c2c22; color: #fff; }
+    @media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
+  </style>
+</head>
+<body>
+<header class="hero pt-5 pb-4">
+  <div class="container text-center">
+    <div class="han mb-2">喃</div>
+    <div class="code mb-2">404</div>
+    <h1 class="mb-3">Page not found</h1>
+    <p class="lead mx-auto mb-4">This page does not exist, or it has moved. Try one of these instead.</p>
+    <a class="btn btn-cinnabar btn-pill" href="/chunom/index.html">Back to the start page</a>
+  </div>
+</header>
+</body>
+</html>
