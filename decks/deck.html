@@ -432,6 +432,7 @@
                     imgError = (cover ? await this.sp.setDeckImage(id, cover) : await this.sp.removeDeckImage(id)).error;
                 }
                 btn.disabled = false;
+                if (pubError && /at most 10/.test(pubError.message || '')) return alert('You can publish at most 10 decks. Take one back first.');
                 if (error || imgError || pubError) return alert('Could not save the deck, please try again.');
                 bootstrap.Modal.getInstance(document.getElementById('editDeckModal')).hide();
                 await this.load();
