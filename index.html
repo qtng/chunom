@@ -198,6 +198,8 @@
 
     .modal-content { background: #fffdf8; color: var(--ink); border-radius: 1rem; border: 1px solid var(--line); }
     .modal-header, .modal-footer { border-color: var(--line); }
+    .deck-toggle { width: 2.3rem; height: 2.3rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; border: 1.5px solid var(--cinnabar); background: #fff; color: var(--cinnabar); font-size: 1.25rem; line-height: 1; padding: 0; }
+    .deck-toggle:hover, .deck-toggle:focus-visible, .deck-toggle.in-deck { background: var(--cinnabar); color: #fff; }
     .modal-title { font-family: Georgia, "Times New Roman", serif; font-weight: 400; }
     .modal-footer .btn-secondary { background: #fff; border: 1px solid var(--field); color: var(--ink); border-radius: 2rem; }
     .modal-footer .btn-secondary:hover { background: #f1e8d2; }
@@ -257,7 +259,7 @@
         <div class="modal-header">
           <h5 class="modal-title" id="modalTitle">Details</h5>
           <div class="d-flex align-items-center ms-auto">
-            <button type="button" id="deck-toggle" class="btn p-0 border-0" style="color: var(--cinnabar)" aria-label="Add to deck" title="Add to deck"><i class="bi bi-bookmark-star"></i></button>
+            <button type="button" id="deck-toggle" class="deck-toggle" aria-label="Add to deck" title="Add to deck"><i class="bi bi-plus-lg"></i></button>
             <button type="button" class="ms-4 btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
         </div>
@@ -442,10 +444,11 @@ class ChunomDict {
     return false;
   }
 
-  // Herz gefüllt, wenn das Zeichen in einem eigenen Deck liegt
+  // Haken auf gefülltem Kreis, wenn das Zeichen in einem eigenen Deck liegt
   updateDeckUi() {
     const inDeck = this.deckIdsNom === this.currentNom && this.deckIds.size > 0;
-    this.deckToggle.querySelector('i').className = `bi ${inDeck ? 'bi-bookmark-star-fill' : 'bi-bookmark-star'}`;
+    this.deckToggle.classList.toggle('in-deck', inDeck);
+    this.deckToggle.querySelector('i').className = `bi ${inDeck ? 'bi-check-lg' : 'bi-plus-lg'}`;
   }
 
   async loadDeckIds() {
