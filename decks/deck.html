@@ -231,7 +231,7 @@
 
             // a public deck of somebody else can be taken over into "My decks" (private ones are only viewable by link)
             get canTake() {
-                return !!this.deck?.id && !!this.deck.is_public && !!this.sp.user && !this.isOwner;
+                return !!this.deck?.id && !!this.deck.is_public && !this.isOwner;
             }
 
             // "12 items · by name" / "· chunom.org" for the decks of the site; the owner sees whether it is published and how many use it
@@ -267,7 +267,7 @@
                     document.getElementById('deck-words').replaceChildren();
                     return;
                 }
-                this.saved = this.canTake ? await this.sp.isDeckSaved(this.deck.id) : false;
+                this.saved = this.canTake && this.signedIn() ? await this.sp.isDeckSaved?.(this.deck.id).catch(() => false) || false : false;
                 const words = this.words();
                 document.title = `${this.deck.title} | Qatt.org`;
                 document.getElementById('deck-title').textContent = this.deck.title;
@@ -302,6 +302,7 @@
 
             // a public deck of somebody else: learning needs "Add to my decks" first
             async toggleSaved(add) {
+                if (!this.signedIn()) return QattLogin.open(this.sp, 'Sign in to add this deck to My decks.');
                 if (!add && !confirm(`Remove "${this.deck.title}" from My decks? Your progress is kept.`)) return;
                 const { error } = add ? await this.sp.saveDeckLink(this.deck) : await this.sp.removeSavedDeck(this.deck.id);
                 if (error) return alert('Could not change your decks, please try again.');
