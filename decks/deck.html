@@ -75,6 +75,7 @@
         .empty-box { background: rgba(255, 255, 255, .6); border: 1px dashed var(--field); }
 
         .section-header { border: none !important; }
+        .account-box { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--line); font-size: .85rem; color: var(--muted); text-align: center; }
         .section-header h6 { letter-spacing: .12em; }
 
         /* modal */
@@ -97,16 +98,19 @@
                 <h1 class="page-title mt-2 mb-2" id="deck-title">Deck</h1>
                 <p class="text-secondary mx-auto mb-4" id="deck-meta" style="max-width: 36rem"></p>
                 <div class="d-flex flex-wrap justify-content-center gap-2 mb-4" id="deck-actions"></div>
-                <div id="account" class="mb-3"></div>
-
                 <div class="text-start mb-5">
-                    <h6 class="text-secondary text-uppercase pb-2 mb-2 small section-header">Characters</h6>
+                    <div class="d-flex justify-content-between align-items-center pb-2 mb-2 section-header">
+                        <h6 class="text-secondary text-uppercase mb-0 small">Characters</h6>
+                        <div class="d-flex gap-2" id="deck-admin"></div>
+                    </div>
                     <div id="deck-words">
                         <div class="text-center p-5 text-secondary">
                             <div class="spinner-border spinner-border-sm accent mb-2" role="status"></div>
                         </div>
                     </div>
                 </div>
+
+                <div id="account" class="account-box"></div>
 
             </div>
         </div>
@@ -207,13 +211,12 @@
                     this.link(`immersive.html?id=${this.deck.id}`, 'bi-headphones', 'Superlearn', 'btn btn-sm btn-cinnabar px-3'),
                     this.link(`practice.html?id=${this.deck.id}`, 'bi-lightning-charge-fill', 'Practice', 'btn btn-sm btn-outline-accent rounded-pill px-3')
                 ];
-                if (this.isOwner) {
-                    actions.push(
-                        this.button('bi-pencil', 'Edit', 'btn btn-sm btn-outline-secondary rounded-pill px-3', () => this.openEdit()),
-                        this.button('bi-trash', 'Delete', 'btn btn-sm btn-outline-danger rounded-pill px-3', () => this.deleteDeck())
-                    );
-                }
                 document.getElementById('deck-actions').replaceChildren(...actions);
+                // editing and deleting: small and apart from the main actions
+                document.getElementById('deck-admin').replaceChildren(...(this.isOwner ? [
+                    this.button('bi-pencil', 'Edit', 'btn-subtle', () => this.openEdit()),
+                    this.button('bi-trash', 'Delete', 'btn-subtle', () => this.deleteDeck())
+                ] : []));
             }
 
             renderWords(words) {
