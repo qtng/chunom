@@ -167,6 +167,8 @@
                     await this.sp.init();
                     this.renderAccount();
                     document.getElementById('saveEditBtn').addEventListener('click', () => this.saveEdit());
+                    // a character was added to or removed from this deck in the popup: show the new list
+                    document.addEventListener('chunom:deckchange', e => { if (e.detail.deckId === this.id) this.load(); });
                     await this.load();
                 } catch (e) {
                     console.error("Deck Init Error:", e);
