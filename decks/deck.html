@@ -240,13 +240,14 @@
                     badge.className = 'badge text-bg-warning align-text-bottom';
                     badge.textContent = 'chunom.org';
                     add(badge);
-                } else if (this.isOwner) {
-                    add(text(deck.is_public ? 'Published' : 'Private'));
+                }
+                if (this.isOwner) {
+                    if (!deck.is_official) add(text(deck.is_public ? 'Published' : 'Private'));
                     if (deck.is_public) {
                         const users = await this.sp.getDeckSaveCount?.(deck.id) || 0;
                         if (this.deck === deck) add(text(`${users} ${users === 1 ? 'user' : 'users'}`));
                     }
-                } else {
+                } else if (!deck.is_official) {
                     const names = await this.sp.getUsernames?.([deck.user_id]) || {};
                     if (this.deck === deck) add(text(`by ${names[deck.user_id] || 'a user'}`));
                 }
