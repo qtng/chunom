@@ -147,12 +147,12 @@
             </div>
             <div class="opts">
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="telex-select" checked>
-                    <label class="form-check-label" for="telex-select">Telex</label>
-                </div>
-                <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" id="qatt-select" checked>
                     <label class="form-check-label" for="qatt-select">QATT <span class="text-secondary">(Quốc Âm Tân Tự)</span></label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="telex-select" checked>
+                    <label class="form-check-label" for="telex-select">Telex</label>
                 </div>
             </div>
         </div>
@@ -190,7 +190,6 @@
         for (const box of Object.values(switches)) {
             box.addEventListener('change', () => {
                 ime.update(options());
-                typer.focus();
             });
         }
 
@@ -211,7 +210,7 @@
         for (const [family, label] of FONTS) font.append(new Option(label, family, family === 'QATT Gothic', family === 'QATT Gothic'));
         const heading = (select, label) => { const value = select.value, g = document.createElement('optgroup'); g.label = label; g.append(...select.options); select.append(g); select.value = value; };
         heading(decoding, 'Choose QATT decoding');
-        heading(font, 'Choose font');
+        heading(font, 'Choose QATT font');
 
         const NOT_LETTER = /[^\p{Script=Latin}\p{M}]/u, WORD_END = /[\p{Script=Latin}\p{M}]+$/u;   // Han characters are letters too, but no Quốc Ngữ
 
@@ -222,7 +221,19 @@
             typer.style.fontSize = Math.round(size.value * 0.363) + 'px';
             $('size-label').textContent = size.value + '%';
         }
-        decoding.addEventListener('change', () => { parser.setDecoding(decoding.value); showPending(); });
+        // a new decoding: decode everything with the old one, then convert it again with the new one
+        decoding.addEventListener('change', () => {
+            const SEP = '\u2063';   // keeps neighbouring cells apart as words, removed after the conversion
+            let text = '';
+            for (const [part] of typer.value.matchAll(QattText.CELL_ANY)) {
+                const reading = /^[\u{F0000}-\u{F0099}]/u.test(part) ? QattText.reading(part, parser) : null;
+                text += reading && reading !== '?' ? SEP + reading + SEP : part;
+            }
+            parser.setDecoding(decoding.value);
+            typer.value = text.replace(/[\p{Script=Latin}\p{M}]+/gu, w => QattText.word(w, parser) ?? w).replaceAll(SEP, '');
+            ime.hide();
+            showPending();
+        });
         font.addEventListener('change', () => { store.set('font', font.value); applyFont(); });
         size.addEventListener('input', () => { store.set('size', size.value); applyFont(); });
 
@@ -238,7 +249,7 @@
             applyFont();
             showPending();
         }
-        qattSwitch.addEventListener('change', () => { setQatt(qattSwitch.checked); typer.focus(); });
+        qattSwitch.addEventListener('change', () => { setQatt(qattSwitch.checked); });
 
         // the word that ends right before `end` becomes QATT characters (if there are any)
         const convertBefore = end => {
@@ -322,6 +333,7 @@
             const pos = typer.selectionStart;
             if (pos !== typer.selectionEnd || pos < length) return;
             if (!NOT_LETTER.test(typer.value.slice(pos - length, pos)) || !convertBefore(pos - length)) return;
+            ime.hide();   // the word is QATT now: no Nôm candidates
             if (!swallow) return;
             const at = typer.selectionStart;
             typer.setRangeText('', at - length, at, 'end');
