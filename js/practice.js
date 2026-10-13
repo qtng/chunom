@@ -60,9 +60,9 @@ class App {
   <div id="fixed-bottom-controls" class="fixed-bottom-bar">
     <div class="d-grid">
       <button id="main-action-btn"
-        class="btn btn-info btn-lg shadow-lg fw-bold py-3"
+        class="btn btn-info shadow-lg fw-bold py-2"
         >
-        Bắt đầu học
+        Start
       </button>
     </div>
   </div>`;

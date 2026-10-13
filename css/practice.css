@@ -199,6 +199,7 @@ svg use[href^="#qt"] { stroke-width: calc(var(--stroke-width) * 3 / 4) }
 .fixed-bottom-bar .btn { pointer-events: auto; }
 /* on phones the bar of the site navigation is at the bottom: the controls sit above it */
 @media (max-width: 767.98px) and (min-height: 480px) {
+  body.has-bottom-bar:not(.bar-typing) { padding-bottom: calc(150px + env(safe-area-inset-bottom)); } /* the end of the page stays reachable above the controls */
   body.has-bottom-bar:not(.bar-typing) .fixed-bottom-bar { bottom: calc(61px + env(safe-area-inset-bottom)); padding-bottom: 12px; }
 }
 
