@@ -227,6 +227,29 @@
                 return !!this.deck?.id && this.deck.user_id === this.sp.user?.id;
             }
 
+            // "12 items · by name" / "· chunom.org" for the decks of the site; the owner sees whether it is published and how many use it
+            async renderMeta(count) {
+                const meta = document.getElementById('deck-meta'), deck = this.deck;
+                meta.textContent = `${count} items`;
+                const add = node => meta.append(' · ', node);
+                const text = t => document.createTextNode(t);
+                if (deck.is_official) {
+                    const badge = document.createElement('span');
+                    badge.className = 'badge text-bg-warning align-text-bottom';
+                    badge.textContent = 'chunom.org';
+                    add(badge);
+                } else if (this.isOwner) {
+                    add(text(deck.is_public ? 'Published' : 'Private'));
+                    if (deck.is_public) {
+                        const users = await this.sp.getDeckSaveCount?.(deck.id) || 0;
+                        if (this.deck === deck) add(text(`${users} ${users === 1 ? 'user' : 'users'}`));
+                    }
+                } else {
+                    const names = await this.sp.getUsernames?.([deck.user_id]) || {};
+                    if (this.deck === deck) add(text(`by ${names[deck.user_id] || 'a user'}`));
+                }
+            }
+
             async load() {
                 this.deck = this.id ? await this.sp.getDeck(this.id) : {};
                 if (!this.deck?.id) {
@@ -239,7 +262,7 @@
                 const words = this.words();
                 document.title = `${this.deck.title} | Qatt.org`;
                 document.getElementById('deck-title').textContent = this.deck.title;
-                document.getElementById('deck-meta').textContent = `${words.length} items`;
+                this.renderMeta(words.length);
                 document.getElementById('deck-cover-slot').replaceChildren(DeckCover.element(this.deck, this.sp.deckImageUrl(this.deck.image_path), 'deck-cover'));
                 this.renderActions();
                 this.renderWords(words);
