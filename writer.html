@@ -214,10 +214,10 @@
 
         const NOT_LETTER = /[^\p{Script=Latin}\p{M}]/u, WORD_END = /[\p{Script=Latin}\p{M}]+$/u;   // Han characters are letters too, but no Quốc Ngữ
 
-        // QATT characters are in the private use area: the field needs a QATT font in front of the Nôm fonts
+        // QATT characters are in the private use area: the field needs a QATT font in front of the Nôm fonts, also with QATT off (existing QATT characters keep their look)
         function applyFont() {
             document.documentElement.style.setProperty('--qfont', `"${font.value}"`);
-            ime.update({ fontList: on ? [font.value] : [] });
+            ime.update({ fontList: [font.value] });
             typer.style.fontSize = Math.round(size.value * 0.363) + 'px';
             $('size-label').textContent = size.value + '%';
         }
