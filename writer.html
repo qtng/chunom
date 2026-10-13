@@ -221,16 +221,10 @@
             typer.style.fontSize = Math.round(size.value * 0.363) + 'px';
             $('size-label').textContent = size.value + '%';
         }
-        // a new decoding: decode everything with the old one, then convert it again with the new one
+        // a new decoding: every QATT cell is read with the old decoding and written with the new one, other text stays as it is
         decoding.addEventListener('change', () => {
-            const SEP = '\u2063';   // keeps neighbouring cells apart as words, removed after the conversion
-            let text = '';
-            for (const [part] of typer.value.matchAll(QattText.CELL_ANY)) {
-                const reading = /^[\u{F0000}-\u{F0099}]/u.test(part) ? QattText.reading(part, parser) : null;
-                text += reading && reading !== '?' ? SEP + reading + SEP : part;
-            }
+            typer.value = QattText.recode(typer.value, parser, new VietnameseParser(decoding.value));
             parser.setDecoding(decoding.value);
-            typer.value = text.replace(/[\p{Script=Latin}\p{M}]+/gu, w => QattText.word(w, parser) ?? w).replaceAll(SEP, '');
             ime.hide();
             showPending();
         });
@@ -379,6 +373,7 @@
                 afterCell = isCell;
             }
             const box = $('reading-out');
+            if (!box.hidden) { box.hidden = true; return; }   // a second click hides it again
             box.textContent = out || '(nothing to read)';
             box.hidden = false;
         });
