@@ -185,6 +185,8 @@
     </div>
 
     <script>
+        const MIN_PUBLIC_ITEMS = 4;
+
         class DeckPage {
             constructor() {
                 this.sp = new SupabaseService();
@@ -369,12 +371,7 @@
                 document.getElementById('coverInput').value = '';
                 this.showCover(this.sp.deckImageUrl(deck.image_path));
                 document.getElementById('editTitleInput').value = deck.title || '';
-                const pub = document.getElementById('publicInput');
-                pub.checked = !!deck.is_public;
-                pub.disabled = this.sp.isAnonymous && !deck.is_public; // publishing needs a signed-in account
-                document.getElementById('publicHint').textContent = pub.disabled
-                    ? 'Sign in to publish a deck.'
-                    : 'Everybody can find the deck, learn it and see your user name. You can take it back at any time.';
+                document.getElementById('publicInput').checked = !!deck.is_public;
                 this.renderEditWords();
                 bootstrap.Modal.getOrCreateInstance(document.getElementById('editDeckModal')).show();
             }
@@ -410,10 +407,22 @@
                 this.showCover(blob ? URL.createObjectURL(blob) : null);
             }
 
+            // publishing needs a signed-in account and at least MIN_PUBLIC items (a deck that is public already can always be taken back)
+            updatePublish(count) {
+                const pub = document.getElementById('publicInput'), was = !!this.deck.is_public;
+                const anonymous = this.sp.isAnonymous, few = count < MIN_PUBLIC_ITEMS;
+                if (few && !was) pub.checked = false;
+                pub.disabled = !was && (anonymous || few);
+                document.getElementById('publicHint').textContent = anonymous && !was ? 'Sign in to publish a deck.'
+                    : few && !was ? `A deck needs at least ${MIN_PUBLIC_ITEMS} items to be published.`
+                    : 'Everybody can find the deck, learn it and see your user name. You can take it back at any time.';
+            }
+
             renderEditWords() {
                 const { words, removed } = this.editing;
                 const shown = words.filter(w => w.n !== '.config' && !removed.has(w));
                 document.getElementById('editCount').textContent = `${shown.length} items`;
+                this.updatePublish(shown.length);
                 const rows = shown.map(word => {
                     const qn = document.createElement('span');
                     qn.className = 'flex-grow-1';
