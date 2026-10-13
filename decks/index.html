@@ -16,7 +16,7 @@
     <script src="https://qatt.org/qatt/vendor/supabase/supabase.min.js"></script>
     <script src="../../qatt/js/navigation.js"></script>
     <script src="../../qatt/js/supabase.js"></script>
-    <script src="cover.js"></script>
+    <script src="deck-cover.js"></script>
     <script src="../../qatt/js/login.js"></script>
 
     <style>
@@ -261,7 +261,7 @@
                 el.querySelectorAll('.deck-thumb-slot').forEach(slot => {
                     const d = data.find(x => x.id === slot.dataset.deck);
                     if (window.DeckCover) slot.replaceWith(DeckCover.element(d, this.sp.deckImageUrl(d.image_path), 'deck-thumb'));
-                    else slot.remove(); // cover.js not loaded (yet): the list works without thumbnails
+                    else slot.remove(); // deck-cover.js not loaded (yet): the list works without thumbnails
                 });
             }
 
