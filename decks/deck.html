@@ -75,6 +75,9 @@
         .empty-box { background: rgba(255, 255, 255, .6); border: 1px dashed var(--field); }
 
         .section-header { border: none !important; }
+        .deck-menu-btn { width: 2rem; height: 2rem; display: inline-flex; align-items: center; justify-content: center; color: var(--muted); border: 1px solid var(--field); background: #fff; border-radius: 50%; padding: 0; }
+        .deck-menu-btn:hover, .deck-menu-btn:focus-visible, .deck-menu-btn.show { color: var(--cinnabar); border-color: var(--cinnabar); }
+        .dropdown-menu { border-color: var(--line); border-radius: .8rem; }
         .account-box { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--line); font-size: .85rem; color: var(--muted); text-align: center; }
         .section-header h6 { letter-spacing: .12em; }
 
@@ -99,10 +102,7 @@
                 <p class="text-secondary mx-auto mb-4" id="deck-meta" style="max-width: 36rem"></p>
                 <div class="d-flex flex-wrap justify-content-center gap-2 mb-4" id="deck-actions"></div>
                 <div class="text-start mb-5">
-                    <div class="d-flex justify-content-between align-items-center pb-2 mb-2 section-header">
-                        <h6 class="text-secondary text-uppercase mb-0 small">Characters</h6>
-                        <div class="d-flex gap-2" id="deck-admin"></div>
-                    </div>
+                    <h6 class="text-secondary text-uppercase pb-2 mb-2 small section-header">Characters</h6>
                     <div id="deck-words">
                         <div class="text-center p-5 text-secondary">
                             <div class="spinner-border spinner-border-sm accent mb-2" role="status"></div>
@@ -211,12 +211,21 @@
                     this.link(`immersive.html?id=${this.deck.id}`, 'bi-headphones', 'Superlearn', 'btn btn-sm btn-cinnabar px-3'),
                     this.link(`practice.html?id=${this.deck.id}`, 'bi-lightning-charge-fill', 'Practice', 'btn btn-sm btn-outline-accent rounded-pill px-3')
                 ];
+                // editing and deleting: in a menu behind an icon button
+                if (this.isOwner) {
+                    const menu = document.createElement('div');
+                    menu.className = 'dropdown';
+                    menu.innerHTML = `
+                        <button type="button" class="deck-menu-btn" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Deck options" title="Deck options"><i class="bi bi-three-dots"></i></button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><button type="button" class="dropdown-item" data-act="edit"><i class="bi bi-pencil me-2"></i>Rename deck or remove characters</button></li>
+                            <li><button type="button" class="dropdown-item text-danger" data-act="delete"><i class="bi bi-trash me-2"></i>Delete the whole deck</button></li>
+                        </ul>`;
+                    menu.querySelector('[data-act=edit]').addEventListener('click', () => this.openEdit());
+                    menu.querySelector('[data-act=delete]').addEventListener('click', () => this.deleteDeck());
+                    actions.push(menu);
+                }
                 document.getElementById('deck-actions').replaceChildren(...actions);
-                // editing and deleting: small and apart from the main actions
-                document.getElementById('deck-admin').replaceChildren(...(this.isOwner ? [
-                    this.button('bi-pencil', 'Edit', 'btn-subtle', () => this.openEdit()),
-                    this.button('bi-trash', 'Delete', 'btn-subtle', () => this.deleteDeck())
-                ] : []));
             }
 
             renderWords(words) {
