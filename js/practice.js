@@ -287,6 +287,7 @@ class App {
             <div class="progress">
               <div class="progress-bar bg-info"></div>
             </div>
+            ${window.ChunomDetail && this.formsOf(this.currentLesson)?.includes("nom") ? '<p class="small opacity-75 mt-2 mb-0"><i>Chạm vào một thẻ để xem chữ trong từ điển.</i></p>' : ''}
           </div>
           <div class="row g-3" id="words-grid"></div>
         </div>
@@ -309,6 +310,7 @@ class App {
         }
 
         this.renderToElement(word, activeStyle, card);
+        this.linkToDetail(card, word);
         card.insertAdjacentHTML('beforeend', this.getProgressEmoji(word, false, 'grid'));
         gridElement.appendChild(column).appendChild(card);
     });
@@ -739,6 +741,15 @@ class App {
     });
   }
 
+  // In the overview of a deck (chunom.org): a click on the card of a word opens the detail popup of its characters (js/detail.js)
+  linkToDetail(card, word) {
+    const nom = window.ChunomDetail && this.items[word]?.n;
+    if (!nom || !this.formValue(word, "nom")) return;
+    card.classList.add("detail-link");
+    card.title = "Xem trong từ điển";
+    card.addEventListener("click", () => ChunomDetail.open(nom));
+  }
+
   // The glyph of a word as <qatt-code> elements (qatt.js draws them), one per syllable; a word without a glyph stays as text.
   // style and skipReference are left from the former styles of the script and no longer used.
   renderToElement(word, style, element, skipReference = false, withHint = true) {
@@ -750,11 +761,6 @@ class App {
       const nom = document.createElement("div");
       nom.className = "nom-chars w-100 text-center";
       nom.append(...this.nomChars(item.n, 32));
-      if (window.ChunomDetail) { // the pages of chunom.org: a click opens the detail popup of the characters (js/detail.js)
-        nom.classList.add("nom-link");
-        nom.title = "Show in the dictionary";
-        nom.addEventListener("click", () => ChunomDetail.open(item.n));
-      }
       element.appendChild(nom);
     }
     if (codes.length) {
@@ -892,6 +898,7 @@ class App {
         card.className = "word-grid-item";
         
         this.renderToElement(word, this.getActiveStyle(lesson), card);
+        this.linkToDetail(card, word);
         card.insertAdjacentHTML('beforeend', this.getProgressEmoji(word, false, 'grid'));
         lessonDiv.querySelector(`#grid-${lesson.id}`).appendChild(column).appendChild(card);
       });

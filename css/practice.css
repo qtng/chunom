@@ -193,7 +193,7 @@ svg use[href^="#qt"] { stroke-width: calc(var(--stroke-width) * 3 / 4) }
 .fade-in { animation: fadeIn 0.4s ease-out; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
 
-.fixed-bottom-bar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 550px; background: linear-gradient(to top, #fffdf8 85%, transparent); padding: 30px 15px 25px 15px; z-index: 2000; display: none; pointer-events: none; }
+.fixed-bottom-bar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 550px; background: linear-gradient(to top, #fffdf8 85%, transparent); padding: 30px 15px 25px 15px; z-index: 1000; display: none; pointer-events: none; }
 .fixed-bottom-bar .btn { pointer-events: auto; }
 
 .symbol-animate {
@@ -306,5 +306,5 @@ qatt-code { --stroke-width: 2px; }
 .symbol-card qatt-code { --stroke-width: 3px; }
 qatt-code svg { height: var(--svg-height); width: auto; }
 
-.nom-chars.nom-link { cursor: pointer; }
-.nom-chars.nom-link:hover { filter: brightness(.9); }
+.word-grid-item.detail-link { cursor: pointer; }
+.word-grid-item.detail-link:hover { border-color: #a8362a; }
