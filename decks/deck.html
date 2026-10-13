@@ -58,6 +58,11 @@
         /* edit dialog: entries of a deck */
         .entry-row { display: flex; align-items: center; gap: .8rem; padding: .4rem .2rem; border-bottom: 1px solid var(--line); }
         .entry-row .glyph { min-width: 4.2rem; text-align: left; white-space: nowrap; font-family: 'Nom Na Tong Supplement', 'pa', serif; font-size: 1.6rem; }
+        /* the characters of the deck page: a grid, one column on the phone */
+        #deck-words { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); gap: .6rem; }
+        .deck-item { display: flex; align-items: center; gap: .8rem; padding: .5rem .9rem; background: rgba(255, 255, 255, .8); border: 1px solid var(--line); border-radius: .8rem; color: var(--ink); text-decoration: none; transition: border-color .15s, box-shadow .15s; }
+        .deck-item:hover, .deck-item:focus-visible { border-color: var(--cinnabar); box-shadow: 0 .2rem .6rem rgba(60, 40, 20, .08); color: var(--ink); }
+        .deck-item .glyph { min-width: 4.2rem; white-space: nowrap; font-family: 'Nom Na Tong Supplement', 'pa', serif; font-size: 1.6rem; }
         .entry-row .btn-remove { color: var(--muted); border: 0; background: none; padding: .2rem .5rem; border-radius: 2rem; }
         .entry-row .btn-remove:hover, .entry-row .btn-remove:focus-visible { color: var(--cinnabar); background: rgba(168, 54, 42, .08); }
 
@@ -97,7 +102,7 @@
 
     <div class="container py-3 pb-5" style="max-width: 62rem">
         <div class="row justify-content-center text-center">
-            <div class="col-lg-10">
+            <div class="col-12">
                 
                 <!-- Header -->
                 <div class="text-start mt-2"><a href="index.html" class="btn-subtle"><i class="bi bi-arrow-left"></i> Practice / Decks</a></div>
@@ -252,14 +257,17 @@
                     qn.className = 'flex-grow-1';
                     qn.lang = 'vi';
                     qn.textContent = word.qn || '';
-                    const row = document.createElement('div');
-                    row.className = 'entry-row';
+                    const row = document.createElement('a');
+                    row.className = 'deck-item';
+                    row.href = `../index.html?detail=${encodeURIComponent(word.n || '')}`; // opens the character in the dictionary
+                    row.title = 'Show in the dictionary';
                     row.append(this.glyph(word.n || ''), qn);
                     return row;
                 });
                 if (!rows.length) {
                     const empty = document.createElement('div');
                     empty.className = 'p-4 text-center text-secondary small empty-box rounded-3';
+                    empty.style.gridColumn = '1 / -1';
                     empty.textContent = 'This deck is empty.';
                     rows.push(empty);
                 }
@@ -319,6 +327,7 @@
                 if (!rows.length) {
                     const empty = document.createElement('div');
                     empty.className = 'p-4 text-center text-secondary small empty-box rounded-3';
+                    empty.style.gridColumn = '1 / -1';
                     empty.textContent = 'This deck is empty.';
                     rows.push(empty);
                 }
