@@ -75,10 +75,12 @@
         .empty-box { background: rgba(255, 255, 255, .6); border: 1px dashed var(--field); }
 
         .section-header { border: none !important; }
+        .account-footer { margin-top: 3rem; text-align: center; font-size: .85rem; color: var(--muted); }
+        .account-footer a { color: var(--cinnabar); text-decoration: none; }
+        .account-footer a:hover { text-decoration: underline; }
         .deck-menu-btn { width: 2rem; height: 2rem; display: inline-flex; align-items: center; justify-content: center; color: var(--muted); border: 1px solid var(--field); background: #fff; border-radius: 50%; padding: 0; }
         .deck-menu-btn:hover, .deck-menu-btn:focus-visible, .deck-menu-btn.show { color: var(--cinnabar); border-color: var(--cinnabar); }
         .dropdown-menu { border-color: var(--line); border-radius: .8rem; }
-        .account-box { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--line); font-size: .85rem; color: var(--muted); text-align: center; }
         .section-header h6 { letter-spacing: .12em; }
 
         /* modal */
@@ -98,7 +100,8 @@
             <div class="col-lg-10">
                 
                 <!-- Header -->
-                <h1 class="page-title mt-2 mb-2" id="deck-title">Deck</h1>
+                <div class="text-start mt-2"><a href="index.html" class="btn-subtle"><i class="bi bi-arrow-left"></i> Practice / Decks</a></div>
+                <h1 class="page-title mt-1 mb-2" id="deck-title">Deck</h1>
                 <p class="text-secondary mx-auto mb-4" id="deck-meta" style="max-width: 36rem"></p>
                 <div class="d-flex flex-wrap justify-content-center gap-2 mb-4" id="deck-actions"></div>
                 <div class="text-start mb-5">
@@ -110,10 +113,9 @@
                     </div>
                 </div>
 
-                <div id="account" class="account-box"></div>
-
             </div>
         </div>
+        <footer id="account" class="account-footer"></footer>
     </div>
 
     <!-- Edit Deck Modal -->
@@ -155,12 +157,28 @@
             async init() {
                 try {
                     await this.sp.init();
-                    QattLogin.status(this.sp, document.getElementById('account'));
+                    this.renderAccount();
                     document.getElementById('saveEditBtn').addEventListener('click', () => this.saveEdit());
                     await this.load();
                 } catch (e) {
                     console.error("Deck Init Error:", e);
                 }
+            }
+
+            // footer: who is signed in, with a sign-out link (nothing when not signed in)
+            renderAccount() {
+                const box = document.getElementById('account');
+                box.replaceChildren();
+                if (!this.signedIn()) return;
+                const out = document.createElement('a');
+                out.href = '#';
+                out.textContent = 'Sign out';
+                out.addEventListener('click', async e => { e.preventDefault(); await this.sp.signOut(); location.reload(); });
+                box.append(`Signed in as ${this.sp.user.email || 'you'} · `, out);
+            }
+
+            signedIn() {
+                return !!this.sp.user && !this.sp.isAnonymous;
             }
 
             get isOwner() {
