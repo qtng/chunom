@@ -601,12 +601,12 @@ class ChunomDetail {
             ? uniqueReadings.map(read => el('span', { className: 'fs-2 fw-bold lh-sm d-flex justify-content-between align-items-center' }, el('span', { lang: 'vi', textContent: read }), ChunomDetail.speakButton(read)))
             : el('span', { className: 'text-secondary fst-italic', textContent: 'Part of compound words' })),
           el('div', { className: 'd-flex flex-column gap-1 mt-3 small text-secondary' },
-            window.ChunomIpa && uniqueReadings.length > 0 && el('div', { className: 'ipa-box' }, uniqueReadings.flatMap(read => {
-              const { north, south } = ChunomIpa.fromQuocNgu(read);
-              return north ? [el('div', {}, `[ ${north} ] `, el('sup', { textContent: 'north' })), el('div', {}, `[ ${south} ] `, el('sup', { textContent: 'south' }))] : [];
-            })),
             uniqueReadings.length > 0 && el('div', {}, 'Quốc Ngữ: ', el('span', { lang: 'vi', textContent: uniqueReadings.join('; ') })),
             qattParts.length > 0 && el('div', {}, 'Quốc Âm Tân Tự: ', qattParts.map((part, i) => [i ? ' / ' : '', part])),
+            window.ChunomIpa && uniqueReadings.length > 0 && el('div', { className: 'd-flex align-items-baseline gap-2' }, 'IPA:', el('div', { className: 'ipa-box' }, uniqueReadings.flatMap(read => {
+              const { north, south } = ChunomIpa.fromQuocNgu(read);
+              return north ? [el('div', {}, `[ ${north} ] `, el('sup', { textContent: 'north' })), el('div', {}, `[ ${south} ] `, el('sup', { textContent: 'south' }))] : [];
+            }))),
             el('div', {},
               el('span', { className: 'clickable-meta border-bottom', title: 'Click to copy hex code', 'data-copy': codes.join(' '), textContent: `Unicode: ${codes.map(c => `U+${c}`).join(' ')}` }),
               ' - ',
