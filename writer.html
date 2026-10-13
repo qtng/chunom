@@ -291,6 +291,16 @@
             typer.setSelectionRange(caret - dropBeforeStart, end - dropBeforeEnd);
         };
 
+        // the text as it was before the last edit, to repair a deletion that cut a cell in two (keyboards that bypass the Backspace handler below)
+        let before = '';
+        typer.addEventListener('beforeinput', () => { before = typer.value; });
+        const repairDeletion = () => {
+          const fixed = QattText.repairDeletion(before, typer.value, typer.selectionStart);
+          if (!fixed) return;
+          typer.value = fixed.value;
+          typer.setSelectionRange(fixed.caret, fixed.caret);
+        };
+
         // Backspace and Delete remove a whole cell
         typer.addEventListener('beforeinput', e => {
             if (!on || e.isComposing || (e.inputType !== 'deleteContentBackward' && e.inputType !== 'deleteContentForward')) return;
@@ -333,6 +343,7 @@
             typer.setRangeText('', at - length, at, 'end');
         };
         typer.addEventListener('input', e => {
+          if (on) repairDeletion();
             if (!on) return;
             if (!e.isComposing && (e.inputType === 'insertLineBreak' || e.inputType === 'insertParagraph')) flush(1, true);
             else if (!e.isComposing && e.inputType === 'insertText' && e.data && NOT_LETTER.test(e.data)) flush(e.data.length, /^\s+$/.test(e.data));
