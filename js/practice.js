@@ -750,6 +750,11 @@ class App {
       const nom = document.createElement("div");
       nom.className = "nom-chars w-100 text-center";
       nom.append(...this.nomChars(item.n, 32));
+      if (window.ChunomDetail) { // the pages of chunom.org: a click opens the detail popup of the characters (js/detail.js)
+        nom.classList.add("nom-link");
+        nom.title = "Show in the dictionary";
+        nom.addEventListener("click", () => ChunomDetail.open(item.n));
+      }
       element.appendChild(nom);
     }
     if (codes.length) {
