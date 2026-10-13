@@ -229,6 +229,11 @@
                 return !!this.deck?.id && this.deck.user_id === this.sp.user?.id;
             }
 
+            // a public deck of somebody else can be taken over into "My decks" (private ones are only viewable by link)
+            get canTake() {
+                return !!this.deck?.id && !!this.deck.is_public && !!this.sp.user && !this.isOwner;
+            }
+
             // "12 items · by name" / "· chunom.org" for the decks of the site; the owner sees whether it is published and how many use it
             async renderMeta(count) {
                 const meta = document.getElementById('deck-meta'), deck = this.deck;
@@ -262,6 +267,7 @@
                     document.getElementById('deck-words').replaceChildren();
                     return;
                 }
+                this.saved = this.canTake ? await this.sp.isDeckSaved(this.deck.id) : false;
                 const words = this.words();
                 document.title = `${this.deck.title} | Qatt.org`;
                 document.getElementById('deck-title').textContent = this.deck.title;
@@ -294,23 +300,48 @@
                 return b;
             }
 
+            // a public deck of somebody else: learning needs "Add to my decks" first
+            async toggleSaved(add) {
+                if (!add && !confirm(`Remove "${this.deck.title}" from My decks? Your progress is kept.`)) return;
+                const { error } = add ? await this.sp.saveDeckLink(this.deck) : await this.sp.removeSavedDeck(this.deck.id);
+                if (error) return alert('Could not change your decks, please try again.');
+                this.saved = add;
+                this.renderActions();
+            }
+
             renderActions() {
-                const actions = [
-                    this.link(`immersive.html?id=${this.deck.id}`, 'bi-headphones', 'Superlearn', 'btn btn-sm btn-cinnabar px-3'),
-                    this.link(`practice.html?id=${this.deck.id}`, 'bi-lightning-charge-fill', 'Practice', 'btn btn-sm btn-outline-accent rounded-pill px-3')
-                ];
+                const locked = this.canTake && !this.saved;
+                const learn = (href, icon, text, cls) => {
+                    if (!locked) return this.link(href, icon, text, cls);
+                    const a = this.link(href, icon, text, `${cls} disabled`);
+                    a.removeAttribute('href');
+                    a.setAttribute('aria-disabled', 'true');
+                    a.title = 'Add the deck to My decks first';
+                    return a;
+                };
+                const actions = [];
+                if (locked) actions.push(this.button('bi-plus-lg', 'Add to my decks', 'btn btn-sm btn-cinnabar px-3', () => this.toggleSaved(true)));
+                actions.push(
+                    learn(`immersive.html?id=${this.deck.id}`, 'bi-headphones', 'Superlearn', locked ? 'btn btn-sm btn-outline-accent rounded-pill px-3' : 'btn btn-sm btn-cinnabar px-3'),
+                    learn(`practice.html?id=${this.deck.id}`, 'bi-lightning-charge-fill', 'Practice', 'btn btn-sm btn-outline-accent rounded-pill px-3')
+                );
                 // editing and deleting: in a menu behind an icon button
+                const items = [];
                 if (this.isOwner) {
+                    items.push(['edit', 'bi-pencil', 'Edit deck or items', '', () => this.openEdit()],
+                        ['delete', 'bi-trash', 'Delete the whole deck', ' text-danger', () => this.deleteDeck()]);
+                } else if (this.canTake && this.saved) {
+                    items.push(['remove', 'bi-x-circle', 'Remove from my decks', '', () => this.toggleSaved(false)]);
+                }
+                if (items.length) {
                     const menu = document.createElement('div');
                     menu.className = 'dropdown';
                     menu.innerHTML = `
                         <button type="button" class="deck-menu-btn" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Deck options" title="Deck options"><i class="bi bi-three-dots"></i></button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                            <li><button type="button" class="dropdown-item" data-act="edit"><i class="bi bi-pencil me-2"></i>Edit deck or items</button></li>
-                            <li><button type="button" class="dropdown-item text-danger" data-act="delete"><i class="bi bi-trash me-2"></i>Delete the whole deck</button></li>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">${items.map(([act, icon, label, cls]) =>
+                            `<li><button type="button" class="dropdown-item${cls}" data-act="${act}"><i class="bi ${icon} me-2"></i>${label}</button></li>`).join('')}
                         </ul>`;
-                    menu.querySelector('[data-act=edit]').addEventListener('click', () => this.openEdit());
-                    menu.querySelector('[data-act=delete]').addEventListener('click', () => this.deleteDeck());
+                    items.forEach(([act, , , , fn]) => menu.querySelector(`[data-act=${act}]`).addEventListener('click', fn));
                     actions.push(menu);
                 }
                 document.getElementById('deck-actions').replaceChildren(...actions);
