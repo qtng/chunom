@@ -202,6 +202,7 @@
     .modal-content { background: #fffdf8; color: var(--ink); border-radius: 1rem; border: 1px solid var(--line); }
     .modal-header, .modal-footer { border-color: var(--line); }
     .deck-toggle { display: inline-flex; align-items: center; gap: .35rem; border-radius: 2rem; border: 1.5px solid var(--cinnabar); background: #fff; color: var(--cinnabar); font-size: .9rem; line-height: 1.2; padding: .3rem .8rem; white-space: nowrap; }
+    .modal-footer .deck-toggle { padding: .375rem .9rem; font-size: 1rem; }
     .deck-toggle:hover, .deck-toggle:focus-visible, .deck-toggle.in-deck { background: var(--cinnabar); color: #fff; }
     .modal-title { font-family: Georgia, "Times New Roman", serif; font-weight: 400; }
     .modal-footer .btn-secondary { background: #fff; border: 1px solid var(--field); color: var(--ink); border-radius: 2rem; }
@@ -262,12 +263,13 @@
         <div class="modal-header">
           <h5 class="modal-title" id="modalTitle">Details</h5>
           <div class="d-flex align-items-center ms-auto">
-            <button type="button" id="deck-toggle" class="deck-toggle"><i class="bi bi-plus-lg"></i> <span>Add to deck</span></button>
+            <button type="button" class="deck-toggle"><i class="bi bi-plus-lg"></i> <span>Add to deck</span></button>
             <button type="button" class="ms-4 btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
         </div>
         <div class="modal-body" id="modalBody"></div>
         <div class="modal-footer">
+          <button type="button" class="deck-toggle"><i class="bi bi-plus-lg"></i> <span>Add to deck</span></button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
         <!-- Bottom-Sheet: Zeichen einem eigenen Deck zuordnen (liegt im Popup, damit der Fokus-Trap von Bootstrap nicht stört) -->
@@ -402,12 +404,12 @@ class ChunomDict {
 
   // Decks: das Zeichen im Popup einem Deck der Flashcards zuordnen (Daten in Supabase, angemeldet)
   initDecks() {
-    this.deckToggle = document.getElementById('deck-toggle');
+    this.deckToggles = [...document.querySelectorAll('.deck-toggle')]; // in the header and in the footer of the popup
     this.deckSheet = document.getElementById('deck-sheet');
     this.deckSheetBody = document.getElementById('deck-sheet-body');
-    this.deckToggle.addEventListener('click', () => {
+    for (const toggle of this.deckToggles) toggle.addEventListener('click', () => {
       this.openDeckSheet();
-      this.deckToggle.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.5)' }, { transform: 'scale(1)' }], { duration: 300, easing: 'ease-out' });
+      toggle.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.5)' }, { transform: 'scale(1)' }], { duration: 300, easing: 'ease-out' });
     });
     this.deckSheet.addEventListener('click', e => { if (e.target === this.deckSheet) this.closeDeckSheet(); });
     document.getElementById('deck-sheet-close').addEventListener('click', () => this.closeDeckSheet());
@@ -450,9 +452,11 @@ class ChunomDict {
   // "Added" mit Haken auf gefülltem Button, wenn das Zeichen in einem eigenen Deck liegt
   updateDeckUi() {
     const inDeck = this.deckIdsNom === this.currentNom && this.deckIds.size > 0;
-    this.deckToggle.classList.toggle('in-deck', inDeck);
-    this.deckToggle.querySelector('i').className = `bi ${inDeck ? 'bi-check-lg' : 'bi-plus-lg'}`;
-    this.deckToggle.querySelector('span').textContent = inDeck ? 'Added' : 'Add to deck';
+    for (const toggle of this.deckToggles) {
+      toggle.classList.toggle('in-deck', inDeck);
+      toggle.querySelector('i').className = `bi ${inDeck ? 'bi-check-lg' : 'bi-plus-lg'}`;
+      toggle.querySelector('span').textContent = inDeck ? 'Added' : 'Add to deck';
+    }
   }
 
   async loadDeckIds() {
