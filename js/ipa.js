@@ -104,10 +104,13 @@ function ipa(syllable, initials, specials, tones) {
   return `${initial}${info.glide ? 'ʷ' : ''}${nucleus}${final}${tones[info.tone]}`;
 }
 
+// An entry of several syllables ("sinh nhật") is converted syllable by syllable
+const words = (s, fn) => String(s).trim().split(/\s+/).map(fn).filter(Boolean).join(' ');
+
 window.ChunomIpa = {
   analyse,
-  north: s => ipa(s, INITIAL_NORTH, SPECIALS_NORTH, TONE_NORTH),
-  south: s => ipa(s, INITIAL_SOUTH, SPECIALS_SOUTH, TONE_SOUTH),
+  north: s => words(s, w => ipa(w, INITIAL_NORTH, SPECIALS_NORTH, TONE_NORTH)),
+  south: s => words(s, w => ipa(w, INITIAL_SOUTH, SPECIALS_SOUTH, TONE_SOUTH)),
   fromQuocNgu(s) { return { north: this.north(s), south: this.south(s) }; },
 };
 })();
