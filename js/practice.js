@@ -49,7 +49,7 @@ class App {
         <div id="badge-sunflower" class="score-badge badge-sunflower" title="Hoa">🌻 <span id="val-sunflower">0</span></div>
         <div id="badge-coin" class="score-badge badge-coin" title="Vàng">🪙 <span id="val-coin">0</span></div>
       </div>
-      <div id="account-btn" class="nav-icon-btn me-2" role="button"></div>
+      <button type="button" id="account-btn" class="account-pill"></button>
     </div>
   </header>
 
@@ -110,7 +110,7 @@ class App {
     const button = document.getElementById("account-btn");
     if (!button) return;
     const signedIn = this.isSignedIn();
-    button.textContent = signedIn ? "✅" : "👤";
+    button.textContent = signedIn ? "Sign out" : "Sign in";
     button.title = signedIn ? `Signed in as ${this.db.user.email || "you"}` : "Not signed in";
   }
 
@@ -277,10 +277,12 @@ class App {
     const lessonClass = `lesson-${lessonId}`;
     this.mainContainer.innerHTML = `
       <div class="fade-in ${lessonClass}">
-        <button onclick="app.renderLibrary()" class="back-link btn btn-link text-white-50 text-decoration-none mb-2 p-0">
-          ← Quay lại
-        </button>
-        ${this.backUrl ? '<button onclick="app.renderLeaderboard()" class="btn btn-sm btn-outline-warning float-end">Bảng xếp hạng</button>' : ''}
+        <div class="d-flex justify-content-between align-items-center my-3">
+          <button onclick="app.renderLibrary()" class="back-link btn btn-link text-white-50 text-decoration-none p-0">
+            ← Quay lại
+          </button>
+          ${this.backUrl ? '<button onclick="app.renderLeaderboard()" class="btn btn-sm btn-outline-warning">Bảng xếp hạng</button>' : ''}
+        </div>
         <div class="card p-4 preview-container">
           <div class="mb-4">
             <h3 class="fw-bold">${this.currentLesson.name}</h3>

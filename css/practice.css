@@ -66,6 +66,8 @@ html { scroll-behavior: auto !important; }
       justify-content: center;
       border: 1px solid var(--line);
     }
+.account-pill { margin-right: .5rem; padding: .2rem .8rem; font-size: .85rem; line-height: 1.4; white-space: nowrap; color: var(--ink); background: #fff; border: 1px solid var(--field); border-radius: 2rem; }
+.account-pill:hover { background: #f1e8d2; border-color: #b9a982; }
 .nav-icon-btn:hover { background: #f1e8d2; transform: scale(1.1); }
 
 svg {
