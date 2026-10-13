@@ -64,7 +64,6 @@
         .empty-box { background: rgba(255, 255, 255, .6); border: 1px dashed var(--field); }
 
         .section-header { border: none !important; }
-        .account-box { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--line); font-size: .85rem; color: var(--muted); text-align: center; }
         .section-header h6 { letter-spacing: .12em; }
 
         /* modal */
@@ -87,6 +86,8 @@
                 <h1 class="page-title mt-2 mb-2">Practice / Decks</h1>
                 <p class="text-secondary mx-auto mb-5" style="max-width: 36rem">Practice Chữ Nôm with the words of your own and public decks.</p>
                 
+                <div id="account" role="alert"></div>
+
                 <!-- Personal Decks Section -->
                 <div class="text-start mb-5">
                     <div class="d-flex justify-content-between align-items-center pb-2 mb-3 section-header">
@@ -122,8 +123,6 @@
                     </div>
                 </div>
                 
-                <div id="account" class="account-box"></div>
-
             </div>
         </div>
     </div>
@@ -166,7 +165,7 @@
             async init() {
                 try {
                     await this.sp.init();
-                    QattLogin.status(this.sp, document.getElementById('account'));
+                    this.renderAccount();
                     this.setupEventListeners();
                     await this.loadLists();
                 } catch (e) {
@@ -215,21 +214,24 @@
             renderList(containerId, data, isPersonal) {
                 const el = document.getElementById(containerId);
                 if (!data || data.length === 0) {
-                    let emptyHtml = `
-                        <div class="p-4 text-center text-secondary rounded-3 small empty-box">
-                            No decks found.`;
-                    
-                    if (containerId === 'deck-list') {
-                        emptyHtml += `
+                    let emptyHtml = '<div class="p-4 text-center text-secondary rounded-3 small empty-box">';
+                    if (containerId !== 'deck-list') {
+                        emptyHtml += 'No decks found.';
+                    } else if (this.signedIn()) {
+                        emptyHtml += `No decks found.
                             <div class="mt-2">
-                                <button class="btn btn-sm btn-link accent text-decoration-none p-0 border-0 shadow-none" 
+                                <button class="btn btn-sm btn-link accent text-decoration-none p-0 border-0 shadow-none"
                                         data-bs-toggle="modal" data-bs-target="#createDeckModal">
                                     Create your first deck now
                                 </button>
                             </div>`;
+                    } else {
+                        emptyHtml += `Sign in to see your own decks.
+                            <div class="mt-2"><button type="button" class="btn btn-sm btn-cinnabar rounded-pill px-3" id="signin-decks">Sign in</button></div>`;
                     }
                     emptyHtml += `</div>`;
                     el.innerHTML = emptyHtml;
+                    el.querySelector('#signin-decks')?.addEventListener('click', () => QattLogin.open(this.sp));
                     return;
                 }
 
@@ -244,7 +246,7 @@
                         <div class="d-flex flex-wrap gap-2 mt-3">
                             <a href="immersive.html?id=${d.id}" class="btn btn-sm btn-cinnabar px-3"><i class="bi bi-headphones me-1"></i> Superlearn</a>
                             <a href="practice.html?id=${d.id}" class="btn btn-sm btn-outline-accent rounded-pill px-3"><i class="bi bi-lightning-charge-fill"></i> Practice</a>
-                            <a href="deck.html?id=${d.id}" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Details</a>
+                            <a href="deck.html?id=${d.id}" class="btn btn-sm btn-outline-secondary rounded-pill px-3 ms-auto">Details</a>
                         </div>
                     </div>
                 `).join('');
@@ -272,6 +274,26 @@
                     text.textContent = "Create";
                     spinner.classList.add('d-none');
                 }
+            }
+
+            // the login as an alert at the top: sign in, or who is signed in
+            renderAccount() {
+                const box = document.getElementById('account');
+                box.className = 'alert py-2 px-3 mb-4 d-flex flex-wrap align-items-center justify-content-center gap-2 text-center small ' + (this.signedIn() ? 'alert-success' : 'alert-warning');
+                const text = document.createElement('span');
+                const action = document.createElement('button');
+                action.type = 'button';
+                action.className = 'btn btn-sm rounded-pill px-3 ' + (this.signedIn() ? 'btn-outline-secondary' : 'btn-cinnabar');
+                if (this.signedIn()) {
+                    text.textContent = `Signed in as ${this.sp.user.email || 'you'}`;
+                    action.textContent = 'Sign out';
+                    action.addEventListener('click', async () => { await this.sp.signOut(); location.reload(); });
+                } else {
+                    text.textContent = 'Not signed in. Sign in to see your own decks and to keep them on every device.';
+                    action.textContent = 'Sign in';
+                    action.addEventListener('click', () => QattLogin.open(this.sp));
+                }
+                box.replaceChildren(text, action);
             }
 
             signedIn() {

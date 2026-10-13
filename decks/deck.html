@@ -78,7 +78,6 @@
         .deck-menu-btn { width: 2rem; height: 2rem; display: inline-flex; align-items: center; justify-content: center; color: var(--muted); border: 1px solid var(--field); background: #fff; border-radius: 50%; padding: 0; }
         .deck-menu-btn:hover, .deck-menu-btn:focus-visible, .deck-menu-btn.show { color: var(--cinnabar); border-color: var(--cinnabar); }
         .dropdown-menu { border-color: var(--line); border-radius: .8rem; }
-        .account-box { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--line); font-size: .85rem; color: var(--muted); text-align: center; }
         .section-header h6 { letter-spacing: .12em; }
 
         /* modal */
@@ -98,8 +97,10 @@
             <div class="col-lg-10">
                 
                 <!-- Header -->
-                <h1 class="page-title mt-2 mb-2" id="deck-title">Deck</h1>
+                <div class="text-start mt-2"><a href="index.html" class="btn-subtle"><i class="bi bi-arrow-left"></i> Practice / Decks</a></div>
+                <h1 class="page-title mt-1 mb-2" id="deck-title">Deck</h1>
                 <p class="text-secondary mx-auto mb-4" id="deck-meta" style="max-width: 36rem"></p>
+                <div id="account" role="alert"></div>
                 <div class="d-flex flex-wrap justify-content-center gap-2 mb-4" id="deck-actions"></div>
                 <div class="text-start mb-5">
                     <h6 class="text-secondary text-uppercase pb-2 mb-2 small section-header">Characters</h6>
@@ -109,8 +110,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div id="account" class="account-box"></div>
 
             </div>
         </div>
@@ -155,12 +154,36 @@
             async init() {
                 try {
                     await this.sp.init();
-                    QattLogin.status(this.sp, document.getElementById('account'));
+                    this.renderAccount();
                     document.getElementById('saveEditBtn').addEventListener('click', () => this.saveEdit());
                     await this.load();
                 } catch (e) {
                     console.error("Deck Init Error:", e);
                 }
+            }
+
+            // the login as an alert at the top: sign in, or who is signed in
+            renderAccount() {
+                const box = document.getElementById('account');
+                box.className = 'alert py-2 px-3 mb-4 d-flex flex-wrap align-items-center justify-content-center gap-2 text-center small ' + (this.signedIn() ? 'alert-success' : 'alert-warning');
+                const text = document.createElement('span');
+                const action = document.createElement('button');
+                action.type = 'button';
+                action.className = 'btn btn-sm rounded-pill px-3 ' + (this.signedIn() ? 'btn-outline-secondary' : 'btn-cinnabar');
+                if (this.signedIn()) {
+                    text.textContent = `Signed in as ${this.sp.user.email || 'you'}`;
+                    action.textContent = 'Sign out';
+                    action.addEventListener('click', async () => { await this.sp.signOut(); location.reload(); });
+                } else {
+                    text.textContent = 'Not signed in. Sign in to see your own decks and to keep them on every device.';
+                    action.textContent = 'Sign in';
+                    action.addEventListener('click', () => QattLogin.open(this.sp));
+                }
+                box.replaceChildren(text, action);
+            }
+
+            signedIn() {
+                return !!this.sp.user && !this.sp.isAnonymous;
             }
 
             get isOwner() {
