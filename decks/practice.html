@@ -52,6 +52,8 @@ async function main() {
       return false;
     }
 
+    // learning a public deck of somebody else takes it over into "My decks"
+    app.db.saveDeckLink?.(deck);
     document.title = `${deck.title} | Practice | Chunom.org`;
     app.addLesson({
       id: "deck-" + deck.id,

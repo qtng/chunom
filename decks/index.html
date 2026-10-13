@@ -205,12 +205,16 @@
             }
 
             async loadLists() {
-                const [personal, publicDecks] = await Promise.all([
+                const [own, saved, publicDecks] = await Promise.all([
                     this.sp.getDecks() || [],
+                    this.sp.getSavedDecks?.() || [],
                     this.sp.getPublicDecks() || []
                 ]);
-                this.personalDecks = personal;
-                this.publicDecks = publicDecks;
+                // taken-over public decks are in "My decks", not in the catalog
+                const savedIds = new Set(saved.map(d => d.id));
+                this.owners = await this.sp.getUsernames?.([...saved, ...publicDecks].map(d => d.user_id)) || {};
+                this.personalDecks = [...own, ...saved];
+                this.publicDecks = publicDecks.filter(d => !savedIds.has(d.id));
 
                 // one list failing must not keep the other from showing
                 for (const [id, list, mine] of [['deck-list', this.personalDecks, true], ['public-deck-list', this.publicDecks, false]]) {
@@ -248,21 +252,38 @@
                             <span class="deck-thumb-slot" data-deck="${d.id}"></span>
                             <div class="text-start">
                                 <div class="deck-title">${this.escape(d.title)}</div>
-                                <small class="text-secondary">${d.words ? d.words.length : (d.count || 0)} items</small>
+                                <small class="text-secondary">${d.words ? d.words.length : (d.count || 0)} items${this.byline(d, isPersonal)}</small>
                             </div>
                         </div>
                         <div class="d-flex flex-wrap gap-2 mt-3">
                             <a href="immersive.html?id=${d.id}" class="btn btn-sm btn-cinnabar px-3"><i class="bi bi-headphones me-1"></i> Superlearn</a>
                             <a href="practice.html?id=${d.id}" class="btn btn-sm btn-outline-accent rounded-pill px-3"><i class="bi bi-lightning-charge-fill"></i> Practice</a>
-                            <a href="deck.html?id=${d.id}" class="btn btn-sm btn-outline-secondary rounded-pill px-3 ms-auto">Details</a>
+                            ${d.saved ? `<button type="button" class="btn btn-sm btn-link text-secondary text-decoration-none ms-auto" data-remove="${d.id}"><i class="bi bi-x-lg me-1"></i>Remove</button>` : '<span class="ms-auto"></span>'}
+                            <a href="deck.html?id=${d.id}" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Details</a>
                         </div>
                     </div>
                 `).join('');
+                el.querySelectorAll('[data-remove]').forEach(btn => btn.addEventListener('click', async () => {
+                    const d = data.find(x => x.id === btn.dataset.remove);
+                    if (!confirm(`Remove "${d.title}" from My decks? Your progress is kept.`)) return;
+                    btn.disabled = true;
+                    const { error } = await this.sp.removeSavedDeck(d.id);
+                    if (error) { btn.disabled = false; alert('Could not remove the deck, please try again.'); return; }
+                    this.loadLists();
+                }));
                 el.querySelectorAll('.deck-thumb-slot').forEach(slot => {
                     const d = data.find(x => x.id === slot.dataset.deck);
                     if (window.DeckCover) slot.replaceWith(DeckCover.element(d, this.sp.deckImageUrl(d.image_path), 'deck-thumb'));
                     else slot.remove(); // deck-cover.js not loaded (yet): the list works without thumbnails
                 });
+            }
+
+            // who published a public deck: "Chunom" for the decks of the site, else the user name
+            byline(d, isPersonal) {
+                if (isPersonal && !d.saved) return d.is_public ? ' · Published' : '';
+                if (d.is_official) return ' · <span class="badge text-bg-warning align-text-bottom">chunom.org</span>';
+                const name = this.owners && this.owners[d.user_id];
+                return ` · by ${this.escape(name || 'a user')}`;
             }
 
             escape(text) {
