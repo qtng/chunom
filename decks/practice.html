@@ -30,35 +30,44 @@ async function main() {
   const box = document.getElementById("app-container");
 
   const id = new URLSearchParams(location.search).get("id");
-  const deck = id ? await app.db.getDeck(id) : null;
 
-  // one item per word: the key identifies it, the same quốc ngữ with different characters stay apart
-  const items = {};
-  (deck?.words || []).forEach(w => {
-    const n = (w.n || "").trim(), qn = (w.qn || "").trim().replace(/\s+/g, " ");
-    if (!qn || n === ".config") return;
-    items[qn + "|" + n] = { n, qn };
-  });
-  Object.assign(app.items, items);
-  // a word needs one of the other forms besides its quốc ngữ, or there is nothing to ask for
-  const symbols = Object.keys(items).filter(key => FORMS.some(form => form !== "text" && app.formValue(key, form) !== null));
+  // the deck from the server as the lesson of the practice (again after the deck changed in the popup)
+  async function loadDeck() {
+    const deck = id ? await app.db.getDeck(id) : null;
 
-  if (symbols.length < 4) {
-    box.innerHTML = `<div class="card p-4 text-center"><h5 class="mb-3">${deck ? "This deck needs at least 4 words with Nôm characters to practise." : "Deck not found."}</h5>
-      <a class="btn btn-info" href="index.html">← Decks</a></div>`;
-    return;
+    // one item per word: the key identifies it, the same quốc ngữ with different characters stay apart
+    const items = {};
+    (deck?.words || []).forEach(w => {
+      const n = (w.n || "").trim(), qn = (w.qn || "").trim().replace(/\s+/g, " ");
+      if (!qn || n === ".config") return;
+      items[qn + "|" + n] = { n, qn };
+    });
+    Object.assign(app.items, items);
+    // a word needs one of the other forms besides its quốc ngữ, or there is nothing to ask for
+    const symbols = Object.keys(items).filter(key => FORMS.some(form => form !== "text" && app.formValue(key, form) !== null));
+
+    if (symbols.length < 4) {
+      box.innerHTML = `<div class="card p-4 text-center"><h5 class="mb-3">${deck ? "This deck needs at least 4 words with Nôm characters to practise." : "Deck not found."}</h5>
+        <a class="btn btn-info" href="index.html">← Decks</a></div>`;
+      return false;
+    }
+
+    document.title = `${deck.title} | Practice | Chunom.org`;
+    app.addLesson({
+      id: "deck-" + deck.id,
+      category: "Deck",
+      name: deck.title,
+      classes: "bg-primary",
+      items,
+      symbols
+    });
+    app.renderLessonPreview("deck-" + deck.id, true);
+    return true;
   }
 
-  document.title = `${deck.title} | Practice | Chunom.org`;
-  app.addLesson({
-    id: "deck-" + deck.id,
-    category: "Deck",
-    name: deck.title,
-    classes: "bg-primary",
-    items,
-    symbols
-  });
-  app.renderLessonPreview("deck-" + deck.id, true);
+  if (!await loadDeck()) return;
+  // a character was added to or removed from this deck in the popup: the overview shows the new list
+  document.addEventListener("chunom:deckchange", e => { if (e.detail.deckId === id) loadDeck(); });
 }
 main();
   </script>

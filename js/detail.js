@@ -7,6 +7,7 @@ The detail popup of a character (readings, glyphs, related characters, the "Add 
       urlFor(nom)       address of the history entry of the open popup (default: the address of the page, unchanged)
       onQattClick(text) a click on a glyph in the popup (default: search for it in the dictionary, index.html)
       onClose()         the popup was closed by the back button
+  document 'chunom:deckchange' ({ deckId, nom, added }) after a character was added to or removed from a deck
 */
 (() => {
 const BASE = new URL('./', document.currentScript?.src || location.href); // the folder js/ of chunom
@@ -364,6 +365,11 @@ class ChunomDetail {
     if (creating) nameInput.focus();
   }
 
+  // Tells the page that a deck changed (a character added or removed, a deck created), so that it can show the new state
+  announceDeckChange(deckId, added) {
+    document.dispatchEvent(new CustomEvent('chunom:deckchange', { detail: { deckId, nom: this.currentNom, added } }));
+  }
+
   async toggleInDeck(deck, row) {
     const nom = this.currentNom, qn = this.currentQn;
     const add = !this.deckIds.has(deck.id);
@@ -374,6 +380,7 @@ class ChunomDetail {
       row.disabled = false;
       return;
     }
+    this.announceDeckChange(deck.id, add);
     if (nom !== this.currentNom) return;
     this.deckIds[add ? 'add' : 'delete'](deck.id);
     deck.count = Math.max(0, (deck.count || 0) + (add ? 1 : -1));
@@ -393,6 +400,7 @@ class ChunomDetail {
       this.showToast('Could not create the deck, please try again.');
       return this.renderDeckSheet(true);
     }
+    this.announceDeckChange(null, true);
     this.closeDeckSheet();
     this.showToast(`Added to “${title}”`);
     if (nom === this.currentNom) this.loadDeckIds();
