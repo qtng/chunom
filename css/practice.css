@@ -306,5 +306,5 @@ qatt-code { --stroke-width: 2px; }
 .symbol-card qatt-code { --stroke-width: 3px; }
 qatt-code svg { height: var(--svg-height); width: auto; }
 
-.nom-chars.nom-link { cursor: pointer; }
-.nom-chars.nom-link:hover { filter: brightness(.9); }
+.word-grid-item.detail-link { cursor: pointer; }
+.word-grid-item.detail-link:hover { border-color: #a8362a; }

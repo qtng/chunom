@@ -41,6 +41,10 @@ const STYLE = `
 #detailModal .font-serif { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }
 #detailModal .font-monospace { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', monospace; }
 #detailModal .lh-sm { line-height: 1.1; }
+#detailModal .list-group { border-top: 1px solid var(--line) !important; }
+#detailModal .list-group-item { background: #fffdf8 !important; border: 0 !important; border-bottom: 1px solid var(--line) !important; border-radius: 0 !important; margin: 0 !important; color: var(--ink); }
+#detailModal .list-group-item:last-child { border-bottom: 0 !important; }
+#detailModal .list-group-item-action:hover { background: #f6edd6 !important; }
 #detailModal .glyph-box { min-width: 120px; height: 160px; flex-shrink: 0; cursor: pointer; }
 #detailModal .badge-rank { font-weight: 400; border: 1px solid var(--field); color: var(--muted); font-size: .65rem; background: transparent; }
 #detailModal .clickable-meta { cursor: pointer; transition: opacity .2s; }
