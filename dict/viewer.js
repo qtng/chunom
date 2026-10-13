@@ -79,11 +79,11 @@ export class DictionaryViewer {
 		const { config: c, root } = this;
 		const ui = this.ui = {};
 
-		const switcher = el('ul', { className: 'nav nav-pills dict-switch mb-2' },
+		const switcher = el('ul', { className: 'nav nav-pills dict-switch justify-content-center mb-2' },
 			...Object.values(DICTIONARIES).filter(d => !d.hidden).map(d => el('li', { className: 'nav-item' },
 				el('a', { className: `nav-link py-1 px-2${d.id == c.id ? ' active' : ''}`, href: `${d.id}.html`, textContent: d.short }))));
 
-		const header = el('header', { className: 'mb-2' }, switcher,
+		const header = el('header', { className: 'mb-2 text-center' }, switcher,
 			el('h1', { className: 'h5 mb-0', lang: c.titleLang || c.lang, textContent: c.title }),
 			el('p', { className: 'text-secondary small mb-0' },
 				el('span', { lang: c.lang, textContent: c.subtitle }),
@@ -231,6 +231,7 @@ export class DictionaryViewer {
 		matchMedia(WIDE).addEventListener('change', () => this.applyTabs());
 		this.bindSwipe();
 		this.bindPinch();
+		this.bindMouseDrag();
 		// touch-action is read when a finger lands, so keep the class current as soon as the zoom changes
 		const syncPinch = () => this.ui.stage.classList.toggle('is-pinched', this.isPinched());
 		window.visualViewport?.addEventListener('resize', syncPinch);
@@ -282,6 +283,28 @@ export class DictionaryViewer {
 		}, { passive: true });
 		document.addEventListener('touchend', e => { if (e.touches.length < 2) stop(); }, { passive: true });
 		document.addEventListener('touchcancel', stop, { passive: true });
+	}
+
+	// With the mouse the zoomed page is dragged like with a finger: sideways in the stage, vertically with the page.
+	bindMouseDrag() {
+		const { stage } = this.ui;
+		let drag = null;
+		stage.addEventListener('pointerdown', e => {
+			if (e.pointerType != 'mouse' || e.button != 0 || this.zoom <= 1.01) return;
+			drag = { x: e.clientX, y: e.clientY, left: stage.scrollLeft };
+			stage.setPointerCapture(e.pointerId);
+			stage.classList.add('is-dragging');
+			e.preventDefault(); // no text or image selection while dragging
+		});
+		stage.addEventListener('pointermove', e => {
+			if (!drag) return;
+			stage.scrollLeft = drag.left - (e.clientX - drag.x);
+			scrollBy(0, drag.y - e.clientY);
+			drag.y = e.clientY;
+		});
+		const end = () => { drag = null; stage.classList.remove('is-dragging'); };
+		stage.addEventListener('pointerup', end);
+		stage.addEventListener('pointercancel', end);
 	}
 
 	/** Browser zoom (pinch): visualViewport.scale is 1 unzoomed, 1.15 at 15 % */

@@ -84,7 +84,8 @@ body {
 	transition: opacity .15s, transform .15s ease-out;
 	will-change: transform;
 }
-.dict-stage.is-zoomed .dict-image { cursor: zoom-out; }
+.dict-stage.is-zoomed .dict-image { cursor: grab; }
+.dict-stage.is-dragging .dict-image { cursor: grabbing; }
 .dict-stage.is-inverted { background: #1c1c1c; } /* inverted pages are dark: keep the dark stage */
 .dict-stage.is-inverted .dict-image { filter: invert(1) hue-rotate(180deg); background: #111; }
 .dict-stage.is-loading .dict-image { opacity: .35; }

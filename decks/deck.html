@@ -57,7 +57,7 @@
 
         /* edit dialog: entries of a deck */
         .entry-row { display: flex; align-items: center; gap: .8rem; padding: .4rem .2rem; border-bottom: 1px solid var(--line); }
-        .entry-row .glyph { min-width: 2.5rem; text-align: center; font-family: 'Nom Na Tong Supplement', 'pa', serif; font-size: 1.6rem; }
+        .entry-row .glyph { min-width: 4.2rem; text-align: left; white-space: nowrap; font-family: 'Nom Na Tong Supplement', 'pa', serif; font-size: 1.6rem; }
         .entry-row .btn-remove { color: var(--muted); border: 0; background: none; padding: .2rem .5rem; border-radius: 2rem; }
         .entry-row .btn-remove:hover, .entry-row .btn-remove:focus-visible { color: var(--cinnabar); background: rgba(168, 54, 42, .08); }
 
@@ -266,21 +266,23 @@
                 document.getElementById('deck-words').replaceChildren(...rows);
             }
 
-            // a character as image with the font as fallback, like in the dictionary
+            // an item as images (one per character) with the font as fallback, like in the dictionary
             glyph(nom) {
                 const box = document.createElement('span');
                 box.className = 'glyph';
-                if (!/^[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{323af}]$/u.test(nom)) {
-                    box.textContent = nom;
-                    return box;
+                for (const ch of Array.from(nom)) {
+                    if (!/^[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{323af}]$/u.test(ch)) {
+                        box.append(ch);
+                        continue;
+                    }
+                    const img = new Image(32, 32);
+                    img.alt = ch;
+                    img.style.verticalAlign = 'middle';
+                    const hex = ch.codePointAt(0).toString(16).toUpperCase();
+                    img.addEventListener('error', () => img.replaceWith(ch));
+                    img.src = `https://qatt.org/chunom-assets/generated/32/${hex}.webp`;
+                    box.append(img);
                 }
-                const img = new Image(32, 32);
-                img.alt = nom;
-                img.style.verticalAlign = 'middle';
-                const hex = nom.codePointAt(0).toString(16).toUpperCase();
-                img.addEventListener('error', () => img.replaceWith(nom));
-                img.src = `https://qatt.org/chunom-assets/generated/32/${hex}.webp`;
-                box.append(img);
                 return box;
             }
 
