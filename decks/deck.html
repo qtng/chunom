@@ -350,16 +350,18 @@
                 document.getElementById('coverRemove').classList.toggle('d-none', !url);
             }
 
-            // cuts the middle square out of the chosen photo and scales it to 128 x 128 px (JPEG, under 10 KB): it is only shown as a small picture
+            // cuts the middle square out of the chosen photo and scales it to at most 512 x 512 px as WebP (about 20 KB), or as JPEG when the browser cannot write WebP
             async pickCover(file) {
                 if (!file) return;
                 try {
                     const bmp = await createImageBitmap(file);
                     const side = Math.min(bmp.width, bmp.height);
                     const canvas = document.createElement('canvas');
-                    canvas.width = canvas.height = Math.min(128, side);
+                    canvas.width = canvas.height = Math.min(512, side);
                     canvas.getContext('2d').drawImage(bmp, (bmp.width - side) / 2, (bmp.height - side) / 2, side, side, 0, 0, canvas.width, canvas.height);
-                    const blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', 0.85));
+                    let blob = await new Promise(res => canvas.toBlob(res, 'image/webp', 0.8));
+                    // browsers that cannot write WebP hand back a PNG, which is much larger: use JPEG then
+                    if (!blob || blob.type !== 'image/webp') blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', 0.85));
                     if (!blob) throw new Error('empty');
                     this.setCover(blob);
                 } catch (e) {
