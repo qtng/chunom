@@ -50,17 +50,6 @@
         .btn-subtle:hover { color: var(--cinnabar); }
         .btn-subtle:focus-visible { outline: 2px solid var(--cinnabar); outline-offset: 2px; }
 
-        /* deck menu (edit, delete) */
-        .deck-menu-btn { color: var(--muted); border: 0; background: none; padding: .2rem .5rem; border-radius: 2rem; }
-        .deck-menu-btn:hover, .deck-menu-btn:focus-visible { color: var(--cinnabar); background: rgba(168, 54, 42, .08); }
-        .dropdown-menu { border-color: var(--line); border-radius: .8rem; }
-
-        /* edit dialog: entries of a deck */
-        .entry-row { display: flex; align-items: center; gap: .8rem; padding: .4rem .2rem; border-bottom: 1px solid var(--line); }
-        .entry-row .glyph { min-width: 2.5rem; text-align: center; font-family: 'Nom Na Tong Supplement', 'pa', serif; font-size: 1.6rem; }
-        .entry-row .btn-remove { color: var(--muted); border: 0; background: none; padding: .2rem .5rem; border-radius: 2rem; }
-        .entry-row .btn-remove:hover, .entry-row .btn-remove:focus-visible { color: var(--cinnabar); background: rgba(168, 54, 42, .08); }
-
         /* deck cards */
         .list-group { border: none !important; }
         .list-group-item {
@@ -163,34 +152,6 @@
         </div>
     </div>
 
-    <!-- Edit Deck Modal -->
-    <div class="modal fade" id="editDeckModal" data-bs-backdrop="static" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content border-0 shadow-lg">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title">Edit Deck</h5>
-                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body border-0">
-                    <div class="mb-4">
-                        <label for="editTitleInput" class="form-label text-secondary small text-uppercase">Deck Title</label>
-                        <input type="text" class="form-control shadow-none" id="editTitleInput" maxlength="80">
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <h6 class="text-secondary text-uppercase mb-0 small">Characters</h6>
-                        <span id="editCount" class="text-secondary small"></span>
-                    </div>
-                    <div id="editWords"></div>
-                    <p class="text-secondary small mt-3 mb-0">Add characters in the dictionary: open a character and tap the heart.</p>
-                </div>
-                <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-cancel shadow-none" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-cinnabar px-4 fw-bold shadow-none" id="saveEditBtn">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
         class SuperlearningDashboard {
             constructor() {
@@ -230,14 +191,6 @@
                         titleInput.classList.remove('is-invalid');
                     }
                 });
-
-                document.getElementById('deck-list').addEventListener('click', e => {
-                    const del = e.target.closest('[data-delete-deck]');
-                    if (del) this.deleteDeck(del.dataset.deleteDeck);
-                    const edit = e.target.closest('[data-edit-deck]');
-                    if (edit) this.openEdit(edit.dataset.editDeck);
-                });
-                document.getElementById('saveEditBtn').addEventListener('click', () => this.saveEdit());
 
                 submitBtn.addEventListener('click', () => this.handleCreateDeck());
                 titleInput.addEventListener('keypress', (e) => {
@@ -285,18 +238,11 @@
                                 <div class="deck-title">${this.escape(d.title)}</div>
                                 <small class="text-secondary">${d.words ? d.words.length : (d.count || 0)} items</small>
                             </div>
-                            ${isPersonal ? `
-                            <div class="dropdown">
-                                <button type="button" class="deck-menu-btn" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Deck menu"><i class="bi bi-three-dots-vertical"></i></button>
-                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                                    <li><button type="button" class="dropdown-item" data-edit-deck="${d.id}"><i class="bi bi-pencil me-2"></i>Edit</button></li>
-                                    <li><button type="button" class="dropdown-item text-danger" data-delete-deck="${d.id}"><i class="bi bi-trash me-2"></i>Delete</button></li>
-                                </ul>
-                            </div>` : ''}
                         </div>
                         <div class="d-flex flex-wrap gap-2 mt-3">
                             <a href="immersive.html?id=${d.id}" class="btn btn-sm btn-cinnabar px-3"><i class="bi bi-headphones me-1"></i> Superlearn</a>
                             <a href="practice.html?id=${d.id}" class="btn btn-sm btn-outline-accent rounded-pill px-3"><i class="bi bi-lightning-charge-fill"></i> Practice</a>
+                            <a href="deck.html?id=${d.id}" class="btn btn-sm btn-outline-secondary rounded-pill px-3"><i class="bi bi-list-ul me-1"></i> Details</a>
                         </div>
                     </div>
                 `).join('');
@@ -304,83 +250,6 @@
 
             escape(text) {
                 return String(text ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-            }
-
-            // a character as image with the font as fallback, like in the dictionary
-            glyph(nom) {
-                const box = document.createElement('span');
-                box.className = 'glyph';
-                if (!/^[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{323af}]$/u.test(nom)) {
-                    box.textContent = nom;
-                    return box;
-                }
-                const img = new Image(32, 32);
-                img.alt = nom;
-                img.style.verticalAlign = 'middle';
-                const hex = nom.codePointAt(0).toString(16).toUpperCase();
-                img.addEventListener('error', () => img.replaceWith(nom));
-                img.src = `https://qatt.org/chunom-assets/generated/32/${hex}.webp`;
-                box.append(img);
-                return box;
-            }
-
-            async openEdit(id) {
-                const deck = await this.sp.getDeck(id);
-                if (!deck.id || deck.user_id !== this.sp.user?.id) return;
-                this.editing = { id: deck.id, words: deck.words || [], removed: new Set() };
-                document.getElementById('editTitleInput').value = deck.title || '';
-                this.renderEditWords();
-                bootstrap.Modal.getOrCreateInstance(document.getElementById('editDeckModal')).show();
-            }
-
-            renderEditWords() {
-                const { words, removed } = this.editing;
-                const shown = words.filter(w => w.n !== '.config' && !removed.has(w));
-                document.getElementById('editCount').textContent = `${shown.length} items`;
-                const rows = shown.map(word => {
-                    const qn = document.createElement('span');
-                    qn.className = 'flex-grow-1';
-                    qn.lang = 'vi';
-                    qn.textContent = word.qn || '';
-                    const remove = document.createElement('button');
-                    remove.type = 'button';
-                    remove.className = 'btn-remove';
-                    remove.title = 'Remove';
-                    remove.setAttribute('aria-label', 'Remove');
-                    remove.innerHTML = '<i class="bi bi-trash"></i>';
-                    remove.addEventListener('click', () => { removed.add(word); this.renderEditWords(); });
-                    const row = document.createElement('div');
-                    row.className = 'entry-row';
-                    row.append(this.glyph(word.n || ''), qn, remove);
-                    return row;
-                });
-                if (!rows.length) {
-                    const empty = document.createElement('div');
-                    empty.className = 'p-4 text-center text-secondary small empty-box rounded-3';
-                    empty.textContent = 'This deck is empty.';
-                    rows.push(empty);
-                }
-                document.getElementById('editWords').replaceChildren(...rows);
-            }
-
-            async saveEdit() {
-                const { id, words, removed } = this.editing;
-                const btn = document.getElementById('saveEditBtn');
-                btn.disabled = true;
-                const title = document.getElementById('editTitleInput').value.trim() || 'Untitled Deck';
-                const { error } = await this.sp.saveDeck({ id, title, words: words.filter(w => !removed.has(w)) });
-                btn.disabled = false;
-                if (error) return alert('Could not save the deck, please try again.');
-                bootstrap.Modal.getInstance(document.getElementById('editDeckModal')).hide();
-                await this.loadLists();
-            }
-
-            async deleteDeck(id) {
-                const deck = this.personalDecks.find(d => d.id === id);
-                if (!deck || !confirm(`Delete the deck "${deck.title}"? This cannot be undone.`)) return;
-                const { error } = await this.sp.deleteDeck(id);
-                if (error) return alert('Could not delete the deck, please try again.');
-                await this.loadLists();
             }
 
             setLoading(loading) {
