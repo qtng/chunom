@@ -197,6 +197,10 @@ svg use[href^="#qt"] { stroke-width: calc(var(--stroke-width) * 3 / 4) }
 
 .fixed-bottom-bar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 550px; background: linear-gradient(to top, #fffdf8 85%, transparent); padding: 30px 15px 25px 15px; z-index: 1000; display: none; pointer-events: none; }
 .fixed-bottom-bar .btn { pointer-events: auto; }
+/* on phones the bar of the site navigation is at the bottom: the controls sit above it */
+@media (max-width: 767.98px) and (min-height: 480px) {
+  body.has-bottom-bar:not(.bar-typing) .fixed-bottom-bar { bottom: calc(61px + env(safe-area-inset-bottom)); padding-bottom: 12px; }
+}
 
 .symbol-animate {
       display: inline-block;
