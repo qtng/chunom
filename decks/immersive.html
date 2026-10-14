@@ -188,7 +188,7 @@
             <div id="deck-meta" class="text-secondary small text-uppercase mb-4"></div>
         </div>
         <button id="start-button" onclick="app.engage()">
-            <i class="bi bi-play-fill text-warning me-2 btn-start-icon"></i>Start Session
+            <i class="bi bi-play-fill text-warning me-2 btn-start-icon"></i><span data-vi="Bắt đầu">Start session</span>
         </button>
         <div id="index-toggle-wrapper" class="d-none text-center">
             <a class="text-secondary small text-decoration-none" data-bs-toggle="collapse" href="#deck-index-collapse">
@@ -394,7 +394,8 @@
                     isMusicOn: localStorage.getItem('musicOn') !== 'false',
                     isSpeechOn: localStorage.getItem('speechOn') !== 'false',
                     isBinauralOn: localStorage.getItem('binauralOn') !== 'false',
-                    binauralType: localStorage.getItem('binauralType') || 'alpha'
+                    binauralType: localStorage.getItem('binauralType') || 'alpha',
+                    currentTrackIdx: Math.floor(Math.random() * APP_CONFIG.playlist.length) // a random song to start with
                 });
 
                 this.visual = new VisualManager(
