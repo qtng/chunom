@@ -13,7 +13,7 @@
     <script src="https://qatt.org/vendor/supabase/supabase.min.js"></script>
     <script src="https://qatt.org/js/navigation.js"></script>
     <script src="https://qatt.org/js/parser.js"></script>
-    <script src="https://qatt.org/js/qatt.js"></script>
+    <script src="https://qatt.org/js/qatt-text.js"></script>
     <script src="https://qatt.org/js/supabase.js"></script>
     <script src="./audiomanager.js"></script>
     
@@ -122,10 +122,11 @@
         @media (min-width: 992px) { .nom-display-large img { height: min(12rem, calc(88vw / var(--n, 1))); } }
         .nom-display-mini img { height: min(4.5rem, calc(88vw / var(--n, 1))); }
         .qatt-container { display: flex; gap: 0.5rem; justify-content: center; align-items: center; }
-        /* QATT glyphs: qatt.js draws <qatt-code> elements as SVG */
-        qatt-code svg { stroke: currentColor; stroke-linecap: round; fill: none; display: inline-block; }
+        /* QATT glyphs: text in the QATT font (QattText) */
+        @font-face { font-family: "QATT Gothic"; src: url(https://qatt.org/fonts/qatt-gothic.woff2) format("woff2"), url(https://qatt.org/fonts/qatt-gothic.ttf) format("truetype"); }
+        .qatt-glyph { font-family: "QATT Gothic", sans-serif; line-height: 1; }
         .qatt-container { color: var(--ui-color); }
-        .qatt-container svg { height: 5rem; stroke-width: 3px; filter: drop-shadow(0 4px 15px var(--ui-shadow)); }
+        .qatt-container .qatt-glyph { font-size: 5rem; filter: drop-shadow(0 4px 15px var(--ui-shadow)); }
         
         .quocngu-text { 
             font-size: 1.6em; 
@@ -177,7 +178,7 @@
         .index-nom-cell img { width: 1.9rem; height: 1.9rem; filter: invert(1); } /* the glyph images are black on transparent */
         .index-qn-cell { color: rgba(255,255,255,0.6); font-size: 0.95rem; font-weight: 300; flex: 1; text-align: right; }
         .index-qatt-cell { display: flex; align-items: center; justify-content: center; gap: .25rem; min-width: 3.5rem; color: rgba(255,255,255,0.85); }
-        .index-qatt-cell svg { height: 1.8rem; stroke-width: 1.5px; }
+        .index-qatt-cell .qatt-glyph { font-size: 1.8rem; }
     </style>
 </head>
 <body>
@@ -384,8 +385,6 @@
             constructor() {
                 this.sp = new SupabaseService(); 
                 this.parser = new VietnameseParser(); 
-                new Qatt().observe('qatt-code');
-                
                 // Audio configuration
                 this.audio = new AudioManager(document.getElementById('bg-audio'), { 
                     playlist: APP_CONFIG.playlist, 
@@ -545,15 +544,18 @@
                 target.replaceChildren(...chars);
             }
 
-            // one <qatt-code> element per syllable; qatt.js renders them
+            // one span per syllable with the QATT characters of the font
             qattCodes(quocNgu) {
                 const codes = [];
                 for (const word of (quocNgu || '').split(/\s+/)) {
                     const parsed = word && this.parser.parse(word);
                     if (parsed?.qatt) { // the glyph after the rhyme table of the decoding
-                        const code = document.createElement('qatt-code');
+                        const glyph = QattText.syllable(parsed.qatt);
+                        if (!glyph) continue;
+                        const code = document.createElement('span');
+                        code.className = 'qatt-glyph';
                         code.title = word;
-                        code.textContent = parsed.qatt;
+                        code.textContent = glyph;
                         codes.push(code);
                     } // a syllable without a glyph is left out
                 }
