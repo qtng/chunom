@@ -16,6 +16,7 @@
   <script defer src="https://qatt.org/qatt/vendor/supabase/supabase.min.js"></script>
   <script defer src="https://qatt.org/qatt/js/supabase.js"></script>
   <script defer src="https://qatt.org/qatt/js/login.js"></script>
+  <script defer src="https://qatt.org/chunom/decks/deck-cover.js"></script>
   <style>
     svg {
       stroke: currentColor;
@@ -87,6 +88,14 @@
     }
     .clip-box.is-clipped > .clip-more { display: flex; }
     .clip-more:hover { color: var(--bs-body-color); }
+    /* Öffentliche Decks im Masonry-Stil: Spalten, Karten brechen nicht um */
+    .deck-masonry { column-count: 2; column-gap: .75rem; }
+    @media (min-width: 576px) { .deck-masonry { column-count: 3; } }
+    @media (min-width: 992px) { .deck-masonry { column-count: 4; } }
+    .deck-card { break-inside: avoid; margin-bottom: .75rem; display: block; color: inherit; text-decoration: none; overflow: hidden; }
+    .deck-card:hover { border-color: rgba(var(--bs-primary-rgb), 0.6) !important; }
+    .deck-card-img { display: block; width: 100%; height: auto; }
+    .deck-card-img.deck-cover-ph { aspect-ratio: 1; }
     .tile:hover, .tile:focus-visible {
       transform: translateY(-2px);
       border-color: rgba(var(--bs-primary-rgb), 0.6) !important;
@@ -225,6 +234,12 @@
     <!-- Tabs nach Rang und Level, aufgebaut in renderDiscoveryLists() -->
     <div id="discovery" class="mt-4 mb-5"></div>
 
+    <!-- Öffentliche Decks, aufgebaut in loadPublicDecks() -->
+    <section id="public-decks" class="mb-5 d-none">
+      <h2 class="h5 font-serif mb-3">Public decks</h2>
+      <div class="deck-masonry"></div>
+    </section>
+
     <div id="results" class="list-group w-100"></div>
   </div>
 
@@ -249,6 +264,7 @@ class ChunomDict {
     this.searchPreview = document.getElementById('search-preview');
     this.resultsContainer = document.getElementById(resultsContainerId);
     this.discoveryContainer = document.getElementById('discovery');
+    this.decksContainer = document.getElementById('public-decks');
     // Trefferliste auf die größere Bildschirmseite kappen
     this.resultsClip = this.clipContent(this.resultsContainer, () => Math.max(innerHeight, innerWidth));
     this.statusContainer = document.getElementById(statusId);
@@ -449,7 +465,7 @@ class ChunomDict {
           // Anzahl, nur am aktiven Reiter sichtbar (CSS)
           el('span', { className: 'badge rounded-pill text-bg-secondary ms-2 tab-count', textContent: rows.length })))).concat(
         el('li', { className: 'nav-item ms-auto' },
-          el('button', { className: 'nav-link text-secondary tabs-toggle d-none', type: 'button', title: 'Expand / collapse' }, el('i', { className: 'bi bi-chevron-expand', 'aria-hidden': 'true' }))))),
+          el('button', { className: 'nav-link text-secondary tabs-toggle d-none', type: 'button', title: 'Expand / collapse' }, el('i', { className: 'bi bi-chevron-down', 'aria-hidden': 'true' }))))),
       el('div', { className: 'tab-content' }, tabs.map(([id, , , rows], i) =>
         el('div', { className: `tab-pane fade${i ? '' : ' show active'}`, id: `pane-${id}`, role: 'tabpanel', 'aria-labelledby': `tab-${id}` },
           el('div', { className: 'row row-cols-4 row-cols-sm-5 row-cols-md-8 row-cols-lg-10 g-2' }, rows.map(r => this.createTile(r)))))));
@@ -457,13 +473,31 @@ class ChunomDict {
     const toggle = this.discoveryContainer.querySelector('.tabs-toggle');
     const tabClip = this.clipContent(this.discoveryContainer.querySelector('.tab-content'), () => innerHeight * 0.5, ({ clipped, clippable }) => {
       toggle.classList.toggle('d-none', !clippable);
-      toggle.querySelector('i').className = `bi bi-chevron-${clipped ? 'expand' : 'contract'}`;
+      toggle.querySelector('i').className = `bi bi-chevron-${clipped ? 'down' : 'up'}`;
       toggle.setAttribute('aria-label', clipped ? 'Expand' : 'Collapse');
     });
     toggle.addEventListener('click', () => tabClip.isClipped() ? tabClip.open() : tabClip.close());
     this.discoveryContainer.querySelector('.nav-tabs').addEventListener('show.bs.tab', () => tabClip.open());
     // Bootstrap richtet die Pfeiltasten nur für Tabs ein, die beim Laden schon existieren
     if (window.bootstrap) bootstrap.Tab.getOrCreateInstance(this.discoveryContainer.querySelector('.nav-link.active'));
+  }
+  // Öffentliche Decks aus Supabase als Karten: Bild, Titel, Anzahl · Autor bzw. chunom.org
+  async loadPublicDecks() {
+    if (!window.SupabaseService || !window.DeckCover) return;
+    const sp = new SupabaseService();
+    await sp.init();
+    const decks = await sp.getPublicDecks();
+    if (!decks.length) return;
+    const owners = await sp.getUsernames?.(decks.filter(d => !d.is_official).map(d => d.user_id)) || {};
+    this.decksContainer.querySelector('.deck-masonry').replaceChildren(...decks.map(d =>
+      el('a', { className: 'deck-card rounded border border-secondary border-opacity-25 shadow-sm', href: `decks/deck.html?id=${encodeURIComponent(d.id)}` },
+        DeckCover.element(d, sp.deckImageUrl(d.image_path), 'deck-card-img'),
+        el('div', { className: 'p-2' },
+          el('div', { className: 'fw-semibold', textContent: d.title }),
+          el('small', { className: 'text-secondary' },
+            `${d.words ? d.words.length : (d.count || 0)} items · `,
+            d.is_official ? el('span', { className: 'badge text-bg-warning', textContent: 'chunom.org' }) : `by ${owners[d.user_id] || 'a user'}`)))));
+    if (!this.searchInput.value.trim()) this.decksContainer.classList.remove('d-none');
   }
   // Kappt content auf limit() Pixel; Verlauf mit „show more“ klappt auf. Gibt { open, close, reset } zurück; onState({ clipped, clippable }) meldet Änderungen.
   clipContent(content, limit, onState = () => {}) {
@@ -516,10 +550,12 @@ class ChunomDict {
 
     if (!query) {
       this.discoveryContainer.classList.remove('d-none');
+      if (this.decksContainer.querySelector('.deck-card')) this.decksContainer.classList.remove('d-none');
       return;
     }
 
     this.discoveryContainer.classList.add('d-none');
+    this.decksContainer.classList.add('d-none');
 
     // Quốc Ngữ nur ab Silbenanfang (auch in Komposita), Nôm als Teilstring
     const rows = this.data.filter(row => (' ' + row[0].toLowerCase()).includes(' ' + query) || row[1].includes(query));
@@ -560,6 +596,7 @@ window.addEventListener("load", () => {
   try {
     new Qatt().observe("qatt-code");
     dict = new ChunomDict('https://qatt.org/chunom/dict.csv', 'search', 'results', 'dict-status');
+    dict.loadPublicDecks().catch(e => console.error('Public decks failed', e));
   } catch (e) {
     console.error("Initialization error", e);
   }
