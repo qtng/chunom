@@ -76,17 +76,17 @@
         --bs-nav-link-padding-x: .6rem;
       }
     }
-    /* Lange Reiter-Inhalte auf 50vh kappen; Klick auf den Verlauf klappt auf */
-    #discovery .tabs-clip { position: relative; }
-    #discovery .tabs-clip.is-clipped { max-height: 50vh; overflow: hidden; }
-    #discovery .tabs-more {
-      display: none; position: absolute; left: 0; right: 0; bottom: 0; height: 4.5rem;
-      padding: 0; border: 0; cursor: pointer; color: var(--bs-secondary-color);
+    /* Lange Inhalte kappen; Klick auf den Verlauf klappt auf */
+    .clip-box { position: relative; }
+    .clip-box.is-clipped { max-height: var(--clip-h); overflow: hidden; }
+    .clip-more {
+      display: none; position: absolute; left: 0; right: 0; bottom: 0; height: 6.5rem;
+      padding: 0 0 .25rem; border: 0; cursor: pointer; color: var(--bs-secondary-color);
       background: linear-gradient(to bottom, transparent, var(--bs-body-bg) 85%);
-      align-items: flex-end; justify-content: center; padding-bottom: .25rem;
+      flex-direction: column; align-items: center; justify-content: flex-end;
     }
-    #discovery .tabs-clip.is-clipped .tabs-more { display: flex; }
-    #discovery .tabs-more:hover { color: var(--bs-body-color); }
+    .clip-box.is-clipped > .clip-more { display: flex; }
+    .clip-more:hover { color: var(--bs-body-color); }
     .tile:hover, .tile:focus-visible {
       transform: translateY(-2px);
       border-color: rgba(var(--bs-primary-rgb), 0.6) !important;
@@ -249,6 +249,8 @@ class ChunomDict {
     this.searchPreview = document.getElementById('search-preview');
     this.resultsContainer = document.getElementById(resultsContainerId);
     this.discoveryContainer = document.getElementById('discovery');
+    // Trefferliste auf das Doppelte der kleineren Bildschirmseite kappen
+    this.resultsClip = this.clipContent(this.resultsContainer, () => 2 * Math.min(innerHeight, innerWidth));
     this.statusContainer = document.getElementById(statusId);
     this.qnToggle = document.getElementById('toggle-qn');
     this.telexToggle = document.getElementById('toggle-telex');
@@ -446,31 +448,37 @@ class ChunomDict {
           }, short === label ? label : [el('span', { className: 'd-sm-none', textContent: short }), el('span', { className: 'd-none d-sm-inline', textContent: label })],
           // Anzahl, nur am aktiven Reiter sichtbar (CSS)
           el('span', { className: 'badge rounded-pill text-bg-secondary ms-2 tab-count', textContent: rows.length }))))),
-      el('div', { className: 'tabs-clip' },
       el('div', { className: 'tab-content' }, tabs.map(([id, , , rows], i) =>
         el('div', { className: `tab-pane fade${i ? '' : ' show active'}`, id: `pane-${id}`, role: 'tabpanel', 'aria-labelledby': `tab-${id}` },
-          el('div', { className: 'row row-cols-4 row-cols-sm-5 row-cols-md-8 row-cols-lg-10 g-2' }, rows.map(r => this.createTile(r)))))),
-        el('button', { className: 'tabs-more', type: 'button', 'aria-label': 'Mehr anzeigen', onclick: () => clip.classList.remove('is-clipped') },
-          el('i', { className: 'bi bi-chevron-compact-down fs-3', 'aria-hidden': 'true' }))));
-    // Auf 50vh kappen, solange der Inhalt höher ist; Reiterwechsel zeigt alles
-    const clip = this.discoveryContainer.querySelector('.tabs-clip');
-    const content = clip.querySelector('.tab-content');
+          el('div', { className: 'row row-cols-4 row-cols-sm-5 row-cols-md-8 row-cols-lg-10 g-2' }, rows.map(r => this.createTile(r)))))));
+    // Auf 50vh kappen; ein Reiterwechsel zeigt alles
+    const tabClip = this.clipContent(this.discoveryContainer.querySelector('.tab-content'), () => innerHeight * 0.5);
+    this.discoveryContainer.querySelector('.nav-tabs').addEventListener('show.bs.tab', () => tabClip.open());
+    // Bootstrap richtet die Pfeiltasten nur für Tabs ein, die beim Laden schon existieren
+    if (window.bootstrap) bootstrap.Tab.getOrCreateInstance(this.discoveryContainer.querySelector('.nav-link.active'));
+  }
+  // Kappt content auf limit() Pixel; Verlauf mit „show more“ klappt auf. Gibt { open, reset } zurück.
+  clipContent(content, limit) {
+    const box = el('div', { className: 'clip-box' });
+    content.replaceWith(box);
+    const more = el('button', { className: 'clip-more', type: 'button', 'aria-label': 'Show more' },
+      el('span', { className: 'btn btn-sm btn-outline-light', textContent: 'show more' }),
+      el('i', { className: 'bi bi-chevron-compact-down fs-3', 'aria-hidden': 'true' }));
+    box.append(content, more);
     let opened = false;
     const update = () => {
+      box.classList.remove('is-clipped');
       if (opened) return;
-      clip.classList.remove('is-clipped');
-      if (content.offsetHeight > window.innerHeight * 0.5 + 40) clip.classList.add('is-clipped');
+      const max = limit();
+      box.style.setProperty('--clip-h', `${max}px`);
+      if (content.offsetHeight > max + 40) box.classList.add('is-clipped');
     };
-    clip.querySelector('.tabs-more').addEventListener('click', () => { opened = true; });
-    this.discoveryContainer.querySelector('.nav-tabs').addEventListener('show.bs.tab', () => {
-      opened = true;
-      clip.classList.remove('is-clipped');
-    });
+    const open = () => { opened = true; box.classList.remove('is-clipped'); };
+    more.addEventListener('click', open);
     if (window.ResizeObserver) new ResizeObserver(update).observe(content);
     window.addEventListener('resize', update);
     update();
-    // Bootstrap richtet die Pfeiltasten nur für Tabs ein, die beim Laden schon existieren
-    if (window.bootstrap) bootstrap.Tab.getOrCreateInstance(this.discoveryContainer.querySelector('.nav-link.active'));
+    return { open, reset: () => { opened = false; update(); } };
   }
   createTile(r) {
     const tile = el('div', { className: 'pt-4 p-2 rounded text-center h-100 d-flex flex-column justify-content-center border border-secondary border-opacity-25 position-relative shadow-sm tile', style: 'cursor: pointer' },
@@ -520,6 +528,7 @@ class ChunomDict {
     rows.sort((a, b) => group(a) - group(b) || rank(a) - rank(b) || a[0].trim().length - b[0].trim().length);
 
     this.resultsContainer.append(...rows.slice(0, 80).map(row => this.createResultItem(row)));
+    this.resultsClip.reset();
   }
   createResultItem(row) {
     const [quocNgu, nom, meaning, id] = [row[0], row[1], row[2], row[5]];
