@@ -39,7 +39,7 @@ Old addresses that must keep working: `chunom.org/pages/<HEX>/`, `chunom.org/pag
 
 ## Translation (Vietnamese)
 
-`js/navigation.js` defines `Lang` (also on the Chunom site). The language is `localStorage.lang` (`en` or `vi`) if somebody chose it (the switch is only in `license.html` of qatt.org for now, or `?lang=vi` in the address), else the first of English and Vietnamese in the languages of the browser (`vi` only if it comes before `en`). It is not stored until it was chosen.
+`js/navigation.js` defines `Lang` (also on the Chunom site). The language is `localStorage.lang` (`en` or `vi`) if somebody chose it (the switch EN | VI next to the menu button in the menu bar, also in `license.html` of qatt.org, or `?lang=vi` in the address), else the first of English and Vietnamese in the languages of the browser (`vi` only if it comes before `en`). It is not stored until it was chosen.
 In `vi`, a MutationObserver gives every tag with `data-vi` the text of that attribute as its text content (the English text is kept and returns in `en`). It works while the page is parsed and for tags that JavaScript adds or changes later.
 
 Rules when you write or change pages:
