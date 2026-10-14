@@ -249,8 +249,8 @@ class ChunomDict {
     this.searchPreview = document.getElementById('search-preview');
     this.resultsContainer = document.getElementById(resultsContainerId);
     this.discoveryContainer = document.getElementById('discovery');
-    // Trefferliste auf das Doppelte der kleineren Bildschirmseite kappen
-    this.resultsClip = this.clipContent(this.resultsContainer, () => 2 * Math.min(innerHeight, innerWidth));
+    // Trefferliste auf die größere Bildschirmseite kappen
+    this.resultsClip = this.clipContent(this.resultsContainer, () => Math.max(innerHeight, innerWidth));
     this.statusContainer = document.getElementById(statusId);
     this.qnToggle = document.getElementById('toggle-qn');
     this.telexToggle = document.getElementById('toggle-telex');
@@ -447,18 +447,26 @@ class ChunomDict {
             'data-bs-toggle': 'tab', 'data-bs-target': `#pane-${id}`, 'aria-controls': `pane-${id}`, 'aria-selected': String(!i)
           }, short === label ? label : [el('span', { className: 'd-sm-none', textContent: short }), el('span', { className: 'd-none d-sm-inline', textContent: label })],
           // Anzahl, nur am aktiven Reiter sichtbar (CSS)
-          el('span', { className: 'badge rounded-pill text-bg-secondary ms-2 tab-count', textContent: rows.length }))))),
+          el('span', { className: 'badge rounded-pill text-bg-secondary ms-2 tab-count', textContent: rows.length })))).concat(
+        el('li', { className: 'nav-item ms-auto' },
+          el('button', { className: 'nav-link text-secondary tabs-toggle d-none', type: 'button', title: 'Expand / collapse' }, el('i', { className: 'bi bi-chevron-expand', 'aria-hidden': 'true' }))))),
       el('div', { className: 'tab-content' }, tabs.map(([id, , , rows], i) =>
         el('div', { className: `tab-pane fade${i ? '' : ' show active'}`, id: `pane-${id}`, role: 'tabpanel', 'aria-labelledby': `tab-${id}` },
           el('div', { className: 'row row-cols-4 row-cols-sm-5 row-cols-md-8 row-cols-lg-10 g-2' }, rows.map(r => this.createTile(r)))))));
     // Auf 50vh kappen; ein Reiterwechsel zeigt alles
-    const tabClip = this.clipContent(this.discoveryContainer.querySelector('.tab-content'), () => innerHeight * 0.5);
+    const toggle = this.discoveryContainer.querySelector('.tabs-toggle');
+    const tabClip = this.clipContent(this.discoveryContainer.querySelector('.tab-content'), () => innerHeight * 0.5, ({ clipped, clippable }) => {
+      toggle.classList.toggle('d-none', !clippable);
+      toggle.querySelector('i').className = `bi bi-chevron-${clipped ? 'expand' : 'contract'}`;
+      toggle.setAttribute('aria-label', clipped ? 'Expand' : 'Collapse');
+    });
+    toggle.addEventListener('click', () => tabClip.isClipped() ? tabClip.open() : tabClip.close());
     this.discoveryContainer.querySelector('.nav-tabs').addEventListener('show.bs.tab', () => tabClip.open());
     // Bootstrap richtet die Pfeiltasten nur für Tabs ein, die beim Laden schon existieren
     if (window.bootstrap) bootstrap.Tab.getOrCreateInstance(this.discoveryContainer.querySelector('.nav-link.active'));
   }
-  // Kappt content auf limit() Pixel; Verlauf mit „show more“ klappt auf. Gibt { open, reset } zurück.
-  clipContent(content, limit) {
+  // Kappt content auf limit() Pixel; Verlauf mit „show more“ klappt auf. Gibt { open, close, reset } zurück; onState({ clipped, clippable }) meldet Änderungen.
+  clipContent(content, limit, onState = () => {}) {
     const box = el('div', { className: 'clip-box' });
     content.replaceWith(box);
     const more = el('button', { className: 'clip-more', type: 'button', 'aria-label': 'Show more' },
@@ -467,18 +475,19 @@ class ChunomDict {
     box.append(content, more);
     let opened = false;
     const update = () => {
-      box.classList.remove('is-clipped');
-      if (opened) return;
       const max = limit();
       box.style.setProperty('--clip-h', `${max}px`);
-      if (content.offsetHeight > max + 40) box.classList.add('is-clipped');
+      const clippable = content.offsetHeight > max + 40;
+      box.classList.toggle('is-clipped', clippable && !opened);
+      onState({ clipped: clippable && !opened, clippable });
     };
-    const open = () => { opened = true; box.classList.remove('is-clipped'); };
+    const open = () => { opened = true; update(); };
+    const close = () => { opened = false; update(); };
     more.addEventListener('click', open);
     if (window.ResizeObserver) new ResizeObserver(update).observe(content);
     window.addEventListener('resize', update);
     update();
-    return { open, reset: () => { opened = false; update(); } };
+    return { open, close, reset: close, isClipped: () => box.classList.contains('is-clipped') };
   }
   createTile(r) {
     const tile = el('div', { className: 'pt-4 p-2 rounded text-center h-100 d-flex flex-column justify-content-center border border-secondary border-opacity-25 position-relative shadow-sm tile', style: 'cursor: pointer' },
