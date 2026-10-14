@@ -6,15 +6,15 @@
     <title>Qatt.org - Superlearning Immersive</title>
     
     <!-- External Dependencies -->
-    <link href="https://qatt.org/qatt/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://qatt.org/qatt/vendor/bootstrap-icons/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="https://qatt.org/chunom-assets/fonts/fonts.css">
-    <script src="https://qatt.org/qatt/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://qatt.org/qatt/vendor/supabase/supabase.min.js"></script>
-    <script src="../../qatt/js/navigation.js"></script>
-    <script src="../../qatt/js/parser.js"></script>
-    <script src="../../qatt/js/qatt.js"></script>
-    <script src="../../qatt/js/supabase.js"></script>
+    <link href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/chunom-assets/fonts/fonts.css">
+    <script src="https://qatt.org/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://qatt.org/vendor/supabase/supabase.min.js"></script>
+    <script src="/chunom/js/navigation.js"></script>
+    <script src="https://qatt.org/js/parser.js"></script>
+    <script src="https://qatt.org/js/qatt.js"></script>
+    <script src="https://qatt.org/js/supabase.js"></script>
     <script src="./audiomanager.js"></script>
     
     <style>
@@ -532,7 +532,7 @@
                     img.loading = 'lazy';
                     const hex = ch.codePointAt(0).toString(16).toUpperCase();
                     img.addEventListener('error', () => img.replaceWith(document.createTextNode(ch)));
-                    img.src = `https://qatt.org/chunom-assets/generated/${size}/${hex}.webp`;
+                    img.src = `/chunom-assets/generated/${size}/${hex}.webp`;
                     return img;
                 });
             }

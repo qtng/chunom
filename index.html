@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <title>Qatt.org</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://qatt.org/qatt/vendor/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://qatt.org/qatt/vendor/bootstrap-icons/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="https://qatt.org/chunom-assets/fonts/fonts.css">
-  <script defer src="https://qatt.org/qatt/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script defer src="https://qatt.org/chunom/js/ime.js"></script>
-  <script defer src="https://qatt.org/chunom/js/detail.js"></script>
-  <script defer src="https://qatt.org/qatt/js/navigation.js"></script>
-  <script defer src="https://qatt.org/qatt/js/qatt.js"></script>
-  <script defer src="https://qatt.org/qatt/js/parser.js"></script>
-  <script defer src="https://qatt.org/qatt/vendor/supabase/supabase.min.js"></script>
-  <script defer src="https://qatt.org/qatt/js/supabase.js"></script>
-  <script defer src="https://qatt.org/qatt/js/login.js"></script>
-  <script defer src="https://qatt.org/chunom/decks/deck-cover.js"></script>
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/chunom-assets/fonts/fonts.css">
+  <script defer src="https://qatt.org/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script defer src="/chunom/js/ime.js"></script>
+  <script defer src="/chunom/js/detail.js"></script>
+  <script defer src="/chunom/js/navigation.js"></script>
+  <script defer src="https://qatt.org/js/qatt.js"></script>
+  <script defer src="https://qatt.org/js/parser.js"></script>
+  <script defer src="https://qatt.org/vendor/supabase/supabase.min.js"></script>
+  <script defer src="https://qatt.org/js/supabase.js"></script>
+  <script defer src="https://qatt.org/js/login.js"></script>
+  <script defer src="/chunom/decks/deck-cover.js"></script>
   <style>
     svg {
       stroke: currentColor;
@@ -203,7 +203,7 @@
         <a href="writer.html"><i class="bi bi-pencil-square"></i> Nôm Writer</a>
         <a href="decks/index.html"><i class="bi bi-mortarboard"></i> Practice / Decks</a>
         <a href="dict/genibrel.html"><i class="bi bi-journal-richtext"></i> Dictionaries</a>
-        <a href="../qatt/index.html"><i class="bi bi-brush"></i> Quốc Âm Tân Tự</a>
+        <a href="https://qatt.org/index.html"><i class="bi bi-brush"></i> Quốc Âm Tân Tự</a>
       </nav>
     </header>
 
@@ -595,7 +595,7 @@ let dict;
 window.addEventListener("load", () => {
   try {
     new Qatt().observe("qatt-code");
-    dict = new ChunomDict('https://qatt.org/chunom/dict.csv', 'search', 'results', 'dict-status');
+    dict = new ChunomDict('/chunom/dict.csv', 'search', 'results', 'dict-status');
     dict.loadPublicDecks().catch(e => console.error('Public decks failed', e));
   } catch (e) {
     console.error("Initialization error", e);
