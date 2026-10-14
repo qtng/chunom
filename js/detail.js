@@ -86,7 +86,7 @@ const MODAL = `
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalTitle">Details</h5>
+        <h5 class="modal-title" id="modalTitle" data-vi="Chi tiết">Details</h5>
         <div class="d-flex align-items-center ms-auto">
           <button type="button" class="deck-toggle"><i class="bi bi-plus-lg"></i> <span data-vi="Thêm vào bộ thẻ">Add to deck</span></button>
           <button type="button" class="ms-4 btn-close" data-bs-dismiss="modal" aria-label="Close" data-vi-aria-label="Đóng"></button>
