@@ -47,7 +47,8 @@ Rules when you write or change pages:
 - A text that is translated sits **in a tag of its own without tags inside**: `<span data-vi="Ký hiệu">Symbols</span>`. Tags with tags inside are not translated. The English text stays in the tag and must not be empty.
 - When the user says that something is called `xyz` in Vietnamese, put `data-vi="xyz"` on the tag of that text (wrap the text in a `<span>` if it has no tag of its own).
 - When the English text of a tag that has `data-vi` changes, renew its translation too and tell the user which ones (translations written by Claude are drafts: say so).
-- In JavaScript just set the text of such a tag (or add one with `data-vi`); the observer translates it. `Lang.t("English", "Tiếng Việt")` gives a text for a string that is not in a tag; the event `langchange` (on `document`) is sent when the language is switched. Attributes (`title`, `placeholder`, …) are not translated.
+- Texts are written in sentence case, not title case ("Symbol table", "Next word"); only app names such as Sound Check are capitalised.
+- In JavaScript just set the text of such a tag (or add one with `data-vi`); the observer translates it. `Lang.t("English", "Tiếng Việt")` gives a text for a string that is not in a tag; the event `langchange` (on `document`) is sent when the language is switched. Attributes: `data-vi-label`, `data-vi-title`, `data-vi-placeholder` and `data-vi-aria-label` give the attribute without the prefix its Vietnamese text (e.g. the `label` of an `<optgroup>`: `<optgroup label="Choose font" data-vi-label="Lựa chọn phông chữ">`).
 
 ## Going live on chunom.org
 
