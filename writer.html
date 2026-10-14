@@ -119,7 +119,7 @@
 <div class="container py-3 pb-5" style="max-width: 62rem">
 
     <header class="writer-head text-center my-3">
-        <h1 class="mb-1">Chữ Nôm Writer</h1>
+        <h1 class="mb-1" data-vi="Gõ chữ Nôm">Chữ Nôm writer</h1>
         <p class="mb-0">Type Vietnamese with Telex, then pick the Nôm character that fits.</p>
     </header>
 
@@ -132,7 +132,7 @@
             <label><input type="range" id="size" min="50" max="400" step="10" value="100" aria-label="Size"><span id="size-label">100%</span></label>
         </div>
         <div class="writer-pad">
-            <textarea id="typer-text" placeholder="Type here…" aria-label="Text"></textarea>
+            <textarea id="typer-text" placeholder="Type here…" data-vi-placeholder="Gõ ở đây…" aria-label="Text"></textarea>
         </div>
 
         <div id="pending" aria-live="polite"></div>
@@ -140,10 +140,10 @@
 
         <div class="writer-bar">
             <div class="bar-buttons">
-                <button type="button" class="btn btn-accent" id="copy-btn">Copy</button>
-                <button type="button" class="btn btn-quiet" id="clear-btn">Clear</button>
-                <button type="button" class="btn btn-quiet qatt-only" id="convert-btn" title="Convert every Quốc Ngữ word in the field, e.g. after pasting">Convert QATT</button>
-                <button type="button" class="btn btn-quiet qatt-only" id="reading-btn" title="Read the QATT characters of the field as Quốc Ngữ">Decode QATT</button>
+                <button type="button" class="btn btn-accent" id="copy-btn" data-vi="Sao chép">Copy</button>
+                <button type="button" class="btn btn-quiet" id="clear-btn" data-vi="Xóa">Clear</button>
+                <button type="button" class="btn btn-quiet qatt-only" id="convert-btn" title="Convert every Quốc Ngữ word in the field, e.g. after pasting" data-vi="Chuyển sang QATT">Convert QATT</button>
+                <button type="button" class="btn btn-quiet qatt-only" id="reading-btn" title="Read the QATT characters of the field as Quốc Ngữ" data-vi="Giải mã QATT">Decode QATT</button>
             </div>
             <div class="opts">
                 <div class="form-check form-switch">
