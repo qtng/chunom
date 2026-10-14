@@ -88,21 +88,21 @@ const MODAL = `
       <div class="modal-header">
         <h5 class="modal-title" id="modalTitle">Details</h5>
         <div class="d-flex align-items-center ms-auto">
-          <button type="button" class="deck-toggle"><i class="bi bi-plus-lg"></i> <span>Add to deck</span></button>
-          <button type="button" class="ms-4 btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="deck-toggle"><i class="bi bi-plus-lg"></i> <span data-vi="Thêm vào bộ thẻ">Add to deck</span></button>
+          <button type="button" class="ms-4 btn-close" data-bs-dismiss="modal" aria-label="Close" data-vi-aria-label="Đóng"></button>
         </div>
       </div>
       <div class="modal-body" id="modalBody"></div>
       <div class="modal-footer">
-        <button type="button" class="deck-toggle"><i class="bi bi-plus-lg"></i> <span>Add to deck</span></button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="deck-toggle"><i class="bi bi-plus-lg"></i> <span data-vi="Thêm vào bộ thẻ">Add to deck</span></button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-vi="Đóng">Close</button>
       </div>
       <!-- Bottom sheet: add the character to one of the decks (inside the popup, so that the focus trap of Bootstrap does not interfere) -->
       <div id="deck-sheet" role="dialog" aria-modal="true" aria-labelledby="deck-sheet-title" aria-hidden="true">
         <div class="sheet">
           <div class="d-flex align-items-center mb-2">
-            <div id="deck-sheet-title" class="sheet-title flex-grow-1 text-center ps-4">Add to deck</div>
-            <button type="button" id="deck-sheet-close" class="btn-close" aria-label="Close"></button>
+            <div id="deck-sheet-title" class="sheet-title flex-grow-1 text-center ps-4" data-vi="Thêm vào bộ thẻ">Add to deck</div>
+            <button type="button" id="deck-sheet-close" class="btn-close" aria-label="Close" data-vi-aria-label="Đóng"></button>
           </div>
           <div id="deck-sheet-body"></div>
         </div>
@@ -340,7 +340,9 @@ class ChunomDetail {
     for (const toggle of this.deckToggles) {
       toggle.classList.toggle('in-deck', inDeck);
       toggle.querySelector('i').className = `bi ${inDeck ? 'bi-check-lg' : 'bi-plus-lg'}`;
-      toggle.querySelector('span').textContent = inDeck ? 'Added' : 'Add to deck';
+      const label = toggle.querySelector('span');
+      label.dataset.vi = inDeck ? 'Đã thêm' : 'Thêm vào bộ thẻ';
+      label.textContent = inDeck ? 'Added' : 'Add to deck';
     }
   }
 
