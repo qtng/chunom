@@ -394,7 +394,8 @@
                     isMusicOn: localStorage.getItem('musicOn') !== 'false',
                     isSpeechOn: localStorage.getItem('speechOn') !== 'false',
                     isBinauralOn: localStorage.getItem('binauralOn') !== 'false',
-                    binauralType: localStorage.getItem('binauralType') || 'alpha'
+                    binauralType: localStorage.getItem('binauralType') || 'alpha',
+                    currentTrackIdx: Math.floor(Math.random() * APP_CONFIG.playlist.length) // a random song to start with
                 });
 
                 this.visual = new VisualManager(
