@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>節 – Chữ Nôm tiết, tết</title>
+  <meta name="description" content="節 (tiết, tết): [segment, part]. Chữ Nôm character with readings, meanings, variants and example words.">
+  <link rel="canonical" href="https://qatt.org/chunom/c/7BC0/">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "DefinedTerm", "name": "節", "description": "[segment, part]", "inDefinedTermSet": "Chữ Nôm", "url": "https://qatt.org/chunom/c/7BC0/", "alternateName": ["tiết", "tết"]}</script>
+  <link rel="stylesheet" href="https://qatt.org/qatt/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://qatt.org/qatt/vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://qatt.org/chunom-assets/fonts/fonts.css">
+  <script defer src="https://qatt.org/qatt/js/navigation.js"></script>
+  <script defer src="https://qatt.org/qatt/js/qatt.js"></script>
+  <script defer src="https://qatt.org/qatt/js/parser.js"></script>
+  <script defer src="https://qatt.org/qatt/vendor/supabase/supabase.min.js"></script>
+  <script defer src="https://qatt.org/qatt/js/supabase.js"></script>
+  <script defer src="https://qatt.org/qatt/js/login.js"></script>
+  <script defer src="https://qatt.org/chunom/js/detail.js"></script>
+  <style>
+    :root { --ink: #2b2118; --cinnabar: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --muted: #7b6c58; }
+    body { background: #fffdf8; color: var(--ink); }
+    a { color: var(--cinnabar); }
+    .hero { background: radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%), linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%); border-bottom: 1px solid #e8dcc0; }
+    .nom { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }
+    .hero .big { font-size: clamp(5rem, 22vw, 9rem); line-height: 1.25; }
+    .nom-link { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 2rem; text-decoration: none; padding: 0 .3rem; }
+    .btn-cinnabar { background: var(--cinnabar); border-color: var(--cinnabar); color: #fff; border-radius: 2rem; padding: .5rem 1.3rem; }
+    .btn-cinnabar:hover { background: #8c2c22; border-color: #8c2c22; color: #fff; }
+    table { --bs-table-bg: transparent; }
+    .words { columns: 2 18rem; list-style: none; padding: 0; }
+    .words li { break-inside: avoid; margin-bottom: .35rem; }
+  </style>
+</head>
+<body>
+  <header class="hero text-center py-5">
+    <div class="container">
+      <div class="big nom">節</div>
+      <h1 class="h2 font-serif">tiết, tết</h1>
+      <p class="lead mb-3">[segment, part]</p>
+      <button type="button" class="btn btn-cinnabar" id="open-detail"><i class="bi bi-card-text me-1"></i> Show details</button>
+      <a class="btn btn-outline-secondary rounded-pill ms-1" href="https://qatt.org/chunom/index.html?search=ti%E1%BA%BFt">Search the dictionary</a>
+    </div>
+  </header>
+  <main class="container py-5" style="max-width: 46rem">
+    <h2 class="h5">Readings and meanings</h2>
+    <table class="table mb-5"><tbody><tr><th scope="row">tiết</th><td>[segment, part]</td><td class="text-secondary small">Level 3 · Rank #1637</td></tr><tr><th scope="row">tết</th><td>festival, holiday</td><td class="text-secondary small">Level 3 · Rank #564</td></tr></tbody></table>
+
+<h2 class="h5">Words with 節</h2><ul class="words mb-5"><li><span class="nom">發節</span> <b>phát tiết</b> – to appear, to display, to show up</li><li><span class="nom">時節</span> <b>thời tiết</b> – weather</li><li><span class="nom">節目</span> <b>tiết mục</b> – program item</li><li><span class="nom">節元旦</span> <b>tết nguyên đán</b> – lunar new year</li><li><span class="nom">節中秋</span> <b>tết trung thu</b> – mid-autumn festival</li><li><span class="nom">音節</span> <b>âm tết</b> – syllable</li><li><span class="nom">多音節</span> <b>đa âm tiết</b> – polysyllabic</li></ul>
+    <p class="text-secondary small">Chữ Nôm dictionary · <a href="https://qatt.org/chunom/index.html">chunom.org</a></p>
+  </main>
+  <script>
+    // the same popup as on the dictionary page (js/detail.js): readings, glyphs, "Add to deck"
+    window.addEventListener('load', () => {
+      const open = () => ChunomDetail.open("節");
+      document.getElementById('open-detail').addEventListener('click', open);
+      ChunomDetail.get().configure({ urlFor: () => location.href });
+      open();
+    });
+  </script>
+</body>
+</html>

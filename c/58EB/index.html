@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>士 – Chữ Nôm sĩ</title>
+  <meta name="description" content="士 (sĩ): scholar; feudal intellectual. Chữ Nôm character with readings, meanings, variants and example words.">
+  <link rel="canonical" href="https://qatt.org/chunom/c/58EB/">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "DefinedTerm", "name": "士", "description": "scholar; feudal intellectual", "inDefinedTermSet": "Chữ Nôm", "url": "https://qatt.org/chunom/c/58EB/", "alternateName": ["sĩ"]}</script>
+  <link rel="stylesheet" href="https://qatt.org/qatt/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://qatt.org/qatt/vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://qatt.org/chunom-assets/fonts/fonts.css">
+  <script defer src="https://qatt.org/qatt/js/navigation.js"></script>
+  <script defer src="https://qatt.org/qatt/js/qatt.js"></script>
+  <script defer src="https://qatt.org/qatt/js/parser.js"></script>
+  <script defer src="https://qatt.org/qatt/vendor/supabase/supabase.min.js"></script>
+  <script defer src="https://qatt.org/qatt/js/supabase.js"></script>
+  <script defer src="https://qatt.org/qatt/js/login.js"></script>
+  <script defer src="https://qatt.org/chunom/js/detail.js"></script>
+  <style>
+    :root { --ink: #2b2118; --cinnabar: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --muted: #7b6c58; }
+    body { background: #fffdf8; color: var(--ink); }
+    a { color: var(--cinnabar); }
+    .hero { background: radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%), linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%); border-bottom: 1px solid #e8dcc0; }
+    .nom { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }
+    .hero .big { font-size: clamp(5rem, 22vw, 9rem); line-height: 1.25; }
+    .nom-link { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 2rem; text-decoration: none; padding: 0 .3rem; }
+    .btn-cinnabar { background: var(--cinnabar); border-color: var(--cinnabar); color: #fff; border-radius: 2rem; padding: .5rem 1.3rem; }
+    .btn-cinnabar:hover { background: #8c2c22; border-color: #8c2c22; color: #fff; }
+    table { --bs-table-bg: transparent; }
+    .words { columns: 2 18rem; list-style: none; padding: 0; }
+    .words li { break-inside: avoid; margin-bottom: .35rem; }
+  </style>
+</head>
+<body>
+  <header class="hero text-center py-5">
+    <div class="container">
+      <div class="big nom">士</div>
+      <h1 class="h2 font-serif">sĩ</h1>
+      <p class="lead mb-3">scholar; feudal intellectual</p>
+      <button type="button" class="btn btn-cinnabar" id="open-detail"><i class="bi bi-card-text me-1"></i> Show details</button>
+      <a class="btn btn-outline-secondary rounded-pill ms-1" href="https://qatt.org/chunom/index.html?search=s%C4%A9">Search the dictionary</a>
+    </div>
+  </header>
+  <main class="container py-5" style="max-width: 46rem">
+    <h2 class="h5">Readings and meanings</h2>
+    <table class="table mb-5"><tbody><tr><th scope="row">sĩ</th><td>scholar; feudal intellectual</td><td class="text-secondary small">Level 3 · Rank #504</td></tr></tbody></table>
+
+<h2 class="h5">Words with 士</h2><ul class="words mb-5"><li><span class="nom">博士</span> <b>bác sĩ</b> – doctor, physician, general practitioner</li><li><span class="nom">藥士</span> <b>dược sĩ</b> – pharmacist, chemist</li><li><span class="nom">芸士</span> <b>nghệ sĩ</b> – artist</li><li><span class="nom">儒士</span> <b>nho sĩ</b> – Confucian scholar</li></ul>
+    <p class="text-secondary small">Chữ Nôm dictionary · <a href="https://qatt.org/chunom/index.html">chunom.org</a></p>
+  </main>
+  <script>
+    // the same popup as on the dictionary page (js/detail.js): readings, glyphs, "Add to deck"
+    window.addEventListener('load', () => {
+      const open = () => ChunomDetail.open("士");
+      document.getElementById('open-detail').addEventListener('click', open);
+      ChunomDetail.get().configure({ urlFor: () => location.href });
+      open();
+    });
+  </script>
+</body>
+</html>
