@@ -1,7 +1,7 @@
 # qtng/chunom
 
 The dictionary site of Chữ Nôm (search, character details popup, decks and practice, Nôm writer, Génibrel and Bonet dictionaries) in `index.html`, `writer.html`, `decks/`, `dict/`, `js/`, `css/`, with the data `dict.csv`, `js/*.json`.
-Served at `/chunom/` of the Chunom site. `js/navigation.js` is the menu of the Chunom site only; its logo and icons are in `img/`. `js/detail.js` (the details popup) is also loaded by pages of other sites, so it finds its files from its own script URL.
+Served at `/chunom/` of the Chunom site. The menu (`js/navigation.js`, also the translation `Lang`) is the one of `qtng/qatt`, loaded from `https://qatt.org/js/navigation.js`; `js/navigation.js` here is only a loader for old pages; the logo and icons of the Chunom site are in `img/`. `js/detail.js` (the details popup) is also loaded by pages of other sites, so it finds its files from its own script URL.
 Images, audio, fonts and scans are not in this repository but in `qtng/chunom-assets` (`/chunom-assets/…`). The landing pages for search engines are generated in `qtng/pages` from `dict.csv` and `js/glyph_relations.json`; after changing those files, regenerate there.
 `js/check_font_coverage.py` reports which characters of the data a font covers.
 
@@ -33,9 +33,21 @@ Old addresses that must keep working: `chunom.org/pages/<HEX>/`, `chunom.org/pag
 - **From qatt.org to the Chunom site** use **absolute** URLs with the domain: `https://v2.chunom.org/chunom/js/ime.js`, `https://v2.chunom.org/chunom-assets/fonts/fonts.css`.
 - **Scripts that other pages load across sites** (`chunom/js/detail.js`, `ime.js`, `practice.js`) must not assume their own origin: they derive their location from `document.currentScript.src` (e.g. `new URL('../../', BASE)` = root of the Chunom site).
 - Canonical links, `og:` tags and the sitemap need absolute URLs; `qtng/pages` writes them from `tools/generate.py --site …`.
-- Each site has **its own `js/navigation.js`** (menu bar, brand, bottom bar on phones): `qtng/qatt/js/navigation.js` (Qatt.org brand, `CHUNOM_SITE` constant for the Chunom links) and `qtng/chunom/js/navigation.js` (Chunom.org brand, own logo and icons in `chunom/img/`, `QATT_SITE` constant). They do not share code.
+- There is **one `js/navigation.js`** (menu bar, brand, bottom bar on phones, and the translation `Lang`), in `qtng/qatt`, served at `https://qatt.org/js/navigation.js`. The pages of the Chunom site load it from there with `<script src="https://qatt.org/js/navigation.js"></script>` early in `<head>` (a normal script, not `defer`, so that the page is translated while it is parsed). It picks brand, logo, icons, colours and the own block of the menu from the address of the page (`chunom.org`, `v2.chunom.org` or the folders `/chunom/`, `/pages/`, `/chunom-assets/` = Chunom site, else qatt.org); the constants `CHUNOM_SITE` and `QATT_SITE` hold the absolute addresses for the links to the other site. The Chunom logo and icons are in `chunom/img/`. `qtng/chunom/js/navigation.js` is only a loader for old pages that still use that address.
 - The Supabase login (decks, practice) is stored in `localStorage`, i.e. **per origin**: a user signed in on `qatt.org` is not signed in on the Chunom site.
 - The site is plain HTML and JavaScript with Bootstrap 5.3, no build step. Local preview of the real URLs is not possible; to test, serve the repos under mocked hosts (Playwright `page.route` mapping `https://v2.chunom.org/chunom/*`, `/chunom-assets/*`, `/pages/*` and `https://qatt.org/*` to the checkouts) and look for 404s and console errors.
+
+## Translation (Vietnamese)
+
+`js/navigation.js` defines `Lang` (also on the Chunom site). The language is `localStorage.lang` (`en` or `vi`) if somebody chose it (the switch is only in `license.html` of qatt.org for now, or `?lang=vi` in the address), else the first of English and Vietnamese in the languages of the browser (`vi` only if it comes before `en`). It is not stored until it was chosen.
+In `vi`, a MutationObserver gives every tag with `data-vi` the text of that attribute as its text content (the English text is kept and returns in `en`). It works while the page is parsed and for tags that JavaScript adds or changes later.
+
+Rules when you write or change pages:
+
+- A text that is translated sits **in a tag of its own without tags inside**: `<span data-vi="Ký hiệu">Symbols</span>`. Tags with tags inside are not translated. The English text stays in the tag and must not be empty.
+- When the user says that something is called `xyz` in Vietnamese, put `data-vi="xyz"` on the tag of that text (wrap the text in a `<span>` if it has no tag of its own).
+- When the English text of a tag that has `data-vi` changes, renew its translation too and tell the user which ones (translations written by Claude are drafts: say so).
+- In JavaScript just set the text of such a tag (or add one with `data-vi`); the observer translates it. `Lang.t("English", "Tiếng Việt")` gives a text for a string that is not in a tag; the event `langchange` (on `document`) is sent when the language is switched. Attributes (`title`, `placeholder`, …) are not translated.
 
 ## Going live on chunom.org
 
