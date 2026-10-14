@@ -6,20 +6,20 @@
     <title>Qatt.org - Deck</title>
     
     <!-- Bootstrap 5.3 -->
-    <link href="https://qatt.org/qatt/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://qatt.org/qatt/vendor/bootstrap-icons/bootstrap-icons.min.css">
+    <link href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
     
     <!-- Nom Fonts -->
-    <link rel="stylesheet" href="https://qatt.org/chunom-assets/fonts/fonts.css">
+    <link rel="stylesheet" href="/chunom-assets/fonts/fonts.css">
 
-    <script src="https://qatt.org/qatt/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://qatt.org/qatt/vendor/supabase/supabase.min.js"></script>
-    <script src="../../qatt/js/navigation.js"></script>
-    <script src="../../qatt/js/supabase.js"></script>
+    <script src="https://qatt.org/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://qatt.org/vendor/supabase/supabase.min.js"></script>
+    <script src="/chunom/js/navigation.js"></script>
+    <script src="https://qatt.org/js/supabase.js"></script>
     <script src="deck-cover.js"></script>
-    <script src="../../qatt/js/login.js"></script>
-    <script src="../../qatt/js/qatt.js"></script>
-    <script src="../../qatt/js/parser.js"></script>
+    <script src="https://qatt.org/js/login.js"></script>
+    <script src="https://qatt.org/js/qatt.js"></script>
+    <script src="https://qatt.org/js/parser.js"></script>
     <script src="../js/detail.js"></script>
 
     <style>
@@ -391,7 +391,7 @@
                     img.style.verticalAlign = 'middle';
                     const hex = ch.codePointAt(0).toString(16).toUpperCase();
                     img.addEventListener('error', () => img.replaceWith(ch));
-                    img.src = `https://qatt.org/chunom-assets/generated/32/${hex}.webp`;
+                    img.src = `/chunom-assets/generated/32/${hex}.webp`;
                     box.append(img);
                 }
                 return box;

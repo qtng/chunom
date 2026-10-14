@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chữ Nôm Writer (QATT) | Qatt.org</title>
-    <link href="https://qatt.org/qatt/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://qatt.org/qatt/vendor/bootstrap-icons/bootstrap-icons.min.css">
-    <link type="text/css" href="https://qatt.org/chunom-assets/fonts/fonts.css" rel="stylesheet"/>
+    <link href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+    <link type="text/css" href="/chunom-assets/fonts/fonts.css" rel="stylesheet"/>
     <script defer src="js/ime.js"></script>
-    <script defer src="../qatt/js/parser.js"></script>
-    <script defer src="../qatt/js/qatt-text.js"></script>
-    <script defer src="../qatt/js/navigation.js"></script>
+    <script defer src="https://qatt.org/js/parser.js"></script>
+    <script defer src="https://qatt.org/js/qatt-text.js"></script>
+    <script defer src="/chunom/js/navigation.js"></script>
 
     <style>
         :root { --ink: #2b2118; --accent: #a8362a; --paper: #f7efdc; --line: #e4d9c0; }
@@ -198,7 +198,7 @@
             ['QATT Gothic Wide', 'Gothic wide', 'qatt-gothic-wide'], ['QATT Prototype', 'Prototype', 'qatt-prototype'],
             ['QATT Prototype Light', 'Prototype light', 'qatt-prototype-light'], ['QATT Brush', 'Brush-like', 'qatt-brush']];
         const fontStyle = document.createElement('style');
-        fontStyle.textContent = FONTS.map(([family, , file]) => `@font-face { font-family: "${family}"; src: url(../qatt/font/${file}.woff2) format("woff2"), url(../qatt/font/${file}.ttf) format("truetype"); }`).join('\n');
+        fontStyle.textContent = FONTS.map(([family, , file]) => `@font-face { font-family: "${family}"; src: url(https://qatt.org/fonts/${file}.woff2) format("woff2"), url(https://qatt.org/fonts/${file}.ttf) format("truetype"); }`).join('\n');
         document.head.append(fontStyle);
 
         const parser = typeof VietnameseParser !== 'undefined' ? new VietnameseParser() : null;

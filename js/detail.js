@@ -11,9 +11,10 @@ The detail popup of a character (readings, glyphs, related characters, the "Add 
 */
 (() => {
 const BASE = new URL('./', document.currentScript?.src || location.href); // the folder js/ of chunom
-const DICT_URL = 'https://qatt.org/chunom/dict.csv';
-const BOOTSTRAP_JS = 'https://qatt.org/qatt/vendor/bootstrap/js/bootstrap.bundle.min.js';
-const ICONS_CSS = 'https://qatt.org/qatt/vendor/bootstrap-icons/bootstrap-icons.min.css';
+const SITE = new URL('../../', BASE).href; // the root of the Chunom site, also when a page of another site loads this script
+const DICT_URL = new URL('../dict.csv', BASE).href;
+const BOOTSTRAP_JS = 'https://qatt.org/vendor/bootstrap/js/bootstrap.bundle.min.js';
+const ICONS_CSS = 'https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css';
 
 // Small DOM helper: el('div', { className: 'x', 'data-copy': '…' }, child, 'text', [more]).
 // Texts become text nodes, never HTML; known properties directly, everything else (data-*, aria-*, role) with setAttribute.
@@ -253,7 +254,7 @@ class ChunomDetail {
   }
 
   initRelations() {
-    fetch('https://qatt.org/chunom/js/glyph_relations.json')
+    fetch(new URL('glyph_relations.json', BASE))
       .then(response => response.ok ? response.json() : Promise.reject(new Error(`HTTP ${response.status}`)))
       .then(relations => {
         this.mainOf = relations;
@@ -486,7 +487,7 @@ class ChunomDetail {
       const assetSize = size > 40 ? 160 : 32;
       const hex = ch.codePointAt(0).toString(16).toUpperCase();
       return el('span', { className: 'font-serif nom-char', 'data-char': ch },
-        this.image([`https://qatt.org/chunom-assets/generated/${assetSize}/${hex}.webp`], { alt: ch, width: size, height: size, loading: 'lazy', style: 'vertical-align: middle' }, () => ch));
+        this.image([`${SITE}chunom-assets/generated/${assetSize}/${hex}.webp`], { alt: ch, width: size, height: size, loading: 'lazy', style: 'vertical-align: middle' }, () => ch));
     });
   }
 
@@ -584,7 +585,7 @@ class ChunomDetail {
 
     // Großes Bild: Animation, dann zwei SVG-Varianten, sonst das Zeichen als Schrift
     const glyph = this.image(
-      hex ? ['animations/anim-' + hex + '.gif', 'glyph-composer/new/' + hex + '.svg', 'glyph-composer/svg/' + hex + '.svg'].map(path => `https://qatt.org/chunom-assets/${path}`) : [],
+      hex ? ['animations/anim-' + hex + '.gif', 'glyph-composer/new/' + hex + '.svg', 'glyph-composer/svg/' + hex + '.svg'].map(path => `${SITE}chunom-assets/${path}`) : [],
       { style: 'height:150px;width:150px' },
       () => el('div', { className: 'text-center' },
         el('div', { className: 'display-1 font-serif text-nowrap', textContent: mainNom }),
