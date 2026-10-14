@@ -12,10 +12,10 @@
                 themeClass: "text-warning",
                 linkClass: "link-nom",
                 links: [
-                    { name: "Character Search", bar: "Search", url: "/chunom/index.html", icon: "bi-search" },
-                    { name: "Practice / Decks", bar: "Practice", url: "/chunom/decks/index.html", icon: "bi-mortarboard" },
-                    { name: "Chữ Nôm Writer", bar: "Write", url: "/chunom/writer.html", icon: "bi-pencil-square" },
-                    { name: "Dictionary: Génibrel 1898", bar: "Dictionaries", url: "/chunom/dict/genibrel.html", icon: "bi-book" },
+                    { name: "Character Search", bar: "Search", barOrder: 1, url: "/chunom/index.html", icon: "bi-search" },
+                    { name: "Practice / Decks", bar: "Practice", barOrder: 4, url: "/chunom/decks/index.html", icon: "bi-mortarboard" },
+                    { name: "Chữ Nôm Writer", bar: "Write", barOrder: 3, url: "/chunom/writer.html", icon: "bi-pencil-square" },
+                    { name: "Dictionary: Génibrel 1898", bar: "Dictionaries", barOrder: 2, url: "/chunom/dict/genibrel.html", icon: "bi-book" },
                     { name: "Dictionary: Bonet 1899", url: "/chunom/dict/bonet.html", icon: "bi-book" },
                 ]
             },
@@ -211,7 +211,7 @@
         if (!ownBottomBar) {
             const block = sections.find(sec => sec.links.some(l => l.bar));
             const own = sections.find(sec => sec.linkClass === navConfig.own) || block;
-            const barLinks = own.links.filter(l => l.bar).map(link => {
+            const barLinks = own.links.filter(l => l.bar).sort((a, b) => (a.barOrder ?? 0) - (b.barOrder ?? 0)).map(link => {
                 const isActive = currentPath === link.url || currentPath === link.url.replace(/index\.html$/, '');
                 return `<a href="${link.url}" class="${isActive ? 'active' : ''}"><i class="bi ${link.icon}"></i>${link.bar}</a>`;
             }).join('');
