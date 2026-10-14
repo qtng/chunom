@@ -117,7 +117,7 @@
             <div class="col-12">
                 
                 <!-- Header -->
-                <div class="text-start mt-2"><a href="index.html" class="btn-subtle"><i class="bi bi-arrow-left"></i> Practice / Decks</a></div>
+                <div class="text-start mt-2"><a href="index.html" class="btn-subtle"><i class="bi bi-arrow-left"></i> <span data-vi="Luyện tập / Bộ thẻ">Practice / decks</span></a></div>
                 <div class="deck-head mt-2 mb-3">
                     <div id="deck-cover-slot" class="deck-cover-slot"></div>
                     <div class="deck-head-text">
@@ -127,7 +127,6 @@
                 </div>
                 <div class="d-flex flex-wrap justify-content-start gap-2 mb-4" id="deck-actions"></div>
                 <div class="text-start mb-5">
-                    <h6 class="text-secondary text-uppercase pb-2 mb-2 small section-header">Characters</h6>
                     <div id="deck-words">
                         <div class="text-center p-5 text-secondary">
                             <div class="spinner-border spinner-border-sm accent mb-2" role="status"></div>
@@ -170,8 +169,7 @@
                         <div class="form-text" id="publicHint">Everybody can find the deck, learn it and see your user name. You can take it back at any time.</div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center mb-1">
-                        <h6 class="text-secondary text-uppercase mb-0 small">Characters</h6>
-                        <span id="editCount" class="text-secondary small"></span>
+                        <span id="editCount" class="text-secondary small ms-auto"></span>
                     </div>
                     <div id="editWords"></div>
                     <p class="text-secondary small mt-3 mb-0">Add characters in the dictionary: open a character and tap “Add to deck”.</p>
@@ -237,7 +235,11 @@
             // "12 items · by name" / "· chunom.org" for the decks of the site; the owner sees whether it is published and how many use it
             async renderMeta(count) {
                 const meta = document.getElementById('deck-meta'), deck = this.deck;
-                meta.textContent = `${count} items`;
+                meta.textContent = '';
+                const num = document.createElement('span');
+                num.dataset.vi = `${count} chữ`;
+                num.textContent = `${count} items`;
+                meta.append(num);
                 const add = node => meta.append(' · ', node);
                 const text = t => document.createTextNode(t);
                 if (deck.is_official) {
@@ -329,7 +331,7 @@
                 // editing and deleting: in a menu behind an icon button
                 const items = [];
                 if (this.isOwner) {
-                    items.push(['edit', 'bi-pencil', 'Edit deck or items', '', () => this.openEdit()],
+                    items.push(['edit', 'bi-pencil', '<span data-vi="Sửa bộ thẻ hoặc chữ">Edit deck or items</span>', '', () => this.openEdit()],
                         ['delete', 'bi-trash', 'Delete the whole deck', ' text-danger', () => this.deleteDeck()]);
                 } else if (this.canTake && this.saved) {
                     items.push(['remove', 'bi-x-circle', 'Remove from my decks', '', () => this.toggleSaved(false)]);
@@ -454,7 +456,9 @@
             renderEditWords() {
                 const { words, removed } = this.editing;
                 const shown = words.filter(w => w.n !== '.config' && !removed.has(w));
-                document.getElementById('editCount').textContent = `${shown.length} items`;
+                const editCount = document.getElementById('editCount');
+                editCount.dataset.vi = `${shown.length} chữ`;
+                editCount.textContent = `${shown.length} items`;
                 this.updatePublish(shown.length);
                 const rows = shown.map(word => {
                     const qn = document.createElement('span');
