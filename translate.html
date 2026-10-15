@@ -12,6 +12,7 @@
   <script defer src="https://qatt.org/vendor/supabase/supabase.min.js"></script>
   <script defer src="https://qatt.org/js/supabase.js"></script>
   <script defer src="https://qatt.org/js/login.js"></script>
+  <script defer src="/chunom/js/detail.js"></script>
   <style>
     :root { --ink: #2b2118; --accent: #a8362a; --line: #e4d9c0; --muted: #7b6c58; }
     body { background: #f7efdc; color: var(--ink); }
@@ -28,13 +29,31 @@
     #status { min-height: 1.6rem; margin-top: .6rem; color: var(--accent); font-weight: 600; }
     #status.error { color: #842029; }
     #result { margin-top: 1rem; }
-    .nom { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: clamp(1.8rem, 6vw, 2.8rem); line-height: 1.5; word-break: break-all; }
+    .nom { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: clamp(1.8rem, 6vw, 2.8rem); line-height: 1.5; display: flex; flex-wrap: wrap; align-items: center; }
     .qn { color: var(--muted); }
     .flag { color: #842029; }
     table.units { font-size: .85rem; }
     table.units td, table.units th { vertical-align: top; }
+    .font-serif { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }
     .pick { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 1.3rem; }
     .pick.chosen { background: #f6e3de; border-radius: .3rem; padding: 0 .2rem; }
+    /* characters as images (as on the dictionary page), each one opens the popup of the character */
+    .nom-char { cursor: pointer; }
+    .nom .nom-char { display: inline-flex; align-items: center; line-height: 0; }
+    .nom-char, .nom-char img { border-radius: .25rem; transition: background-color .15s, box-shadow .15s; }
+    .nom-char:hover img, .nom-char:not(:has(img)):hover { background-color: #dff1f8; box-shadow: 0 0 0 .2rem #dff1f8; }
+    /* how sure a word is: green = sure, red = uncertain, dotted yellow = not checked */
+    .unit { display: inline-flex; align-items: center; margin: 0 .12em; padding-bottom: .1em; border-bottom: .22rem solid transparent; }
+    .unit.sure { border-bottom-color: #3f8a4f; }
+    .unit.uncertain { border-bottom-color: #c0392b; }
+    .unit.unchecked { border-bottom-color: #c9a227; border-bottom-style: dotted; }
+    .state { white-space: nowrap; font-weight: 600; }
+    .state.sure { color: #2f6f3e; }
+    .state.uncertain { color: #842029; }
+    .state.unchecked { color: #8a6d0b; }
+    .legend .unit { font-size: .8rem; margin-right: .6em; }
+    .cand { display: inline-block; margin: 0 .3rem .2rem 0; padding: .1rem; border-radius: .3rem; }
+    .cand.chosen { background: #f6e3de; }
     .account { font-size: .85rem; color: var(--muted); margin-top: 1.2rem; }
   </style>
 </head>
@@ -44,7 +63,7 @@
   <p class="lead">Type Vietnamese and get the Chữ Nôm text. Behind the button three automatic steps run: candidates for every word, one choice per word, and a back-reading check of the result. Nothing to confirm.</p>
 
   <div class="box">
-    <label for="text" class="form-label fw-semibold" data-vi="Văn bản tiếng Việt">Vietnamese text (Quốc Ngữ)</label>
+    <label for="text" class="form-label fw-semibold">Quốc Ngữ → Chữ Nôm</label>
     <textarea id="text" lang="vi" maxlength="400" spellcheck="false" placeholder="Tôi là người Việt Nam." data-vi-placeholder="Gõ hoặc dán Quốc Ngữ…"></textarea>
     <div class="d-flex justify-content-between align-items-center mt-2">
       <span class="count"><span id="count">0</span> / 400</span>
@@ -57,17 +76,16 @@
     <div class="box">
       <div class="nom" id="nom" lang="vi-Hani"></div>
       <div class="qn mt-1" id="qn"></div>
+      <div class="legend count mt-2"><span class="unit sure" data-vi="chắc chắn">sure</span><span class="unit uncertain" data-vi="chưa chắc">uncertain</span><span class="unit unchecked" data-vi="chưa kiểm tra">not checked</span></div>
       <div class="d-flex gap-2 mt-3">
         <button type="button" class="btn-quiet" id="copy"><i class="bi bi-clipboard"></i> <span data-vi="Sao chép">Copy</span></button>
       </div>
       <p class="flag mt-3 mb-0" id="warn" hidden></p>
     </div>
-    <details class="mt-3">
-      <summary class="fw-semibold" data-vi="Chi tiết">Details</summary>
-      <div class="table-responsive mt-2">
-        <table class="table table-sm units"><thead><tr><th>#</th><th>Quốc Ngữ</th><th data-vi="Chữ Nôm">Chữ Nôm</th><th data-vi="Đọc lại">Read back</th><th data-vi="Ứng viên">Candidates</th></tr></thead><tbody id="units"></tbody></table>
-      </div>
-    </details>
+    <h2 class="h6 fw-semibold mt-3 mb-0" data-vi="Chi tiết">Details</h2>
+    <div class="table-responsive mt-2">
+      <table class="table table-sm units"><thead><tr><th>#</th><th>Quốc Ngữ</th><th data-vi="Chữ Nôm">Chữ Nôm</th><th data-vi="Trạng thái">Status</th><th data-vi="Ứng viên">Candidates</th></tr></thead><tbody id="units"></tbody></table>
+    </div>
   </section>
 
   <p class="account" id="account"></p>
@@ -107,8 +125,44 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   const GENERIC = t('Something went wrong. Please try again.', 'Đã xảy ra lỗi. Vui lòng thử lại.');
 
+  // characters as images (js/detail.js, as on the dictionary page); plain text if that script is not there
+  const chars = (str, size) => (typeof ChunomDetail !== 'undefined' ? ChunomDetail.get().nomChars(str, size) : [str]);
+
+  // how sure a word is: sure (in the dictionary or read back correctly), uncertain, not checked (step 3 did not run)
+  const stateOf = u => {
+    if (u.chosen === '?') return { key: 'uncertain', label: t('uncertain', 'chưa chắc'), icon: 'bi-exclamation-triangle-fill', why: t('no character found', 'không tìm được chữ') };
+    if (u.ok === false) return { key: 'uncertain', label: t('uncertain', 'chưa chắc'), icon: 'bi-exclamation-triangle-fill', why: t('read back as “', 'đọc lại thành “') + (u.read || '?') + '”' };
+    if (u.ok === true) {
+      const inDict = (u.candidates.find(c => c.char === u.chosen) || {}).inDict;
+      return { key: 'sure', label: t('sure', 'chắc chắn'), icon: 'bi-check-circle-fill', why: inDict ? t('in the dictionary', 'có trong từ điển') : t('back-reading matches', 'đọc lại khớp') };
+    }
+    return { key: 'unchecked', label: t('not checked', 'chưa kiểm tra'), icon: 'bi-dash-circle', why: t('back-reading not done', 'chưa đọc lại') };
+  };
+
+  // the result line: every word underlined by its state, punctuation between the words as it was
+  const showNom = r => {
+    const box = $('nom'); box.replaceChildren();
+    let pos = 0;
+    for (const u of r.units) {
+      const shown = u.chosen === '?' ? `[${u.qn}]` : u.chosen;
+      const at = r.nom.indexOf(shown, pos);
+      if (at < 0) continue;
+      if (at > pos) box.append(...chars(r.nom.slice(pos, at), 50));
+      const st = stateOf(u);
+      const span = document.createElement('span');
+      span.className = 'unit ' + st.key;
+      span.title = `${u.qn} · ${st.label}`;
+      span.append(...(u.chosen === '?' ? [shown] : chars(shown, 50)));
+      box.append(span);
+      pos = at + shown.length;
+    }
+    if (pos < r.nom.length) box.append(...chars(r.nom.slice(pos), 50));
+  };
+
+  let lastNom = '';
   const show = r => {
-    $('nom').textContent = r.nom;
+    lastNom = r.nom;
+    showNom(r);
     $('qn').textContent = r.qn;
     const warn = $('warn');
     const notes = [];
@@ -118,19 +172,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     warn.textContent = notes.join(' ');
     $('units').replaceChildren(...r.units.map(u => {
       const tr = document.createElement('tr');
-      const cell = (content, cls) => { const td = document.createElement('td'); if (cls) td.className = cls; td.append(content); return td; };
-      const cands = document.createElement('span');
-      u.candidates.forEach(c => {
+      const cell = (content, cls) => { const td = document.createElement('td'); if (cls) td.className = cls; td.append(...[].concat(content)); return td; };
+      const st = stateOf(u);
+      const state = document.createElement('div');
+      const badge = document.createElement('span');
+      badge.className = 'state ' + st.key;
+      const icon = document.createElement('i'); icon.className = 'bi ' + st.icon;
+      badge.append(icon, ' ', st.label);
+      const why = document.createElement('div'); why.className = 'count'; why.textContent = st.why;
+      state.append(badge, why);
+      const cands = u.candidates.map(c => {
         const s = document.createElement('span');
-        s.className = 'pick me-2' + (c.char === u.chosen ? ' chosen' : '');
-        s.textContent = c.char; s.title = `${c.reading} · ${c.type}${c.inDict ? ' · dictionary' : ''}`;
-        cands.append(s);
+        s.className = 'cand' + (c.char === u.chosen ? ' chosen' : '');
+        s.title = `${c.reading} · ${c.type}${c.inDict ? ' · dictionary' : ''}`;
+        s.append(...chars(c.char, 32));
+        return s;
       });
-      tr.append(cell(String(u.id)), cell(u.qn), cell(u.chosen === '?' ? '?' : u.chosen, 'pick' + (u.ok === false ? ' flag' : '')), cell(u.read || '–', u.ok === false ? 'flag' : ''), cell(cands));
+      tr.append(cell(String(u.id)), cell(u.qn), cell(u.chosen === '?' ? '?' : chars(u.chosen, 40)), cell(state), cell(cands));
       return tr;
     }));
     $('result').hidden = false;
   };
+
+  // a click on a character opens its popup (js/detail.js)
+  $('result').addEventListener('click', e => {
+    const c = e.target.closest('.nom-char');
+    if (c && typeof ChunomDetail !== 'undefined') ChunomDetail.get().open(c.dataset.char).catch(err => console.error('Popup failed', err));
+  });
 
   go.addEventListener('click', async () => {
     const value = text.value.trim();
@@ -171,7 +239,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   $('copy').addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText($('nom').textContent); say(t('Copied.', 'Đã sao chép.')); setTimeout(() => say(''), 1500); } catch { /* no clipboard permission */ }
+    try { await navigator.clipboard.writeText(lastNom); say(t('Copied.', 'Đã sao chép.')); setTimeout(() => say(''), 1500); } catch { /* no clipboard permission */ }
   });
 });
 </script>
