@@ -65,6 +65,17 @@
         .deck-title { font-weight: 600; color: var(--ink); }
         .empty-box { background: rgba(255, 255, 255, .6); border: 1px dashed var(--field); }
 
+        /* grey placeholders while the decks load: the same layout as a deck card, so nothing jumps */
+        .sk-block { display: block; border-radius: .5rem; background: linear-gradient(90deg, #e4e2dd 25%, #efede8 50%, #e4e2dd 75%); background-size: 200% 100%; animation: sk-shimmer 1.4s linear infinite; }
+        .sk-thumb { width: 4rem; height: 4rem; border-radius: .9rem; flex: none; }
+        .sk-line { height: 1.1rem; margin: .15rem 0 .5rem; }
+        .sk-sm { height: .8rem; }
+        .sk-btn { height: 1.9rem; width: 6.5rem; border-radius: 50rem; }
+        @keyframes sk-shimmer { to { background-position: -200% 0; } }
+        @media (prefers-reduced-motion: reduce) { .sk-block { animation: none; } }
+        .deck-progress { height: 6px; background: rgba(0, 0, 0, .08); }
+        .deck-progress .progress-bar { transition: width .4s; }
+
         .section-header { border: none !important; }
         .account-footer { margin-top: 3rem; text-align: center; font-size: .85rem; color: var(--muted); }
         .account-footer a { color: var(--cinnabar); text-decoration: none; }
@@ -107,10 +118,21 @@
                     </div>
 
                     <div id="deck-list" class="list-group">
-                        <div class="text-center p-5 text-secondary rounded">
-                            <div class="spinner-border spinner-border-sm accent mb-2" role="status"></div>
-                            <div class="small">Loading personal decks...</div>
-                        </div>
+                        <div role="status"><span class="visually-hidden">Loading personal decks...</span></div>
+                            <div class="list-group-item py-3 mb-2 rounded shadow-none" aria-hidden="true">
+                                <div class="d-flex align-items-start gap-3">
+                                    <span class="sk-block sk-thumb"></span>
+                                    <div class="flex-grow-1"><span class="sk-block sk-line" style="width: 55%"></span><span class="sk-block sk-line sk-sm" style="width: 30%"></span></div>
+                                </div>
+                                <div class="d-flex gap-2 mt-3"><span class="sk-block sk-btn"></span><span class="sk-block sk-btn"></span><span class="sk-block sk-btn ms-auto"></span></div>
+                            </div>
+                            <div class="list-group-item py-3 mb-2 rounded shadow-none" aria-hidden="true">
+                                <div class="d-flex align-items-start gap-3">
+                                    <span class="sk-block sk-thumb"></span>
+                                    <div class="flex-grow-1"><span class="sk-block sk-line" style="width: 55%"></span><span class="sk-block sk-line sk-sm" style="width: 30%"></span></div>
+                                </div>
+                                <div class="d-flex gap-2 mt-3"><span class="sk-block sk-btn"></span><span class="sk-block sk-btn"></span><span class="sk-block sk-btn ms-auto"></span></div>
+                            </div>
                     </div>
                 </div>
 
@@ -120,10 +142,28 @@
                         Public Decks
                     </h6>
                     <div id="public-deck-list" class="list-group">
-                        <div class="text-center p-5 text-secondary">
-                            <div class="spinner-border spinner-border-sm accent mb-2" role="status"></div>
-                            <div class="small">Loading public decks...</div>
-                        </div>
+                        <div role="status"><span class="visually-hidden">Loading public decks...</span></div>
+                            <div class="list-group-item py-3 mb-2 rounded shadow-none" aria-hidden="true">
+                                <div class="d-flex align-items-start gap-3">
+                                    <span class="sk-block sk-thumb"></span>
+                                    <div class="flex-grow-1"><span class="sk-block sk-line" style="width: 55%"></span><span class="sk-block sk-line sk-sm" style="width: 30%"></span></div>
+                                </div>
+                                <div class="d-flex gap-2 mt-3"><span class="sk-block sk-btn"></span><span class="sk-block sk-btn"></span><span class="sk-block sk-btn ms-auto"></span></div>
+                            </div>
+                            <div class="list-group-item py-3 mb-2 rounded shadow-none" aria-hidden="true">
+                                <div class="d-flex align-items-start gap-3">
+                                    <span class="sk-block sk-thumb"></span>
+                                    <div class="flex-grow-1"><span class="sk-block sk-line" style="width: 55%"></span><span class="sk-block sk-line sk-sm" style="width: 30%"></span></div>
+                                </div>
+                                <div class="d-flex gap-2 mt-3"><span class="sk-block sk-btn"></span><span class="sk-block sk-btn"></span><span class="sk-block sk-btn ms-auto"></span></div>
+                            </div>
+                            <div class="list-group-item py-3 mb-2 rounded shadow-none" aria-hidden="true">
+                                <div class="d-flex align-items-start gap-3">
+                                    <span class="sk-block sk-thumb"></span>
+                                    <div class="flex-grow-1"><span class="sk-block sk-line" style="width: 55%"></span><span class="sk-block sk-line sk-sm" style="width: 30%"></span></div>
+                                </div>
+                                <div class="d-flex gap-2 mt-3"><span class="sk-block sk-btn"></span><span class="sk-block sk-btn"></span><span class="sk-block sk-btn ms-auto"></span></div>
+                            </div>
                     </div>
                 </div>
                 
@@ -205,11 +245,14 @@
             }
 
             async loadLists() {
-                const [own, saved, publicDecks] = await Promise.all([
-                    this.sp.getDecks() || [],
-                    this.sp.getSavedDecks?.() || [],
-                    this.sp.getPublicDecks() || []
+                const [own, saved, publicDecks, progress] = await Promise.all([
+                    this.sp.getDecks({ words: true }) || [],
+                    this.sp.getSavedDecks?.({ words: true }) || [],
+                    this.sp.getPublicDecks() || [],
+                    this.signedIn() ? this.sp.getProgress().catch(() => ({})) : {}
                 ]);
+                // key of a word -> number of correct answers (no bar if the progress could not be loaded)
+                this.correct = progress && progress.rows ? new Map(progress.rows.map(r => [r.key, r.correct])) : null;
                 // taken-over public decks are in "My decks", not in the catalog
                 const savedIds = new Set(saved.map(d => d.id));
                 this.owners = await this.sp.getUsernames?.([...saved, ...publicDecks].map(d => d.user_id)) || {};
@@ -246,13 +289,15 @@
                     return;
                 }
 
-                el.innerHTML = data.map(d => `
+                el.innerHTML = data.map(d => { const pr = isPersonal ? this.progressOf(d) : null; return `
                     <div class="list-group-item py-3 mb-2 rounded shadow-none">
                         <div class="d-flex align-items-start gap-3">
                             <span class="deck-thumb-slot" data-deck="${d.id}"></span>
-                            <div class="text-start">
+                            <div class="text-start flex-grow-1">
                                 <div class="deck-title">${this.escape(d.title)}</div>
                                 <small class="text-secondary">${d.words ? d.words.length : (d.count || 0)} items${this.byline(d, isPersonal)}</small>
+                                ${pr ? `<div class="progress deck-progress mt-2" role="progressbar" aria-valuemin="0" aria-valuemax="${pr.total}" aria-valuenow="${pr.done}"><div class="progress-bar bg-info" style="width: ${Math.round(pr.done / pr.total * 100)}%"></div></div>
+                                <small class="text-secondary"><span>${pr.done} / ${pr.total}</span> <span data-vi="đã học">learned</span></small>` : ''}
                             </div>
                         </div>
                         <div class="d-flex flex-wrap gap-2 mt-3">
@@ -262,7 +307,7 @@
                             <a href="deck.html?id=${d.id}" class="btn btn-sm btn-outline-secondary rounded-pill px-3" data-vi="Chi tiết">Details</a>
                         </div>
                     </div>
-                `).join('');
+                `; }).join('');
                 el.querySelectorAll('[data-remove]').forEach(btn => btn.addEventListener('click', async () => {
                     const d = data.find(x => x.id === btn.dataset.remove);
                     if (!confirm(`Remove "${d.title}" from My decks? Your progress is kept.`)) return;
@@ -276,6 +321,21 @@
                     if (window.DeckCover) slot.replaceWith(DeckCover.element(d, this.sp.deckImageUrl(d.image_path), 'deck-thumb'));
                     else slot.remove(); // deck-cover.js not loaded (yet): the list works without thumbnails
                 });
+            }
+
+            // how many words of a deck are learned: { done, total } or null. The words and the key ("quốc ngữ|Nôm") are the ones of
+            // practice.html (only words with Nôm characters are practised); a word counts as learned after 4 correct answers (requiredCorrect).
+            progressOf(d) {
+                if (!this.correct || !Array.isArray(d.words)) return null;
+                const keys = new Set();
+                for (const w of d.words) {
+                    const n = (w.n || '').trim(), qn = (w.qn || '').trim().replace(/\s+/g, ' ');
+                    if (qn && n !== '.config' && /[一-鿿㐀-䶿\u{20000}-\u{323af}]/u.test(n)) keys.add(qn + '|' + n);
+                }
+                if (!keys.size) return null;
+                let done = 0;
+                for (const k of keys) if ((this.correct.get(k) || 0) >= 4) done++;
+                return { done, total: keys.size };
             }
 
             // who published a public deck: "Chunom" for the decks of the site, else the user name
