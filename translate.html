@@ -111,8 +111,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     $('nom').textContent = r.nom;
     $('qn').textContent = r.qn;
     const warn = $('warn');
-    warn.hidden = !r.uncertain.length;
-    warn.textContent = r.uncertain.length ? t('Not sure about: ', 'Chưa chắc về: ') + r.uncertain.map(id => r.units.find(u => u.id === id).qn).join(', ') : '';
+    const notes = [];
+    if (r.uncertain.length) notes.push(t('Not sure about: ', 'Chưa chắc về: ') + r.uncertain.map(id => r.units.find(u => u.id === id).qn).join(', '));
+    if (r.checked === false) notes.push(t('The back-reading check was not done.', 'Chưa kiểm tra đọc lại.'));
+    warn.hidden = !notes.length;
+    warn.textContent = notes.join(' ');
     $('units').replaceChildren(...r.units.map(u => {
       const tr = document.createElement('tr');
       const cell = (content, cls) => { const td = document.createElement('td'); if (cls) td.className = cls; td.append(content); return td; };
@@ -123,7 +126,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         s.textContent = c.char; s.title = `${c.reading} · ${c.type}${c.inDict ? ' · dictionary' : ''}`;
         cands.append(s);
       });
-      tr.append(cell(String(u.id)), cell(u.qn), cell(u.chosen === '?' ? '?' : u.chosen, 'pick' + (u.ok ? '' : ' flag')), cell(u.read || '–', u.ok ? '' : 'flag'), cell(cands));
+      tr.append(cell(String(u.id)), cell(u.qn), cell(u.chosen === '?' ? '?' : u.chosen, 'pick' + (u.ok === false ? ' flag' : '')), cell(u.read || '–', u.ok === false ? 'flag' : ''), cell(cands));
       return tr;
     }));
     $('result').hidden = false;
