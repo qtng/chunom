@@ -26,7 +26,7 @@
     .loading[hidden] { display: none; }
     @media (prefers-reduced-motion: reduce) { .loading .ch { animation: none; opacity: .7; } }
     .box { background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; padding: .8rem; box-shadow: 0 .3rem 1rem rgba(60, 40, 20, .12); }
-    textarea { width: 100%; min-height: 7rem; resize: vertical; border: 1px solid #cdbf9f; border-radius: .5rem; padding: .5rem .7rem; font-size: 1.1rem; background: #fff; }
+    textarea { width: 100%; min-height: 11.1rem; resize: vertical; border: 1px solid #cdbf9f; border-radius: .5rem; padding: .5rem .7rem; font-size: 1.1rem; background: #fff; }
     textarea:focus { outline: 2px solid rgba(168, 54, 42, .35); }
     .btn-go { background: var(--accent); border-color: var(--accent); color: #fff; border-radius: 2rem; padding: .4rem 1.4rem; }
     .btn-go:hover:not(:disabled) { background: #8c2c22; border-color: #8c2c22; color: #fff; }
@@ -82,19 +82,16 @@
 <main>
   <header class="text-center my-3">
     <h1>Quốc Ngữ → Chữ Nôm</h1>
+    <p class="mb-0"><span class="d-block" data-vi="Tự động chuyển chữ Quốc Ngữ sang chữ Nôm.">Automatic Quốc Ngữ to Nôm transliteration.</span><span class="d-block" data-vi="Đây là bản dịch máy và có thể không chính xác.">This is a machine translation that might be inaccurate.</span></p>
   </header>
 
   <div class="box">
-    <label for="text" class="form-label fw-semibold">Quốc Ngữ → Chữ Nôm</label>
-    <textarea id="text" lang="vi" maxlength="400" spellcheck="false" placeholder="Tôi là người Việt Nam." data-vi-placeholder="Gõ hoặc dán Quốc Ngữ…"></textarea>
-    <div class="d-flex align-items-center gap-2 mt-2">
-      <label for="lang" class="small mb-0" data-vi="Dịch nghĩa sang">Translate the meaning into</label>
-      <select id="lang" class="form-select form-select-sm w-auto">
-        <option value="" data-vi="không">none</option><option value="en">English</option><option value="vi">Tiếng Việt</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="it">Italiano</option><option value="pt">Português</option><option value="ru">Русский</option><option value="zh">中文</option><option value="ja">日本語</option><option value="ko">한국어</option>
+    <textarea id="text" aria-label="Quốc Ngữ" lang="vi" maxlength="400" spellcheck="false" placeholder="Tôi là người Việt Nam." data-vi-placeholder="Gõ hoặc dán Quốc Ngữ…"></textarea>
+    <div class="count text-end mt-1"><span id="count">0</span> / 400</div>
+    <div class="d-flex justify-content-center align-items-center flex-wrap gap-2 mt-2">
+      <select id="lang" class="form-select w-auto" aria-label="Output">
+        <option value="">Chữ Nôm</option><option value="en">Chữ Nôm + English</option><option value="de">Chữ Nôm + Deutsch</option><option value="fr">Chữ Nôm + Français</option><option value="es">Chữ Nôm + Español</option><option value="it">Chữ Nôm + Italiano</option><option value="pt">Chữ Nôm + Português</option><option value="ru">Chữ Nôm + Русский</option><option value="zh">Chữ Nôm + 中文</option><option value="ja">Chữ Nôm + 日本語</option><option value="ko">Chữ Nôm + 한국어</option>
       </select>
-    </div>
-    <div class="d-flex justify-content-between align-items-center mt-2">
-      <span class="count"><span id="count">0</span> / 400</span>
       <button type="button" class="btn btn-go" id="go" data-vi="Dịch">Translate</button>
     </div>
     <div class="loading" id="loading" role="status" hidden><span class="ch" aria-hidden="true">越</span><span class="ch" aria-hidden="true">南</span><span class="ch" aria-hidden="true">𡨸</span><span class="ch" aria-hidden="true">喃</span><span class="visually-hidden" data-vi="Đang dịch…">Translating…</span></div>
@@ -323,7 +320,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // the Quốc Ngữ above the characters can be hidden (remembered in this browser)
   const rtBox = $('rt-toggle'), rtSet = on => { $('nom').classList.toggle('no-rt', !on); rtBox.checked = on; };
   const langBox = $('lang');
-  try { const saved = localStorage.getItem('translate_target'); langBox.value = saved !== null ? saved : (localStorage.getItem('lang') === 'vi' ? 'vi' : 'en'); } catch { langBox.value = 'en'; }
+  try { const saved = localStorage.getItem('translate_target'); langBox.value = saved !== null ? saved : 'en'; if (langBox.value !== saved && saved !== null) langBox.value = 'en'; } catch { langBox.value = 'en'; }
   langBox.addEventListener('change', () => { try { localStorage.setItem('translate_target', langBox.value); } catch { /* no storage */ } });
   try { rtSet(localStorage.getItem('translate_rt') !== '0'); } catch { /* no storage */ }
   rtBox.addEventListener('change', () => { rtSet(rtBox.checked); try { localStorage.setItem('translate_rt', rtBox.checked ? '1' : '0'); } catch { /* no storage */ } });
