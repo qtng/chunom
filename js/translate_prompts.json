@@ -1,0 +1,41 @@
+{
+  "version": "2026-10-15",
+  "models": [
+    "gemini-3.5-flash",
+    "gemini-3.1-flash-lite",
+    "gemini-3.8-flash"
+  ],
+  "prompts": {
+    "system": [
+      "You transcribe Vietnamese (Quốc Ngữ) into Chữ Nôm. Answer with JSON only, exactly in the requested shape, no comments.",
+      "Rules: never invent characters; if you do not know a reliable character, write none. Only Chữ Nôm / Han characters, no Chinese rewording: every unit stands for exactly the syllables given, in the same order, nothing added, nothing left out. For purely Vietnamese words (pronouns, particles, function words) never use a Sino-Vietnamese character with a different reading, e.g. never 我 for \"tôi\" (that is read \"ngã\"). The reading of a candidate must match the syllable."
+    ],
+    "step1": [
+      "STEP 1. Do not transcribe yet, only prepare candidates.",
+      "The whole sentence (for context): {{text}}",
+      "Syllables of the text (in order): {{syllables}}",
+      "Group them into words where appropriate (a unit has one or more consecutive syllables; every syllable belongs to exactly one unit, none missing, none added). Give each unit a sequential id starting at 1.",
+      "For each unit give 2 to 4 candidates sorted by confidence. Choose candidates that fit the meaning of the unit in this sentence (word class, sense in context); where a word is ambiguous, include a second reading. Prefer phono-semantic characters if available and confidence is sufficient.",
+      "Each candidate: {\"char\": \"...\", \"codepoint\": \"U+...\", \"reading\": \"Quốc Ngữ reading\", \"type\": \"Sino-Vietnamese\" | \"purely Nôm\" | \"phono-semantic\", \"reason\": \"at most 10 words\"}.",
+      "{{hintsLine}}",
+      "Answer: {\"units\": [{\"id\": 1, \"qn\": \"the syllables of the unit separated by a space\", \"candidates\": [ ... ]}]}"
+    ],
+    "hintsLine": "Dictionary entries of this site that may help (reading: characters with meaning; use them when the meaning fits the sentence): {{hints}}",
+    "step1retry": "Your previous answer was rejected: {{error}}. Follow the syllable list exactly.",
+    "step2": [
+      "STEP 2. Choose exactly one candidate per unit, only from its list; if none fits, use \"?\".",
+      "The whole sentence: {{text}}",
+      "Make sure the choices are coherent in context (word class, meaning, identical words spelled identically); use the meaning given with a candidate.",
+      "{{note}}",
+      "Units: {{units}}",
+      "Answer: {\"choices\": [{\"id\": 1, \"char\": \"...\"}]}"
+    ],
+    "step2repair": "These units failed the back-reading check. Choose a different candidate (or \"?\") for exactly these units: {{bad}}",
+    "step3": [
+      "STEP 3, back-reading check. You see only Chữ Nôm characters, no original text. Ignore anything you may have thought before.",
+      "Read each unit in Quốc Ngữ based on the characters alone. Do not guess to force a match; write \"?\" if a reading is unclear. A unit with several characters has several syllables.",
+      "Units: {{units}}",
+      "Answer: {\"readings\": [{\"id\": 1, \"reading\": \"...\"}]}"
+    ]
+  }
+}
