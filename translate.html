@@ -101,6 +101,7 @@
       </select>
       <button type="button" class="btn btn-go" id="go" data-vi="Dịch">Translate</button>
     </div>
+    <div class="count text-center mt-2" id="quota" hidden></div>
     <div class="loading" id="loading" role="status" hidden><span class="ch" aria-hidden="true">越</span><span class="ch" aria-hidden="true">南</span><span class="ch" aria-hidden="true">𡨸</span><span class="ch" aria-hidden="true">喃</span><span class="visually-hidden" data-vi="Đang dịch…">Translating…</span></div>
     <div id="status" role="status" aria-live="polite"></div>
   </div>
@@ -208,6 +209,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     bad_request: t('The lists were not accepted. Try a shorter text.', 'Danh sách không được chấp nhận. Hãy thử văn bản ngắn hơn.'),
     empty: t('Please type some text.', 'Vui lòng nhập văn bản.'),
   };
+  // requests left today: the function reports it with every result; the page keeps it for the day (UTC, like the counter of the server)
+  // and shows it approximately. After the error "limit" it is 0; on a new day it is unknown again and not shown.
+  const today = () => new Date().toISOString().slice(0, 10);
+  const quotaShow = () => {
+    let q = null;
+    try { q = JSON.parse(localStorage.getItem('translate_left')); } catch { /* no storage */ }
+    const box = $('quota');
+    if (!q || q.day !== today() || typeof q.left !== 'number') { box.hidden = true; return; }
+    box.textContent = q.left > 0 ? t(`${q.left} requests left today`, `Hôm nay còn ${q.left} lượt`) : t('No requests left today', 'Hôm nay đã hết lượt');
+    box.hidden = false;
+  };
+  const quotaSet = left => { try { localStorage.setItem('translate_left', JSON.stringify({ day: today(), left })); } catch { /* no storage */ } quotaShow(); };
+  document.addEventListener('langchange', quotaShow);
+  quotaShow();
   const GENERIC = t('Something went wrong. Please try again.', 'Đã xảy ra lỗi. Vui lòng thử lại.');
 
   // characters as images in the table (js/detail.js, as on the dictionary page); plain text if that script is not there
@@ -357,12 +372,13 @@ document.addEventListener('DOMContentLoaded', async () => {
           if (!line.trim()) continue;
           const m = JSON.parse(line);
           if (m.error) throw new Error(m.error);
-          if (m.result) { show(m.result, full); say(''); done = true; }
+          if (m.result) { show(m.result, full); if (typeof m.result.left === 'number') quotaSet(m.result.left); say(''); done = true; }
         }
         if (end) break;
       }
       if (!done) throw new Error('failed');
     } catch (e) {
+      if (e.message === 'limit') quotaSet(0);
       say(ERRORS[e.message] || GENERIC, true);
     } finally {
       go.disabled = false; $('loading').hidden = true;
