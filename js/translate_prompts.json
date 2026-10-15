@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-16",
+  "version": "2026-10-16b",
   "models": [
     "gemini-3.5-flash",
     "gemini-3.1-flash-lite",
@@ -17,6 +17,7 @@
       "Group them into words where appropriate (a unit has one or more consecutive syllables; every syllable belongs to exactly one unit, none missing, none added). Give each unit a sequential id starting at 1.",
       "For each unit give 2 to 4 candidates sorted by confidence. Choose candidates that fit the meaning of the unit in this sentence (word class, sense in context); where a word is ambiguous, include a second reading. Prefer phono-semantic characters if available and confidence is sufficient.",
       "Each candidate: {\"char\": \"...\", \"codepoint\": \"U+...\", \"reading\": \"Quốc Ngữ reading\", \"type\": \"Sino-Vietnamese\" | \"purely Nôm\" | \"phono-semantic\", \"reason\": \"at most 10 words\"}.",
+      "{{hintsLine}}",
       "Answer: {\"units\": [{\"id\": 1, \"qn\": \"the syllables of the unit separated by a space\", \"candidates\": [ ... ]}]}"
     ],
     "hintsLine": "Dictionary entries of this site that may help (reading: characters with meaning; use them when the meaning fits the sentence): {{hints}}",
