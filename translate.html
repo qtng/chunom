@@ -355,7 +355,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const { spans, full } = buildSpans(value, csv);
       $('lists').textContent = spans.map(s => `${s.at}+${s.len}  ${s.options.map(o => o.c + (o.s ? '*' : '')).join(' ')}`).join('\n');
       const session = (await sp.client.auth.getSession()).data.session;
-      const res = await fetch(`${sp.url}/functions/v1/translate2`, {
+      const res = await fetch(`${sp.url}/functions/v1/translate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', apikey: sp.key, Authorization: 'Bearer ' + session.access_token },
         body: JSON.stringify({ text: value, spans, lang: $('lang').value }),
