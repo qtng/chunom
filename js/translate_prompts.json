@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-16b",
+  "version": "2026-10-16c",
   "models": [
     "gemini-3.5-flash",
     "gemini-3.1-flash-lite",
@@ -26,16 +26,8 @@
       "STEP 2. Choose exactly one candidate per unit, only from its list; if none fits, use \"?\".",
       "The whole sentence: {{text}}",
       "Make sure the choices are coherent in context (word class, meaning, identical words spelled identically); use the meaning given with a candidate.",
-      "{{note}}",
       "Units: {{units}}",
       "Answer: {\"choices\": [{\"id\": 1, \"char\": \"...\"}]}"
-    ],
-    "step2repair": "These units failed the back-reading check. Choose a different candidate (or \"?\") for exactly these units: {{bad}}",
-    "step3": [
-      "STEP 3, back-reading check. You see only Chữ Nôm characters, no original text. Ignore anything you may have thought before.",
-      "Read each unit in Quốc Ngữ based on the characters alone. Do not guess to force a match; write \"?\" if a reading is unclear. A unit with several characters has several syllables.",
-      "Units: {{units}}",
-      "Answer: {\"readings\": [{\"id\": 1, \"reading\": \"...\"}]}"
     ]
   }
 }

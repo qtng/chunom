@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quốc Ngữ → Chữ Nôm</title>
-  <meta name="description" content="Type Vietnamese (Quốc Ngữ) and get the Chữ Nôm text. Three automatic steps (candidates, choice, back-reading) keep the result close to the text.">
+  <meta name="description" content="Type Vietnamese (Quốc Ngữ) and get the Chữ Nôm text. Two automatic steps (candidates, choice) and a check of the pronunciation against the dictionaries keep the result close to the text.">
   <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
   <link rel="stylesheet" href="/chunom-assets/fonts/fonts.css">
@@ -46,6 +46,7 @@
     .nom-char, .nom-char img { border-radius: .25rem; transition: background-color .15s, box-shadow .15s; }
     .nom-char:hover img, .nom-char:not(:has(img)):hover { background-color: #dff1f8; box-shadow: 0 0 0 .2rem #dff1f8; }
     .nom .nom-char { display: inline-flex; align-items: center; line-height: 0; }
+    .nom .nom-char:not(:has(img)) { line-height: 1.2; font-size: 28px; }   /* the character as text when its image is missing */
     /* how sure a word is: green = sure, orange dashed = differs from the dictionary, red = uncertain, dotted yellow = not checked */
     .unit { display: inline-flex; flex-wrap: nowrap; white-space: nowrap; align-items: flex-end; margin: 0 .12em; padding-bottom: .1em; border-bottom: .22rem solid transparent; }
     .unit.sure { border-bottom-color: #3f8a4f; }
@@ -78,7 +79,7 @@
 <body>
 <main>
   <h1>Quốc Ngữ → Chữ Nôm</h1>
-  <p class="lead">Type Vietnamese and get the Chữ Nôm text. Behind the button three automatic steps run: candidates for every word, one choice per word, and a back-reading check of the result. Nothing to confirm.</p>
+  <p class="lead">Type Vietnamese and get the Chữ Nôm text. Behind the button two automatic steps run: candidates for every word and one choice per word; then every character is checked against the dictionaries for its pronunciation. Nothing to confirm.</p>
 
   <div class="box">
     <label for="text" class="form-label fw-semibold">Quốc Ngữ → Chữ Nôm</label>
@@ -100,7 +101,6 @@
       <div class="alert alert-warning py-2 px-3 mt-3 mb-0">
         <div class="legend"><span class="unit sure" data-vi="chắc chắn">sure</span><span class="unit differs" data-vi="khác từ điển">differs from dictionary</span><span class="unit uncertain" data-vi="chưa chắc">uncertain</span><span class="unit unchecked" data-vi="chưa kiểm tra">not checked</span></div>
         <div class="small mt-1" id="warn" hidden></div>
-        <div class="small mt-1" id="checking" hidden><span class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span><span data-vi="Đang kiểm tra bằng đọc lại…">Back-reading check is running…</span></div>
       </div>
     </div>
     <h2 class="h6 fw-semibold mt-3 mb-0" data-vi="Chi tiết">Details</h2>
@@ -132,9 +132,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const say = (msg, error) => { status.textContent = msg; status.className = error ? 'error' : ''; };
   const STEPS = {
-    1: t('Step 1 of 3: preparing candidates…', 'Bước 1/3: chuẩn bị ứng viên…'),
-    2: t('Step 2 of 3: choosing characters…', 'Bước 2/3: chọn chữ…'),
-    3: t('Step 3 of 3: reading back to check…', 'Bước 3/3: đọc lại để kiểm tra…'),
+    1: t('Step 1 of 2: preparing candidates…', 'Bước 1/2: chuẩn bị ứng viên…'),
+    2: t('Step 2 of 2: choosing characters…', 'Bước 2/2: chọn chữ…'),
   };
   const ERRORS = {
     sign_in: t('Please sign in first.', 'Vui lòng đăng nhập trước.'),
@@ -149,26 +148,24 @@ document.addEventListener('DOMContentLoaded', async () => {
   // characters as images (js/detail.js, as on the dictionary page); plain text if that script is not there
   const chars = (str, size) => (typeof ChunomDetail !== 'undefined' ? ChunomDetail.get().nomChars(str, size) : [str]);
 
-  // state of a word: sure (model and dictionary agree, or the back-reading matches), differs (the dictionary lists other characters),
+  // state of a word: sure (model and dictionary agree, or the dictionaries list the reading), differs (the dictionary lists other characters),
   // uncertain, not checked. The server sends state and why; results of an older server are translated.
   const STATES = {
     sure: { icon: 'bi-check-circle-fill', label: () => t('sure', 'chắc chắn') },
     differs: { icon: 'bi-question-circle-fill', label: () => t('differs from dictionary', 'khác từ điển') },
     uncertain: { icon: 'bi-exclamation-triangle-fill', label: () => t('uncertain', 'chưa chắc') },
-    unchecked: { icon: 'bi-dash-circle', label: () => (pending ? t('checking…', 'đang kiểm tra…') : t('not checked', 'chưa kiểm tra')) },
+    unchecked: { icon: 'bi-dash-circle', label: () => t('not checked', 'chưa kiểm tra') },
   };
-  let pending = false;   // the first result is shown, the back-reading check is still running
   const stateOf = u => {
     const s = u.state ? { state: u.state, why: u.why } : u.chosen === '?' ? { state: 'uncertain', why: 'nochar' }
       : u.ok === true ? { state: 'sure', why: 'backreading' } : u.ok === false ? { state: 'uncertain', why: 'readas' } : { state: 'unchecked', why: 'none' };
     const why = {
       dictionary: t('matches the dictionary', 'khớp từ điển'),
-      backreading: t('back-reading matches', 'đọc lại khớp'),
+      dictionaries: t('reading found in the dictionaries', 'cách đọc có trong từ điển'),
       nochar: t('no character found', 'không tìm được chữ'),
-      readas: t('read back as “', 'đọc lại thành “') + (u.read || '?') + '”',
+      readas: t('the dictionaries read it as “', 'từ điển đọc là “') + (u.read || '?') + '”',
       differs: t('the dictionary lists other characters', 'từ điển ghi chữ khác'),
-      none: t('back-reading not done', 'chưa đọc lại'),
-      pending: '',
+      unknown: t('not in the dictionaries, not checked', 'không có trong từ điển, chưa kiểm tra'),
     }[s.why] || '';
     return { ...s, label: STATES[s.state].label(), icon: STATES[s.state].icon, why };
   };
@@ -228,19 +225,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
-  let lastNom = '', lastResult = null;
+  let lastNom = '';
   const show = r => {
-    lastResult = r;
-    pending = !!r.pending;
     lastNom = r.nom;
     showNom(r);
     const warn = $('warn');
     const notes = [];
     if (r.uncertain.length) notes.push(t('Not sure about: ', 'Chưa chắc về: ') + r.uncertain.map(id => r.units.find(u => u.id === id).qn).join(', '));
-    if (r.checked === false && !r.pending) notes.push(t('The back-reading check was not done.', 'Chưa kiểm tra đọc lại.'));
+    if (r.checked === false) notes.push(t('The pronunciation check was not possible.', 'Không kiểm tra được cách đọc.'));
     warn.hidden = !notes.length;
     warn.textContent = notes.join(' ');
-    $('checking').hidden = !r.pending;
 
     // the table: a line per word; the alternatives (candidates and dictionary entries) in the last column under the definition
     const el = (tag, cls, ...kids) => { const n = document.createElement(tag); if (cls) n.className = cls; n.append(...kids.flat()); return n; };
@@ -273,7 +267,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const value = text.value.trim();
     if (!value) return say(ERRORS.empty, true);
     if (!(await QattLogin.require(sp, t('Sign in to use the translator.', 'Đăng nhập để dùng công cụ dịch.')))) return;
-    go.disabled = true; $('result').hidden = true; lastResult = null;
+    go.disabled = true; $('result').hidden = true;
     say(STEPS[1]);
     try {
       const session = (await sp.client.auth.getSession()).data.session;
@@ -284,7 +278,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
       if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error || 'failed'); }
       const reader = res.body.getReader(), dec = new TextDecoder();
-      let buf = '', done = false, early = false;   // early: the first result (steps 1 and 2) is shown, the back-reading check runs on
+      let buf = '', done = false;
       while (true) {
         const { value: chunk, done: end } = await reader.read();
         if (chunk) buf += dec.decode(chunk, { stream: true });
@@ -293,16 +287,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         for (const line of lines) {
           if (!line.trim()) continue;
           const m = JSON.parse(line);
-          if (m.step && !early) say(STEPS[m.step]);
+          if (m.step) say(STEPS[m.step]);
           if (m.error) throw new Error(m.error);
-          if (m.result) { show(m.result); say(''); if (m.result.pending) early = true; else done = true; }
+          if (m.result) { show(m.result); say(''); done = true; }
         }
         if (end) break;
       }
       if (!done) throw new Error('failed');
     } catch (e) {
-      if (lastResult && lastResult.pending) show({ ...lastResult, pending: false, checked: false });   // the check was cut off: keep the first result
-      else say(ERRORS[e.message] || GENERIC, true);
+      say(ERRORS[e.message] || GENERIC, true);
     } finally {
       go.disabled = false;
     }
