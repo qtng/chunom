@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-16d",
+  "version": "2026-10-16f",
   "models": [
     "gemini-3.5-flash",
     "gemini-3.1-flash-lite",
@@ -19,6 +19,10 @@
       "If you know that the right character of the word is not listed, or none of the options is the word, give the character you know as your own: set \"own\": true. Never invent characters; if you know none, write \"?\" and \"own\": true.",
       "Besides the chosen option give up to two more options of the same span that would fit next best, best first (\"alt\"); leave \"alt\" out for a character of your own.",
       "Answer: {\"words\": [{\"at\": 0, \"len\": 1, \"char\": \"...\", \"alt\": [\"...\", \"...\"], \"own\": false}]}"
+    ],
+    "translation": [
+      "Also give a free, natural translation of the whole sentence into {{language}}.",
+      "Add it to the answer as \"translation\": \"...\" next to \"words\"."
     ],
     "retry": "Your previous answer was rejected: {{error}}. Follow the rules exactly."
   }
