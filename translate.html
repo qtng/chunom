@@ -29,26 +29,22 @@
     #status { min-height: 1.6rem; margin-top: .6rem; color: var(--accent); font-weight: 600; }
     #status.error { color: #842029; }
     #result { margin-top: 1rem; }
-    .plain { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 1.5rem; line-height: 1.5; user-select: all; }
-    .plain .w { white-space: nowrap; }   /* a word (a compound too) is never split over two lines */
     .flag { color: #842029; }
     .font-serif { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }
-    /* the result with images: every character with its Quốc Ngữ above it (like ruby text) */
-    .nom { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 1.6rem; line-height: 1.2; display: flex; flex-wrap: wrap; align-items: flex-end; gap: .3rem .1rem; }
-    .rb { display: inline-flex; flex-direction: column; align-items: center; }
-    .rb .rt { font: .75rem/1.2 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--muted); white-space: nowrap; padding: 0 .1rem; min-height: 1.2em; }
-    .rb .chars { display: inline-flex; line-height: 0; }
-    .rb .txt { line-height: 1.3; font-size: 1.2rem; padding: 0 .1rem; white-space: nowrap; }
-    .punct { align-self: flex-end; padding: 0 .1rem; }
-    .grp { display: inline-flex; flex-wrap: nowrap; align-items: flex-end; }   /* a word with the punctuation behind it: never separated */
+    /* the result as text in the Nôm font (selectable, copyable), every character with its Quốc Ngữ as ruby text above it */
+    .nom { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 2rem; line-height: 1.5; }
+    .nom ruby { ruby-position: over; }
+    .nom rt { font: .75rem/1.2 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--muted); user-select: none; }   /* not copied with the text */
+    .nom.no-rt rt { display: none; }
+    .nom .ch { cursor: pointer; border-radius: .25rem; transition: background-color .15s; }
+    .nom .ch:hover { background-color: #dff1f8; }
+    .nom .txt { font-size: 1.3rem; }
     /* characters as images (as on the dictionary page), each one opens the popup of the character */
     .nom-char { cursor: pointer; }
     .nom-char, .nom-char img { border-radius: .25rem; transition: background-color .15s, box-shadow .15s; }
     .nom-char:hover img, .nom-char:not(:has(img)):hover { background-color: #dff1f8; box-shadow: 0 0 0 .2rem #dff1f8; }
-    .nom .nom-char { display: inline-flex; align-items: center; line-height: 0; }
-    .nom .nom-char:not(:has(img)) { line-height: 1.2; font-size: 28px; }   /* the character as text when its image is missing */
     /* how sure a word is: green = sure, orange dashed = differs from the dictionary, red = uncertain, dotted yellow = not checked */
-    .unit { display: inline-flex; flex-wrap: nowrap; white-space: nowrap; align-items: flex-end; margin: 0 .12em; padding-bottom: .1em; border-bottom: .22rem solid transparent; }
+    .unit { display: inline-block; white-space: nowrap; margin: 0 .08em; padding-bottom: .05em; border-bottom: .22rem solid transparent; }   /* a word (a compound too) is never split over two lines */
     .unit.sure { border-bottom-color: #3f8a4f; }
     .unit.differs { border-bottom-color: #d9822b; border-bottom-style: dashed; }
     .unit.uncertain { border-bottom-color: #c0392b; }
@@ -93,11 +89,11 @@
 
   <section id="result" hidden>
     <div class="box">
-      <div class="d-flex align-items-start gap-2">
-        <div class="plain flex-grow-1" id="plain" lang="vi-Hani"></div>
-        <button type="button" class="btn-quiet flex-shrink-0" id="copy"><i class="bi bi-clipboard"></i> <span data-vi="Sao chép">Copy</span></button>
+      <div class="d-flex align-items-center flex-wrap gap-3 mb-2">
+        <button type="button" class="btn-quiet" id="copy"><i class="bi bi-clipboard"></i> <span data-vi="Sao chép">Copy</span></button>
+        <div class="form-check form-switch mb-0"><input class="form-check-input" type="checkbox" role="switch" id="rt-toggle" checked><label class="form-check-label small" for="rt-toggle" data-vi="Hiện Quốc Ngữ phía trên chữ">Show Quốc Ngữ above the characters</label></div>
       </div>
-      <div class="nom mt-3" id="nom" lang="vi-Hani"></div>
+      <div class="nom" id="nom" lang="vi-Hani"></div>
       <div class="alert alert-warning py-2 px-3 mt-3 mb-0">
         <div class="legend"><span class="unit sure" data-vi="chắc chắn">sure</span><span class="unit differs" data-vi="khác từ điển">differs from dictionary</span><span class="unit uncertain" data-vi="chưa chắc">uncertain</span><span class="unit unchecked" data-vi="chưa kiểm tra">not checked</span></div>
         <div class="small mt-1" id="warn" hidden></div>
@@ -145,7 +141,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   const GENERIC = t('Something went wrong. Please try again.', 'Đã xảy ra lỗi. Vui lòng thử lại.');
 
-  // characters as images (js/detail.js, as on the dictionary page); plain text if that script is not there
+  // characters as images in the table (js/detail.js, as on the dictionary page); plain text if that script is not there
+  const SIZE = 32;   // px of the character images
   const chars = (str, size) => (typeof ChunomDetail !== 'undefined' ? ChunomDetail.get().nomChars(str, size) : [str]);
 
   // state of a word: sure (model and dictionary agree, or the dictionaries list the reading), differs (the dictionary lists other characters),
@@ -170,21 +167,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     return { ...s, label: STATES[s.state].label(), icon: STATES[s.state].icon, why };
   };
 
-  // the characters of a word with their Quốc Ngữ above them: one syllable per character if the numbers agree, else the whole reading over the group
-  const SIZE = 32;   // px of the character images
-  const rb = (reading, nodes) => {
-    const box = document.createElement('span'); box.className = 'rb';
-    const rt = document.createElement('span'); rt.className = 'rt'; rt.textContent = reading;
-    const cs = document.createElement('span'); cs.className = 'chars'; cs.append(...nodes);
-    box.append(rt, cs);
-    return box;
-  };
-  const wordNodes = u => {
-    if (u.chosen === '?') { const txt = document.createElement('span'); txt.className = 'txt'; txt.textContent = `[${u.qn}]`; return [rb('', [txt])]; }
-    const cs = [...u.chosen], syl = u.qn.split(' ');
-    return cs.length === syl.length ? cs.map((c, i) => rb(syl[i], chars(c, SIZE))) : [rb(u.qn, chars(u.chosen, SIZE))];
-  };
-
   // the words of the result in order, with the punctuation between them: [{text, unit}] (unit is null for punctuation)
   const pieces = r => {
     const out = [];
@@ -201,27 +183,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     return out;
   };
 
-  // the plain text (to copy) and the line with images; a word is one piece that is never split over two lines
+  // the result as text: every character is a <ruby> with its syllable (one syllable per character if the numbers agree, else the whole
+  // reading over the group); a word is underlined by its state. The Quốc Ngữ is not selected when the text is copied.
+  const ruby = (nodes, reading) => { const r = document.createElement('ruby'); r.append(...nodes); const rt = document.createElement('rt'); rt.textContent = reading; r.append(rt); return r; };
+  const ch = c => { const s = document.createElement('span'); s.className = 'ch'; s.dataset.char = c; s.textContent = c; return s; };
+  const wordNodes = u => {
+    if (u.chosen === '?') { const t = document.createElement('span'); t.className = 'txt'; t.textContent = `[${u.qn}]`; return [t]; }
+    const cs = [...u.chosen], syl = u.qn.split(' ');
+    return cs.length === syl.length ? cs.map((c, i) => ruby([ch(c)], syl[i])) : [ruby(cs.map(ch), u.qn)];
+  };
   const showNom = r => {
-    const plain = $('plain'), box = $('nom');
-    plain.replaceChildren(); box.replaceChildren();
-    let last = null;   // the last element of the line; punctuation is put into one group with it, so that it does not stand alone in a new line
+    const box = $('nom');
+    box.replaceChildren();
     for (const piece of pieces(r)) {
-      const w = document.createElement('span'); w.className = 'w'; w.textContent = piece.text; plain.append(w);
-      if (!piece.unit) {
-        const sp = document.createElement('span'); sp.className = 'punct'; sp.append(...chars(piece.text, SIZE));
-        if (!last) box.append(sp);
-        else if (last.classList.contains('grp')) last.append(sp);
-        else { const g = document.createElement('span'); g.className = 'grp'; last.replaceWith(g); g.append(last, sp); last = g; }
-        continue;
-      }
+      if (!piece.unit) { box.append(piece.text); continue; }
       const st = stateOf(piece.unit);
       const span = document.createElement('span');
       span.className = 'unit ' + st.state;
       span.title = `${piece.unit.qn} · ${st.label}`;
       span.append(...wordNodes(piece.unit));
       box.append(span);
-      last = span;
     }
   };
 
@@ -257,11 +238,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     $('result').hidden = false;
   };
 
-  // a click on a character opens its popup (js/detail.js)
+  // a click on a character opens its popup (js/detail.js), but not while text is selected
   $('result').addEventListener('click', e => {
-    const c = e.target.closest('.nom-char');
-    if (c && typeof ChunomDetail !== 'undefined') ChunomDetail.get().open(c.dataset.char).catch(err => console.error('Popup failed', err));
+    const c = e.target.closest('.nom-char, .ch');
+    if (!c || String(window.getSelection()).length || typeof ChunomDetail === 'undefined') return;
+    ChunomDetail.get().open(c.dataset.char).catch(err => console.error('Popup failed', err));
   });
+
+  // copying selected text of the result: only the characters, without the Quốc Ngữ of the ruby text
+  $('nom').addEventListener('copy', e => {
+    const sel = window.getSelection();
+    if (!sel.rangeCount || sel.isCollapsed) return;
+    const box = document.createElement('div');
+    for (let i = 0; i < sel.rangeCount; i++) box.append(sel.getRangeAt(i).cloneContents());
+    box.querySelectorAll('rt').forEach(n => n.remove());
+    e.clipboardData.setData('text/plain', box.textContent);
+    e.preventDefault();
+  });
+
+  // the Quốc Ngữ above the characters can be hidden (remembered in this browser)
+  const rtBox = $('rt-toggle'), rtSet = on => { $('nom').classList.toggle('no-rt', !on); rtBox.checked = on; };
+  try { rtSet(localStorage.getItem('translate_rt') !== '0'); } catch { /* no storage */ }
+  rtBox.addEventListener('change', () => { rtSet(rtBox.checked); try { localStorage.setItem('translate_rt', rtBox.checked ? '1' : '0'); } catch { /* no storage */ } });
 
   go.addEventListener('click', async () => {
     const value = text.value.trim();
