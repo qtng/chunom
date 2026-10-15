@@ -103,7 +103,8 @@
     <div class="table-responsive mt-2">
       <table class="table table-sm table-borderless units"><thead><tr><th>#</th><th>Quốc Ngữ</th><th data-vi="Chữ Nôm">Chữ Nôm</th><th data-vi="Trạng thái / Định nghĩa">Status / Definition</th></tr></thead><tbody id="units"></tbody></table>
     </div>
-    <details class="mt-3 small" id="lists-box">
+    <div class="count mt-3" id="version"></div>
+    <details class="mt-2 small" id="lists-box">
       <summary class="fw-semibold" data-vi="Danh sách gửi cho mô hình">Lists sent to the model</summary>
       <pre class="mt-2 p-2 bg-white border rounded" id="lists" style="white-space: pre-wrap; font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif;"></pre>
     </details>
@@ -161,7 +162,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         else out.set(e.glyph, { c: e.glyph, m: e.definition, score: e.definition ? 10 : 1 });
       }
     }
-    const list = [...out.values()].sort((a, b) => b.score - a.score).slice(0, MAX_OPTIONS).map(({ c, m }) => ({ c, m }));
+    const list = [...out.values()].sort((a, b) => b.score - a.score).slice(0, MAX_OPTIONS).map(({ c, m, score }) => ({ c, m, s: score >= 30 ? 1 : 0 }));   // s: the usual character according to dict.csv ("standard")
     optionCache.set(key, list);
     return list;
   };
@@ -174,7 +175,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const options = optionsFor(syl.slice(at, at + len).join(' '), csv);
         if (!options.length) continue;
         full.set(at + '+' + len, options);
-        spans.push({ at, len, options: options.slice(0, MAX_SENT).map(o => ({ c: o.c })) });
+        spans.push({ at, len, options: options.slice(0, MAX_SENT).map(o => ({ c: o.c, s: o.s })) });
       }
     }
     return { syl, spans, full };
@@ -283,6 +284,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       return el('tr', '', el('td', '', String(w.id)), el('td', '', w.qn), el('td', 'chars-cell', ...(w.chosen === '?' ? ['?'] : chars(w.chosen, SIZE))), status);
     });
     $('units').replaceChildren(...rows);
+    $('version').textContent = r.version ? t('Prompt version: ', 'Phiên bản prompt: ') + r.version : '';
     $('result').hidden = false;
   };
 
@@ -316,7 +318,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       const [csv] = await Promise.all([csvReady, imeReady]);
       const { spans, full } = buildSpans(value, csv);
-      $('lists').textContent = spans.map(s => `${s.at}+${s.len}  ${s.options.map(o => o.c).join(' ')}`).join('\n');
+      $('lists').textContent = spans.map(s => `${s.at}+${s.len}  ${s.options.map(o => o.c + (o.s ? '*' : '')).join(' ')}`).join('\n');
       say(t('Choosing characters…', 'Đang chọn chữ…'));
       const session = (await sp.client.auth.getSession()).data.session;
       const res = await fetch(`${sp.url}/functions/v1/translate2`, {
