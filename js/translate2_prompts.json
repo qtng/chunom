@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-16",
+  "version": "2026-10-16b",
   "models": [
     "gemini-3.5-flash",
     "gemini-3.1-flash-lite",
@@ -16,7 +16,8 @@
       "Task: cover the syllables from the first to the last with consecutive words (a word is one span: at and len; every syllable belongs to exactly one word, in order, none missing, none twice). Use a compound span (len > 1) where the compound is the word meant in this sentence, else single syllables.",
       "For each word choose the option that fits its meaning in the context of the whole sentence (word class, sense, the other words). Use only the options listed for exactly that span.",
       "If a span has no suitable option you may give a character of your own if you know a reliable one: set \"own\": true. Never invent characters; if you know none, write \"?\" and \"own\": true.",
-      "Answer: {\"words\": [{\"at\": 0, \"len\": 1, \"char\": \"...\", \"own\": false}]}"
+      "Besides the chosen option give up to two more options of the same span that would fit next best, best first (\"alt\"); leave \"alt\" out for a character of your own.",
+      "Answer: {\"words\": [{\"at\": 0, \"len\": 1, \"char\": \"...\", \"alt\": [\"...\", \"...\"], \"own\": false}]}"
     ],
     "retry": "Your previous answer was rejected: {{error}}. Follow the rules exactly."
   }
