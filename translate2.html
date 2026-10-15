@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // the options for a reading ("có thể"): characters of dict.csv (standard first, with meaning), then the others of the dictionaries of the
   // input method, those with a definition first; at most 15
-  const MAX_OPTIONS = 15, MAX_SENT = 8;   // the page keeps 15 options per reading for the alternatives, the model gets the first 8
+  const MAX_OPTIONS = 15, MAX_SENT = 15;   // the model gets the characters only (no meanings): its own knowledge decides, the list only limits the choice
   const optionCache = new Map();
   const optionsFor = (key, csv) => {
     if (optionCache.has(key)) return optionCache.get(key);
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const options = optionsFor(syl.slice(at, at + len).join(' '), csv);
         if (!options.length) continue;
         full.set(at + '+' + len, options);
-        spans.push({ at, len, options: options.slice(0, MAX_SENT) });
+        spans.push({ at, len, options: options.slice(0, MAX_SENT).map(o => ({ c: o.c })) });
       }
     }
     return { syl, spans, full };
@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       const [csv] = await Promise.all([csvReady, imeReady]);
       const { spans, full } = buildSpans(value, csv);
-      $('lists').textContent = spans.map(s => `${s.at}+${s.len}  ${s.options.map(o => o.c + (o.m ? ' (' + o.m.slice(0, 30) + ')' : '')).join(' · ')}`).join('\n');
+      $('lists').textContent = spans.map(s => `${s.at}+${s.len}  ${s.options.map(o => o.c).join(' ')}`).join('\n');
       say(t('Choosing characters…', 'Đang chọn chữ…'));
       const session = (await sp.client.auth.getSession()).data.session;
       const res = await fetch(`${sp.url}/functions/v1/translate2`, {
