@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // the options for a reading ("có thể"): characters of dict.csv (standard first, with meaning), then the others of the dictionaries of the
   // input method, those with a definition first; at most 15
-  const MAX_OPTIONS = 15;
+  const MAX_OPTIONS = 15, MAX_SENT = 8;   // the page keeps 15 options per reading for the alternatives, the model gets the first 8
   const optionCache = new Map();
   const optionsFor = (key, csv) => {
     if (optionCache.has(key)) return optionCache.get(key);
@@ -168,14 +168,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   // all spans of 1 to 4 syllables that have options
   const buildSpans = (value, csv) => {
     const syl = (value.match(/[\p{L}\p{M}]+/gu) || []).map(norm);
-    const spans = [];
+    const spans = [], full = new Map();   // spans: what is sent; full: all options of a span for the alternatives
     for (let at = 0; at < syl.length; at++) {
       for (let len = 1; len <= 4 && at + len <= syl.length; len++) {
         const options = optionsFor(syl.slice(at, at + len).join(' '), csv);
-        if (options.length) spans.push({ at, len, options });
+        if (!options.length) continue;
+        full.set(at + '+' + len, options);
+        spans.push({ at, len, options: options.slice(0, MAX_SENT) });
       }
     }
-    return { syl, spans };
+    return { syl, spans, full };
   };
 
   const say = (msg, error) => { status.textContent = msg; status.className = error ? 'error' : ''; };
@@ -226,7 +228,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   const rate = w => {
     if (w.chosen === '?') return { state: 'uncertain', why: t('no character found', 'không tìm được chữ') };
-    if (!w.own) return { state: 'sure', why: w.options.length > 1 ? t(`chosen from ${w.options.length} options`, `chọn trong ${w.options.length} lựa chọn`) : t('the only option', 'lựa chọn duy nhất') };
+    if (!w.own) return { state: 'sure', why: w.options.length > 1 ? t(`chosen from ${Math.min(w.options.length, MAX_SENT)} options`, `chọn trong ${Math.min(w.options.length, MAX_SENT)} lựa chọn`) : t('the only option', 'lựa chọn duy nhất') };
     const v = verify(w.qn, w.chosen);
     if (v.ok === false) return { state: 'uncertain', why: t('the dictionaries read it as “', 'từ điển đọc là “') + v.read + '”' };
     return { state: 'own', why: v.ok ? t('reading found in the dictionaries', 'cách đọc có trong từ điển') : t('reading not confirmed', 'chưa xác nhận cách đọc') };
@@ -244,9 +246,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const shown = w => (w.chosen === '?' ? `[${w.qn}]` : w.chosen);
 
   let lastNom = '';
-  const show = r => {
+  const show = (r, full) => {
     const byId = new Map(r.words.map(w => [w.id, w]));
-    for (const w of r.words) Object.assign(w, rate(w));
+    for (const w of r.words) { w.options = (full.get(w.at + '+' + w.len) || []).map(o => ({ char: o.c, meaning: o.m })); Object.assign(w, rate(w)); }
     lastNom = r.parts.map(p => (p.word ? shown(byId.get(p.word)) : p.text)).join('');
     const box = $('nom'); box.replaceChildren();
     for (const p of r.parts) {
@@ -269,11 +271,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const rows = r.words.map(w => {
       const st = STATES[w.state];
       const mine = w.options.find(o => o.char === w.chosen) || {};
-      const alts = w.options.filter(o => o.char !== w.chosen);
+      const others = w.options.filter(o => o.char !== w.chosen);
+      const best = (w.alt || []).map(c => others.find(o => o.char === c)).filter(Boolean);
+      const rest = others.filter(o => !best.includes(o));
+      const alts = [...best, ...rest.filter(o => o.meaning)], more = rest.filter(o => !o.meaning);
+      const altLine = a => el('div', 'alt', el('span', 'alt-chars', ...chars(a.char, 24)), el('span', '', a.meaning || ''));
       const status = el('td', '', el('div', '', el('span', 'state ' + st.cls, el('i', 'bi ' + st.icon), ' ', st.label()), ' ', el('span', 'def', '· ' + w.why)),
         mine.meaning ? el('div', 'def', mine.meaning) : '',
-        alts.length ? el('div', 'alts', el('div', 'alts-title', t('Alternatives', 'Lựa chọn khác')),
-          alts.map(a => el('div', 'alt', el('span', 'alt-chars', ...chars(a.char, 24)), el('span', '', a.meaning || '')))) : '');
+        alts.length || more.length ? el('div', 'alts', el('div', 'alts-title', t('Alternatives', 'Lựa chọn khác')), alts.map(altLine),
+          more.length ? el('details', '', el('summary', '', t(`show ${more.length} more`, `xem thêm ${more.length}`)), more.map(altLine)) : '') : '');
       return el('tr', '', el('td', '', String(w.id)), el('td', '', w.qn), el('td', 'chars-cell', ...(w.chosen === '?' ? ['?'] : chars(w.chosen, SIZE))), status);
     });
     $('units').replaceChildren(...rows);
@@ -309,7 +315,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     say(t('Looking up the options…', 'Đang tra danh sách…'));
     try {
       const [csv] = await Promise.all([csvReady, imeReady]);
-      const { spans } = buildSpans(value, csv);
+      const { spans, full } = buildSpans(value, csv);
       $('lists').textContent = spans.map(s => `${s.at}+${s.len}  ${s.options.map(o => o.c + (o.m ? ' (' + o.m.slice(0, 30) + ')' : '')).join(' · ')}`).join('\n');
       say(t('Choosing characters…', 'Đang chọn chữ…'));
       const session = (await sp.client.auth.getSession()).data.session;
@@ -330,7 +336,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           if (!line.trim()) continue;
           const m = JSON.parse(line);
           if (m.error) throw new Error(m.error);
-          if (m.result) { show(m.result); say(''); done = true; }
+          if (m.result) { show(m.result, full); say(''); done = true; }
         }
         if (end) break;
       }
