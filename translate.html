@@ -21,13 +21,20 @@
     .page-head .han { color: var(--accent); font-size: 1.3rem; }
     .page-head h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(1.9rem, 6vw, 2.6rem); margin: .1rem 0 .2rem; }
     .page-head p { color: var(--muted); margin: 0 auto; max-width: 40rem; }
-    /* loading animation: the four characters of "Việt Nam chữ Nôm" rise one after the other like brush strokes */
-    .loading { display: flex; justify-content: center; gap: 1rem; padding: 1.1rem 0 .3rem; }
-    .loading .ch { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 2.2rem; line-height: 1; color: var(--accent); opacity: .15; animation: ink 1.6s ease-in-out infinite; }
-    .loading .ch:nth-child(2) { animation-delay: .2s; } .loading .ch:nth-child(3) { animation-delay: .4s; } .loading .ch:nth-child(4) { animation-delay: .6s; }
-    @keyframes ink { 0%, 100% { opacity: .15; transform: translateY(0); } 35% { opacity: 1; transform: translateY(-.35rem); } 70% { opacity: .4; transform: translateY(0); } }
+    /* loading animation (the answer can take up to a minute): the four characters of "Quốc ngữ chữ Nôm" (國語𡨸喃) light up in a wave, a bar creeps forward and never stops
+       at the end, the message changes every few seconds and says how long it has been, so nobody thinks that something is broken */
+    .loading { display: flex; flex-direction: column; align-items: center; gap: .6rem; padding: 1.1rem 0 .3rem; }
     .loading[hidden] { display: none; }
-    @media (prefers-reduced-motion: reduce) { .loading .ch { animation: none; opacity: .7; } }
+    .loading .chars { display: flex; gap: 1rem; }
+    .loading .ch { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 2.6rem; line-height: 1; color: var(--accent); opacity: .15; animation: ink 2s ease-in-out infinite; }
+    .loading .ch:nth-child(2) { animation-delay: .25s; } .loading .ch:nth-child(3) { animation-delay: .5s; } .loading .ch:nth-child(4) { animation-delay: .75s; }
+    @keyframes ink { 0%, 100% { opacity: .15; transform: translateY(0); } 35% { opacity: 1; transform: translateY(-.45rem); } 70% { opacity: .4; transform: translateY(0); } }
+    .loading .bar { width: min(18rem, 80%); height: .4rem; border-radius: .2rem; background: var(--line); overflow: hidden; }
+    .loading .bar i { display: block; height: 100%; width: 3%; border-radius: .2rem; transition: width .5s linear;
+      background: repeating-linear-gradient(-45deg, var(--accent) 0 .6rem, #c4574a .6rem 1.2rem); background-size: 200% 100%; animation: stripes 1s linear infinite; }
+    @keyframes stripes { to { background-position: 1.7rem 0; } }
+    .loading .msg { color: var(--muted); font-size: .95rem; text-align: center; min-height: 1.5em; }
+    @media (prefers-reduced-motion: reduce) { .loading .ch { animation: none; opacity: .7; } .loading .bar i { animation: none; } }
     .box { background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; padding: .8rem; box-shadow: 0 .3rem 1rem rgba(60, 40, 20, .12); }
     textarea { width: 100%; min-height: 11.1rem; resize: vertical; border: 1px solid #cdbf9f; border-radius: .5rem; padding: .5rem .7rem; font-size: 1.1rem; background: #fff; }
     textarea:focus { outline: 2px solid rgba(168, 54, 42, .35); }
@@ -102,7 +109,12 @@
       </select>
       <button type="button" class="btn btn-go" id="go" data-vi="Dịch">Translate</button>
     </div>
-    <div class="loading" id="loading" role="status" hidden><span class="ch" aria-hidden="true">越</span><span class="ch" aria-hidden="true">南</span><span class="ch" aria-hidden="true">𡨸</span><span class="ch" aria-hidden="true">喃</span><span class="visually-hidden" data-vi="Đang dịch…">Translating…</span></div>
+    <div class="loading" id="loading" role="status" aria-live="polite" hidden>
+      <div class="chars"><span class="ch" aria-hidden="true">國</span><span class="ch" aria-hidden="true">語</span><span class="ch" aria-hidden="true">𡨸</span><span class="ch" aria-hidden="true">喃</span></div>
+      <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+      <div class="msg" id="msg"></div>
+    </div>
+
     <div id="status" role="status" aria-live="polite"></div>
   </div>
 
@@ -346,12 +358,33 @@ document.addEventListener('DOMContentLoaded', async () => {
   try { rtSet(localStorage.getItem('translate_rt') !== '0'); } catch { /* no storage */ }
   rtBox.addEventListener('change', () => { rtSet(rtBox.checked); try { localStorage.setItem('translate_rt', rtBox.checked ? '1' : '0'); } catch { /* no storage */ } });
 
+  // waiting for the answer: bar and messages by elapsed time (the function sends no real progress; it can take up to a minute)
+  const WAIT = [
+    [0, 'Looking up the characters…', 'Đang tra các chữ…'],
+    [6, 'Reading the sentence…', 'Đang đọc câu…'],
+    [14, 'Choosing the characters in context…', 'Đang chọn chữ theo ngữ cảnh…'],
+    [28, 'Still working: this can take up to a minute.', 'Vẫn đang xử lý: có thể mất đến một phút.'],
+    [55, 'The service is busy, thank you for waiting.', 'Dịch vụ đang bận, cảm ơn bạn đã chờ.'],
+  ];
+  let waitTimer = null;
+  const waitStart = () => {
+    const t0 = Date.now(), bar = $('bar'), msg = $('msg');
+    const tick = () => {
+      const sec = (Date.now() - t0) / 1000;
+      bar.style.width = (3 + 90 * (1 - Math.exp(-sec / 25))).toFixed(1) + '%';   // fast at first, ever slower, never at the end
+      const w = WAIT.filter(x => sec >= x[0]).pop();
+      msg.textContent = t(w[1], w[2]) + (sec >= 6 ? '  ' + Math.floor(sec) + ' s' : '');
+    };
+    tick(); clearInterval(waitTimer); waitTimer = setInterval(tick, 500);
+  };
+  const waitStop = () => { clearInterval(waitTimer); waitTimer = null; };
+
   go.addEventListener('click', async () => {
     const value = text.value.trim();
     if (!value) return say(ERRORS.empty, true);
     if (!(await QattLogin.require(sp, t('Sign in to use the translator.', 'Đăng nhập để dùng công cụ dịch.')))) return;
     go.disabled = true; $('result').hidden = true;
-    say(''); $('loading').hidden = false;
+    say(''); $('loading').hidden = false; waitStart();
     try {
       const [csv] = await Promise.all([csvReady, imeReady]);
       const { spans, full } = buildSpans(value, csv);
@@ -383,7 +416,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (e.message === 'limit') quotaSet(0);
       say(ERRORS[e.message] || GENERIC, true);
     } finally {
-      go.disabled = false; $('loading').hidden = true;
+      go.disabled = false; $('loading').hidden = true; waitStop();
     }
   });
 
