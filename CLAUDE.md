@@ -21,7 +21,7 @@ Two websites, hosted with GitHub Pages, built from four repositories of the GitH
 
 `chunom`, `pages` and `chunom-assets` are **one site** (the Chunom site, same origin); `qatt` is **a separate site** (another origin).
 GitHub Pages allows one custom domain per repository, which is why `qatt` has its own domain and the others share `qtng.github.io`.
-The Chunom site is live on `chunom.org` (the former test address `chunom.org` is no longer used; see "Going live" for how it was done).
+The Chunom site is live on `chunom.org` (the former test address `v2.chunom.org` is no longer used; see "Going live" for how it was done).
 
 Old addresses that must keep working: `chunom.org/pages/<HEX>/`, `chunom.org/pages/grade/<N>/`, `chunom.org/pages/pa/`, `…/fonts/`, `…/links/` (same paths in `qtng/pages`),
 `/pages/genibrel/`, `/pages/bonet/`, `/pages/ime/`, `/pages/imepad/`, `/pages/moses/`, `/pages/standard/` (redirect stubs in `qtng/pages`), and
@@ -29,13 +29,13 @@ Old addresses that must keep working: `chunom.org/pages/<HEX>/`, `chunom.org/pag
 
 ## URL rules (important when you add or change a link)
 
-- **Inside the Chunom site** (`chunom`, `pages`, `chunom-assets`) use **root-relative** paths: `/chunom/js/detail.js`, `/chunom-assets/fonts/fonts.css`, `/pages/site.js`. Never write the domain, so the same file works on `chunom.org` and `chunom.org`.
+- **Inside the Chunom site** (`chunom`, `pages`, `chunom-assets`) use **root-relative** paths: `/chunom/js/detail.js`, `/chunom-assets/fonts/fonts.css`, `/pages/site.js`. Never write the domain, so the same file works on any domain of the site.
 - **From the Chunom site to qatt.org** use **absolute** URLs: `https://qatt.org/vendor/bootstrap/…` (Bootstrap, Bootstrap Icons, Supabase), `https://qatt.org/js/qatt.js`, `parser.js`, `supabase.js`, `login.js`, `https://qatt.org/fonts/…`.
 - **Inside qatt.org** use **root paths** without any folder prefix: `/js/navigation.js`, `/editor.html`, `/img/logo.svg` (the old prefix `/qatt/` no longer exists).
 - **From qatt.org to the Chunom site** use **absolute** URLs with the domain: `https://chunom.org/chunom/js/ime.js`, `https://chunom.org/chunom-assets/fonts/fonts.css`.
 - **Scripts that other pages load across sites** (`chunom/js/detail.js`, `ime.js`, `practice.js`) must not assume their own origin: they derive their location from `document.currentScript.src` (e.g. `new URL('../../', BASE)` = root of the Chunom site).
 - Canonical links, `og:` tags and the sitemap need absolute URLs; `qtng/pages` writes them from `tools/generate.py --site …`.
-- There is **one `js/navigation.js`** (menu bar, brand, bottom bar on phones, and the translation `Lang`), in `qtng/qatt`, served at `https://qatt.org/js/navigation.js`. The pages of the Chunom site load it from there with `<script src="https://qatt.org/js/navigation.js"></script>` early in `<head>` (a normal script, not `defer`, so that the page is translated while it is parsed). It picks brand, logo, icons, colours and the own block of the menu from the address of the page (`chunom.org`, `chunom.org` or the folders `/chunom/`, `/pages/`, `/chunom-assets/` = Chunom site, else qatt.org); the constants `CHUNOM_SITE` and `QATT_SITE` hold the absolute addresses for the links to the other site. The Chunom logo and icons are in `chunom/img/`.
+- There is **one `js/navigation.js`** (menu bar, brand, bottom bar on phones, and the translation `Lang`), in `qtng/qatt`, served at `https://qatt.org/js/navigation.js`. The pages of the Chunom site load it from there with `<script src="https://qatt.org/js/navigation.js"></script>` early in `<head>` (a normal script, not `defer`, so that the page is translated while it is parsed). It picks brand, logo, icons, colours and the own block of the menu from the address of the page (`chunom.org` or the folders `/chunom/`, `/pages/`, `/chunom-assets/` = Chunom site, else qatt.org); the constants `CHUNOM_SITE` and `QATT_SITE` hold the absolute addresses for the links to the other site. The Chunom logo and icons are in `chunom/img/`.
 - The Supabase login (decks, practice) is stored in `localStorage`, i.e. **per origin**: a user signed in on `qatt.org` is not signed in on the Chunom site.
 - The site is plain HTML and JavaScript with Bootstrap 5.3, no build step. Local preview of the real URLs is not possible; to test, serve the repos under mocked hosts (Playwright `page.route` mapping `https://chunom.org/chunom/*`, `/chunom-assets/*`, `/pages/*` and `https://qatt.org/*` to the checkouts) and look for 404s and console errors.
 
