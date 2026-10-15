@@ -15,9 +15,12 @@
   <script defer src="/chunom/js/detail.js"></script>
   <style>
     :root { --ink: #2b2118; --accent: #a8362a; --line: #e4d9c0; --muted: #7b6c58; }
-    body { background: #f7efdc; color: var(--ink); }
+    body { color: var(--ink); background: linear-gradient(180deg, #f7efdc 0, #fffdf8 18rem) no-repeat, #fffdf8; min-height: 100vh; }
     main { max-width: 44rem; margin: 0 auto; padding: 1.2rem 1rem 2rem; }
-    h1 { font: 400 clamp(1.8rem, 5vw, 2.6rem)/1.15 Georgia, "Times New Roman", serif; margin: 0; }
+    .page-head { text-align: center; padding: .4rem 0 0; margin-bottom: 1rem; }
+    .page-head .han { color: var(--accent); font-size: 1.3rem; }
+    .page-head h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(1.9rem, 6vw, 2.6rem); margin: .1rem 0 .2rem; }
+    .page-head p { color: var(--muted); margin: 0 auto; max-width: 40rem; }
     /* loading animation: the four characters of "Việt Nam chữ Nôm" rise one after the other like brush strokes */
     .loading { display: flex; justify-content: center; gap: 1rem; padding: 1.1rem 0 .3rem; }
     .loading .ch { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 2.2rem; line-height: 1; color: var(--accent); opacity: .15; animation: ink 1.6s ease-in-out infinite; }
@@ -74,15 +77,19 @@
     .alts .alts-title { font-size: .75rem; }
     .alts .alt { display: flex; align-items: center; gap: .5rem; margin-top: .15rem; }
     .alts .alt .alt-chars { white-space: nowrap; flex-shrink: 0; }
+    /* characters without an image are shown as font text, as big as the images (32 px in the table, 24 px for alternatives) */
+    td.chars-cell .nom-char { font-size: 32px; line-height: 1; }
+    .alts .alt-chars .nom-char { font-size: 24px; line-height: 1; }
     .alts .alt img { opacity: .8; }
     .account { font-size: .85rem; color: var(--muted); margin-top: 1.2rem; }
   </style>
 </head>
 <body>
 <main>
-  <header class="text-center my-3">
+  <header class="page-head">
+    <div class="han">喃</div>
     <h1>Quốc Ngữ → Chữ Nôm</h1>
-    <p class="mb-0"><span class="d-block" data-vi="Tự động chuyển chữ Quốc Ngữ sang chữ Nôm.">Automatic Quốc Ngữ to Nôm transliteration.</span><span class="d-block" data-vi="Đây là bản dịch máy và có thể không chính xác.">This is a machine translation that might be inaccurate.</span></p>
+    <p><span class="d-block" data-vi="Tự động chuyển chữ Quốc Ngữ sang chữ Nôm.">Automatic Quốc Ngữ to Nôm transliteration.</span><span class="d-block" data-vi="Đây là bản dịch máy và có thể không chính xác.">This is a machine translation that might be inaccurate.</span></p>
   </header>
 
   <div class="box">
@@ -285,13 +292,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       const mine = w.options.find(o => o.char === w.chosen) || {};
       const others = w.options.filter(o => o.char !== w.chosen);
       const best = (w.alt || []).map(c => others.find(o => o.char === c)).filter(Boolean);
-      const rest = others.filter(o => !best.includes(o));
-      const alts = [...best, ...rest.filter(o => o.meaning)], more = rest.filter(o => !o.meaning);
+      const alts = best;
       const altLine = a => el('div', 'alt', el('span', 'alt-chars', ...chars(a.char, 24)), el('span', '', a.meaning || ''));
       const status = el('td', '', el('div', '', el('span', 'state ' + st.cls, el('i', 'bi ' + st.icon), ' ', st.label()), ' ', el('span', 'def', '· ' + w.why)),
         mine.meaning ? el('div', 'def', mine.meaning) : '',
-        alts.length || more.length ? el('div', 'alts', el('div', 'alts-title', t('Alternatives', 'Lựa chọn khác')), alts.map(altLine),
-          more.length ? el('details', '', el('summary', '', t(`show ${more.length} more`, `xem thêm ${more.length}`)), more.map(altLine)) : '') : '');
+        alts.length ? el('div', 'alts', el('div', 'alts-title', t('Alternatives', 'Lựa chọn khác')), alts.map(altLine)) : '');
       return el('tr', '', el('td', '', String(w.id)), el('td', '', w.qn), el('td', 'chars-cell', ...(w.chosen === '?' ? ['?'] : chars(w.chosen, SIZE))), status);
     });
     $('units').replaceChildren(...rows);
