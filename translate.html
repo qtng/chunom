@@ -123,6 +123,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     await sp.init();
     return sp;
   };
+  // the dictionaries of the input method (js/ime.js) for the check of the pronunciation; if they are not there nothing is checked
+  const imeReady = typeof ChunomDetail !== 'undefined' ? ChunomDetail.loadIme() : Promise.resolve();
   const sp = await ready();
   QattLogin.status(sp, $('account'));
 
@@ -153,9 +155,57 @@ document.addEventListener('DOMContentLoaded', async () => {
     uncertain: { icon: 'bi-exclamation-triangle-fill', label: () => t('uncertain', 'chưa chắc') },
     unchecked: { icon: 'bi-dash-circle', label: () => t('not checked', 'chưa kiểm tra') },
   };
+  // ---- the check of the pronunciation in the browser, with the dictionaries of the input method (js/ime.js): does every chosen character
+  // read as its syllable? The server sends the model's choice, its candidates and the entries of dict.csv for the reading.
+  const norm = x => String(x || '').normalize('NFC').toLowerCase().trim();
+  const readingCache = new Map();
+  const readingsOf = ch => {   // the syllables the dictionaries list for a character (a word with as many characters as syllables gives one per character)
+    if (!readingCache.has(ch)) {
+      const set = new Set();
+      for (const e of window.VietIme.lookupGlyph(ch)) {
+        const syl = norm(e.reading).split(' '), cs = [...e.glyph];
+        if (syl.length === cs.length) cs.forEach((c, i) => { if (c === ch) set.add(syl[i]); });
+      }
+      readingCache.set(ch, set);
+    }
+    return readingCache.get(ch);
+  };
+  // {ok: true}, {ok: false, read: "the readings listed for the characters"} or {ok: undefined} (not decidable)
+  const verify = (u, glyphs) => {
+    const cs = [...glyphs], syl = u.qn.split(' ');
+    if (u.dict.some(e => e.han === glyphs) || window.VietIme.lookupGlyph(cs[0]).some(e => e.glyph === glyphs && norm(e.reading) === u.qn)) return { ok: true };
+    if (cs.length !== syl.length) return { ok: undefined };   // another number of characters than syllables: only a listed word can be confirmed
+    const bad = []; let unknown = false;
+    cs.forEach((c, i) => { const set = readingsOf(c); if (!set.size) unknown = true; else if (!set.has(syl[i])) bad.push([...set].slice(0, 3).join(', ')); });
+    if (bad.length) return { ok: false, read: bad.join(' / ') };
+    return { ok: unknown ? undefined : true };
+  };
+  // rates every word: sure (the model and dict.csv agree, or the dictionaries list the reading), differs (dict.csv lists other characters),
+  // uncertain (no character, or it does not read like that), unchecked (not decidable). A choice that does not read right is replaced by
+  // the first candidate that does.
+  const check = r => {
+    r.checked = !!(window.VietIme && window.VietIme.lookupGlyph);
+    for (const u of r.units) {
+      u.state = 'unchecked'; u.why = 'unknown'; u.read = '';
+      if (u.chosen === '?') { u.state = 'uncertain'; u.why = 'nochar'; continue; }
+      let v = r.checked ? verify(u, u.chosen) : { ok: undefined };
+      if (v.ok === false) {
+        const other = u.candidates.find(c => c.char !== u.chosen && verify(u, c.char).ok === true);
+        if (other) { u.replaced = u.chosen; u.chosen = other.char; v = { ok: true }; }
+      }
+      if (v.read) u.read = v.read;
+      if (v.ok === false) { u.state = 'uncertain'; u.why = 'readas'; }
+      else if (u.dict.some(e => e.han === u.chosen)) { u.state = 'sure'; u.why = 'dictionary'; }
+      else if (u.dict.length) { u.state = 'differs'; u.why = 'differs'; }
+      else if (v.ok === true) { u.state = 'sure'; u.why = 'dictionaries'; }
+    }
+    const shown = u => (u.chosen === '?' ? `[${u.qn}]` : u.chosen);
+    r.nom = r.parts.map(p => (p.unit ? shown(r.units.find(u => u.id === p.unit)) : p.text)).join('');
+    r.uncertain = r.units.filter(u => u.state === 'uncertain' || u.state === 'differs').map(u => u.id);
+    return r;
+  };
+
   const stateOf = u => {
-    const s = u.state ? { state: u.state, why: u.why } : u.chosen === '?' ? { state: 'uncertain', why: 'nochar' }
-      : u.ok === true ? { state: 'sure', why: 'backreading' } : u.ok === false ? { state: 'uncertain', why: 'readas' } : { state: 'unchecked', why: 'none' };
     const why = {
       dictionary: t('matches the dictionary', 'khớp từ điển'),
       dictionaries: t('reading found in the dictionaries', 'cách đọc có trong từ điển'),
@@ -163,25 +213,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       readas: t('the dictionaries read it as “', 'từ điển đọc là “') + (u.read || '?') + '”',
       differs: t('the dictionary lists other characters', 'từ điển ghi chữ khác'),
       unknown: t('not in the dictionaries, not checked', 'không có trong từ điển, chưa kiểm tra'),
-    }[s.why] || '';
-    return { ...s, label: STATES[s.state].label(), icon: STATES[s.state].icon, why };
+    }[u.why] || '';
+    const replaced = u.replaced ? t('replaced ', 'đã thay ') + u.replaced + ' · ' : '';
+    return { state: u.state, label: STATES[u.state].label(), icon: STATES[u.state].icon, why: replaced + why };
   };
 
   // the words of the result in order, with the punctuation between them: [{text, unit}] (unit is null for punctuation)
-  const pieces = r => {
-    const out = [];
-    let pos = 0;
-    for (const u of r.units) {
-      const shown = u.chosen === '?' ? `[${u.qn}]` : u.chosen;
-      const at = r.nom.indexOf(shown, pos);
-      if (at < 0) continue;
-      if (at > pos) out.push({ text: r.nom.slice(pos, at), unit: null });
-      out.push({ text: shown, unit: u });
-      pos = at + shown.length;
-    }
-    if (pos < r.nom.length) out.push({ text: r.nom.slice(pos), unit: null });
-    return out;
-  };
+  const pieces = r => r.parts.map(p => {
+    if (!p.unit) return { text: p.text, unit: null };
+    const u = r.units.find(x => x.id === p.unit);
+    return { text: u.chosen === '?' ? `[${u.qn}]` : u.chosen, unit: u };
+  });
 
   // the result as text: every character is a <ruby> with its syllable (one syllable per character if the numbers agree, else the whole
   // reading over the group); a word is underlined by its state. The Quốc Ngữ is not selected when the text is copied.
@@ -207,7 +249,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   let lastNom = '';
-  const show = r => {
+  const show = async r => {
+    await imeReady;
+    check(r);
     lastNom = r.nom;
     showNom(r);
     const warn = $('warn');
@@ -287,7 +331,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           const m = JSON.parse(line);
           if (m.step) say(STEPS[m.step]);
           if (m.error) throw new Error(m.error);
-          if (m.result) { show(m.result); say(''); done = true; }
+          if (m.result) { await show(m.result); say(''); done = true; }
         }
         if (end) break;
       }
