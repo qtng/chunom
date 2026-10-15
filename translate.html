@@ -21,7 +21,7 @@
     .page-head .han { color: var(--accent); font-size: 1.3rem; }
     .page-head h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(1.9rem, 6vw, 2.6rem); margin: .1rem 0 .2rem; }
     .page-head p { color: var(--muted); margin: 0 auto; max-width: 40rem; }
-    /* loading animation (the answer can take up to a minute): the four characters of "Việt Nam chữ Nôm" light up in a wave, a bar creeps forward and never stops
+    /* loading animation (the answer can take up to a minute): the four characters of "Quốc ngữ chữ Nôm" (國語𡨸喃) light up in a wave, a bar creeps forward and never stops
        at the end, the message changes every few seconds and says how long it has been, so nobody thinks that something is broken */
     .loading { display: flex; flex-direction: column; align-items: center; gap: .6rem; padding: 1.1rem 0 .3rem; }
     .loading[hidden] { display: none; }
@@ -110,7 +110,7 @@
       <button type="button" class="btn btn-go" id="go" data-vi="Dịch">Translate</button>
     </div>
     <div class="loading" id="loading" role="status" aria-live="polite" hidden>
-      <div class="chars"><span class="ch" aria-hidden="true">越</span><span class="ch" aria-hidden="true">南</span><span class="ch" aria-hidden="true">𡨸</span><span class="ch" aria-hidden="true">喃</span></div>
+      <div class="chars"><span class="ch" aria-hidden="true">國</span><span class="ch" aria-hidden="true">語</span><span class="ch" aria-hidden="true">𡨸</span><span class="ch" aria-hidden="true">喃</span></div>
       <div class="bar" aria-hidden="true"><i id="bar"></i></div>
       <div class="msg" id="msg"></div>
     </div>

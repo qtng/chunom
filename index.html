@@ -306,9 +306,9 @@ class ChunomDict {
       document.body.classList.toggle('hide-qn', !hidden);
     });
 
-    // Telex-IME von chunom.org: auf Touch-Geräten standardmäßig aus
+    // Telex-IME von chunom.org: standardmäßig an (gespeicherte Wahl hat Vorrang)
     const telex = localStorage.getItem(this.telexKey);
-    this.telexToggle.checked = telex ? telex === 'true' : !matchMedia('(pointer: coarse)').matches;
+    this.telexToggle.checked = telex ? telex === 'true' : true;
     this.setTelex(this.telexToggle.checked);
     this.telexToggle.addEventListener('change', (e) => {
       localStorage.setItem(this.telexKey, e.target.checked);
