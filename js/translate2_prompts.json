@@ -1,0 +1,23 @@
+{
+  "version": "2026-10-16",
+  "models": [
+    "gemini-3.5-flash",
+    "gemini-3.1-flash-lite",
+    "gemini-3.8-flash"
+  ],
+  "prompts": {
+    "system": [
+      "You choose Chữ Nôm characters for Vietnamese (Quốc Ngữ) text. Answer with JSON only, exactly in the requested shape, no comments."
+    ],
+    "main": [
+      "The sentence: {{text}}",
+      "Its syllables as [index, syllable]: {{syllables}}",
+      "For spans of syllables (at = index of the first syllable, len = number of syllables) the dictionaries list Chữ Nôm options, all with the correct reading, most usual first, with a short meaning where known. Options: {{spans}}",
+      "Task: cover the syllables from the first to the last with consecutive words (a word is one span: at and len; every syllable belongs to exactly one word, in order, none missing, none twice). Use a compound span (len > 1) where the compound is the word meant in this sentence, else single syllables.",
+      "For each word choose the option that fits its meaning in the context of the whole sentence (word class, sense, the other words). Use only the options listed for exactly that span.",
+      "If a span has no suitable option you may give a character of your own if you know a reliable one: set \"own\": true. Never invent characters; if you know none, write \"?\" and \"own\": true.",
+      "Answer: {\"words\": [{\"at\": 0, \"len\": 1, \"char\": \"...\", \"own\": false}]}"
+    ],
+    "retry": "Your previous answer was rejected: {{error}}. Follow the rules exactly."
+  }
+}
