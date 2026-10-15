@@ -1,5 +1,5 @@
 /*
-	The scanned dictionaries. Page images are hot-linked (chunom-assets as WebP; TĐCNTD still on chunom.org).
+	The scanned dictionaries. Page images are hot-linked (chunom-assets as WebP; TĐCNTD still on the old server, new.chunom.org).
 
 	stageColor = background behind the page image: just a little darker than the scanned paper (about 1.3:1),
 	so tilting pages do not flicker between light and dark. Paper: Génibrel #c2c2c2, Bonet and TĐCNTD #ffffff.
@@ -11,7 +11,7 @@
 	data/<id>.json = last headword on each dictionary page, starting at displayed page 1 (used by the search)
 */
 
-const CHUNOM = 'https://chunom.org/media/dict';
+const CHUNOM = 'https://new.chunom.org/media/dict'; // the old server of chunom.org (chunom.org itself is GitHub Pages now); until the TĐCNTD pages are in chunom-assets
 const ASSETS = '/chunom-assets/dict'; // converted to WebP, moved dictionary by dictionary
 
 export const DICTIONARIES = {
