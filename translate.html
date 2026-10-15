@@ -81,7 +81,7 @@
     td.chars-cell .nom-char { font-size: 32px; line-height: 1; }
     .alts .alt-chars .nom-char { font-size: 24px; line-height: 1; }
     .alts .alt img { opacity: .8; }
-    .account { font-size: .85rem; color: var(--muted); margin-top: 1.2rem; }
+    .account { font-size: .85rem; color: var(--muted); margin-top: 1.2rem; text-align: center; }
   </style>
 </head>
 <body>
@@ -93,9 +93,9 @@
   </header>
 
   <div class="box">
-    <label for="text" class="form-label fw-semibold">Quốc Ngữ → Chữ Nôm</label>
+    <div class="d-flex justify-content-between align-items-baseline"><label for="text" class="form-label fw-semibold">Quốc Ngữ → Chữ Nôm</label><span class="count"><span id="count">0</span> / 400</span></div>
     <textarea id="text" lang="vi" maxlength="400" spellcheck="false" placeholder="Tôi là người Việt Nam." data-vi-placeholder="Gõ hoặc dán Quốc Ngữ…"></textarea>
-    <div class="d-flex justify-content-between mt-1"><span class="count" id="quota" hidden></span><span class="count ms-auto"><span id="count">0</span> / 400</span></div>
+    <div class="count text-center mt-1" id="quota" hidden></div>
     <div class="d-flex justify-content-center align-items-center flex-wrap gap-2 mt-2">
       <select id="lang" class="form-select w-auto" aria-label="Output">
         <option value="">Chữ Nôm</option><option value="en">Chữ Nôm + English</option><option value="de">Chữ Nôm + Deutsch</option><option value="fr">Chữ Nôm + Français</option><option value="es">Chữ Nôm + Español</option><option value="it">Chữ Nôm + Italiano</option><option value="pt">Chữ Nôm + Português</option><option value="ru">Chữ Nôm + Русский</option><option value="zh">Chữ Nôm + 中文</option><option value="ja">Chữ Nôm + 日本語</option><option value="ko">Chữ Nôm + 한국어</option>
@@ -218,6 +218,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const box = $('quota');
     if (!q || q.day !== today() || typeof q.left !== 'number') { box.hidden = true; return; }
     box.textContent = q.left > 0 ? t(`${q.left} requests left today`, `Hôm nay còn ${q.left} lượt`) : t('No requests left today', 'Hôm nay đã hết lượt');
+    box.className = 'count text-center mt-1 ' + (q.left <= 5 ? 'text-warning' : 'text-success');
     box.hidden = false;
   };
   const quotaSet = left => { try { localStorage.setItem('translate_left', JSON.stringify({ day: today(), left })); } catch { /* no storage */ } quotaShow(); };
