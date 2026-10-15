@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-16c",
+  "version": "2026-10-16g",
   "models": [
     "gemini-3.5-flash",
     "gemini-3.1-flash-lite",
@@ -7,27 +7,23 @@
   ],
   "prompts": {
     "system": [
-      "You transcribe Vietnamese (Quốc Ngữ) into Chữ Nôm. Answer with JSON only, exactly in the requested shape, no comments.",
-      "Rules: never invent characters; if you do not know a reliable character, write none. Only Chữ Nôm / Han characters, no Chinese rewording: every unit stands for exactly the syllables given, in the same order, nothing added, nothing left out. For purely Vietnamese words (pronouns, particles, function words) never use a Sino-Vietnamese character with a different reading, e.g. never 我 for \"tôi\" (that is read \"ngã\"). The reading of a candidate must match the syllable."
+      "You choose Chữ Nôm characters for Vietnamese (Quốc Ngữ) text. Answer with JSON only, exactly in the requested shape, no comments."
     ],
-    "step1": [
-      "STEP 1. Do not transcribe yet, only prepare candidates.",
-      "The whole sentence (for context): {{text}}",
-      "Syllables of the text (in order): {{syllables}}",
-      "Group them into words where appropriate (a unit has one or more consecutive syllables; every syllable belongs to exactly one unit, none missing, none added). Give each unit a sequential id starting at 1.",
-      "For each unit give 2 to 4 candidates sorted by confidence. Choose candidates that fit the meaning of the unit in this sentence (word class, sense in context); where a word is ambiguous, include a second reading. Prefer phono-semantic characters if available and confidence is sufficient.",
-      "Each candidate: {\"char\": \"...\", \"codepoint\": \"U+...\", \"reading\": \"Quốc Ngữ reading\", \"type\": \"Sino-Vietnamese\" | \"purely Nôm\" | \"phono-semantic\", \"reason\": \"at most 10 words\"}.",
-      "{{hintsLine}}",
-      "Answer: {\"units\": [{\"id\": 1, \"qn\": \"the syllables of the unit separated by a space\", \"candidates\": [ ... ]}]}"
+    "main": [
+      "The sentence: {{text}}",
+      "Its syllables as [index, syllable]: {{syllables}}",
+      "For spans of syllables (at = index of the first syllable, len = number of syllables) the dictionaries list these characters for exactly that reading (all have the correct reading, in no particular order, no meanings given; use your own knowledge of Chữ Nôm and of the context to decide). Options: {{spans}}",
+      "Task: cover the syllables from the first to the last with consecutive words (a word is one span: at and len; every syllable belongs to exactly one word, in order, none missing, none twice). Use a compound span (len > 1) where the compound is the word meant in this sentence, else single syllables.",
+      "A * behind an option marks the character that the dictionary of the site gives as the usual one for this reading; choose it unless the sentence calls for another word.",
+      "For each word choose the option that is the right Chữ Nôm for it in the context of the whole sentence (word class, sense, the other words): the usual character of the word, not a variant or a character with another meaning. Prefer a listed option.",
+      "If you know that the right character of the word is not listed, or none of the options is the word, give the character you know as your own: set \"own\": true. Never invent characters; if you know none, write \"?\" and \"own\": true.",
+      "Besides the chosen option give up to two more options of the same span that would fit next best, best first (\"alt\"); leave \"alt\" out for a character of your own.",
+      "Answer: {\"words\": [{\"at\": 0, \"len\": 1, \"char\": \"...\", \"alt\": [\"...\", \"...\"], \"own\": false}]}"
     ],
-    "hintsLine": "Dictionary entries of this site that may help (reading: characters with meaning; use them when the meaning fits the sentence): {{hints}}",
-    "step1retry": "Your previous answer was rejected: {{error}}. Follow the syllable list exactly.",
-    "step2": [
-      "STEP 2. Choose exactly one candidate per unit, only from its list; if none fits, use \"?\".",
-      "The whole sentence: {{text}}",
-      "Make sure the choices are coherent in context (word class, meaning, identical words spelled identically); use the meaning given with a candidate.",
-      "Units: {{units}}",
-      "Answer: {\"choices\": [{\"id\": 1, \"char\": \"...\"}]}"
-    ]
+    "translation": [
+      "Also give a free, natural translation of the whole sentence into {{language}}.",
+      "Add it to the answer as \"translation\": \"...\" next to \"words\"."
+    ],
+    "retry": "Your previous answer was rejected: {{error}}. Follow the rules exactly."
   }
 }
