@@ -94,6 +94,7 @@
         <div class="form-check form-switch mb-0"><input class="form-check-input" type="checkbox" role="switch" id="rt-toggle" checked><label class="form-check-label small" for="rt-toggle" data-vi="Hiện Quốc Ngữ phía trên chữ">Show Quốc Ngữ above the characters</label></div>
       </div>
       <div class="nom" id="nom" lang="vi-Hani"></div>
+      <p class="mt-2 mb-0" id="translation" hidden></p>
       <div class="alert alert-warning py-2 px-3 mt-3 mb-0">
         <div class="legend"><span class="unit sure" data-vi="từ danh sách">from the list</span><span class="unit differs" data-vi="mô hình tự chọn">model's own</span><span class="unit uncertain" data-vi="chưa chắc">uncertain</span></div>
         <div class="small mt-1" id="warn" hidden></div>
@@ -284,6 +285,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       return el('tr', '', el('td', '', String(w.id)), el('td', '', w.qn), el('td', 'chars-cell', ...(w.chosen === '?' ? ['?'] : chars(w.chosen, SIZE))), status);
     });
     $('units').replaceChildren(...rows);
+    $('translation').textContent = r.translation || ''; $('translation').hidden = !r.translation;
     $('version').textContent = r.version ? t('Prompt version: ', 'Phiên bản prompt: ') + r.version : '';
     $('result').hidden = false;
   };
