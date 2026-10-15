@@ -80,6 +80,12 @@
   <div class="box">
     <label for="text" class="form-label fw-semibold">Quốc Ngữ → Chữ Nôm</label>
     <textarea id="text" lang="vi" maxlength="400" spellcheck="false" placeholder="Tôi là người Việt Nam." data-vi-placeholder="Gõ hoặc dán Quốc Ngữ…"></textarea>
+    <div class="d-flex align-items-center gap-2 mt-2">
+      <label for="lang" class="small mb-0" data-vi="Dịch nghĩa sang">Translate the meaning into</label>
+      <select id="lang" class="form-select form-select-sm w-auto">
+        <option value="" data-vi="không">none</option><option value="en">English</option><option value="vi">Tiếng Việt</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="it">Italiano</option><option value="pt">Português</option><option value="ru">Русский</option><option value="zh">中文</option><option value="ja">日本語</option><option value="ko">한국어</option>
+      </select>
+    </div>
     <div class="d-flex justify-content-between align-items-center mt-2">
       <span class="count"><span id="count">0</span> / 400</span>
       <button type="button" class="btn btn-go" id="go" data-vi="Dịch">Translate</button>
@@ -308,6 +314,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   // the Quốc Ngữ above the characters can be hidden (remembered in this browser)
   const rtBox = $('rt-toggle'), rtSet = on => { $('nom').classList.toggle('no-rt', !on); rtBox.checked = on; };
+  const langBox = $('lang');
+  try { const saved = localStorage.getItem('translate_target'); langBox.value = saved !== null ? saved : (localStorage.getItem('lang') === 'vi' ? 'vi' : 'en'); } catch { langBox.value = 'en'; }
+  langBox.addEventListener('change', () => { try { localStorage.setItem('translate_target', langBox.value); } catch { /* no storage */ } });
   try { rtSet(localStorage.getItem('translate_rt') !== '0'); } catch { /* no storage */ }
   rtBox.addEventListener('change', () => { rtSet(rtBox.checked); try { localStorage.setItem('translate_rt', rtBox.checked ? '1' : '0'); } catch { /* no storage */ } });
 
@@ -326,7 +335,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const res = await fetch(`${sp.url}/functions/v1/translate2`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', apikey: sp.key, Authorization: 'Bearer ' + session.access_token },
-        body: JSON.stringify({ text: value, spans }),
+        body: JSON.stringify({ text: value, spans, lang: $('lang').value }),
       });
       if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error || 'failed'); }
       const reader = res.body.getReader(), dec = new TextDecoder();
