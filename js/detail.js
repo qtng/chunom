@@ -30,56 +30,54 @@ function el(tag, attrs = {}, ...children) {
 
 const NOM_CHAR = /[一-鿿㐀-䶿\u{20000}-\u{323af}]/u;
 
+// The look of the popup: the colours come from the variables of the page (--ink, --cinnabar, … of qatt.org and its themes; the values after the comma are the
+// classic look for pages without them), its buttons are btn-cinnabar / btn-quiet of the theme. The rules that only colour start with :where(#detailModal)
+// (no weight beyond Bootstrap's own), so that the rules of a theme (html[data-theme] .modal-content, …) win; Canvas is white, dark in a dark theme.
 const STYLE = `
 #copy-toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #2b2118; color: #fff; padding: 8px 16px;
   border-radius: 20px; font-size: .85rem; z-index: 9999; display: none; border: 1px solid #2b2118; }
-#detailModal { --ink: #2b2118; --cinnabar: #a8362a; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
-#detailModal .modal-content { background: #fffdf8; color: var(--ink); border-radius: 1rem; border: 1px solid var(--line); }
-#detailModal .modal-header, #detailModal .modal-footer { border-color: var(--line); }
-#detailModal .modal-title { font-family: Georgia, "Times New Roman", serif; font-weight: 400; }
-#detailModal .modal-footer .btn-secondary { background: #fff; border: 1px solid var(--field); color: var(--ink); border-radius: 2rem; }
-#detailModal .modal-footer .btn-secondary:hover { background: #f1e8d2; }
-#detailModal .text-secondary { color: var(--muted) !important; }
+#detailModal { --dm-ink: var(--ink, #2b2118); --dm-cinnabar: var(--cinnabar, #a8362a); --dm-paper: var(--paper, #f7efdc); --dm-line: var(--line, #e4d9c0);
+  --dm-field: var(--field, #cdbf9f); --dm-muted: var(--muted, #7b6c58); --dm-bg: color-mix(in srgb, var(--dm-paper) 15%, Canvas); }
+:where(#detailModal) .modal-content { background: var(--dm-bg); color: var(--dm-ink); border-radius: 1rem; border: 1px solid var(--dm-line); }
+:where(#detailModal) .modal-header, :where(#detailModal) .modal-footer { border-color: var(--dm-line); }
+:where(#detailModal) .modal-title { font-family: Georgia, "Times New Roman", serif; font-weight: 400; }
+#detailModal .text-secondary { color: var(--dm-muted) !important; }
 #detailModal .font-serif { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }
 #detailModal .font-monospace { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', monospace; }
 #detailModal .lh-sm { line-height: 1.1; }
-#detailModal .list-group { border-top: 1px solid var(--line) !important; }
-#detailModal .list-group-item { background: #fffdf8 !important; border: 0 !important; border-bottom: 1px solid var(--line) !important; border-radius: 0 !important; margin: 0 !important; color: var(--ink); }
+#detailModal .list-group { border-top: 1px solid var(--dm-line) !important; }
+#detailModal .list-group-item { background: transparent !important; border: 0 !important; border-bottom: 1px solid var(--dm-line) !important; border-radius: 0 !important; margin: 0 !important; color: var(--dm-ink); }
 #detailModal .list-group-item:last-child { border-bottom: 0 !important; }
-#detailModal .list-group-item-action:hover { background: #f6edd6 !important; }
-#detailModal .glyph-box { min-width: 120px; height: 160px; flex-shrink: 0; cursor: pointer; }
-#detailModal .badge-rank { font-weight: 400; border: 1px solid var(--field); color: var(--muted); font-size: .65rem; background: transparent; }
+#detailModal .list-group-item-action:hover { background: color-mix(in srgb, var(--dm-paper) 60%, transparent) !important; }
+#detailModal .glyph-box { min-width: 120px; height: 160px; flex-shrink: 0; cursor: pointer; border-color: var(--dm-line) !important; }
+#detailModal .badge-rank { font-weight: 400; border: 1px solid var(--dm-field); color: var(--dm-muted); font-size: .65rem; background: transparent; }
 #detailModal .clickable-meta { cursor: pointer; transition: opacity .2s; }
 #detailModal .clickable-meta:hover { opacity: 1 !important; text-decoration: underline; }
 #detailModal .nom-char { cursor: pointer; }
 #detailModal .nom-char, #detailModal .nom-char img { border-radius: .25rem; transition: background-color .15s, box-shadow .15s; }
-#detailModal .nom-char:hover img, #detailModal .nom-char:not(:has(img)):hover { background-color: var(--bs-info-bg-subtle); box-shadow: 0 0 0 .2rem var(--bs-info-bg-subtle); }
+#detailModal .nom-char:hover img, #detailModal .nom-char:not(:has(img)):hover { background-color: color-mix(in srgb, #2fa4d6 25%, transparent); box-shadow: 0 0 0 .2rem color-mix(in srgb, #2fa4d6 25%, transparent); }
 #detailModal qatt-code { cursor: pointer; vertical-align: sub; transition: filter .2s; }
 #detailModal qatt-code:hover { filter: brightness(1.3); }
 #detailModal qatt-code svg { stroke: currentColor; stroke-linecap: round; fill: transparent; vertical-align: baseline; display: inline-block; height: 2em; position: relative; top: -.25em; }
-#detailModal .deck-toggle { display: inline-flex; align-items: center; gap: .35rem; border-radius: 2rem; border: 1.5px solid var(--cinnabar); background: #fff; color: var(--cinnabar); font-size: .9rem; line-height: 1.2; padding: .3rem .8rem; white-space: nowrap; }
+#detailModal .deck-toggle { display: inline-flex; align-items: center; gap: .35rem; white-space: nowrap; }   /* btn-quiet, btn-cinnabar when the character is in a deck */
 #detailModal .ipa-box { color: #4f9a5a; font-size: 1.05rem; line-height: 1.35; }
 #detailModal .ipa-box sup { font-size: .65em; }
-#detailModal .speak-btn { width: 2.2rem; height: 2.2rem; padding: 0; border: 1.5px solid var(--cinnabar); border-radius: 50%; background: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 1.05rem; flex: none; }
-#detailModal .speak-btn:hover { background: var(--cinnabar); color: #fff; opacity: 1; }
+#detailModal .speak-btn { width: 2.2rem; height: 2.2rem; padding: 0; border: 1.5px solid var(--dm-cinnabar); border-radius: 50%; background: Canvas; display: inline-flex; align-items: center; justify-content: center; font-size: 1.05rem; flex: none; }
+#detailModal .speak-btn:hover { background: var(--dm-cinnabar); color: #fff; opacity: 1; }
 .speak-btn { border: 0; background: none; color: var(--cinnabar, #a8372b); padding: 0 .35rem; line-height: 1; font-size: 1.2rem; cursor: pointer; }
 .speak-btn:hover, .speak-btn:focus-visible { opacity: .7; }
-#detailModal .modal-footer .deck-toggle { padding: .375rem .9rem; font-size: 1rem; }
-#detailModal .deck-toggle:hover, #detailModal .deck-toggle:focus-visible, #detailModal .deck-toggle.in-deck { background: var(--cinnabar); color: #fff; }
 #deck-sheet { position: fixed; inset: 0; z-index: 5; display: flex; align-items: flex-end; justify-content: center; background: rgba(43, 33, 24, .45); opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; }
 #deck-sheet.open { opacity: 1; visibility: visible; }
-#deck-sheet .sheet { width: min(100%, 32rem); max-height: 80vh; overflow-y: auto; background: #fffdf8; border-radius: 1.2rem 1.2rem 0 0; padding: .8rem 1.2rem 1.4rem; transform: translateY(100%); transition: transform .25s ease-out; }
+#deck-sheet .sheet { width: min(100%, 32rem); max-height: 80vh; overflow-y: auto; background: var(--dm-bg); color: var(--dm-ink); border-radius: 1.2rem 1.2rem 0 0; padding: .8rem 1.2rem 1.4rem; transform: translateY(100%); transition: transform .25s ease-out; }
 #deck-sheet.open .sheet { transform: none; }
 #deck-sheet .sheet-title { font: 400 1.15rem Georgia, "Times New Roman", serif; }
-#deck-sheet .deck-line { display: flex; align-items: center; border-bottom: 1px solid var(--line); }
-#deck-sheet .deck-line:hover { background: rgba(168, 54, 42, .06); }
-#deck-sheet .deck-row { display: flex; align-items: center; gap: .8rem; flex: 1; min-width: 0; padding: .65rem .3rem; border: 0; background: none; color: var(--ink); text-align: left; }
-#deck-sheet .deck-row .bi { font-size: 1.25rem; color: var(--cinnabar); }
-#deck-sheet .deck-open { flex: none; padding: .65rem .8rem; color: var(--muted); text-decoration: none; }
-#deck-sheet .deck-open:hover, #deck-sheet .deck-open:focus-visible { color: var(--cinnabar); }
-#deck-sheet .btn-new { background: var(--cinnabar); border-color: var(--cinnabar); color: #fff; border-radius: 2rem; }
-#deck-sheet .btn-new:hover { background: #8c2c22; border-color: #8c2c22; color: #fff; }
-#deck-sheet .text-secondary { color: var(--muted) !important; }`;
+#deck-sheet .deck-line { display: flex; align-items: center; border-bottom: 1px solid var(--dm-line); }
+#deck-sheet .deck-line:hover { background: color-mix(in srgb, var(--dm-cinnabar) 6%, transparent); }
+#deck-sheet .deck-row { display: flex; align-items: center; gap: .8rem; flex: 1; min-width: 0; padding: .65rem .3rem; border: 0; background: none; color: var(--dm-ink); text-align: left; }
+#deck-sheet .deck-row .bi { font-size: 1.25rem; color: var(--dm-cinnabar); }
+#deck-sheet .deck-open { flex: none; padding: .65rem .8rem; color: var(--dm-muted); text-decoration: none; }
+#deck-sheet .deck-open:hover, #deck-sheet .deck-open:focus-visible { color: var(--dm-cinnabar); }
+#deck-sheet .text-secondary { color: var(--dm-muted) !important; }`;
 
 const MODAL = `
 <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true" aria-labelledby="modalTitle">
@@ -88,14 +86,14 @@ const MODAL = `
       <div class="modal-header">
         <h5 class="modal-title" id="modalTitle" data-vi="Chi tiết">Details</h5>
         <div class="d-flex align-items-center ms-auto">
-          <button type="button" class="deck-toggle"><i class="bi bi-plus-lg"></i> <span data-vi="Thêm vào bộ thẻ">Add to deck</span></button>
+          <button type="button" class="btn btn-sm btn-quiet deck-toggle"><i class="bi bi-plus-lg"></i> <span data-vi="Thêm vào bộ thẻ">Add to deck</span></button>
           <button type="button" class="ms-4 btn-close" data-bs-dismiss="modal" aria-label="Close" data-vi-aria-label="Đóng"></button>
         </div>
       </div>
       <div class="modal-body" id="modalBody"></div>
       <div class="modal-footer">
-        <button type="button" class="deck-toggle"><i class="bi bi-plus-lg"></i> <span data-vi="Thêm vào bộ thẻ">Add to deck</span></button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-vi="Đóng">Close</button>
+        <button type="button" class="btn btn-quiet deck-toggle"><i class="bi bi-plus-lg"></i> <span data-vi="Thêm vào bộ thẻ">Add to deck</span></button>
+        <button type="button" class="btn btn-quiet" data-bs-dismiss="modal" data-vi="Đóng">Close</button>
       </div>
       <!-- Bottom sheet: add the character to one of the decks (inside the popup, so that the focus trap of Bootstrap does not interfere) -->
       <div id="deck-sheet" role="dialog" aria-modal="true" aria-labelledby="deck-sheet-title" aria-hidden="true">
@@ -282,7 +280,7 @@ class ChunomDetail {
     this.relatedBox.replaceChildren(...(items.length ? [
       el('div', { className: 'small text-secondary mb-1', textContent: 'Related' }),
       el('div', { className: 'd-flex flex-wrap justify-content-center gap-2' }, items.map(([ch, title]) => {
-        const link = el('button', { type: 'button', className: 'btn btn-link text-body p-0 border-0 text-decoration-none', title: `${title}: ${ch}`, 'aria-label': `${title}: ${ch}` }, this.nomChars(ch, 32));
+        const link = el('button', { type: 'button', className: 'btn btn-link text-reset p-0 border-0 text-decoration-none', title: `${title}: ${ch}`, 'aria-label': `${title}: ${ch}` }, this.nomChars(ch, 32));
         link.addEventListener('click', () => this.showDetails(null, ch));
         return link;
       }))
@@ -344,6 +342,8 @@ class ChunomDetail {
     const inDeck = this.deckIdsNom === this.currentNom && this.deckIds.size > 0;
     for (const toggle of this.deckToggles) {
       toggle.classList.toggle('in-deck', inDeck);
+      toggle.classList.toggle('btn-cinnabar', inDeck); // the button of the theme: red when the character is in a deck
+      toggle.classList.toggle('btn-quiet', !inDeck);
       toggle.querySelector('i').className = `bi ${inDeck ? 'bi-check-lg' : 'bi-plus-lg'}`;
       const label = toggle.querySelector('span');
       label.dataset.vi = inDeck ? 'Đã thêm' : 'Thêm vào bộ thẻ';
@@ -389,9 +389,9 @@ class ChunomDetail {
     const nameInput = el('input', { type: 'text', className: 'form-control', placeholder: 'Deck title', maxLength: 80, 'aria-label': 'Deck title' });
     const create = () => this.createDeck(nameInput.value);
     nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') create(); });
-    const createBtn = el('button', { type: 'button', className: 'btn btn-new fw-bold px-4', textContent: 'Create' });
+    const createBtn = el('button', { type: 'button', className: 'btn btn-cinnabar fw-bold px-4', textContent: 'Create' });
     createBtn.addEventListener('click', create);
-    const newBtn = el('button', { type: 'button', className: 'btn btn-new w-100 py-2 fw-bold', textContent: 'New deck' });
+    const newBtn = el('button', { type: 'button', className: 'btn btn-cinnabar w-100 py-2 fw-bold', textContent: 'New deck' });
     newBtn.addEventListener('click', () => this.renderDeckSheet(true));
     this.deckSheetBody.replaceChildren(
       el('div', { className: 'd-flex align-items-center gap-3 mb-2' },
