@@ -395,7 +395,9 @@
                 // Audio configuration
                 this.audio = new AudioManager(document.getElementById('bg-audio'), { 
                     playlist: APP_CONFIG.playlist, 
-                    binaural: APP_CONFIG.binaural 
+                    binaural: APP_CONFIG.binaural,
+                    crossfadeAfter: 120,   // seconds: then the next song is faded in
+                    crossfadeDuration: 5   // seconds the crossfade lasts
                 }, {
                     isMusicOn: localStorage.getItem('musicOn') !== 'false',
                     isSpeechOn: localStorage.getItem('speechOn') !== 'false',
