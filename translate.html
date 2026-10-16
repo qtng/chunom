@@ -181,6 +181,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // the options for a reading ("có thể"): characters of dict.csv (standard first, with meaning), then the others of the dictionaries of the
   // input method, those with a definition first; at most 15
   const MAX_OPTIONS = 15, MAX_SENT = 15;   // the model gets the characters only (no meanings): its own knowledge decides, the list only limits the choice
+  // how many words on each side of a gap of the dictionary (a word for which the model had to use a character of its own) the function stores for the improvement of the
+  // dictionary and the model (0 to 5; see qtng/qatt db/translate_log.sql). It is the length of the context in the pilot; without it the function uses 3.
+  const CONTEXT = 3;
   const optionCache = new Map();
   const optionsFor = (key, csv) => {
     if (optionCache.has(key)) return optionCache.get(key);
@@ -393,7 +396,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const res = await fetch(`${sp.url}/functions/v1/translate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', apikey: sp.key, Authorization: 'Bearer ' + session.access_token },
-        body: JSON.stringify({ text: value, spans, lang: $('lang').value }),
+        body: JSON.stringify({ text: value, spans, lang: $('lang').value, context: CONTEXT }),
       });
       if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error || 'failed'); }
       const reader = res.body.getReader(), dec = new TextDecoder();
