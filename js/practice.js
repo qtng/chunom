@@ -972,7 +972,7 @@ renderLeaderboard(isPop = false) {
     		</tr>
     		${html}
     	</table>`;
-    if (window.QattLogin) QattLogin.status(this.db, document.getElementById('practice-account'), { en: 'to keep your progress on every device', vi: 'để lưu tiến trình học của bạn trên mọi thiết bị' });
+    if (window.QattLogin) QattLogin.status(this.db, document.getElementById('practice-account'), '[Sign in] to keep your progress on every device.', '[Đăng nhập] để lưu tiến trình học của bạn trên mọi thiết bị.');
   });
 }
 
