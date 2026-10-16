@@ -11,6 +11,7 @@
     <script defer src="js/ime.js"></script>
     <script defer src="https://qatt.org/js/parser.js"></script>
     <script defer src="https://qatt.org/js/qatt-text.js"></script>
+    <script defer src="https://qatt.org/js/fonts.js"></script>   <!-- the QATT fonts (QATT_FONTS) and their @font-face rules -->
     <script src="https://qatt.org/js/navigation.js"></script>
 
     <style>
@@ -194,12 +195,9 @@
         }
 
         // ---------- QATT ----------
-        const FONTS = [['QATT Serif', 'Serif', 'qatt-serif'], ['QATT Gothic', 'Gothic', 'qatt-gothic'], ['QATT Gothic Bold', 'Gothic bold', 'qatt-gothic-bold'],
-            ['QATT Gothic Wide', 'Gothic wide', 'qatt-gothic-wide'], ['QATT Prototype', 'Prototype', 'qatt-prototype'],
-            ['QATT Prototype Light', 'Prototype light', 'qatt-prototype-light'], ['QATT Brush', 'Brush-like', 'qatt-brush']];
-        const fontStyle = document.createElement('style');
-        fontStyle.textContent = FONTS.map(([family, , file]) => `@font-face { font-family: "${family}"; src: url(https://qatt.org/fonts/${file}.woff2) format("woff2"), url(https://qatt.org/fonts/${file}.ttf) format("truetype"); }`).join('\n');
-        document.head.append(fontStyle);
+        // the fonts of the list of qatt.org (js/fonts.js defines their @font-face rules; admins also get the fonts marked admin)
+        const FONTS = typeof QATT_FONTS !== 'undefined' ? QATT_FONTS.filter(f => !f.admin || isAdmin()).map(f => [f.family, f.label]) : [];
+        const DEFAULT_FONT = 'QATT Pen';
 
         const parser = typeof VietnameseParser !== 'undefined' ? new VietnameseParser() : null;
         const qattSwitch = $('qatt-select');
@@ -207,7 +205,7 @@
 
         const decoding = $('decoding'), font = $('font'), size = $('size');
         for (const [name, label] of [['qatt', 'qatt.org'], ['omniglot', 'omniglot']]) decoding.append(new Option(label, name, name === 'qatt', name === 'qatt'));
-        for (const [family, label] of FONTS) font.append(new Option(label, family, family === 'QATT Gothic', family === 'QATT Gothic'));
+        for (const [family, label] of FONTS) font.append(new Option(label, family, family === DEFAULT_FONT, family === DEFAULT_FONT));
         const heading = (select, label) => { const value = select.value, g = document.createElement('optgroup'); g.label = label; g.append(...select.options); select.append(g); select.value = value; };
         heading(decoding, 'Choose QATT decoding');
         heading(font, 'Choose QATT font');
@@ -407,7 +405,8 @@
             typer.focus();
         });
 
-        font.value = store.get('font', 'QATT Gothic');
+        font.value = store.get('font', DEFAULT_FONT);
+        if (!font.value) font.value = DEFAULT_FONT;   // a stored font that is no longer in the list
         size.value = store.get('size', '100');
         qattSwitch.checked = store.get('qatt', 'true') === 'true' && !qattSwitch.closest('.form-check').hidden;
         setQatt(qattSwitch.checked);
