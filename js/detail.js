@@ -130,6 +130,7 @@ class ChunomDetail {
   }
   // A small speaker button for a reading
   static speakButton(text) {
+    ChunomDetail.addStyle(); // the button is also used outside the popup (deck page), before the popup was opened
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'speak-btn';
@@ -138,6 +139,10 @@ class ChunomDetail {
     b.innerHTML = '<i class="bi bi-volume-up-fill"></i>';
     b.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); ChunomDetail.speak(text); });
     return b;
+  }
+
+  static addStyle() {
+    if (!document.getElementById('chunom-detail-style')) document.head.append(el('style', { id: 'chunom-detail-style', textContent: STYLE }));
   }
 
   static open(nom, clickedId = null, row = null) { return ChunomDetail.get().open(nom, clickedId, row); }
@@ -185,7 +190,7 @@ class ChunomDetail {
   // The popup is built when it is needed: styles, Bootstrap, the dictionary, the elements.
   setup() {
     return this.ready ??= (async () => {
-      if (!document.getElementById('chunom-detail-style')) document.head.append(el('style', { id: 'chunom-detail-style', textContent: STYLE }));
+      ChunomDetail.addStyle();
       if (!document.querySelector('link[href*="bootstrap-icons"]')) document.head.append(el('link', { rel: 'stylesheet', href: ICONS_CSS }));
       await ChunomDetail.loadScript(BOOTSTRAP_JS, () => window.bootstrap);
       if (typeof Qatt != 'undefined') new Qatt().observe('qatt-code'); // draws the glyphs of the popup (an element is drawn only once)

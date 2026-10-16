@@ -22,112 +22,83 @@
 
     <style>
         :root { --ink: #2b2118; --cinnabar: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
-
-        body {
-            min-height: 100vh;
+        body { min-height: 100vh; color: var(--ink); background: #fffdf8; }
+        /* the header of the pages of qatt.org and the Chunom site (.hero): the look of the theme "classic"; other themes override it */
+        .hero {
+            background:
+                radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%),
+                linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%);
+            border-bottom: 1px solid #e8dcc0;
             color: var(--ink);
-            background: linear-gradient(180deg, var(--paper) 0, #fffdf8 18rem) no-repeat, #fffdf8;
         }
+        .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: .01em; }
+        .hero .han { color: var(--cinnabar); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; }
+        .hero .han { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }   /* Nôm characters outside the usual fonts */
+        .hero .lead { max-width: 38rem; color: #4a3d30; }
+        @media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
+        .card-box { padding: 1rem; margin-bottom: .6rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .14); }
 
-        .page-title { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2rem, 7vw, 2.8rem); }
         .accent { color: var(--cinnabar) !important; }
-        .btn-outline-accent { color: var(--cinnabar); border-color: var(--cinnabar); }
-        .btn-outline-accent:hover { background: var(--cinnabar); border-color: var(--cinnabar); color: #fff; }
         .text-secondary { color: var(--muted) !important; }
-
-        /* quiet text buttons without hover or focus highlights */
-        .btn-subtle {
-            all: unset;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.25rem 0.6rem;
-            cursor: pointer;
-            color: var(--muted);
-            font-size: 0.925rem;
-            font-weight: 500;
-            user-select: none;
-            border-radius: 2rem;
-        }
-        .btn-subtle:hover { color: var(--cinnabar); }
-        .btn-subtle:focus-visible { outline: 2px solid var(--cinnabar); outline-offset: 2px; }
+        .section-header h6 { letter-spacing: .12em; }
 
         /* deck cards */
-        .list-group { border: none !important; }
-        .list-group-item {
-            background-color: rgba(255, 255, 255, .8) !important;
-            border: 1px solid var(--line) !important;
-            border-radius: .8rem !important;
-            color: var(--ink);
-            margin-bottom: 0.6rem;
-            transition: border-color .15s, box-shadow .15s;
-        }
         .deck-thumb { width: 4rem; height: 4rem; object-fit: cover; border-radius: .9rem; flex: none; }
-        .deck-title { font-weight: 600; color: var(--ink); }
-        .empty-box { background: rgba(255, 255, 255, .6); border: 1px dashed var(--field); }
+        .deck-title { font-weight: 600; }
+        .empty-box { background: color-mix(in srgb, currentColor 4%, transparent); border: 1px dashed var(--field); }
 
         /* grey placeholders while the decks load: the same layout as a deck card, so nothing jumps */
-        .sk-block { display: block; border-radius: .5rem; background: linear-gradient(90deg, #e4e2dd 25%, #efede8 50%, #e4e2dd 75%); background-size: 200% 100%; animation: sk-shimmer 1.4s linear infinite; }
+        .sk-block { display: block; border-radius: .5rem; background: linear-gradient(90deg, color-mix(in srgb, currentColor 12%, transparent) 25%, color-mix(in srgb, currentColor 6%, transparent) 50%, color-mix(in srgb, currentColor 12%, transparent) 75%); background-size: 200% 100%; animation: sk-shimmer 1.4s linear infinite; }
         .sk-thumb { width: 4rem; height: 4rem; border-radius: .9rem; flex: none; }
         .sk-line { height: 1.1rem; margin: .15rem 0 .5rem; }
         .sk-sm { height: .8rem; }
         .sk-btn { height: 1.9rem; width: 6.5rem; border-radius: 50rem; }
         @keyframes sk-shimmer { to { background-position: -200% 0; } }
         @media (prefers-reduced-motion: reduce) { .sk-block { animation: none; } }
-        .deck-progress { height: 6px; background: rgba(0, 0, 0, .08); }
+        .deck-progress { height: 6px; background: color-mix(in srgb, currentColor 10%, transparent); }
         .deck-progress .progress-bar { transition: width .4s; }
 
-        .section-header { border: none !important; }
         .account-footer { margin-top: 3rem; text-align: center; font-size: .85rem; color: var(--muted); }
         .account-footer a { color: var(--cinnabar); text-decoration: none; }
         .account-footer a:hover { text-decoration: underline; }
-        .section-header h6 { letter-spacing: .12em; }
 
         /* modal */
         .modal-content { background: #fffdf8; color: var(--ink); border-radius: 1rem; }
         .modal-content .form-control { border-color: var(--field); background-color: #fff; color: var(--ink); }
         .modal-content .form-control:focus { border-color: var(--cinnabar); box-shadow: 0 0 0 .2rem rgba(168, 54, 42, .15) !important; }
-        .btn-cinnabar { background: var(--cinnabar); border-color: var(--cinnabar); color: #fff; border-radius: 2rem; }
-        .btn-cinnabar:hover, .btn-cinnabar:focus-visible { background: #8c2c22; border-color: #8c2c22; color: #fff; }
-        .btn-cancel { border-radius: 2rem; background: #fff; border: 1px solid var(--field); color: var(--ink); }
-        .btn-cancel:hover { background: #f1e8d2; color: var(--ink); }
     </style>
 </head>
 <body>
 
-    <div class="container py-3 pb-5" style="max-width: 62rem">
+    <header class="hero pt-5 pb-4 mb-4">
+        <div class="container text-center">
+            <div class="han mb-2">學𡨸喃</div>
+            <h1 class="mb-3" data-vi="Luyện tập / Bộ thẻ">Practice / decks</h1>
+            <p class="lead mx-auto mb-4">Practice Chữ Nôm with the words of your own and public decks.</p>
+            <button type="button" class="btn btn-cinnabar btn-pill" data-bs-toggle="modal" data-bs-target="#createDeckModal"><i class="bi bi-plus-lg me-1"></i> <span data-vi="Tạo bộ thẻ mới">Create new deck</span></button>
+            <a class="btn btn-cinnabar btn-pill" href="/chunom/index.html" data-vi="Tra cứu chữ">Character search</a>
+        </div>
+    </header>
+    <main class="container pb-5" style="max-width: 62rem">
         <div class="row justify-content-center text-center">
             <div class="col-lg-10">
-                
-                <!-- Header -->
-                <h1 class="page-title mt-2 mb-2" data-vi="Luyện tập / Bộ thẻ">Practice / decks</h1>
-                <p class="text-secondary mx-auto mb-5" style="max-width: 36rem">Practice Chữ Nôm with the words of your own and public decks.</p>
-                
 
                 <!-- Personal Decks Section -->
                 <div class="text-start mb-5">
-                    <div class="d-flex justify-content-between align-items-center pb-2 mb-3 section-header">
-                        <div class="d-flex align-items-center gap-2">
-                            <h6 class="text-secondary text-uppercase mb-0 small" data-vi="Bộ thẻ của tôi">My decks</h6>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button class="btn-subtle" data-bs-toggle="modal" data-bs-target="#createDeckModal">
-                                <i class="bi bi-plus-lg"></i>
-                                <span data-vi="Tạo bộ thẻ mới">Create new deck</span>
-                            </button>
-                        </div>
+                    <div class="pb-2 mb-3 section-header">
+                        <h6 class="text-secondary text-uppercase mb-0 small" data-vi="Bộ thẻ của tôi">My decks</h6>
                     </div>
 
-                    <div id="deck-list" class="list-group">
+                    <div id="deck-list">
                         <div role="status"><span class="visually-hidden">Loading personal decks...</span></div>
-                            <div class="list-group-item py-3 mb-2 rounded shadow-none" aria-hidden="true">
+                            <div class="card-box" aria-hidden="true">
                                 <div class="d-flex align-items-start gap-3">
                                     <span class="sk-block sk-thumb"></span>
                                     <div class="flex-grow-1"><span class="sk-block sk-line" style="width: 55%"></span><span class="sk-block sk-line sk-sm" style="width: 30%"></span></div>
                                 </div>
                                 <div class="d-flex gap-2 mt-3"><span class="sk-block sk-btn"></span><span class="sk-block sk-btn"></span><span class="sk-block sk-btn ms-auto"></span></div>
                             </div>
-                            <div class="list-group-item py-3 mb-2 rounded shadow-none" aria-hidden="true">
+                            <div class="card-box" aria-hidden="true">
                                 <div class="d-flex align-items-start gap-3">
                                     <span class="sk-block sk-thumb"></span>
                                     <div class="flex-grow-1"><span class="sk-block sk-line" style="width: 55%"></span><span class="sk-block sk-line sk-sm" style="width: 30%"></span></div>
@@ -139,26 +110,24 @@
 
                 <!-- Public Decks Section -->
                 <div class="text-start mb-5">
-                    <h6 class="text-secondary text-uppercase pb-2 mb-3 small section-header">
-                        Public Decks
-                    </h6>
-                    <div id="public-deck-list" class="list-group">
+                    <div class="pb-2 mb-3 section-header"><h6 class="text-secondary text-uppercase mb-0 small" data-vi="Danh mục bộ thẻ">Deck catalog</h6></div>
+                    <div id="public-deck-list">
                         <div role="status"><span class="visually-hidden">Loading public decks...</span></div>
-                            <div class="list-group-item py-3 mb-2 rounded shadow-none" aria-hidden="true">
+                            <div class="card-box" aria-hidden="true">
                                 <div class="d-flex align-items-start gap-3">
                                     <span class="sk-block sk-thumb"></span>
                                     <div class="flex-grow-1"><span class="sk-block sk-line" style="width: 55%"></span><span class="sk-block sk-line sk-sm" style="width: 30%"></span></div>
                                 </div>
                                 <div class="d-flex gap-2 mt-3"><span class="sk-block sk-btn"></span><span class="sk-block sk-btn"></span><span class="sk-block sk-btn ms-auto"></span></div>
                             </div>
-                            <div class="list-group-item py-3 mb-2 rounded shadow-none" aria-hidden="true">
+                            <div class="card-box" aria-hidden="true">
                                 <div class="d-flex align-items-start gap-3">
                                     <span class="sk-block sk-thumb"></span>
                                     <div class="flex-grow-1"><span class="sk-block sk-line" style="width: 55%"></span><span class="sk-block sk-line sk-sm" style="width: 30%"></span></div>
                                 </div>
                                 <div class="d-flex gap-2 mt-3"><span class="sk-block sk-btn"></span><span class="sk-block sk-btn"></span><span class="sk-block sk-btn ms-auto"></span></div>
                             </div>
-                            <div class="list-group-item py-3 mb-2 rounded shadow-none" aria-hidden="true">
+                            <div class="card-box" aria-hidden="true">
                                 <div class="d-flex align-items-start gap-3">
                                     <span class="sk-block sk-thumb"></span>
                                     <div class="flex-grow-1"><span class="sk-block sk-line" style="width: 55%"></span><span class="sk-block sk-line sk-sm" style="width: 30%"></span></div>
@@ -171,7 +140,7 @@
             </div>
         </div>
         <footer id="account" class="account-footer"></footer>
-    </div>
+    </main>
 
     <!-- Create Deck Modal -->
     <div class="modal fade" id="createDeckModal" data-bs-backdrop="static" tabindex="-1">
@@ -189,8 +158,8 @@
                     </div>
                 </div>
                 <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-cancel shadow-none" data-bs-dismiss="modal" data-vi="Hủy">Cancel</button>
-                    <button type="button" class="btn btn-cinnabar px-4 fw-bold shadow-none" id="submitCreateBtn">
+                    <button type="button" class="btn btn-quiet" data-bs-dismiss="modal" data-vi="Hủy">Cancel</button>
+                    <button type="button" class="btn btn-cinnabar px-4 fw-bold" id="submitCreateBtn">
                         <span id="btnText">Create</span>
                         <div id="btnSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"></div>
                     </button>
@@ -282,7 +251,7 @@
                             </div>`;
                     } else {
                         emptyHtml += `<span data-vi="Đăng nhập để xem các bộ thẻ của bạn.">Sign in to see your own decks.</span>
-                            <div class="mt-2"><button type="button" class="btn btn-sm btn-cinnabar rounded-pill px-3" id="signin-decks" data-vi="Đăng nhập">Sign in</button></div>`;
+                            <div class="mt-2"><button type="button" class="btn btn-sm btn-cinnabar px-3" id="signin-decks" data-vi="Đăng nhập">Sign in</button></div>`;
                     }
                     emptyHtml += `</div>`;
                     el.innerHTML = emptyHtml;
@@ -291,7 +260,7 @@
                 }
 
                 el.innerHTML = data.map(d => { const pr = isPersonal ? this.progressOf(d) : null; return `
-                    <div class="list-group-item py-3 mb-2 rounded shadow-none">
+                    <div class="card-box">
                         <div class="d-flex align-items-start gap-3">
                             <span class="deck-thumb-slot" data-deck="${d.id}"></span>
                             <div class="text-start flex-grow-1">
@@ -303,9 +272,9 @@
                         </div>
                         <div class="d-flex flex-wrap gap-2 mt-3">
                             <a href="immersive.html?id=${d.id}" class="btn btn-sm btn-cinnabar px-3"><i class="bi bi-headphones me-1"></i> Superlearn</a>
-                            <a href="practice.html?id=${d.id}" class="btn btn-sm btn-outline-accent rounded-pill px-3"><i class="bi bi-lightning-charge-fill"></i> <span data-vi="Luyện tập">Practice</span></a>
+                            <a href="practice.html?id=${d.id}" class="btn btn-sm btn-quiet px-3"><i class="bi bi-lightning-charge-fill"></i> <span data-vi="Luyện tập">Practice</span></a>
                             ${d.saved ? `<button type="button" class="btn btn-sm btn-link text-secondary text-decoration-none ms-auto" data-remove="${d.id}"><i class="bi bi-x-lg me-1"></i>Remove</button>` : '<span class="ms-auto"></span>'}
-                            <a href="deck.html?id=${d.id}" class="btn btn-sm btn-outline-secondary rounded-pill px-3" data-vi="Chi tiết">Details</a>
+                            <a href="deck.html?id=${d.id}" class="btn btn-sm btn-quiet px-3" data-vi="Chi tiết">Details</a>
                         </div>
                     </div>
                 `; }).join('');

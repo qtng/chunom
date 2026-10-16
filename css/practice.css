@@ -2,14 +2,15 @@
       /* the colours of the site (see index.html): ink, cinnabar, paper */
       --ink: #2b2118;
       --accent: #a8362a;
+      --cinnabar: #a8362a; /* the colour of btn-cinnabar (also in site.css of qatt.org); the themes set their own */
       --accent-dark: #8c2c22;
       --paper: #f7efdc;
       --line: #e4d9c0;
       --field: #cdbf9f;
       --muted: #7b6c58;
       --good: #2f7d3b;
-      --good-bg: #d9ecd5;
-      --bad-bg: #f4d3cd;
+      --good-bg: color-mix(in srgb, var(--good) 22%, Canvas);   /* Canvas: white, dark in a dark theme (color-scheme) */
+      --bad-bg: color-mix(in srgb, var(--accent) 20%, Canvas);
       --stroke-width: 6px;
       --svg-height: 2.5em;
       --highlight-onsets: #c8402f;
@@ -43,7 +44,7 @@ html { scroll-behavior: auto !important; }
       left: 0;
       width: 100%;
       height: var(--nav-height);
-      background: rgba(255, 253, 248, 0.88);
+      background: color-mix(in srgb, Canvas 88%, transparent);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       z-index: 1;
@@ -59,16 +60,15 @@ html { scroll-behavior: auto !important; }
       padding: 4px 8px;
       margin-left: 10px;
       border-radius: 8px;
-      background: #fff;
+      background: Canvas;
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
       border: 1px solid var(--line);
     }
-.account-pill { margin-right: .5rem; padding: .2rem .8rem; font-size: .85rem; line-height: 1.4; white-space: nowrap; color: var(--ink); background: #fff; border: 1px solid var(--field); border-radius: 2rem; }
-.account-pill:hover { background: #f1e8d2; border-color: #b9a982; }
-.nav-icon-btn:hover { background: #f1e8d2; transform: scale(1.1); }
+.account-pill { margin-right: .5rem; padding: .2rem .8rem; font-size: .85rem; line-height: 1.4; white-space: nowrap; }   /* a btn-quiet: the colours are those of the theme */
+.nav-icon-btn:hover { background: color-mix(in srgb, var(--field) 30%, Canvas); transform: scale(1.1); }
 
 svg {
         stroke: currentColor;
@@ -84,21 +84,21 @@ svg {
     
 svg use[href^="#qt"] { stroke-width: calc(var(--stroke-width) * 3 / 4) }
 
-.card { color: var(--ink); background-color: #fff; border: 1px solid var(--line); border-radius: 1rem; box-shadow: 0 .5rem 1.5rem rgba(60, 40, 20, .08); }
-.lesson-card { transition: transform 0.2s, border-color 0.2s; cursor: pointer; border-left: 6px solid var(--accent); }
-.lesson-card:hover { transform: translateY(-3px); border-color: var(--field); border-left-color: var(--accent); }
-/* the levels of the lessons keep their own mark, in the colours of the site */
-.lesson-card.bg-primary { border-left-color: var(--accent); }
-.lesson-card.bg-success { border-left-color: #5b7f4a; }
-.lesson-card.bg-warning { border-left-color: #c08a2b; }
-.lesson-card.bg-danger { border-left-color: #6e2a2a; }
-.lesson-card.bg-primary, .lesson-card.bg-success, .lesson-card.bg-warning, .lesson-card.bg-danger { background-color: #fff !important; color: var(--ink) !important; }
+.card { color: var(--ink); background-color: Canvas; border: 1px solid var(--line); border-radius: 1rem; box-shadow: 0 .5rem 1.5rem rgba(60, 40, 20, .08); }
+/* a lesson: the mark of its level is a bar on the left (drawn of its own, so that it stays when a theme draws the border of the cards);
+   the classes bg-… of the lessons become level-… (practice.js), so that Bootstrap does not paint the card */
+.lesson-card { position: relative; overflow: hidden; padding-left: calc(1rem + 6px) !important; transition: transform 0.2s, border-color 0.2s; cursor: pointer; }
+.lesson-card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 6px; background: var(--level, var(--accent)); }
+.lesson-card:hover { transform: translateY(-3px); border-color: var(--field); }
+.lesson-card.level-success { --level: #5b7f4a; }
+.lesson-card.level-warning { --level: #c08a2b; }
+.lesson-card.level-danger { --level: #6e2a2a; }
 
 
 .status-group { display: flex; gap: 6px; align-items: center; flex-wrap: nowrap; flex-grow: 1; margin-left: 10px; overflow-x: auto; scrollbar-width: none; }
 
 .score-badge {
-      background: #fff;
+      background: Canvas;
       color: var(--ink);
       padding: 4px 8px;
       border-radius: 50px;
@@ -111,13 +111,13 @@ svg use[href^="#qt"] { stroke-width: calc(var(--stroke-width) * 3 / 4) }
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       white-space: nowrap;
     }
-.score-badge.pop { transform: scale(1.15); background: #f1e8d2; border-color: var(--field); }
+.score-badge.pop { transform: scale(1.15); background: color-mix(in srgb, var(--field) 30%, Canvas); border-color: var(--field); }
     
 .badge-total { background: rgba(168, 54, 42, 0.08); border-color: rgba(168, 54, 42, 0.35); font-size: 0.85rem; padding: 4px 10px; }
 
 .symbol-card, .word-grid-item, .lesson-thumbnail {
         position: relative;
-        background: #fcf8ee;
+        background: color-mix(in srgb, var(--paper) 50%, Canvas);
         border: 1px solid var(--line);
         border-radius: 6px;
         padding: 4px;
@@ -143,7 +143,7 @@ svg use[href^="#qt"] { stroke-width: calc(var(--stroke-width) * 3 / 4) }
 .options .btn { 
       min-height: 90px; 
       transition: all 0.2s ease; 
-      background-color: #fff; 
+      background-color: Canvas; 
       color: var(--ink); 
       font-weight: 800; 
       font-size: 1.65rem; 
@@ -155,13 +155,13 @@ svg use[href^="#qt"] { stroke-width: calc(var(--stroke-width) * 3 / 4) }
       border: 2px solid var(--line);
       box-shadow: 0 .25rem .6rem rgba(60, 40, 20, .06);
     }
-.options .btn:hover:not(:disabled) { border-color: var(--accent); background-color: #fff; color: var(--ink); }
+.options .btn:hover:not(:disabled) { border-color: var(--accent); background-color: Canvas; color: var(--ink); }
 .options .btn svg { height: 2.2em; }
 
 .hint-shake { animation: hintShake 0.15s ease-in-out infinite; box-shadow: 0 0 15px rgba(168, 54, 42, 0.45) !important; }
 @keyframes hintShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
 
-.feedback-area { position: absolute; top: 50%; left: 50%; width: 100%; text-align: center; z-index: 100; transform: translate(-50%, -50%); opacity: 0; pointer-events: none; text-shadow: 0 1px 6px #fff, 0 0 12px #fff; }
+.feedback-area { position: absolute; top: 50%; left: 50%; width: 100%; text-align: center; z-index: 100; transform: translate(-50%, -50%); opacity: 0; pointer-events: none; text-shadow: 0 1px 6px Canvas, 0 0 12px Canvas; }
 .float-up-fade { animation: floatUpFade 1.6s ease-in-out forwards; }
 @keyframes floatUpFade { 0% { opacity: 0; transform: translate(-50%, -30%); } 15%, 85% { opacity: 1; transform: translate(-50%, -50%); } 100% { opacity: 0; transform: translate(-50%, -70%); } }
 
@@ -195,7 +195,7 @@ svg use[href^="#qt"] { stroke-width: calc(var(--stroke-width) * 3 / 4) }
 .fade-in { animation: fadeIn 0.4s ease-out; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
 
-.fixed-bottom-bar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 550px; background: linear-gradient(to top, #fffdf8 85%, transparent); padding: 30px 15px 25px 15px; z-index: 1000; display: none; pointer-events: none; }
+.fixed-bottom-bar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 550px; background: linear-gradient(to top, color-mix(in srgb, var(--paper) 30%, Canvas) 85%, transparent); padding: 30px 15px 25px 15px; z-index: 1000; display: none; pointer-events: none; }
 .fixed-bottom-bar .btn { pointer-events: auto; }
 /* on phones the bar of the site navigation is at the bottom: the controls sit above it */
 @media (max-width: 767.98px) and (min-height: 480px) {
@@ -262,7 +262,7 @@ svg use[href^="#qt"] { stroke-width: calc(var(--stroke-width) * 3 / 4) }
 .timer-pie {
     width: 100%; height: 100%; border-radius: 50%;
     background:  conic-gradient(transparent calc(var(--p) * 1%), var(--timer-color) 0),
-      rgba(43, 33, 24, 0.1); 
+      color-mix(in srgb, currentColor 10%, transparent); 
   }
 
 /* 10 seconds infinite loop animation */
@@ -289,17 +289,9 @@ svg use[href^="#qt"] { stroke-width: calc(var(--stroke-width) * 3 / 4) }
 #app .back-link, #app .text-white-50 { color: var(--muted) !important; }
 #app .back-link:hover, #app .text-white-50:hover { color: var(--ink) !important; }
 #app .text-warning { color: var(--accent) !important; }
-#app #practice-navbar { padding-top: 16px !important; background: #fcf8ee; border: 1px solid var(--line); color: var(--ink); }
-#app .btn-info, #app .btn-primary { --bs-btn-bg: var(--accent); --bs-btn-border-color: var(--accent); --bs-btn-color: #fff;
-  --bs-btn-hover-bg: var(--accent-dark); --bs-btn-hover-border-color: var(--accent-dark); --bs-btn-hover-color: #fff;
-  --bs-btn-active-bg: var(--accent-dark); --bs-btn-active-border-color: var(--accent-dark); --bs-btn-active-color: #fff; }
-#app .btn-outline-warning { --bs-btn-color: var(--accent); --bs-btn-border-color: var(--accent);
-  --bs-btn-hover-bg: var(--accent); --bs-btn-hover-border-color: var(--accent); --bs-btn-hover-color: #fff;
-  --bs-btn-active-bg: var(--accent-dark); --bs-btn-active-border-color: var(--accent-dark); --bs-btn-active-color: #fff; }
-#app .btn-outline-light { --bs-btn-color: #5b4d3d; --bs-btn-border-color: var(--field);
-  --bs-btn-hover-bg: #f1e8d2; --bs-btn-hover-border-color: #b9a982; --bs-btn-hover-color: var(--ink);
-  --bs-btn-active-bg: #f1e8d2; --bs-btn-active-border-color: #b9a982; --bs-btn-active-color: var(--ink); }
-#app .btn-info, #app .btn-primary, #app .btn-outline-warning, #app .btn-outline-light { border-radius: 2rem; }
+#app #practice-navbar { padding-top: 16px !important; }
+:where(#practice-navbar) { background: color-mix(in srgb, var(--paper) 50%, Canvas); border: 1px solid var(--line); color: var(--ink); }   /* no weight: a theme that draws .alert wins */
+/* the buttons are btn-cinnabar and btn-quiet: their look is the one of the theme (qatt.org css/theme-….css) */
 #app .table { --bs-table-bg: transparent; --bs-table-color: var(--ink); --bs-table-border-color: var(--line); }
 
 /* Highlighting of the parts of a glyph (qatt.js: <qatt-code> with <use href="#v2-…">):
@@ -314,4 +306,4 @@ qatt-code { --stroke-width: 2px; }
 qatt-code svg { height: var(--svg-height); width: auto; }
 
 .word-grid-item.detail-link { cursor: pointer; }
-.word-grid-item.detail-link:hover { border-color: #a8362a; }
+.word-grid-item.detail-link:hover { border-color: var(--accent); }
