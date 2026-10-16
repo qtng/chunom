@@ -321,6 +321,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   const shown = w => (w.chosen === '?' ? `[${w.qn}]` : w.chosen);
 
+  // a click on the word opens the list: it has other options, or it has no sure character (then a character can be typed)
+  const pickable = w => w.options.some(o => o.char !== w.chosen) || (!!window.VietIme && (w.chosen === '?' || w.state !== 'sure'));
   let lastNom = '', current = null;   // current: {r, full} of the result on the page, shown again after a choice
   const show = (r, full) => {
     current = { r, full }; closePick();
@@ -332,7 +334,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!p.word) { box.append(p.text); continue; }
       const w = byId.get(p.word), st = STATES[w.state];
       const span = document.createElement('span');
-      const canPick = w.options.some(o => o.char !== w.chosen) || (!!window.VietIme && (w.chosen === '?' || w.state !== 'sure'));   // other options, or a word without a sure character: type one
+      const canPick = pickable(w);
       span.className = 'unit ' + st.cls + (canPick ? ' has-alts' : '');
       span.dataset.w = w.id;
       span.title = `${w.qn} · ${st.label()}` + (canPick ? ' · ' + t('click to choose another character', 'bấm để chọn chữ khác') : '');
@@ -434,7 +436,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const unit = e.target.closest('#nom .unit');
     if (unit && current) {
       const w = current.r.words.find(x => x.id === Number(unit.dataset.w));
-      if (w && w.options.some(o => o.char !== w.chosen)) { if (pick.dataset.w === String(w.id) && !pick.hidden) closePick(); else openPick(w, unit); return; }
+      if (w && pickable(w)) { if (pick.dataset.w === String(w.id) && !pick.hidden) closePick(); else openPick(w, unit); return; }
     }
     const c = e.target.closest('.nom-char, .ch');
     if (!c || typeof ChunomDetail === 'undefined') return;
