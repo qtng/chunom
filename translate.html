@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }).catch(e => { console.warn('dict.csv not loaded', e); return new Map(); });
   const imeReady = typeof ChunomDetail !== 'undefined' ? ChunomDetail.loadIme() : Promise.resolve();
   const sp = await ready();
-  QattLogin.status(sp, $('account'));
+  QattLogin.status(sp, $('account'), '[Sign in] to use the translator.', '[Đăng nhập] để dùng công cụ dịch.');
 
   // the options for a reading ("có thể"): characters of dict.csv (standard first, with meaning), then the others of the dictionaries of the
   // input method, those with a definition first; at most 15

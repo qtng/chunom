@@ -227,7 +227,7 @@
                 modalEl.addEventListener('show.bs.modal', e => {
                     if (!this.signedIn()) {
                         e.preventDefault();
-                        QattLogin.open(this.sp, 'Sign in to create decks. The decks you have so far stay with your account.');
+                        QattLogin.open(this.sp, (window.Lang ? Lang.t('Sign in to create decks. The decks you have so far stay with your account.', 'Đăng nhập để tạo bộ thẻ. Các bộ thẻ bạn đã có sẽ được giữ trong tài khoản của bạn.') : 'Sign in to create decks. The decks you have so far stay with your account.'));
                     }
                 });
                 modalEl.addEventListener('shown.bs.modal', () => titleInput.focus());
@@ -280,8 +280,8 @@
                                 </button>
                             </div>`;
                     } else {
-                        emptyHtml += `Sign in to see your own decks.
-                            <div class="mt-2"><button type="button" class="btn btn-sm btn-cinnabar rounded-pill px-3" id="signin-decks">Sign in</button></div>`;
+                        emptyHtml += `<span data-vi="Đăng nhập để xem các bộ thẻ của bạn.">Sign in to see your own decks.</span>
+                            <div class="mt-2"><button type="button" class="btn btn-sm btn-cinnabar rounded-pill px-3" id="signin-decks" data-vi="Đăng nhập">Sign in</button></div>`;
                     }
                     emptyHtml += `</div>`;
                     el.innerHTML = emptyHtml;
@@ -375,11 +375,18 @@
                 const box = document.getElementById('account');
                 box.replaceChildren();
                 if (!this.signedIn()) return;
+                // the words are tags of their own with data-vi, so they follow the language
+                const label = document.createElement('span');
+                label.setAttribute('data-vi', 'Đã đăng nhập:');
+                label.textContent = 'Signed in as';
                 const out = document.createElement('a');
                 out.href = '#';
-                out.textContent = 'Sign out';
+                const outText = document.createElement('span');
+                outText.setAttribute('data-vi', 'Đăng xuất');
+                outText.textContent = 'Sign out';
+                out.append(outText);
                 out.addEventListener('click', async e => { e.preventDefault(); await this.sp.signOut(); location.reload(); });
-                box.append(`Signed in as ${this.sp.user.email || 'you'} · `, out);
+                box.append(label, ` ${this.sp.user.email || 'you'} · `, out);
             }
 
             signedIn() {
@@ -388,7 +395,7 @@
 
             async handleCreateDeck() {
                 if (this.isCreating) return;
-                if (!this.signedIn()) return QattLogin.open(this.sp, 'Sign in to create decks. The decks you have so far stay with your account.');
+                if (!this.signedIn()) return QattLogin.open(this.sp, (window.Lang ? Lang.t('Sign in to create decks. The decks you have so far stay with your account.', 'Đăng nhập để tạo bộ thẻ. Các bộ thẻ bạn đã có sẽ được giữ trong tài khoản của bạn.') : 'Sign in to create decks. The decks you have so far stay with your account.'));
                 const titleInput = document.getElementById('deckTitleInput');
                 const title = titleInput.value.trim();
                 if (!title) {
