@@ -6,16 +6,30 @@ html { touch-action: pan-x pan-y; }
 body {
 	font-family: system-ui, -apple-system, sans-serif;
 	color: var(--ink);
-	background: linear-gradient(180deg, var(--paper) 0, #fffdf8 18rem) no-repeat, #fffdf8;
+	background: #fffdf8;
 	min-height: 100vh;
 }
+
+/* the header of the pages of qatt.org and the Chunom site (.hero): the look of the theme "classic"; other themes override it */
+.hero {
+	background:
+		radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%),
+		linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%);
+	border-bottom: 1px solid #e8dcc0;
+	color: var(--ink);
+}
+.hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.6rem; line-height: 1.25; letter-spacing: .01em; }
+.hero .lead { max-width: 38rem; font-size: .95rem; color: #4a3d30; }
+/* a tool page: the scan is what matters, so the title stays small in every theme (the id beats the rule of a theme; it keeps its font and colours) */
+#app .hero h1 { font-size: clamp(1.4rem, 4vw, 2rem); }
+#app .hero .lead { font-size: .95rem; }
 
 /* Toolbar sticks below the fixed site navigation */
 .dict-toolbar {
 	position: sticky;
 	top: var(--nav-h);
 	z-index: 1020;
-	background: rgba(250, 244, 230, .95);
+	background: color-mix(in srgb, color-mix(in srgb, var(--paper) 60%, Canvas) 95%, transparent);
 	backdrop-filter: blur(10px);
 	border-block: 1px solid var(--line);
 	--bs-border-radius: .6rem;
@@ -27,7 +41,7 @@ body {
 .dict-pager input { min-width: 0; font-variant-numeric: tabular-nums; }
 .dict-tools { flex: 0 0 auto; margin-left: auto; }
 .dict-zoom-label { min-width: 3.4rem; opacity: 1 !important; color: var(--muted); font-variant-numeric: tabular-nums; }
-.dict-tools .btn.active, .dict-search .btn.active { background: #eadfc4; color: var(--ink); }
+.dict-tools .btn.active, .dict-search .btn.active { background: color-mix(in srgb, var(--field) 45%, Canvas); color: var(--ink); }
 
 @media (min-width: 768px) {
 	/* one row: search | page | tools */
@@ -40,7 +54,7 @@ body {
 .dict-tabs { border-bottom-color: var(--line); }
 .dict-tabs .nav-link { color: var(--muted); }
 .dict-tabs .nav-link:hover { color: var(--ink); border-color: transparent transparent var(--line); }
-.dict-tabs .nav-link.active { background: #fffdf8; color: var(--ink); border-color: var(--line) var(--line) #fffdf8; box-shadow: inset 0 2px 0 var(--cinnabar); }
+.dict-tabs .nav-link.active { background: transparent; color: var(--ink); border-color: var(--line) var(--line) transparent; box-shadow: inset 0 2px 0 var(--cinnabar); }
 
 .dict-wrap { max-width: 1600px; margin-inline: auto; padding-inline: 12px; }
 .dict-layout { padding-top: 1rem; }
@@ -134,30 +148,22 @@ body {
 	.dict-image { transition: none; }
 }
 
-/* Candidate list is not used here (headword search only needs Telex), but keep ime.js light when shown */
-.vietime { --vietime-bg: #fff; --vietime-color: #212529; --vietime-border: 1px solid #ced4da; --vietime-grid: #dee2e6; --vietime-active: rgba(10, 120, 255, .15); --vietime-remainder: #0d6efd; }
 
 
-/* ---------- look of the site: paper, ink and cinnabar ---------- */
-.dict-wrap header h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.6rem; line-height: 1.25; }
-.dict-wrap header p { color: var(--muted) !important; }
+/* ---------- colours from the variables; buttons (btn-cinnabar, btn-quiet) and the header are drawn by the theme ---------- */
 .dict-hint, .dict-wrap .text-secondary { color: var(--muted) !important; }
 
-.dict-switch { --bs-nav-pills-link-active-bg: var(--cinnabar); --bs-nav-link-color: var(--ink); --bs-nav-link-hover-color: var(--cinnabar); gap: .25rem; }
-.dict-switch .nav-link { border-radius: 2rem; }
-
-.dict-toolbar .form-control { border-color: var(--field); background-color: #fff; color: var(--ink); }
+.dict-toolbar .form-control { border-color: var(--field); background-color: Canvas; color: var(--ink); }
 .dict-toolbar .form-control:focus { border-color: var(--cinnabar); box-shadow: 0 0 0 .2rem rgba(168, 54, 42, .15); }
-.dict-toolbar .btn-outline-secondary { --bs-btn-color: var(--ink); --bs-btn-border-color: var(--field); --bs-btn-hover-bg: #f1e8d2; --bs-btn-hover-color: var(--ink); --bs-btn-hover-border-color: #b9a982;
-	--bs-btn-active-bg: #eadfc4; --bs-btn-active-color: var(--ink); --bs-btn-active-border-color: #b9a982; --bs-btn-disabled-color: var(--muted); --bs-btn-disabled-border-color: var(--field); background-color: #fff; }
-.dict-toolbar .btn-primary, .dict-pane .btn-primary { --bs-btn-bg: var(--cinnabar); --bs-btn-border-color: var(--cinnabar); --bs-btn-hover-bg: #8c2c22; --bs-btn-hover-border-color: #8c2c22; --bs-btn-active-bg: #7a261d; --bs-btn-active-border-color: #7a261d; }
-.dict-pager-bottom .btn-outline-secondary { --bs-btn-color: var(--ink); --bs-btn-border-color: var(--field); --bs-btn-hover-bg: #f1e8d2; --bs-btn-hover-color: var(--ink); --bs-btn-hover-border-color: #b9a982; --bs-btn-border-radius: 2rem; padding-inline: 1.1rem; background-color: #fff; }
 
 .dict-contents h2 { color: var(--muted) !important; letter-spacing: .12em; }
-.dict-contents .list-group { --bs-list-group-border-color: var(--line); --bs-list-group-bg: rgba(255, 255, 255, .7); --bs-list-group-color: var(--ink);
-	--bs-list-group-action-hover-bg: #f6edd6; --bs-list-group-action-hover-color: var(--ink); --bs-list-group-active-bg: var(--cinnabar); --bs-list-group-active-border-color: var(--cinnabar); --bs-list-group-border-radius: .7rem; }
+.dict-contents .list-group { --bs-list-group-border-color: var(--line); --bs-list-group-bg: color-mix(in srgb, Canvas 70%, transparent); --bs-list-group-color: var(--ink);
+	--bs-list-group-action-hover-bg: color-mix(in srgb, var(--paper) 60%, Canvas); --bs-list-group-action-hover-color: var(--ink); --bs-list-group-active-bg: var(--cinnabar); --bs-list-group-active-border-color: var(--cinnabar); --bs-list-group-border-radius: .7rem; }
 .dict-contents .badge.text-bg-secondary { background-color: #8a7660 !important; }
 .dict-contents .active .badge.text-bg-secondary { background-color: rgba(255, 255, 255, .25) !important; }
-.dict-contents a { color: inherit; }
+/* links, but not in the link colour of a theme (the id beats its rule) */
+#app .dict-contents a { color: inherit; }
+#app .dict-contents a.list-group-item { color: var(--bs-list-group-color); }
+#app .dict-contents a.list-group-item.active { color: var(--bs-list-group-active-color); }
+#app .dict-contents .small a { color: var(--cinnabar); }
 .dict-contents dt { color: var(--cinnabar); }
-.dict-contents .small a { color: var(--cinnabar); }

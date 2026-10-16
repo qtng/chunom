@@ -79,34 +79,35 @@ export class DictionaryViewer {
 		const { config: c, root } = this;
 		const ui = this.ui = {};
 
-		const switcher = el('ul', { className: 'nav nav-pills dict-switch justify-content-center mb-2' },
-			...Object.values(DICTIONARIES).filter(d => !d.hidden).map(d => el('li', { className: 'nav-item' },
-				el('a', { className: `nav-link py-1 px-2${d.id == c.id ? ' active' : ''}`, href: `${d.id}.html`, textContent: d.short }))));
+		// the header of the pages of qatt.org (.hero): the dictionaries as buttons (the open one red), title and subtitle
+		const switcher = el('ul', { className: 'list-unstyled d-flex flex-wrap justify-content-center gap-2 mb-3 dict-switch' },
+			...Object.values(DICTIONARIES).filter(d => !d.hidden).map(d => el('li', {},
+				el('a', { className: `btn btn-sm btn-pill ${d.id == c.id ? 'btn-cinnabar' : 'btn-quiet'}`, href: `${d.id}.html`, ...(d.id == c.id ? { ariaCurrent: 'page' } : {}), textContent: d.short }))));
 
-		const header = el('header', { className: 'mb-2 text-center' }, switcher,
-			el('h1', { className: 'h5 mb-0', lang: c.titleLang || c.lang, textContent: c.title }),
-			el('p', { className: 'text-secondary small mb-0' },
+		const header = el('header', { className: 'hero pt-3 pt-md-4 pb-3' }, el('div', { className: 'container text-center' }, switcher,
+			el('h1', { className: 'mb-1', lang: c.titleLang || c.lang, textContent: c.title }),
+			el('p', { className: 'lead mx-auto mb-0' },
 				el('span', { lang: c.lang, textContent: c.subtitle }),
-				c.note ? el('span', { lang: c.noteLang || c.lang, textContent: ` · ${c.note}` }) : ''));
+				c.note ? el('span', { lang: c.noteLang || c.lang, textContent: ` · ${c.note}` }) : '')));
 
 		ui.search = el('input', {
 			type: 'search', className: 'form-control', placeholder: 'Search', autocomplete: 'off', enterKeyHint: 'search',
 			ariaLabel: 'Search headword', disabled: true
 		});
-		ui.telex = el('button', { type: 'button', className: 'btn btn-outline-secondary dict-telex', title: 'Type Vietnamese with Telex (aa → â, ow → ơ, s → sắc)' },
+		ui.telex = el('button', { type: 'button', className: 'btn btn-quiet dict-telex', title: 'Type Vietnamese with Telex (aa → â, ow → ơ, s → sắc)' },
 			ui.telexIcon = el('i', { className: 'bi me-1' }), 'Telex');
 		ui.searchForm = el('form', { className: 'input-group dict-search', role: 'search' }, ui.search, ui.telex,
-			el('button', { type: 'submit', className: 'btn btn-primary', ariaLabel: 'Go to headword' }, el('i', { className: 'bi bi-search' })));
+			el('button', { type: 'submit', className: 'btn btn-cinnabar', ariaLabel: 'Go to headword' }, el('i', { className: 'bi bi-search' })));
 
-		ui.prev = el('button', { type: 'button', className: 'btn btn-outline-secondary', title: 'Previous page (←)', ariaLabel: 'Previous page' }, el('i', { className: 'bi bi-chevron-left' }));
-		ui.next = el('button', { type: 'button', className: 'btn btn-outline-secondary', title: 'Next page (→)', ariaLabel: 'Next page' }, el('i', { className: 'bi bi-chevron-right' }));
+		ui.prev = el('button', { type: 'button', className: 'btn btn-quiet', title: 'Previous page (←)', ariaLabel: 'Previous page' }, el('i', { className: 'bi bi-chevron-left' }));
+		ui.next = el('button', { type: 'button', className: 'btn btn-quiet', title: 'Next page (→)', ariaLabel: 'Next page' }, el('i', { className: 'bi bi-chevron-right' }));
 		ui.number = el('input', { type: 'text', inputMode: 'numeric', pattern: '-?[0-9]*', className: 'form-control text-center', size: 5, ariaLabel: 'Page number', autocomplete: 'off' });
 		ui.pager = el('form', { className: 'input-group dict-pager' }, ui.prev, ui.number, ui.next);
 
-		ui.zoomOut = el('button', { type: 'button', className: 'btn btn-outline-secondary', title: 'Zoom out (−)', ariaLabel: 'Zoom out' }, el('i', { className: 'bi bi-zoom-out' }));
-		ui.zoomIn = el('button', { type: 'button', className: 'btn btn-outline-secondary', title: 'Zoom in (+)', ariaLabel: 'Zoom in' }, el('i', { className: 'bi bi-zoom-in' }));
-		ui.zoomLabel = el('span', { className: 'btn btn-outline-secondary disabled dict-zoom-label' });
-		ui.night = el('button', { type: 'button', className: 'btn btn-outline-secondary', title: 'Invert page colours (N)', ariaLabel: 'Invert page colours' }, el('i', { className: 'bi bi-moon-stars' }));
+		ui.zoomOut = el('button', { type: 'button', className: 'btn btn-quiet', title: 'Zoom out (−)', ariaLabel: 'Zoom out' }, el('i', { className: 'bi bi-zoom-out' }));
+		ui.zoomIn = el('button', { type: 'button', className: 'btn btn-quiet', title: 'Zoom in (+)', ariaLabel: 'Zoom in' }, el('i', { className: 'bi bi-zoom-in' }));
+		ui.zoomLabel = el('span', { className: 'btn btn-quiet disabled dict-zoom-label' });
+		ui.night = el('button', { type: 'button', className: 'btn btn-quiet', title: 'Invert page colours (N)', ariaLabel: 'Invert page colours' }, el('i', { className: 'bi bi-moon-stars' }));
 		ui.tools = el('div', { className: 'btn-group dict-tools' }, ui.zoomOut, ui.zoomLabel, ui.zoomIn, ui.night);
 
 		const toolbar = el('div', { className: 'dict-toolbar' },
@@ -123,8 +124,8 @@ export class DictionaryViewer {
 		if (c.stageColor) ui.stage.style.setProperty('--dict-stage-bg', c.stageColor); // a little darker than this dictionary's paper
 		ui.frame = el('div', { className: 'dict-frame' }, ui.stage, ui.spinner, ui.error); // does not scroll: the overlays stay centred on the visible part
 		ui.stageBottom = el('div', { className: 'dict-pager-bottom d-flex justify-content-between my-3' },
-			ui.prev2 = el('button', { type: 'button', className: 'btn btn-outline-secondary' }, el('i', { className: 'bi bi-chevron-left' }), ' Previous'),
-			ui.next2 = el('button', { type: 'button', className: 'btn btn-outline-secondary' }, 'Next ', el('i', { className: 'bi bi-chevron-right' })));
+			ui.prev2 = el('button', { type: 'button', className: 'btn btn-quiet btn-pill' }, el('i', { className: 'bi bi-chevron-left' }), ' Previous'),
+			ui.next2 = el('button', { type: 'button', className: 'btn btn-quiet btn-pill' }, 'Next ', el('i', { className: 'bi bi-chevron-right' })));
 
 		const tab = (name, icon, label) => {
 			const button = el('button', { type: 'button', className: 'nav-link', role: 'tab', id: `dict-tab-${name}`, ariaControls: `dict-pane-${name}` },
@@ -151,7 +152,7 @@ export class DictionaryViewer {
 		ui.hintPrev = swipeHint('prev', 'bi-chevron-left');
 		ui.hintNext = swipeHint('next', 'bi-chevron-right');
 
-		root.replaceChildren(el('div', { className: 'dict-wrap pt-3' }, header, ui.tabs,
+		root.replaceChildren(header, el('div', { className: 'dict-wrap pt-3' }, ui.tabs,
 			el('div', { className: 'dict-layout' }, ui.paneContents, ui.panePages)), ui.hintPrev, ui.hintNext);
 	}
 
