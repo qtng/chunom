@@ -212,11 +212,18 @@
                 const box = document.getElementById('account');
                 box.replaceChildren();
                 if (!this.signedIn()) return;
+                // the words are tags of their own with data-vi, so they follow the language
+                const label = document.createElement('span');
+                label.setAttribute('data-vi', 'Đã đăng nhập:');
+                label.textContent = 'Signed in as';
                 const out = document.createElement('a');
                 out.href = '#';
-                out.textContent = 'Sign out';
+                const outText = document.createElement('span');
+                outText.setAttribute('data-vi', 'Đăng xuất');
+                outText.textContent = 'Sign out';
+                out.append(outText);
                 out.addEventListener('click', async e => { e.preventDefault(); await this.sp.signOut(); location.reload(); });
-                box.append(`Signed in as ${this.sp.user.email || 'you'} · `, out);
+                box.append(label, ` ${this.sp.user.email || 'you'} · `, out);
             }
 
             signedIn() {
@@ -304,7 +311,7 @@
 
             // a public deck of somebody else: learning needs "Add to my decks" first
             async toggleSaved(add) {
-                if (!this.signedIn()) return QattLogin.open(this.sp, 'Sign in to add this deck to My decks.');
+                if (!this.signedIn()) return QattLogin.open(this.sp, (window.Lang ? Lang.t('Sign in to add this deck to My decks.', 'Đăng nhập để thêm bộ thẻ này vào "Bộ thẻ của tôi".') : 'Sign in to add this deck to My decks.'));
                 if (!add && !confirm(`Remove "${this.deck.title}" from My decks? Your progress is kept.`)) return;
                 const { error } = add ? await this.sp.saveDeckLink(this.deck) : await this.sp.removeSavedDeck(this.deck.id);
                 if (error) return alert('Could not change your decks, please try again.');
@@ -448,7 +455,7 @@
                 const anonymous = this.sp.isAnonymous, few = count < MIN_PUBLIC_ITEMS;
                 if (few && !was) pub.checked = false;
                 pub.disabled = !was && (anonymous || few);
-                document.getElementById('publicHint').textContent = anonymous && !was ? 'Sign in to publish a deck.'
+                document.getElementById('publicHint').textContent = anonymous && !was ? (window.Lang ? Lang.t('Sign in to publish a deck.', 'Đăng nhập để công khai bộ thẻ.') : 'Sign in to publish a deck.')
                     : few && !was ? `A deck needs at least ${MIN_PUBLIC_ITEMS} items to be published.`
                     : 'Everybody can find the deck, learn it and see your user name. You can take it back at any time.';
             }

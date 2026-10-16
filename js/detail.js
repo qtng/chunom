@@ -329,7 +329,7 @@ class ChunomDetail {
     this.sp ??= new SupabaseService();
     if (!this.sp.client) await this.sp.init();
     if (this.signedIn()) return true;
-    QattLogin.open(this.sp, 'Sign in to save characters to your decks.');
+    QattLogin.open(this.sp, (window.Lang ? Lang.t('Sign in to save characters to your decks.', 'Đăng nhập để lưu chữ vào bộ thẻ của bạn.') : 'Sign in to save characters to your decks.'));
     return false;
   }
 

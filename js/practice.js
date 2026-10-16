@@ -108,18 +108,21 @@ class App {
     return !!this.db.user && !this.db.isAnonymous;
   }
 
+  // the text in the language of the page (Lang of navigation.js), English where it is not loaded
+  static t(en, vi) { return window.Lang ? Lang.t(en, vi) : en; }
+
   updateAccountButton() {
     const button = document.getElementById("account-btn");
     if (!button) return;
     const signedIn = this.isSignedIn();
-    button.textContent = signedIn ? "Sign out" : "Sign in";
-    button.title = signedIn ? `Signed in as ${this.db.user.email || "you"}` : "Not signed in";
+    button.textContent = signedIn ? App.t("Sign out", "Đăng xuất") : App.t("Sign in", "Đăng nhập");
+    button.title = signedIn ? `${App.t("Signed in as", "Đã đăng nhập:")} ${this.db.user.email || App.t("you", "bạn")}` : App.t("Not signed in", "Chưa đăng nhập");
   }
 
   async onAccount() {
     if (!window.QattLogin) return;
-    if (!this.isSignedIn()) return QattLogin.open(this.db, "Sign in to keep your score and your decks on every device. What you have so far stays with your account.");
-    if (confirm(`Signed in as ${this.db.user.email || "you"}.\nSign out?`)) {
+    if (!this.isSignedIn()) return QattLogin.open(this.db, App.t("Sign in to keep your score and your decks on every device. What you have so far stays with your account.", "Đăng nhập để giữ điểm và bộ thẻ của bạn trên mọi thiết bị. Những gì bạn đã có sẽ được giữ trong tài khoản của bạn."));
+    if (confirm(`${App.t("Signed in as", "Đã đăng nhập:")} ${this.db.user.email || App.t("you", "bạn")}.\n${App.t("Sign out?", "Đăng xuất?")}`)) {
       await this.db.signOut();
       location.reload();
     }
@@ -163,8 +166,8 @@ class App {
       <div class="container qatt-container" style="max-width: 32rem">
         <div class="card p-4 text-center mt-4">
           <h4 class="fw-bold mb-3">Practice</h4>
-          <p class="mb-4">Sign in to practice. Your score goes to the leaderboard and stays with your account.</p>
-          <button id="practice-login" class="btn btn-info btn-lg fw-bold">Sign in</button>
+          <p class="mb-4" data-vi="Đăng nhập để luyện tập. Điểm của bạn được đưa lên bảng xếp hạng và giữ trong tài khoản của bạn.">Sign in to practice. Your score goes to the leaderboard and stays with your account.</p>
+          <button id="practice-login" class="btn btn-info btn-lg fw-bold" data-vi="Đăng nhập">Sign in</button>
           <p id="practice-login-note" class="small text-secondary mt-3 mb-0" hidden></p>
         </div>
       </div>`;
@@ -181,7 +184,7 @@ class App {
       note.hidden = false;
       return;
     }
-    button.addEventListener("click", () => QattLogin.open(db, "Sign in to practice. What you have so far stays with your account."));
+    button.addEventListener("click", () => QattLogin.open(db, App.t("Sign in to practice. What you have so far stays with your account.", "Đăng nhập để luyện tập. Những gì bạn đã có sẽ được giữ trong tài khoản của bạn.")));
     // the link of an email opened in another tab signs in here as well
     db.client.auth.onAuthStateChange((event, session) => {
       if (session && session.user && session.user.is_anonymous === false) location.reload();
@@ -969,7 +972,7 @@ renderLeaderboard(isPop = false) {
     		</tr>
     		${html}
     	</table>`;
-    if (window.QattLogin) QattLogin.status(this.db, document.getElementById('practice-account'), 'to keep your progress on every device');
+    if (window.QattLogin) QattLogin.status(this.db, document.getElementById('practice-account'), { en: 'to keep your progress on every device', vi: 'để lưu tiến trình học của bạn trên mọi thiết bị' });
   });
 }
 
