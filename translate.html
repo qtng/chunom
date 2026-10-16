@@ -88,6 +88,17 @@
     td.chars-cell .nom-char { font-size: 32px; line-height: 1; }
     .alts .alt-chars .nom-char { font-size: 24px; line-height: 1; }
     .alts .alt img { opacity: .8; }
+    /* a word with other options: a click on it opens the list to choose from (#pick) */
+    .nom .unit.has-alts { cursor: pointer; }
+    #pick { position: absolute; z-index: 1055; background: #fff; border: 1px solid #cdbf9f; border-radius: .5rem; box-shadow: 0 .4rem 1rem rgba(0, 0, 0, .15); padding: .35rem; min-width: 12rem; max-width: min(22rem, calc(100vw - 16px)); max-height: 60vh; overflow: auto; }
+    #pick .pick-title { font-size: .75rem; color: var(--muted); padding: .1rem .4rem .3rem; }
+    #pick .pick-item { display: flex; align-items: center; gap: .6rem; width: 100%; text-align: left; background: none; border: 0; border-radius: .35rem; padding: .15rem .4rem; color: inherit; }
+    #pick .pick-item:hover:not(:disabled) { background: #dff1f8; }
+    #pick .pick-item:disabled { background: #f3ede0; }
+    #pick .pc { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 1.7rem; line-height: 1.25; flex-shrink: 0; }
+    #pick .pm { font-size: .8rem; color: var(--muted); }
+    #pick .pick-more { border-top: 1px solid var(--line); margin-top: .25rem; padding-top: .25rem; }
+    #pick .pick-more .pick-item { font-size: .8rem; color: var(--muted); }
     .account { font-size: .85rem; color: var(--muted); margin-top: 1.2rem; text-align: center; }
   </style>
 </head>
@@ -282,6 +293,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   const rate = w => {
     if (w.chosen === '?') return { state: 'uncertain', why: t('no character found', 'không tìm được chữ') };
+    if (w.manual) return { state: 'sure', why: t('chosen by you', 'do bạn chọn') };   // picked in the list of #pick
     if (!w.own) return { state: 'sure', why: w.options.length > 1 ? t(`chosen from ${Math.min(w.options.length, MAX_SENT)} options`, `chọn trong ${Math.min(w.options.length, MAX_SENT)} lựa chọn`) : t('the only option', 'lựa chọn duy nhất') };
     const v = verify(w.qn, w.chosen);
     if (v.ok === false) return { state: 'uncertain', why: t('the dictionaries read it as “', 'từ điển đọc là “') + v.read + '”' };
@@ -299,8 +311,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   const shown = w => (w.chosen === '?' ? `[${w.qn}]` : w.chosen);
 
-  let lastNom = '';
+  let lastNom = '', current = null;   // current: {r, full} of the result on the page, shown again after a choice
   const show = (r, full) => {
+    current = { r, full }; closePick();
     const byId = new Map(r.words.map(w => [w.id, w]));
     for (const w of r.words) { w.options = (full.get(w.at + '+' + w.len) || []).map(o => ({ char: o.c, meaning: o.m })); Object.assign(w, rate(w)); }
     lastNom = r.parts.map(p => (p.word ? shown(byId.get(p.word)) : p.text)).join('');
@@ -309,8 +322,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!p.word) { box.append(p.text); continue; }
       const w = byId.get(p.word), st = STATES[w.state];
       const span = document.createElement('span');
-      span.className = 'unit ' + st.cls;
-      span.title = `${w.qn} · ${st.label()}`;
+      const canPick = w.options.some(o => o.char !== w.chosen);
+      span.className = 'unit ' + st.cls + (canPick ? ' has-alts' : '');
+      span.dataset.w = w.id;
+      span.title = `${w.qn} · ${st.label()}` + (canPick ? ' · ' + t('click to choose another character', 'bấm để chọn chữ khác') : '');
       span.append(...wordNodes(w));
       box.append(span);
     }
@@ -340,10 +355,44 @@ document.addEventListener('DOMContentLoaded', async () => {
     $('result').hidden = false;
   };
 
-  // a click on a character opens its popup (js/detail.js), but not while text is selected
+  // the list to choose another character for a word from (its other options; the model's next best ones first)
+  const pick = document.createElement('div');
+  pick.id = 'pick'; pick.hidden = true; document.body.append(pick);
+  const mk = (tag, cls, ...kids) => { const n = document.createElement(tag); if (cls) n.className = cls; n.append(...kids); return n; };
+  function closePick() { pick.hidden = true; delete pick.dataset.w; }
+  const choose = (w, c) => {   // the character becomes the choice, the one it replaces stays as an alternative
+    const prev = w.chosen;
+    w.alt = [prev, ...(w.alt || []).filter(x => x !== c && x !== prev)].filter(x => x !== '?').slice(0, 2);
+    w.chosen = c; w.own = false; w.manual = true;
+    show(current.r, current.full);
+  };
+  const openPick = (w, unit) => {
+    const rank = c => { const i = (w.alt || []).indexOf(c); return i < 0 ? 99 : i; };
+    const others = w.options.filter(o => o.char !== w.chosen).sort((a, b) => rank(a.char) - rank(b.char));
+    const item = (o, cur) => { const b = mk('button', 'pick-item', mk('span', 'pc', o.char), mk('span', 'pm', (cur ? '✓ ' : '') + (o.meaning || ''))); b.type = 'button'; b.disabled = cur; if (!cur) b.addEventListener('click', () => choose(w, o.char)); return b; };
+    const mine = w.options.find(o => o.char === w.chosen);
+    pick.replaceChildren(mk('div', 'pick-title', t('Choose another character', 'Chọn chữ khác') + ' · ' + w.qn),
+      ...(w.chosen !== '?' ? [item(mine || { char: w.chosen, meaning: '' }, true)] : []), ...others.map(o => item(o, false)),
+      ...(w.chosen !== '?' && typeof ChunomDetail !== 'undefined' ? [mk('div', 'pick-more', (() => { const b = mk('button', 'pick-item', t('Details of ', 'Chi tiết của ') + w.chosen); b.type = 'button'; b.addEventListener('click', () => { closePick(); ChunomDetail.get().open([...w.chosen][0]).catch(err => console.error('Popup failed', err)); }); return b; })())] : []));
+    pick.dataset.w = w.id; pick.hidden = false;
+    const r = unit.getBoundingClientRect();
+    pick.style.top = (r.bottom + window.scrollY + 4) + 'px';
+    pick.style.left = Math.max(8, Math.min(r.left + window.scrollX, window.scrollX + document.documentElement.clientWidth - pick.offsetWidth - 8)) + 'px';
+  };
+  document.addEventListener('click', e => { if (!pick.hidden && !pick.contains(e.target) && !e.target.closest('#nom .unit')) closePick(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePick(); });
+  window.addEventListener('resize', closePick);
+
+  // a click on a word with other options opens the list to choose from; else (and in the table) on a character its popup (js/detail.js); not while text is selected
   $('result').addEventListener('click', e => {
+    if (String(window.getSelection()).length) return;
+    const unit = e.target.closest('#nom .unit');
+    if (unit && current) {
+      const w = current.r.words.find(x => x.id === Number(unit.dataset.w));
+      if (w && w.options.some(o => o.char !== w.chosen)) { if (pick.dataset.w === String(w.id) && !pick.hidden) closePick(); else openPick(w, unit); return; }
+    }
     const c = e.target.closest('.nom-char, .ch');
-    if (!c || String(window.getSelection()).length || typeof ChunomDetail === 'undefined') return;
+    if (!c || typeof ChunomDetail === 'undefined') return;
     ChunomDetail.get().open(c.dataset.char).catch(err => console.error('Popup failed', err));
   });
   // copying selected text of the result: only the characters, without the Quốc Ngữ of the ruby text
