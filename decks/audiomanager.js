@@ -23,6 +23,17 @@ class AudioManager {
         
         this.el.crossOrigin = "anonymous";
 
+        // Crossfade: config.crossfadeAfter (seconds of playing time after which the next song is faded in; 0 = off)
+        // and config.crossfadeDuration (seconds the fade lasts). A song that ends sooner is faded out at its end.
+        this.crossfadeAfter = parseFloat(config.crossfadeAfter) || 0;
+        this.crossfadeDuration = parseFloat(config.crossfadeDuration) || 4;
+        this.fading = false;
+        this._fadeTimer = null;
+        this.el1 = audioEl;
+        this.el2 = new Audio();
+        this.el2.crossOrigin = "anonymous";
+        this.el2.preload = "auto";
+
         const parseVolume = (v) => {
             const num = parseFloat(v);
             return isFinite(num) ? num : 0.5;
@@ -65,7 +76,18 @@ class AudioManager {
         this.masterCompressor = null; 
         this.sourceAttached = false; 
         
-        this.el.onended = () => this.nextTrack();
+        this._bindElement(this.el1);
+        this._bindElement(this.el2);
+    }
+
+    _bindElement(el) {
+        // only the song that is playing counts; the one fading out is stopped by the fade itself
+        el.onended = () => { if (el === this.el && !this.fading) this.nextTrack(); };
+        el.ontimeupdate = () => {
+            if (el !== this.el || this.fading || !this.state.isMusicOn || !this.crossfadeAfter || !this.gains) return;
+            const left = isFinite(el.duration) ? el.duration - el.currentTime : Infinity;
+            if (el.currentTime >= this.crossfadeAfter || left <= this.crossfadeDuration) this._crossfadeToNext();
+        };
     }
 
     on(evt, fn) { this.events.on(evt, fn); }
@@ -78,8 +100,15 @@ class AudioManager {
             this.masterCompressor.connect(this.ctx.destination);
 
             if (!this.sourceAttached) {
-                const source = this.ctx.createMediaElementSource(this.el);
-                source.connect(this.masterCompressor);
+                // each element gets its own gain, so that one can fade out while the other fades in
+                this.gains = new Map();
+                for (const el of [this.el1, this.el2]) {
+                    const gain = this.ctx.createGain();
+                    gain.gain.value = (el === this.el1) ? 1 : 0;
+                    this.ctx.createMediaElementSource(el).connect(gain);
+                    gain.connect(this.masterCompressor);
+                    this.gains.set(el, gain);
+                }
                 this.sourceAttached = true;
             }
         }
@@ -183,7 +212,13 @@ class AudioManager {
     toggleMusic() {
         if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
         this.state.isMusicOn = !this.state.isMusicOn;
-        this.state.isMusicOn ? this.el.play().catch(() => {}) : this.el.pause();
+        if (this.state.isMusicOn) {
+            this.el.play().catch(() => {});
+            if (this.fading) this.el2.play().catch(() => {}); // the one fading out; the fade timer ends it
+        } else {
+            this.el.pause();
+            this.el2.pause();
+        }
         this._notify();
     }
 
@@ -259,10 +294,59 @@ class AudioManager {
         }
     }
 
+    _trackUrl(idx) {
+        return `../../chunom-assets/audio/SoundHelix-Song-${this.config.playlist[idx]}.mp3`;
+    }
+
+    // Fade the next song in while the current one fades out (equal power).
+    _crossfadeToNext() {
+        if (this.fading) return;
+        this.fading = true;
+        const out = this.el, inn = (out === this.el1) ? this.el2 : this.el1;
+        const gOut = this.gains.get(out), gIn = this.gains.get(inn);
+        this.state.currentTrackIdx = (this.state.currentTrackIdx + 1) % this.config.playlist.length;
+        inn.pause();
+        inn.src = this._trackUrl(this.state.currentTrackIdx);
+        inn.currentTime = 0;
+        const start = () => {
+            inn.onerror = null;
+            const t = this.ctx.currentTime, d = this.crossfadeDuration, n = 64;
+            const up = new Float32Array(n), down = new Float32Array(n);
+            for (let i = 0; i < n; i++) {
+                const x = i / (n - 1);
+                up[i] = Math.sin(x * Math.PI / 2);
+                down[i] = Math.cos(x * Math.PI / 2);
+            }
+            for (const [g, curve] of [[gIn, up], [gOut, down]]) {
+                g.gain.cancelScheduledValues(t);
+                g.gain.setValueAtTime(curve[0], t);
+                g.gain.setValueCurveAtTime(curve, t, d);
+            }
+            this.el = inn;   // the new song is the current one from now on
+            inn.play().catch(() => {});
+            this._notify();
+            this._fadeTimer = setTimeout(() => {
+                out.pause();
+                this._fadeTimer = null;
+                this.fading = false;
+            }, d * 1000 + 50);
+        };
+        inn.oncanplay = () => { inn.oncanplay = null; start(); };
+        inn.onerror = () => { inn.onerror = null; this.fading = false; this.nextTrack(); }; // could not load: plain switch
+        inn.load();
+    }
+
     _loadTrack() {
-        const trackId = this.config.playlist[this.state.currentTrackIdx];
+        // a plain switch ends a fade that is running
+        if (this._fadeTimer) { clearTimeout(this._fadeTimer); this._fadeTimer = null; }
+        this.fading = false;
+        for (const el of [this.el1, this.el2]) if (el !== this.el) el.pause();
+        if (this.gains) {
+            const t = this.ctx.currentTime;
+            for (const [el, g] of this.gains) { g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(el === this.el ? 1 : 0, t); }
+        }
         this.el.pause();
-        this.el.src = `../../chunom-assets/audio/SoundHelix-Song-${trackId}.mp3`;
+        this.el.src = this._trackUrl(this.state.currentTrackIdx);
         this.el.load();
         if (this.state.isMusicOn) {
             this.el.oncanplay = () => {
