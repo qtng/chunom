@@ -97,6 +97,10 @@
     #pick .pick-item:disabled { background: #f3ede0; }
     #pick .pc { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 1.7rem; line-height: 1.25; flex-shrink: 0; }
     #pick .pm { font-size: .8rem; color: var(--muted); }
+    #pick .pick-hint { font-size: .8rem; color: var(--muted); padding: 0 .4rem .3rem; }
+    #pick .pick-type { display: flex; gap: .4rem; align-items: center; padding: .15rem .4rem .3rem; }
+    #pick .pick-type input { min-width: 0; font-size: 1.4rem; }
+    #pick .pick-msg { font-size: .8rem; color: #842029; padding: 0 .4rem .3rem; }
     #pick .pick-more { border-top: 1px solid var(--line); margin-top: .25rem; padding-top: .25rem; }
     #pick .pick-more .pick-item { font-size: .8rem; color: var(--muted); }
     .account { font-size: .85rem; color: var(--muted); margin-top: 1.2rem; text-align: center; }
@@ -290,9 +294,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     sure: { cls: 'sure', icon: 'bi-check-circle-fill', label: () => t('from the list', 'từ danh sách') },
     own: { cls: 'differs', icon: 'bi-question-circle-fill', label: () => t("model's own", 'mô hình tự chọn') },
     uncertain: { cls: 'uncertain', icon: 'bi-exclamation-triangle-fill', label: () => t('uncertain', 'chưa chắc') },
+    typed: { cls: 'differs', icon: 'bi-pencil-fill', label: () => t('typed by you', 'do bạn nhập') },
   };
   const rate = w => {
     if (w.chosen === '?') return { state: 'uncertain', why: t('no character found', 'không tìm được chữ') };
+    if (w.typed) {   // typed in the dialog of #pick: the reading is checked like the one of the model's own character
+      const v = verify(w.qn, w.chosen);
+      if (v.ok === false) return { state: 'uncertain', why: t('typed by you; the dictionaries read it as “', 'do bạn nhập; từ điển đọc là “') + v.read + '”' };
+      return { state: 'typed', why: v.ok ? t('reading found in the dictionaries', 'cách đọc có trong từ điển') : t('reading not confirmed', 'chưa xác nhận cách đọc') };
+    }
     if (w.manual) return { state: 'sure', why: t('chosen by you', 'do bạn chọn') };   // picked in the list of #pick
     if (!w.own) return { state: 'sure', why: w.options.length > 1 ? t(`chosen from ${Math.min(w.options.length, MAX_SENT)} options`, `chọn trong ${Math.min(w.options.length, MAX_SENT)} lựa chọn`) : t('the only option', 'lựa chọn duy nhất') };
     const v = verify(w.qn, w.chosen);
@@ -322,7 +332,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!p.word) { box.append(p.text); continue; }
       const w = byId.get(p.word), st = STATES[w.state];
       const span = document.createElement('span');
-      const canPick = w.options.some(o => o.char !== w.chosen);
+      const canPick = w.options.some(o => o.char !== w.chosen) || (!!window.VietIme && (w.chosen === '?' || w.state !== 'sure'));   // other options, or a word without a sure character: type one
       span.className = 'unit ' + st.cls + (canPick ? ' has-alts' : '');
       span.dataset.w = w.id;
       span.title = `${w.qn} · ${st.label()}` + (canPick ? ' · ' + t('click to choose another character', 'bấm để chọn chữ khác') : '');
@@ -360,28 +370,63 @@ document.addEventListener('DOMContentLoaded', async () => {
   pick.id = 'pick'; pick.hidden = true; document.body.append(pick);
   const mk = (tag, cls, ...kids) => { const n = document.createElement(tag); if (cls) n.className = cls; n.append(...kids); return n; };
   function closePick() { pick.hidden = true; delete pick.dataset.w; }
-  const choose = (w, c) => {   // the character becomes the choice, the one it replaces stays as an alternative
-    const prev = w.chosen;
+  const choose = (w, c) => {   // the character becomes the choice, the one it replaces stays as an alternative (if it is an option)
+    const prev = w.chosen, fromList = w.options.some(o => o.char === c);
     w.alt = [prev, ...(w.alt || []).filter(x => x !== c && x !== prev)].filter(x => x !== '?').slice(0, 2);
-    w.chosen = c; w.own = false; w.manual = true;
+    w.chosen = c; w.own = !fromList; w.manual = fromList; w.typed = !fromList;
     show(current.r, current.full);
+  };
+  // the field to type a character: Telex and the candidates of js/ime.js (one field for the whole page, moved into the list when it opens)
+  const typeInput = document.createElement('input');
+  typeInput.type = 'text'; typeInput.className = 'form-control form-control-sm'; typeInput.lang = 'vi';
+  typeInput.setAttribute('aria-label', t('Quốc Ngữ, then choose the character', 'Gõ Quốc Ngữ rồi chọn chữ'));
+  let imeWasOpen = false;   // was the candidate list open when the key was pressed (Esc and Enter then belong to it)
+  typeInput.addEventListener('keydown', () => { imeWasOpen = !!ime && !ime.list.hidden; });
+  let ime = null;   // made when it is first needed: js/ime.js is loaded by js/detail.js, not at the start of the page
+  const typeRow = w => {
+    if (!ime) ime = new VietIme(typeInput, { candidates: true, defer: true, returnSelect: true });
+    const msg = mk('div', 'pick-msg'); msg.hidden = true;
+    const use = mk('button', 'btn btn-sm btn-go', t('Use', 'Dùng')); use.type = 'button';
+    const apply = () => {
+      const text = [...typeInput.value].filter(c => /\p{Script=Han}/u.test(c)).join('');
+      if (!text || [...text].length > 16) { msg.textContent = t('Type the reading, then choose a character from the list.', 'Gõ cách đọc rồi chọn một chữ trong danh sách.'); msg.hidden = false; return; }
+      choose(w, text);
+    };
+    use.addEventListener('click', apply);
+    typeInput.onkeydown = e => { if (e.key === 'Enter' && !e.defaultPrevented && !imeWasOpen && !e.isComposing) { e.preventDefault(); apply(); } };
+    typeInput.value = w.qn;
+    setTimeout(() => { pick.scrollIntoView({ block: 'center' }); typeInput.focus(); typeInput.setSelectionRange(typeInput.value.length, typeInput.value.length); ime.load(); }, 0);
+    return [mk('div', 'pick-type', typeInput, use), msg];
   };
   const openPick = (w, unit) => {
     const rank = c => { const i = (w.alt || []).indexOf(c); return i < 0 ? 99 : i; };
     const others = w.options.filter(o => o.char !== w.chosen).sort((a, b) => rank(a.char) - rank(b.char));
     const item = (o, cur) => { const b = mk('button', 'pick-item', mk('span', 'pc', o.char), mk('span', 'pm', (cur ? '✓ ' : '') + (o.meaning || ''))); b.type = 'button'; b.disabled = cur; if (!cur) b.addEventListener('click', () => choose(w, o.char)); return b; };
-    const mine = w.options.find(o => o.char === w.chosen);
-    pick.replaceChildren(mk('div', 'pick-title', t('Choose another character', 'Chọn chữ khác') + ' · ' + w.qn),
-      ...(w.chosen !== '?' ? [item(mine || { char: w.chosen, meaning: '' }, true)] : []), ...others.map(o => item(o, false)),
-      ...(w.chosen !== '?' && typeof ChunomDetail !== 'undefined' ? [mk('div', 'pick-more', (() => { const b = mk('button', 'pick-item', t('Details of ', 'Chi tiết của ') + w.chosen); b.type = 'button'; b.addEventListener('click', () => { closePick(); ChunomDetail.get().open([...w.chosen][0]).catch(err => console.error('Popup failed', err)); }); return b; })())] : []));
+    const none = w.chosen === '?', mine = w.options.find(o => o.char === w.chosen);
+    const kids = [mk('div', 'pick-title', (none ? t('No character found', 'Không tìm được chữ') : t('Choose another character', 'Chọn chữ khác')) + ' · ' + w.qn)];
+    if (none && window.VietIme) { kids.push(mk('div', 'pick-hint', t('Type it yourself:', 'Tự gõ:')), ...typeRow(w)); if (others.length) kids.push(mk('div', 'pick-title', t('Or choose from the list', 'Hoặc chọn trong danh sách'))); }
+    if (!none) kids.push(item(mine || { char: w.chosen, meaning: w.typed ? t('typed by you', 'do bạn nhập') : '' }, true));
+    kids.push(...others.map(o => item(o, false)));
+    if (!none && window.VietIme) {   // below the list: type a character yourself
+      const row = mk('div', 'pick-more'), b = mk('button', 'pick-item', '✎ ' + t('Type another character…', 'Nhập chữ khác…')); b.type = 'button';
+      b.addEventListener('click', () => { row.replaceChildren(...typeRow(w)); });
+      row.append(b); kids.push(row);
+    }
+    if (!none && typeof ChunomDetail !== 'undefined') {
+      const b = mk('button', 'pick-item', t('Details of ', 'Chi tiết của ') + w.chosen); b.type = 'button';
+      b.addEventListener('click', () => { closePick(); ChunomDetail.get().open([...w.chosen][0]).catch(err => console.error('Popup failed', err)); });
+      kids.push(mk('div', 'pick-more', b));
+    }
+    pick.replaceChildren(...kids);
     pick.dataset.w = w.id; pick.hidden = false;
     const r = unit.getBoundingClientRect();
     pick.style.top = (r.bottom + window.scrollY + 4) + 'px';
     pick.style.left = Math.max(8, Math.min(r.left + window.scrollX, window.scrollX + document.documentElement.clientWidth - pick.offsetWidth - 8)) + 'px';
   };
-  document.addEventListener('click', e => { if (!pick.hidden && !pick.contains(e.target) && !e.target.closest('#nom .unit')) closePick(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePick(); });
-  window.addEventListener('resize', closePick);
+  document.addEventListener('click', e => { if (!pick.hidden && e.target.isConnected && !pick.contains(e.target) && !e.target.closest('#nom .unit, .vietime')) closePick(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { if (imeWasOpen && e.target === typeInput) imeWasOpen = false; else closePick(); } });   // the first Esc in the field closes its candidate list only
+  let pickWidth = window.innerWidth;
+  window.addEventListener('resize', () => { if (window.innerWidth !== pickWidth) { pickWidth = window.innerWidth; closePick(); } });   // not for the keyboard of a phone (the height changes)
 
   // a click on a word with other options opens the list to choose from; else (and in the table) on a character its popup (js/detail.js); not while text is selected
   $('result').addEventListener('click', e => {
