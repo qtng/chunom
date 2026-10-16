@@ -14,26 +14,27 @@
     <script src="https://qatt.org/js/navigation.js"></script>
 
     <style>
-        :root { --ink: #2b2118; --accent: #a8362a; --paper: #f7efdc; --line: #e4d9c0; }
+        :root { --ink: #2b2118; --accent: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
 
-        body {
-            background: linear-gradient(180deg, var(--paper) 0, #fffdf8 16rem) no-repeat, #fffdf8;
+        body { margin: 0; background: var(--paper); color: var(--ink); font-family: system-ui, -apple-system, sans-serif; }
+
+        /* the header of the pages of qatt.org and the Chunom site (.hero): the look of the theme "classic"; other themes override it */
+        .hero {
+            background:
+                radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%),
+                linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%);
+            border-bottom: 1px solid #e8dcc0;
             color: var(--ink);
-            font-family: system-ui, -apple-system, sans-serif;
-            min-height: 100vh;
         }
+        .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: .01em; }
+        .hero .han { color: var(--accent); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; }
+        .hero .han { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }   /* Nôm characters outside the usual fonts */
+        .hero .lead { max-width: 38rem; color: #4a3d30; }
+        @media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
 
-        .writer-head h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(1.7rem, 6vw, 2.4rem); }
-        .writer-head p { color: #5b4d3d; max-width: 36rem; margin-inline: auto; }
-
-        /* the writing card */
-        .writer {
-            background: #fff;
-            border: 1px solid var(--line);
-            border-radius: 1rem;
-            box-shadow: 0 .5rem 1.5rem rgba(60, 40, 20, .08);
-            overflow: hidden;
-        }
+        /* the writing card (.card-box: the panel of the theme), the parts inside go to its edges */
+        .card-box { background: #fff; border: 1px solid var(--line); border-radius: 1rem; box-shadow: 0 .5rem 1.5rem rgba(60, 40, 20, .08); }
+        .writer { padding: 0; overflow: hidden; }
         .writer-pad { padding: .25rem; }
         #typer-text {
             display: block;
@@ -54,11 +55,9 @@
             gap: .5rem;
             padding: .4rem .6rem;
             border-top: 1px solid var(--line);
-            background: #fcf8ee;
+            background: color-mix(in srgb, currentColor 3%, transparent);   /* a tint of the text colour: light on a light theme, dark on a dark one */
         }
-        .writer-bar .btn { border-radius: 2rem; font-size: .85rem; padding: .25rem .8rem; }
-        .btn-quiet { border-color: #cdbf9f; color: #5b4d3d; background: #fff; }
-        .btn-quiet:hover { background: #f1e8d2; color: var(--ink); border-color: #b9a982; }
+        .writer-bar .btn { font-size: .85rem; padding: .25rem .8rem; }
 
         /* QATT: toolbar above the field, QATT fonts, reading of the cells */
         .qatt-bar { display: flex; flex-wrap: nowrap; justify-content: center; align-items: center; gap: .4rem 1.2rem; padding: .5rem .6rem 0; font-size: .78rem; }
@@ -67,8 +66,8 @@
         .qatt-bar select { font-size: .78rem; padding-top: .1rem; padding-bottom: .1rem; min-width: 0; }
         .qatt-bar label { display: flex; align-items: center; gap: .3rem; white-space: nowrap; margin: 0; flex: 1 1 8rem; max-width: 15rem; min-width: 5rem; }
         .qatt-bar input[type=range] { flex: 1 1 auto; width: 0; min-width: 2.5rem; accent-color: var(--accent); }
-        #size-label { min-width: 2.6em; color: #7b6c58; }
-        #pending { display: none; height: 1.2rem; align-items: center; gap: .8rem; padding: 0 .9rem; font-size: .85rem; color: #7b6c58; }
+        #size-label { min-width: 2.6em; color: var(--muted); }
+        #pending { display: none; height: 1.2rem; align-items: center; gap: .8rem; padding: 0 .9rem; font-size: .85rem; color: var(--muted); }
         .qatt-on #pending { display: flex; }
         #pending .glyph { font-family: var(--qfont), sans-serif; font-size: 1.8rem; line-height: 1; color: var(--ink); }
         #pending .word { font-style: italic; }
@@ -80,12 +79,12 @@
         .opts .form-check { margin: 0; }
         .writer-bar { flex-direction: column; gap: .6rem; }
         @media (min-width: 768px) { .writer-bar { flex-direction: row; justify-content: space-between; } }
-        .status { padding: 0 .9rem .7rem; text-align: center; font-size: .9rem; color: #5b4d3d; }
+        .status { padding: 0 .9rem .7rem; text-align: center; font-size: .9rem; color: var(--muted); }
         .status b { color: var(--ink); font-weight: 600; }
         .opts .form-check-input:checked { background-color: var(--accent); border-color: var(--accent); }
 
         /* info box under the writing card */
-        .info { margin-top: 1rem; padding: .8rem 1rem; border: 1px solid var(--line); border-radius: .8rem; background: rgba(255, 255, 255, .7); color: #5b4d3d; font-size: .92rem; }
+        .info { margin-top: 1rem; padding: .8rem 1rem; border: 1px solid var(--line); border-radius: .8rem; background: color-mix(in srgb, currentColor 4%, transparent); color: var(--muted); font-size: .92rem; }
         .info b { color: var(--ink); font-weight: 600; }
         .info .ex { font-size: 1.15rem; white-space: nowrap; }
         .info ol { margin: 0; padding-left: 1.2rem; }
@@ -103,8 +102,8 @@
 
         /* phones: compact top so the list under the field stays above the keyboard */
         @media (max-width: 575.98px) {
-            .writer-head { margin-block: .5rem !important; }
-            .writer-head p { display: none; }
+            .hero { padding-top: 1.2rem !important; padding-bottom: .8rem !important; margin-bottom: .8rem !important; }
+            .hero .lead, .hero .btn { display: none; }
             #typer-text { min-height: 7.4rem; }
         }
         @media (min-width: 576px) {
@@ -114,14 +113,19 @@
 </head>
 <body>
 
-<div class="container py-3 pb-5" style="max-width: 62rem">
+<header class="hero pt-5 pb-4 mb-4">
+    <div class="container text-center">
+        <div class="han mb-2">𡨸喃</div>
+        <h1 class="mb-3" data-vi="Gõ chữ Nôm">Chữ Nôm writer</h1>
+        <p class="lead mx-auto mb-4">Type Vietnamese with Telex, then pick the Nôm character that fits.</p>
+        <a class="btn btn-cinnabar btn-pill" href="/chunom/translate.html" data-vi="Bộ chuyển đổi">Nôm converter</a>
+        <a class="btn btn-cinnabar btn-pill" href="/chunom/index.html" data-vi="Tra cứu chữ">Character search</a>
+    </div>
+</header>
 
-    <header class="writer-head text-center my-3">
-        <h1 class="mb-1" data-vi="Gõ chữ Nôm">Chữ Nôm writer</h1>
-        <p class="mb-0">Type Vietnamese with Telex, then pick the Nôm character that fits.</p>
-    </header>
+<div class="container pb-5" style="max-width: 62rem">
 
-    <div class="writer">
+    <div class="card-box writer">
         <div class="qatt-bar">
             <div class="group">
                 <select id="decoding" class="form-select form-select-sm w-auto" aria-label="Reading of the rhyme table" title="Reading of the rhyme table"></select>

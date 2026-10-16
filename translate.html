@@ -15,13 +15,22 @@
   <script defer src="https://qatt.org/js/login.js"></script>
   <script defer src="/chunom/js/detail.js"></script>
   <style>
-    :root { --ink: #2b2118; --accent: #a8362a; --line: #e4d9c0; --muted: #7b6c58; }
-    body { color: var(--ink); background: linear-gradient(180deg, #f7efdc 0, #fffdf8 18rem) no-repeat, #fffdf8; min-height: 100vh; }
-    main { max-width: 44rem; margin: 0 auto; padding: 1.2rem 1rem 2rem; }
-    .page-head { text-align: center; padding: .4rem 0 0; margin-bottom: 1rem; }
-    .page-head .han { color: var(--accent); font-size: 1.3rem; }
-    .page-head h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(1.9rem, 6vw, 2.6rem); margin: .1rem 0 .2rem; }
-    .page-head p { color: var(--muted); margin: 0 auto; max-width: 40rem; }
+    :root { --ink: #2b2118; --accent: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
+    body { margin: 0; background: var(--paper); color: var(--ink); }
+    /* the header of the pages of qatt.org and the Chunom site (.hero): the look of the theme "classic"; other themes override it */
+    .hero {
+      background:
+        radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%),
+        linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%);
+      border-bottom: 1px solid #e8dcc0;
+      color: var(--ink);
+    }
+    .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: .01em; }
+    .hero .han { color: var(--accent); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; }
+    .hero .han { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }   /* Nôm characters outside the usual fonts */
+    .hero .lead { max-width: 38rem; color: #4a3d30; }
+    @media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
+    main { max-width: 44rem; margin: 0 auto; padding: 0 1rem 2rem; }
     /* loading animation (the answer can take up to a minute): the four characters of "Quốc ngữ chữ Nôm" (國語𡨸喃) light up in a wave, a bar creeps forward and never stops
        at the end, the message changes every few seconds and says how long it has been, so nobody thinks that something is broken */
     .loading { display: flex; flex-direction: column; align-items: center; gap: .6rem; padding: 1.1rem 0 .3rem; }
@@ -36,12 +45,9 @@
     @keyframes stripes { to { background-position: 1.7rem 0; } }
     .loading .msg { color: var(--muted); font-size: .95rem; text-align: center; min-height: 1.5em; }
     @media (prefers-reduced-motion: reduce) { .loading .ch { animation: none; opacity: .7; } .loading .bar i { animation: none; } }
-    .box { background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; padding: .8rem; box-shadow: 0 .3rem 1rem rgba(60, 40, 20, .12); }
-    textarea { width: 100%; min-height: 11.1rem; resize: vertical; border: 1px solid #cdbf9f; border-radius: .5rem; padding: .5rem .7rem; font-size: 1.1rem; background: #fff; }
+    .card-box { margin: 0 0 .4rem; padding: .8rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .14); }
+    textarea { width: 100%; min-height: 11.1rem; resize: vertical; border: 1px solid var(--field); border-radius: .5rem; padding: .5rem .7rem; font-size: 1.1rem; background: #fff; }
     textarea:focus { outline: 2px solid rgba(168, 54, 42, .35); }
-    .btn-go { --bs-btn-bg: var(--accent); --bs-btn-border-color: var(--accent); --bs-btn-color: #fff; --bs-btn-hover-bg: #8c2c22; --bs-btn-hover-border-color: #8c2c22; --bs-btn-hover-color: #fff; --bs-btn-active-bg: #8c2c22; --bs-btn-active-border-color: #8c2c22; --bs-btn-active-color: #fff; --bs-btn-disabled-bg: var(--accent); --bs-btn-disabled-border-color: var(--accent); --bs-btn-disabled-color: #fff; background: var(--accent); border-color: var(--accent); color: #fff; border-radius: 2rem; padding: .4rem 1.4rem; }
-    .btn-go:disabled { opacity: .55; }
-    .btn-quiet { border: 1px solid #cdbf9f; background: #fff; color: #5b4d3d; border-radius: 2rem; padding: .25rem .9rem; font-size: .85rem; }
     .count { font-size: .8rem; color: var(--muted); }
     #status { min-height: 1.6rem; margin-top: .6rem; color: var(--accent); font-weight: 600; }
     #status.error { color: #842029; }
@@ -54,12 +60,12 @@
     .nom rt { font: .75rem/1.2 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--muted); user-select: none; }   /* not copied with the text */
     .nom.no-rt rt { display: none; }
     .nom .ch { cursor: pointer; border-radius: .25rem; transition: background-color .15s; }
-    .nom .ch:hover { background-color: #dff1f8; }
+    .nom .ch:hover { background-color: color-mix(in srgb, #2fa4d6 25%, transparent); }
     .nom .txt { font-size: 1.3rem; }
     /* characters as images (as on the dictionary page), each one opens the popup of the character */
     .nom-char { cursor: pointer; }
     .nom-char, .nom-char img { border-radius: .25rem; transition: background-color .15s, box-shadow .15s; }
-    .nom-char:hover img, .nom-char:not(:has(img)):hover { background-color: #dff1f8; box-shadow: 0 0 0 .2rem #dff1f8; }
+    .nom-char:hover img, .nom-char:not(:has(img)):hover { background-color: color-mix(in srgb, #2fa4d6 25%, transparent); box-shadow: 0 0 0 .2rem color-mix(in srgb, #2fa4d6 25%, transparent); }
     /* how sure a word is: green = sure, orange dashed = differs from the dictionary, red = uncertain, dotted yellow = not checked */
     .unit { display: inline-block; white-space: nowrap; margin: 0 .08em; padding-bottom: .05em; border-bottom: .22rem solid transparent; }   /* a word (a compound too) is never split over two lines */
     .unit.sure { border-bottom-color: #3f8a4f; }
@@ -91,11 +97,11 @@
     .alts .alt img { opacity: .8; }
     /* a word with other options: a click on it opens the list to choose from (#pick) */
     .nom .unit.has-alts { cursor: pointer; }
-    #pick { position: absolute; z-index: 1055; background: #fff; border: 1px solid #cdbf9f; border-radius: .5rem; box-shadow: 0 .4rem 1rem rgba(0, 0, 0, .15); padding: .35rem; min-width: 12rem; max-width: min(22rem, calc(100vw - 16px)); max-height: 60vh; overflow: auto; }
+    #pick { position: absolute; z-index: 1055; background: Canvas; color: CanvasText; border: 1px solid var(--field); border-radius: .5rem; box-shadow: 0 .4rem 1rem rgba(0, 0, 0, .15); padding: .35rem; min-width: 12rem; max-width: min(22rem, calc(100vw - 16px)); max-height: 60vh; overflow: auto; }
     #pick .pick-title { font-size: .75rem; color: var(--muted); padding: .1rem .4rem .3rem; }
     #pick .pick-item { display: flex; align-items: center; gap: .6rem; width: 100%; text-align: left; background: none; border: 0; border-radius: .35rem; padding: .15rem .4rem; color: inherit; }
-    #pick .pick-item:hover:not(:disabled) { background: #dff1f8; }
-    #pick .pick-item:disabled { background: #f3ede0; }
+    #pick .pick-item:hover:not(:disabled) { background: color-mix(in srgb, #2fa4d6 22%, transparent); }
+    #pick .pick-item:disabled { background: color-mix(in srgb, CanvasText 8%, transparent); }
     #pick .pc { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 1.7rem; line-height: 1.25; flex-shrink: 0; }
     #pick .pm { font-size: .8rem; color: var(--muted); }
     #pick .pick-hint { font-size: .8rem; color: var(--muted); padding: 0 .4rem .3rem; }
@@ -108,14 +114,18 @@
   </style>
 </head>
 <body>
+<header class="hero pt-5 pb-4 mb-4">
+  <div class="container text-center">
+    <div class="han mb-2">國語𡨸喃</div>
+    <h1 class="mb-3" data-vi="Bộ chuyển đổi">Converter</h1>
+    <p class="lead mx-auto mb-4"><span class="d-block" data-vi="Tự động chuyển chữ Quốc Ngữ sang chữ Nôm.">Automatic Quốc Ngữ to Nôm transliteration.</span><span class="d-block" data-vi="Đây là bản dịch máy và có thể không chính xác.">This is a machine translation that might be inaccurate.</span></p>
+    <a class="btn btn-cinnabar btn-pill" href="/chunom/writer.html" data-vi="Gõ chữ Nôm">Chữ Nôm writer</a>
+    <a class="btn btn-cinnabar btn-pill" href="/chunom/index.html" data-vi="Tra cứu chữ">Character search</a>
+  </div>
+</header>
 <main>
-  <header class="page-head">
-    <div class="han">喃</div>
-    <h1 data-vi="Bộ chuyển đổi">Converter</h1>
-    <p><span class="d-block" data-vi="Tự động chuyển chữ Quốc Ngữ sang chữ Nôm.">Automatic Quốc Ngữ to Nôm transliteration.</span><span class="d-block" data-vi="Đây là bản dịch máy và có thể không chính xác.">This is a machine translation that might be inaccurate.</span></p>
-  </header>
 
-  <div class="box">
+  <div class="card-box">
     <div class="d-flex justify-content-between align-items-baseline"><label for="text" class="form-label fw-semibold">Quốc Ngữ → Chữ Nôm</label><span class="count"><span id="count">0</span> / 400</span></div>
     <textarea id="text" lang="vi" maxlength="400" spellcheck="false" placeholder="Tôi là người Việt Nam." data-vi-placeholder="Gõ hoặc dán Quốc Ngữ…"></textarea>
     <div class="count text-center mt-1" id="quota" hidden></div>
@@ -123,7 +133,7 @@
       <select id="lang" class="form-select w-auto" aria-label="Output">
         <option value="">Chữ Nôm</option><option value="en">Chữ Nôm + English</option><option value="de">Chữ Nôm + Deutsch</option><option value="fr">Chữ Nôm + Français</option><option value="es">Chữ Nôm + Español</option><option value="it">Chữ Nôm + Italiano</option><option value="pt">Chữ Nôm + Português</option><option value="ru">Chữ Nôm + Русский</option><option value="zh">Chữ Nôm + 中文</option><option value="ja">Chữ Nôm + 日本語</option><option value="ko">Chữ Nôm + 한국어</option>
       </select>
-      <button type="button" class="btn btn-go" id="go" data-vi="Dịch">Translate</button>
+      <button type="button" class="btn btn-cinnabar btn-pill" id="go" data-vi="Dịch">Translate</button>
     </div>
     <div class="d-flex justify-content-center mt-2">
       <div class="form-check form-switch mb-0"><input class="form-check-input" type="checkbox" role="switch" id="improve" checked><label class="form-check-label small" for="improve" data-vi="Giúp cải thiện mô hình" title="Words for which the dictionary has no character are stored with the words around them, to improve the dictionary and the model. Off: only one word on each side, on: five." data-vi-title="Những từ mà từ điển chưa có chữ được lưu cùng các từ xung quanh để cải thiện từ điển và mô hình. Tắt: chỉ một từ mỗi bên, bật: năm từ.">Help improve the model</label></div>
@@ -138,9 +148,9 @@
   </div>
 
   <section id="result" hidden>
-    <div class="box">
+    <div class="card-box">
       <div class="d-flex align-items-center flex-wrap gap-3 mb-2">
-        <button type="button" class="btn-quiet" id="copy"><i class="bi bi-clipboard"></i> <span data-vi="Sao chép">Copy</span></button>
+        <button type="button" class="btn btn-quiet btn-sm" id="copy"><i class="bi bi-clipboard"></i> <span data-vi="Sao chép">Copy</span></button>
         <div class="form-check form-switch mb-0"><input class="form-check-input" type="checkbox" role="switch" id="rt-toggle" checked><label class="form-check-label small" for="rt-toggle" data-vi="Hiện Quốc Ngữ phía trên chữ">Show Quốc Ngữ above the characters</label></div>
       </div>
       <div class="nom" id="nom" lang="vi-Hani"></div>
@@ -389,7 +399,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const typeRow = w => {
     if (!ime) ime = new VietIme(typeInput, { candidates: true, defer: true, returnSelect: true });
     const msg = mk('div', 'pick-msg'); msg.hidden = true;
-    const use = mk('button', 'btn btn-sm btn-go', t('Use', 'Dùng')); use.type = 'button';
+    const use = mk('button', 'btn btn-sm btn-cinnabar', t('Use', 'Dùng')); use.type = 'button';
     const apply = () => {
       const text = [...typeInput.value].filter(c => /\p{Script=Han}/u.test(c)).join('');
       if (!text || [...text].length > 16) { msg.textContent = t('Type the reading, then choose a character from the list.', 'Gõ cách đọc rồi chọn một chữ trong danh sách.'); msg.hidden = false; return; }
