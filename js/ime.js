@@ -27,7 +27,7 @@
 		VietIme.telex('vieetj')      'việt'
 
 	Styling via CSS variables on .vietime (or an ancestor): --vietime-bg, --vietime-color, --vietime-border,
-	--vietime-active, --vietime-ring, --vietime-remainder
+	--vietime-active, --vietime-ring, --vietime-remainder (by default the colours of the browser, Canvas/CanvasText: dark in a dark theme)
 
 	The Telex engine is ported from VietUni.
 */
@@ -331,7 +331,7 @@
 
 	const STYLE = `
 .vietime { position: absolute; z-index: 1070; min-width: 14em; max-width: 28em; box-sizing: border-box; padding: .3em; font-family: system-ui, -apple-system, sans-serif;
-	background: var(--vietime-bg, #fff); color: var(--vietime-color, #212529); border: var(--vietime-border, 1px solid #ced4da);
+	background: var(--vietime-bg, Canvas); color: var(--vietime-color, color-mix(in srgb, CanvasText 87%, Canvas)); border: var(--vietime-border, 1px solid color-mix(in srgb, CanvasText 20%, Canvas));
 	border-radius: .8em; box-shadow: 0 .4em 1.2em rgba(0, 0, 0, .2) }
 .vietime[hidden] { display: none }
 .vietime:not([hidden]) { display: grid; grid-template-columns: minmax(0, 1fr); gap: .1em }

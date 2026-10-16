@@ -68,7 +68,6 @@
     }
     .tile {
       transition: transform 0.15s, border-color 0.15s;
-      background: papayawhip;
     }
     #discovery .nav-link:not(.active) .tab-count {
       display: none;
@@ -84,17 +83,18 @@
     .clip-more {
       display: none; position: absolute; left: 0; right: 0; bottom: 0; height: 6.5rem;
       padding: 0 0 .25rem; border: 0; cursor: pointer; color: var(--bs-secondary-color);
-      background: linear-gradient(to bottom, transparent, var(--bs-body-bg) 85%);
+      background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--paper) 20%, Canvas) 85%);
       flex-direction: column; align-items: center; justify-content: flex-end;
     }
     .clip-box.is-clipped > .clip-more { display: flex; }
-    .clip-more:hover { color: var(--bs-body-color); }
+    .clip-more:hover { color: var(--ink); }
     /* Öffentliche Decks im Masonry-Stil: Spalten, Karten brechen nicht um */
     .deck-masonry { column-count: 2; column-gap: .75rem; }
     @media (min-width: 576px) { .deck-masonry { column-count: 3; } }
     @media (min-width: 992px) { .deck-masonry { column-count: 4; } }
-    .deck-card { break-inside: avoid; margin-bottom: .75rem; display: block; color: inherit; text-decoration: none; overflow: hidden; }
-    .deck-card:hover { border-color: rgba(var(--bs-primary-rgb), 0.6) !important; }
+    .deck-card { break-inside: avoid; margin-bottom: .75rem; display: block; color: inherit; text-decoration: none; overflow: hidden; background: color-mix(in srgb, Canvas 85%, transparent); border-color: var(--line) !important; }
+    #public-decks .deck-card { color: var(--ink); }   /* a link, but not in the link colour of a theme (the id beats its rule) */
+    .deck-card:hover { border-color: var(--cinnabar) !important; }
     .deck-card-img { display: block; width: 100%; height: auto; }
     .deck-card-img.deck-cover-ph { aspect-ratio: 1; }
     .tile:hover, .tile:focus-visible {
@@ -111,8 +111,8 @@
     }
     :is(#results, #modalBody) .nom-char:hover img,
     :is(#results, #modalBody) .nom-char:not(:has(img)):hover {
-      background-color: var(--bs-info-bg-subtle);
-      box-shadow: 0 0 0 .2rem var(--bs-info-bg-subtle);
+      background-color: color-mix(in srgb, #2fa4d6 25%, transparent);
+      box-shadow: 0 0 0 .2rem color-mix(in srgb, #2fa4d6 25%, transparent);
     }
     qatt-code {
       cursor: default;
@@ -145,71 +145,71 @@
     #search-preview svg {
       height: 1.4em;
     }
-    #search:focus {
-      box-shadow: none;
-      outline: none;
-      border-color: #ddd;
-    }
 
-    /* ---------- look of the site: paper, ink and cinnabar ---------- */
+    /* ---------- the skeleton of qatt.org: colours from the variables, the theme draws the rest ---------- */
     :root { --ink: #2b2118; --cinnabar: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
-    body {
+    body { color: var(--ink); background: #fffdf8; min-height: 100vh; }
+    /* the header of the pages of qatt.org and the Chunom site (.hero): the look of the theme "classic"; other themes override it */
+    .hero {
+      background:
+        radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%),
+        linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%);
+      border-bottom: 1px solid #e8dcc0;
       color: var(--ink);
-      background: linear-gradient(180deg, var(--paper) 0, #fffdf8 18rem) no-repeat, #fffdf8;
-      min-height: 100vh;
     }
-    .page-head { text-align: center; padding: .4rem 0 0; }
-    .page-head .han { color: var(--cinnabar); font-size: 1.3rem; }
-    .page-head h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(1.9rem, 6vw, 2.6rem); margin: .1rem 0 .2rem; }
-    .page-head p { color: var(--muted); margin: 0 auto; max-width: 40rem; }
-    .home-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; margin-top: 1rem; }
-    .home-links a { display: inline-flex; align-items: center; gap: .4rem; padding: .3rem .95rem; border: 1px solid var(--field); border-radius: 2rem; background: #fff; color: var(--ink); text-decoration: none; font-size: .9rem; }
-    .home-links a:hover, .home-links a:focus-visible { background: var(--cinnabar); border-color: var(--cinnabar); color: #fff; }
+    .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: .01em; }
+    .hero .han { color: var(--cinnabar); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; }
+    .hero .han { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }   /* Nôm characters outside the usual fonts */
+    .hero .lead { max-width: 38rem; color: #4a3d30; }
+    @media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
+    .home-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; }
+    @media (max-width: 575.98px) { .home-links { gap: .35rem; } .home-links .btn { --bs-btn-padding-x: .7rem; --bs-btn-padding-y: .2rem; --bs-btn-font-size: .85rem; padding: .2rem .7rem; } }   /* the search stays near the top */
+    .card-box { padding: 1rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .14); }
     .text-secondary { color: var(--muted) !important; }
 
-    .search-card { background: rgba(255, 255, 255, .8); border: 1px solid var(--line); border-radius: 1rem; box-shadow: 0 .4rem 1.2rem rgba(60, 40, 20, .07); color: var(--ink); }
-    .search-card .input-group { --bs-border-radius: .7rem; }
-    .search-card .input-group-text { background: #f6eddb; border-color: var(--field); color: var(--muted); }
-    .search-card .form-control { border-color: var(--field); background: #fff; color: var(--ink); }
-    .search-card .form-control:focus, #search:focus { border-color: var(--cinnabar); box-shadow: 0 0 0 .2rem rgba(168, 54, 42, .15); }
+    /* the search field: a pill like the search bar of qatt.org */
+    .search-card .input-group { --bs-border-radius: 2rem; }
+    .search-card .input-group-text { background: color-mix(in srgb, var(--paper) 70%, Canvas); border-color: var(--field); color: var(--muted); }
+    .search-card .form-control { border-color: var(--field); background: Canvas; color: var(--ink); }
+    .search-card .form-control:focus { border-color: var(--cinnabar); box-shadow: 0 0 0 .2rem rgba(168, 54, 42, .15); outline: none; }
     .search-card .form-check-input:checked { background-color: var(--cinnabar); border-color: var(--cinnabar); }
-    .search-card .btn-link { color: var(--cinnabar); text-decoration: none; }
-    .search-card .btn-link:hover { text-decoration: underline; }
-    #search-preview { background: #f3d99c !important; border-color: var(--field) !important; }
+    #search-preview { background: color-mix(in srgb, #f3d99c 70%, Canvas) !important; border-color: var(--field) !important; color: var(--ink); }
 
     #discovery .nav-tabs { border-bottom-color: var(--line); }
     #discovery .nav-link { color: var(--muted); }
     #discovery .nav-link:hover { color: var(--ink); border-color: transparent transparent var(--line); }
-    #discovery .nav-link.active { background: #fffdf8; color: var(--ink); border-color: var(--line) var(--line) #fffdf8; box-shadow: inset 0 2px 0 var(--cinnabar); }
-    .tile { background: rgba(255, 255, 255, .85); border-color: var(--line) !important; border-radius: .8rem !important; color: var(--ink); }
+    #discovery .nav-link.active { background: transparent; color: var(--ink); border-color: var(--line) var(--line) transparent; box-shadow: inset 0 2px 0 var(--cinnabar); }
+    .tile { background: color-mix(in srgb, Canvas 85%, transparent); border-color: var(--line) !important; border-radius: .8rem !important; color: var(--ink); }
     .tile:hover, .tile:focus-visible { border-color: var(--cinnabar) !important; box-shadow: 0 .3rem 1rem rgba(60, 40, 20, .1); }
 
-    #results .list-group-item { background: rgba(255, 255, 255, .85); border: 1px solid var(--line); border-radius: .8rem !important; margin-bottom: .6rem; color: var(--ink); }
-    #results .list-group-item-action:hover { background: #fff; border-color: var(--cinnabar); }
+    #results .list-group-item { background: color-mix(in srgb, Canvas 85%, transparent); border: 1px solid var(--line); border-radius: .8rem !important; margin-bottom: .6rem; color: var(--ink); }
+    #results .list-group-item-action:hover { background: Canvas; border-color: var(--cinnabar); }
     .badge-rank { border-color: var(--field); color: var(--muted); }
 
-    #copy-toast { background: var(--ink); border-color: var(--ink); }
+    #copy-toast { background: var(--ink); border-color: var(--ink); color: Canvas; }
   </style>
 </head>
 <body>
   <div id="copy-toast">Copied</div>
 
-  <div class="container mt-4">
-
-    <header class="page-head">
-      <div class="han">喃</div>
-      <h1>Chữ Nôm</h1>
-      <p data-vi="Việt Nam, bằng chữ của chính mình.">Vietnam, in its own characters.</p>
+  <header class="hero pt-4 pt-sm-5 pb-4 mb-4">
+    <div class="container text-center">
+      <div class="han mb-2">𡨸喃</div>
+      <h1 class="mb-3">Chữ Nôm</h1>
+      <p class="lead mx-auto mb-4" data-vi="Việt Nam, bằng chữ của chính mình.">Vietnam, in its own characters.</p>
       <nav class="home-links" aria-label="Chunom.org">
-        <a href="writer.html"><i class="bi bi-pencil-square"></i> <span data-vi="Gõ chữ Nôm">Nôm writer</span></a>
-        <a href="translate.html"><i class="bi bi-translate"></i> <span data-vi="Dịch">Translate</span></a>
-        <a href="decks/index.html"><i class="bi bi-mortarboard"></i> <span data-vi="Luyện tập / Bộ thẻ">Practice / decks</span></a>
-        <a href="dict/genibrel.html"><i class="bi bi-journal-richtext"></i> <span data-vi="Từ điển">Dictionaries</span></a>
-        <a href="https://qatt.org/index.html"><i class="bi bi-brush"></i> Quốc Âm Tân Tự</a>
+        <a class="btn btn-quiet btn-pill" href="writer.html"><i class="bi bi-pencil-square"></i> <span data-vi="Gõ chữ Nôm">Nôm writer</span></a>
+        <a class="btn btn-quiet btn-pill" href="translate.html"><i class="bi bi-translate"></i> <span data-vi="Dịch">Translate</span></a>
+        <a class="btn btn-quiet btn-pill" href="decks/index.html"><i class="bi bi-mortarboard"></i> <span data-vi="Luyện tập / Bộ thẻ">Practice / decks</span></a>
+        <a class="btn btn-quiet btn-pill" href="dict/genibrel.html"><i class="bi bi-journal-richtext"></i> <span data-vi="Từ điển">Dictionaries</span></a>
+        <a class="btn btn-quiet btn-pill" href="https://qatt.org/index.html"><i class="bi bi-brush"></i> Quốc Âm Tân Tự</a>
       </nav>
-    </header>
+    </div>
+  </header>
 
-    <div class="mt-4 p-3 search-card">
+  <main class="container">
+
+    <div class="card-box search-card">
       <div class="mb-3 d-flex justify-content-between align-items-center">
         <!-- Toggle für Quốc Ngữ ausblenden -->
         <div class="d-inline-flex">
@@ -243,7 +243,7 @@
     </section>
 
     <div id="results" class="list-group w-100"></div>
-  </div>
+  </main>
 
   <script>
 // Kleiner DOM-Helfer: el('div', { className: 'x', 'data-copy': '…' }, kind, 'Text', [weitere]).
@@ -506,7 +506,7 @@ class ChunomDict {
     const box = el('div', { className: 'clip-box' });
     content.replaceWith(box);
     const more = el('button', { className: 'clip-more', type: 'button', 'aria-label': 'Show more' },
-      el('span', { className: 'btn btn-sm btn-outline-light', textContent: 'show more' }),
+      el('span', { className: 'btn btn-sm btn-quiet', textContent: 'show more' }),
       el('i', { className: 'bi bi-chevron-compact-down fs-3', 'aria-hidden': 'true' }));
     box.append(content, more);
     let opened = false;
