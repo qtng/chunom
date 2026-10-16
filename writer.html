@@ -138,6 +138,7 @@
             <div class="bar-buttons">
                 <button type="button" class="btn btn-quiet" id="copy-btn" data-vi="Sao chép">Copy</button>
                 <button type="button" class="btn btn-quiet" id="clear-btn" data-vi="Xóa">Clear</button>
+                <button type="button" class="btn btn-quiet qatt-only" id="convert-btn" title="If the field has QATT characters, convert them to Quốc Ngữ; else convert every Quốc Ngữ word to QATT (with the chosen decoding)" data-vi-title="Nếu ô nhập có chữ QATT, chuyển chúng sang Quốc Ngữ; nếu không, chuyển mọi từ Quốc Ngữ sang QATT (theo cách giải mã đã chọn)" data-vi="Chuyển đổi QATT">Convert QATT</button>
             </div>
             <div class="opts">
                 <div class="form-check form-switch">
@@ -362,6 +363,24 @@
             else pending.append(' (no QATT letter yet)');
         }
         document.addEventListener('selectionchange', () => { snap(); if (document.activeElement === typer) showPending(); });
+
+        // Convert QATT: with QATT characters in the field they become Quốc Ngữ (every cell by its reading, separated by spaces, other text as it is),
+        // else every Quốc Ngữ word becomes QATT; both with the decoding chosen
+        $('convert-btn').addEventListener('click', () => {
+            if (QattText.cells(typer.value).length) {
+                let out = '', afterCell = false;
+                for (const [part] of typer.value.matchAll(QattText.CELL_ANY)) {
+                    const isCell = /^[\u{F0000}-\u{F0099}]/u.test(part);
+                    if (isCell) out += (afterCell ? ' ' : '') + QattText.reading(part, parser);
+                    else out += (afterCell && /[\p{L}\p{N}]/u.test(part) ? ' ' : '') + part;
+                    afterCell = isCell;
+                }
+                typer.value = out;
+            } else {
+                typer.value = typer.value.replace(/[\p{Script=Latin}\p{M}]+/gu, w => QattText.word(w, parser) ?? w);
+            }
+            showPending();
+        });
 
         // ---------- buttons ----------
         const copyBtn = $('copy-btn');
