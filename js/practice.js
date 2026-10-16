@@ -969,7 +969,7 @@ renderLeaderboard(isPop = false) {
     		</tr>
     		${html}
     	</table>`;
-    if (window.QattLogin) QattLogin.status(this.db, document.getElementById('practice-account'));
+    if (window.QattLogin) QattLogin.status(this.db, document.getElementById('practice-account'), 'to keep your progress on every device');
   });
 }
 
