@@ -109,6 +109,9 @@
       </select>
       <button type="button" class="btn btn-go" id="go" data-vi="Dịch">Translate</button>
     </div>
+    <div class="d-flex justify-content-center mt-2">
+      <div class="form-check form-switch mb-0"><input class="form-check-input" type="checkbox" role="switch" id="improve" checked><label class="form-check-label small" for="improve" data-vi="Giúp cải thiện mô hình" title="Words for which the dictionary has no character are stored with the words around them, to improve the dictionary and the model. Off: only one word on each side, on: three." data-vi-title="Những từ mà từ điển chưa có chữ được lưu cùng các từ xung quanh để cải thiện từ điển và mô hình. Tắt: chỉ một từ mỗi bên, bật: ba từ.">Help improve the model</label></div>
+    </div>
     <div class="loading" id="loading" role="status" aria-live="polite" hidden>
       <div class="chars"><span class="ch" aria-hidden="true">國</span><span class="ch" aria-hidden="true">語</span><span class="ch" aria-hidden="true">𡨸</span><span class="ch" aria-hidden="true">喃</span></div>
       <div class="bar" aria-hidden="true"><i id="bar"></i></div>
@@ -182,8 +185,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // input method, those with a definition first; at most 15
   const MAX_OPTIONS = 15, MAX_SENT = 15;   // the model gets the characters only (no meanings): its own knowledge decides, the list only limits the choice
   // how many words on each side of a gap of the dictionary (a word for which the model had to use a character of its own) the function stores for the improvement of the
-  // dictionary and the model (0 to 5; see qtng/qatt db/translate_log.sql). It is the length of the context in the pilot; without it the function uses 3.
-  const CONTEXT = 3;
+  // dictionary and the model (1 to 5; see qtng/qatt db/translate_log.sql): CONTEXT_ON with the switch "Help improve the model" (on by default, remembered in this browser), else CONTEXT_OFF.
+  const CONTEXT_ON = 3, CONTEXT_OFF = 1;
   const optionCache = new Map();
   const optionsFor = (key, csv) => {
     if (optionCache.has(key)) return optionCache.get(key);
@@ -358,6 +361,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const langBox = $('lang');
   try { const saved = localStorage.getItem('translate_target'); langBox.value = saved !== null ? saved : 'en'; if (langBox.value !== saved && saved !== null) langBox.value = 'en'; } catch { langBox.value = 'en'; }
   langBox.addEventListener('change', () => { try { localStorage.setItem('translate_target', langBox.value); } catch { /* no storage */ } });
+  const improveBox = $('improve');
+  try { improveBox.checked = localStorage.getItem('translate_improve') !== '0'; } catch { /* no storage */ }
+  improveBox.addEventListener('change', () => { try { localStorage.setItem('translate_improve', improveBox.checked ? '1' : '0'); } catch { /* no storage */ } });
   try { rtSet(localStorage.getItem('translate_rt') !== '0'); } catch { /* no storage */ }
   rtBox.addEventListener('change', () => { rtSet(rtBox.checked); try { localStorage.setItem('translate_rt', rtBox.checked ? '1' : '0'); } catch { /* no storage */ } });
 
@@ -396,7 +402,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const res = await fetch(`${sp.url}/functions/v1/translate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', apikey: sp.key, Authorization: 'Bearer ' + session.access_token },
-        body: JSON.stringify({ text: value, spans, lang: $('lang').value, context: CONTEXT }),
+        body: JSON.stringify({ text: value, spans, lang: $('lang').value, context: improveBox.checked ? CONTEXT_ON : CONTEXT_OFF }),
       });
       if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error || 'failed'); }
       const reader = res.body.getReader(), dec = new TextDecoder();
