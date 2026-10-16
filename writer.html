@@ -56,8 +56,6 @@
             background: #fcf8ee;
         }
         .writer-bar .btn { border-radius: 2rem; font-size: .85rem; padding: .25rem .8rem; }
-        .btn-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
-        .btn-accent:hover, .btn-accent:focus-visible { background: #8c2c22; border-color: #8c2c22; color: #fff; }
         .btn-quiet { border-color: #cdbf9f; color: #5b4d3d; background: #fff; }
         .btn-quiet:hover { background: #f1e8d2; color: var(--ink); border-color: #b9a982; }
 
@@ -76,7 +74,6 @@
         .qatt-only { display: none; }
         .qatt-on .qatt-only { display: inline-block; }
         .qatt-on li.qatt-only { display: list-item; }
-        .reading-out { margin: .6rem .8rem 0; padding: .4rem .7rem; border: 1px dashed #cdbf9f; border-radius: .5rem; font-size: 1.05rem; white-space: pre-wrap; word-break: break-word; }
         .bar-buttons, .opts { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .5rem; }
         .opts { gap: .2rem 1.5rem; }
         .opts .form-check { margin: 0; }
@@ -136,14 +133,11 @@
         </div>
 
         <div id="pending" aria-live="polite"></div>
-        <div id="reading-out" class="reading-out" hidden aria-live="polite"></div>
 
         <div class="writer-bar">
             <div class="bar-buttons">
-                <button type="button" class="btn btn-accent" id="copy-btn" data-vi="Sao chép">Copy</button>
+                <button type="button" class="btn btn-quiet" id="copy-btn" data-vi="Sao chép">Copy</button>
                 <button type="button" class="btn btn-quiet" id="clear-btn" data-vi="Xóa">Clear</button>
-                <button type="button" class="btn btn-quiet qatt-only" id="convert-btn" title="Convert every Quốc Ngữ word in the field, e.g. after pasting" data-vi="Chuyển sang QATT">Convert QATT</button>
-                <button type="button" class="btn btn-quiet qatt-only" id="reading-btn" title="Read the QATT characters of the field as Quốc Ngữ" data-vi="Giải mã QATT">Decode QATT</button>
             </div>
             <div class="opts">
                 <div class="form-check form-switch">
@@ -235,7 +229,6 @@
             on = value;
             store.set('qatt', on);
             document.body.classList.toggle('qatt-on', on);
-            if (!on) $('reading-out').hidden = true;
             $('status').innerHTML = on
                 ? '<b>Space</b> converts QATT, <b>Enter</b> picks first Hán Nôm'
                 : '<b>Space</b> and <b>Enter</b> pick first Hán Nôm';
@@ -370,25 +363,6 @@
         }
         document.addEventListener('selectionchange', () => { snap(); if (document.activeElement === typer) showPending(); });
 
-        $('convert-btn').addEventListener('click', () => {
-            typer.value = typer.value.replace(/[\p{Script=Latin}\p{M}]+/gu, w => QattText.word(w, parser) ?? w);
-            showPending();
-        });
-        // the QATT characters read as Quốc Ngữ (after the decoding chosen): every cell by its reading, separated by spaces; other text as it is
-        $('reading-btn').addEventListener('click', () => {
-            let out = '', afterCell = false;
-            for (const [part] of typer.value.matchAll(QattText.CELL_ANY)) {
-                const isCell = /^[\u{F0000}-\u{F0099}]/u.test(part);
-                if (isCell) out += (afterCell ? ' ' : '') + QattText.reading(part, parser);
-                else out += (afterCell && /[\p{L}\p{N}]/u.test(part) ? ' ' : '') + part;
-                afterCell = isCell;
-            }
-            const box = $('reading-out');
-            if (!box.hidden) { box.hidden = true; return; }   // a second click hides it again
-            box.textContent = out || '(nothing to read)';
-            box.hidden = false;
-        });
-
         // ---------- buttons ----------
         const copyBtn = $('copy-btn');
         copyBtn.addEventListener('click', async () => {
@@ -404,7 +378,6 @@
         });
 
         $('clear-btn').addEventListener('click', () => {
-            $('reading-out').hidden = true;
             typer.value = '';
             typer.dispatchEvent(new Event('input', { bubbles: true }));
             typer.focus();
