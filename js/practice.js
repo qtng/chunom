@@ -51,7 +51,7 @@ class App {
         <div id="badge-sunflower" class="score-badge badge-sunflower" title="Hoa">🌻 <span id="val-sunflower">0</span></div>
         <div id="badge-coin" class="score-badge badge-coin" title="Vàng">🪙 <span id="val-coin">0</span></div>
       </div>
-      <button type="button" id="account-btn" class="account-pill"></button>
+      <button type="button" id="account-btn" class="btn btn-sm btn-quiet account-pill"></button>
     </div>
   </header>
 
@@ -62,7 +62,7 @@ class App {
   <div id="fixed-bottom-controls" class="fixed-bottom-bar">
     <div class="d-grid">
       <button id="main-action-btn"
-        class="btn btn-info shadow-lg fw-bold py-2"
+        class="btn btn-cinnabar shadow-lg fw-bold py-2"
         >
         Start
       </button>
@@ -167,7 +167,7 @@ class App {
         <div class="card p-4 text-center mt-4">
           <h4 class="fw-bold mb-3">Practice</h4>
           <p class="mb-4" data-vi="Đăng nhập để luyện tập. Điểm của bạn được đưa lên bảng xếp hạng và giữ trong tài khoản của bạn.">Sign in to practice. Your score goes to the leaderboard and stays with your account.</p>
-          <button id="practice-login" class="btn btn-info btn-lg fw-bold" data-vi="Đăng nhập">Sign in</button>
+          <button id="practice-login" class="btn btn-cinnabar btn-lg fw-bold" data-vi="Đăng nhập">Sign in</button>
           <p id="practice-login-note" class="small text-secondary mt-3 mb-0" hidden></p>
         </div>
       </div>`;
@@ -215,8 +215,8 @@ class App {
     if (this.useDB) html += `
       <div id="practice-navbar" class="fade-in alert py-0 shadow">
        		<div class="text-center mb-3">
-		         <div class="me-2 btn btn-sm btn-outline-warning" onclick="app.renderLeaderboard()">Bảng xếp hạng</div>
-         		<button class="btn btn-sm btn-outline-light" onclick="app.renderFullView()">
+		         <div class="me-2 btn btn-sm btn-quiet" onclick="app.renderLeaderboard()">Bảng xếp hạng</div>
+         		<button class="btn btn-sm btn-quiet" onclick="app.renderFullView()">
            			Mục lục
          		</button>
         </div>
@@ -234,7 +234,7 @@ class App {
           const progress = this.getLessonProgress(lesson.id);
           html += `
             <div class="col-12 lesson-${lesson.id}">
-              <div class="card p-3 lesson-card ${lesson.classes}" onclick="app.renderLessonPreview('${lesson.id}')">
+              <div class="card p-3 lesson-card ${(lesson.classes || "").replace(/\bbg-/g, "level-")}" onclick="app.renderLessonPreview('${lesson.id}')">
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="flex-grow-1 me-3">
                     <h5 class="fw-bold mb-1">${lesson.name}</h5>
@@ -286,7 +286,7 @@ class App {
           <button onclick="app.renderLibrary()" class="back-link btn btn-link text-white-50 text-decoration-none p-0">
             ← Quay lại
           </button>
-          ${this.backUrl ? '<button onclick="app.renderLeaderboard()" class="btn btn-sm btn-outline-warning">Bảng xếp hạng</button>' : ''}
+          ${this.backUrl ? '<button onclick="app.renderLeaderboard()" class="btn btn-sm btn-quiet">Bảng xếp hạng</button>' : ''}
         </div>
         <div class="card p-4 preview-container">
           <div class="mb-4">
@@ -329,7 +329,7 @@ class App {
       this.mainContainer.innerHTML = `
         <div class="card p-5 text-center">
           <h2>Hết năng lượng!</h2>
-          <button class="btn btn-primary mt-3" onclick="app.startLessonDirectly()"> Thử lại </button>
+          <button class="btn btn-cinnabar mt-3" onclick="app.startLessonDirectly()"> Thử lại </button>
         </div>`;
       return;
     }

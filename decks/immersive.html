@@ -34,6 +34,8 @@
         .ui-theme-dark-bg { --glyph-filter: invert(1); --ui-color: white; --ui-bg-alpha: rgba(255, 255, 255, 0.1); --ui-border: rgba(255, 255, 255, 0.15); --ui-shadow: rgba(0, 0, 0, 0.3); }
         .ui-theme-light-bg { --glyph-filter: none; --ui-color: black; --ui-bg-alpha: rgba(0, 0, 0, 0.05); --ui-border: rgba(0, 0, 0, 0.1); --ui-shadow: transparent; }
 
+ /* the page is dark in every theme: the theme gives the fonts and the start button, the colours of the texts stay light (the ids beat the rules of a theme) */
+        :root { color-scheme: dark; }
         body { 
             background-color: #000; 
             color: #f8f9fa; 
@@ -58,7 +60,10 @@
         }
 
         /* Layout Elements */
+        #loading-overlay #deck-title { color: #fff; text-shadow: none; }
+        #loading-overlay .text-secondary { color: rgba(255, 255, 255, .6) !important; }
         #loading-overlay { 
+            color: #f8f9fa;
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; 
             z-index: 1000; 
@@ -146,10 +151,10 @@
         .btn-minimal { background: none; border: none; color: var(--ui-color); padding: 0.4rem; font-size: 1.1rem; opacity: 0.4; transition: opacity 0.3s ease, transform 0.3s ease; cursor: pointer; border-radius: 50%; outline: none !important; box-shadow: none !important; }
         .btn-minimal.active { opacity: 1 !important; color: var(--ui-color) !important; transform: scale(1.15); }
 
-        .dropdown-menu-custom { width: auto; min-width: 260px; padding: 0.5rem 0; background: rgba(33, 37, 41, 0.98) !important; backdrop-filter: blur(20px); border: 1px solid var(--ui-border); z-index: 1600; }
-        .dropdown-menu-custom .dropdown-divider { margin: 0.25rem 0 !important; opacity: 0.1; }
-        .dropdown-item { padding: 0.25rem 1rem 0.25rem 2.5rem; font-size: 0.88rem; color: rgba(255,255,255,0.8); transition: background 0.2s; }
-        .dropdown-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        #settings-menu.dropdown-menu-custom { width: auto; min-width: 260px; padding: 0.5rem 0; background: rgba(33, 37, 41, 0.98) !important; backdrop-filter: blur(20px); border: 1px solid var(--ui-border); z-index: 1600; }
+        #settings-menu .dropdown-divider { margin: 0.25rem 0 !important; opacity: 0.1; }
+        #settings-menu .dropdown-item { padding: 0.25rem 1rem 0.25rem 2.5rem; font-size: 0.88rem; color: rgba(255,255,255,0.8); transition: background 0.2s; }
+        #settings-menu .dropdown-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
 
         /* Audio feedback */
         .credits-container { height: 1.4em; display: flex; align-items: center; justify-content: center; margin-top: 0.5rem; cursor: pointer; }
@@ -165,12 +170,8 @@
         }
         #learning-view.active { opacity: 1; }
 
-        #start-button { 
-            display: none; background: none; border: 2px solid white; color: white; 
-            padding: 8px 40px; border-radius: 50px; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; 
-            transition: all 0.3s; cursor: pointer; margin-bottom: 1.5rem; 
-        }
-        #start-button:hover { background: white; color: black; transform: scale(1.05); }
+        /* the start button is a btn-cinnabar: its look is the one of the theme */
+        #start-button { display: none; margin-bottom: 1.5rem; padding-left: 2.5rem; padding-right: 2.5rem; text-transform: uppercase; letter-spacing: 2px; }
         .btn-start-icon { font-size: 2.2rem; vertical-align: middle; }
 
         .deck-index-card { background: rgba(20, 20, 20, 0.7) !important; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.15) !important; max-height: 45vh; overflow-y: auto; border-radius: 16px !important; }
@@ -189,8 +190,8 @@
             <h1 id="deck-title" class="mt-3"></h1>
             <div id="deck-meta" class="text-secondary small text-uppercase mb-4"></div>
         </div>
-        <button id="start-button" onclick="app.engage()">
-            <i class="bi bi-play-fill text-warning me-2 btn-start-icon"></i><span data-vi="Bắt đầu">Start session</span>
+        <button id="start-button" type="button" class="btn btn-cinnabar btn-pill btn-lg" onclick="app.engage()">
+            <i class="bi bi-play-fill me-1 btn-start-icon"></i><span data-vi="Bắt đầu">Start session</span>
         </button>
         <div id="index-toggle-wrapper" class="d-none text-center">
             <a class="text-secondary small text-decoration-none" data-bs-toggle="collapse" href="#deck-index-collapse">
@@ -221,7 +222,7 @@
 
         <div class="control-bar" onclick="event.stopPropagation()">
             <div class="controls-pill">
-                <button class="btn-minimal" onclick="location.href='https://qtng.github.io/chunom/decks/index.html'"><i class="bi bi-x-lg"></i></button>
+                <button class="btn-minimal" onclick="location.href='index.html'"><i class="bi bi-x-lg"></i></button>
                 <div class="vr mx-2 opacity-25" style="height:20px;"></div>
                 <button id="speak-toggle" class="btn-minimal" onclick="app.audio.toggleSpeech()"><i class="bi bi-volume-up"></i></button>
                 <button id="binaural-toggle" class="btn-minimal" onclick="app.audio.toggleBinaural()"><i class="bi bi-headphones"></i></button>
