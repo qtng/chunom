@@ -247,13 +247,18 @@
          * VIDEO_VARIANTS: Source configurations for themes
          */
         const VIDEO_VARIANTS = {
-            v1: { src: 'https://qtng.github.io/chunom/225845_tiny.mp4', theme: 'light', inv: true }, // Luminous
-            v2: { src: 'https://qtng.github.io/chunom/36028-408417039_tiny.mp4', theme: 'dark', inv: false }, // Triangles
-            v3: { src: 'https://qtng.github.io/chunom/225845_tiny.mp4', theme: 'dark', inv: false } // Cosmic
+            v1: { src: '/chunom/225845_tiny.mp4', theme: 'light', inv: true }, // Luminous
+            v2: { src: '/chunom/36028-408417039_tiny.mp4', theme: 'dark', inv: false }, // Triangles
+            v3: { src: '/chunom/225845_tiny.mp4', theme: 'dark', inv: false } // Cosmic
         };
 
         const APP_CONFIG = {
             visuals: {
+                auto: {   // all videos one after the other, two minutes each (the default)
+                    label: 'Auto',
+                    interval: 120000,
+                    sequence: [VIDEO_VARIANTS.v1, VIDEO_VARIANTS.v2, VIDEO_VARIANTS.v3]
+                },
                 luminous_spirit: { 
                     label: 'Luminous Spirit', 
                     interval: 60000, 
@@ -518,7 +523,7 @@
                 
                 this.audio.initMusicEngine(); 
                 this.visual.startCycle();
-                this.visual.setSource(localStorage.getItem('videoKey') || 'luminous_spirit');
+                this.visual.setSource(APP_CONFIG.visuals[localStorage.getItem('videoKey')] ? localStorage.getItem('videoKey') : 'auto');
                 
                 this.updateCard();
                 this.showNavbar();
@@ -599,7 +604,7 @@
                         ${active ? '✓ ' : ''}${label}
                     </button>`;
                 
-                const vKey = localStorage.getItem('videoKey') || 'luminous_spirit';
+                const vKey = this.visual.currentThemeKey || 'auto';
                 
                 menu.innerHTML = `
                     <div class="px-3 py-2 text-secondary small text-uppercase">Backgrounds</div>
