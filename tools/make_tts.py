@@ -69,7 +69,8 @@ if __name__ == '__main__':
     made = 0
     for name, text in sorted(todo.items()):
         path = os.path.join(a.out, name + '.mp3')
-        if os.path.exists(path): continue
-        with open(path, 'wb') as f: f.write(synthesize(text, key, a.voice))
+        if os.path.exists(path) and os.path.getsize(path) > 0: continue
+        data = synthesize(text, key, a.voice)  # first the answer, then the file: an error leaves no empty file
+        with open(path, 'wb') as f: f.write(data)
         made += 1; time.sleep(0.6)
     print(made, 'made,', len(todo) - made, 'already there')
