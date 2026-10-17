@@ -174,7 +174,7 @@
         #start-button { display: none; margin-bottom: 1.5rem; padding-left: 2.5rem; padding-right: 2.5rem; text-transform: uppercase; letter-spacing: 2px; }
         .btn-start-icon { font-size: 2.2rem; vertical-align: middle; }
 
-        .sl-info { max-width: 30rem; margin: 0 auto 1.25rem; padding: 0 1.25rem; text-align: center; }
+        .sl-info { display: none; max-width: 30rem; margin: 0 auto 1.25rem; padding: 0 1.25rem; text-align: center; }
         #loading-overlay .sl-info h2 { font: 600 1.2rem 'Inter', system-ui, sans-serif; letter-spacing: .04em; text-transform: none; color: #fff; text-shadow: none; background: none; border: 0; padding: 0; margin: 0 0 .4rem; }   /* the ids beat the h2 rules of a theme */
         .sl-info h2 .bi { color: var(--accent-start); margin-right: .2rem; }
         .sl-info p { font-size: 1.1rem; line-height: 1.5; margin: 0; color: rgba(255,255,255,.75); }
@@ -459,6 +459,7 @@
                     document.getElementById('loading-spinner').style.display = 'none';
                     document.getElementById('deck-info').style.display = 'block';
                     document.getElementById('start-button').style.display = 'block';
+                    document.querySelector('.sl-info').style.display = 'block';   // with the start button: the page does not jump while it loads
                     document.getElementById('index-toggle-wrapper').classList.remove('d-none');
                 }
                 
