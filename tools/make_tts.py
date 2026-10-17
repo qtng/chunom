@@ -8,7 +8,7 @@ Only files that do not exist yet are made, so it can be run again after dict.csv
 The file name rule is the same as syllableFileName() in decks/audiomanager.js:
 Telex letters (â=aa ê=ee ô=oo ă=aw ơ=ow ư=uw đ=dd) + tone digit 0 ngang, 1 sắc, 2 huyền, 3 hỏi, 4 ngã, 5 nặng.
 """
-import argparse, base64, csv, json, os, re, sys, time, unicodedata, urllib.request
+import argparse, base64, csv, json, os, re, sys, time, unicodedata, urllib.error, urllib.request
 
 TONE = {'̀': 2, '́': 1, '̉': 3, '̃': 4, '̣': 5}
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -44,8 +44,13 @@ def synthesize(text, key, voice):
                        'audioConfig': {'audioEncoding': 'MP3'}}).encode()
     req = urllib.request.Request('https://texttospeech.googleapis.com/v1/text:synthesize?key=' + key,
                                  body, {'Content-Type': 'application/json'})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return base64.b64decode(json.load(r)['audioContent'])
+    for wait in (5, 15, 30, 60, 120, None):  # 429 = too many requests: wait and try again
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return base64.b64decode(json.load(r)['audioContent'])
+        except urllib.error.HTTPError as e:
+            if e.code not in (429, 500, 503) or wait is None: raise
+            print('HTTP', e.code, '- waiting', wait, 's', file=sys.stderr); time.sleep(wait)
 
 
 if __name__ == '__main__':
@@ -66,5 +71,5 @@ if __name__ == '__main__':
         path = os.path.join(a.out, name + '.mp3')
         if os.path.exists(path): continue
         with open(path, 'wb') as f: f.write(synthesize(text, key, a.voice))
-        made += 1; time.sleep(0.05)
+        made += 1; time.sleep(0.6)
     print(made, 'made,', len(todo) - made, 'already there')
