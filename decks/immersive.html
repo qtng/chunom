@@ -174,6 +174,12 @@
         #start-button { display: none; margin-bottom: 1.5rem; padding-left: 2.5rem; padding-right: 2.5rem; text-transform: uppercase; letter-spacing: 2px; }
         .btn-start-icon { font-size: 2.2rem; vertical-align: middle; }
 
+        .sl-info { display: none; max-width: 30rem; margin: 0 auto 1.25rem; padding: 0 1.25rem; text-align: center; }
+        #loading-overlay .sl-info h2 { font: 600 1.2rem 'Inter', system-ui, sans-serif; letter-spacing: .04em; text-transform: none; color: #fff; text-shadow: none; background: none; border: 0; padding: 0; margin: 0 0 .4rem; }   /* the ids beat the h2 rules of a theme */
+        .sl-info h2 .bi { color: var(--accent-start); margin-right: .2rem; }
+        .sl-info p { font-size: 1.1rem; line-height: 1.5; margin: 0; color: rgba(255,255,255,.75); }
+        .sl-info .sl-phones { font-size: 1rem; margin-top: .6rem; color: rgba(255,255,255,.7); }
+        .sl-info .sl-why { font-size: .85rem; line-height: 1.45; margin-top: .25rem; color: rgba(255,255,255,.55); }
         .deck-index-card { background: rgba(20, 20, 20, 0.7) !important; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.15) !important; max-height: 45vh; overflow-y: auto; border-radius: 16px !important; }
         .index-item { border-color: rgba(255,255,255,0.08) !important; background: transparent !important; color: white !important; padding: 0.75rem 1.25rem !important; gap: 1rem; }
         .index-nom-cell { font-family: var(--nom-font-stack); font-size: 1.4rem; line-height: 1; min-width: 2.5rem; display: flex; align-items: center; gap: 2px; }
@@ -193,6 +199,12 @@
         <button id="start-button" type="button" class="btn btn-cinnabar btn-pill btn-lg" onclick="app.engage()">
             <i class="bi bi-play-fill me-1 btn-start-icon"></i><span data-vi="Bắt đầu">Start session</span>
         </button>
+        <div class="sl-info">
+            <h2><i class="bi bi-moon-stars"></i> <span data-vi="Superlearning là gì?">What is superlearning?</span></h2>
+            <p data-vi="Cách học trong trạng thái thư giãn, do Georgi Lozanov phát triển từ những năm 1970. Hít thở chậm, để nhạc chơi, xem các chữ lần lượt hiện ra.">A relaxed way to learn, developed by Georgi Lozanov in the 1970s. Breathe slowly, let the music play, watch the characters pass by.</p>
+            <p class="sl-phones"><i class="bi bi-headphones"></i> <span data-vi="Nhịp binaural cần dùng tai nghe.">Binaural beats need headphones.</span></p>
+            <p class="sl-why" data-vi="Âm thanh tinh tế giúp bạn thư giãn và tập trung.">Subtle sounds that help you stay relaxed and focused.</p>
+        </div>
         <div id="index-toggle-wrapper" class="d-none text-center">
             <a class="text-secondary small text-decoration-none" data-bs-toggle="collapse" href="#deck-index-collapse">
                 Show all characters <i class="bi bi-chevron-down"></i>
@@ -447,6 +459,7 @@
                     document.getElementById('loading-spinner').style.display = 'none';
                     document.getElementById('deck-info').style.display = 'block';
                     document.getElementById('start-button').style.display = 'block';
+                    document.querySelector('.sl-info').style.display = 'block';   // with the start button: the page does not jump while it loads
                     document.getElementById('index-toggle-wrapper').classList.remove('d-none');
                 }
                 
