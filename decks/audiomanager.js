@@ -160,14 +160,16 @@ class AudioManager {
         const forceBrowser = (mode === 'browser');
 
         if (!forceCloud && (forceBrowser || mode === 'auto') && this.voice) {
-            setTimeout(() => {
+            // resolves when the voice has finished (or was stopped), like the recorded and the cloud voice
+            return new Promise(resolve => setTimeout(() => {
                 const u = new SpeechSynthesisUtterance(text);
                 u.voice = this.voice;
                 u.lang = 'vi-VN';
                 u.rate = rate;
+                u.onend = u.onerror = () => resolve();
                 this.stopSpeech();
                 speechSynthesis.speak(u);
-            }, 50);
+            }, 50));
         } else {
             if (forceBrowser && !this.voice) {
                 console.warn("Browser voice forced but not found.");
