@@ -5,6 +5,26 @@
  * To only use speak(str, mode='auto', rate=0.8), don't call initMusicEngine().
  */
 
+// Recorded syllables: chunom-assets/audio/tts/vi-VN-Standard-A/<name>.mp3 (made by tools/make_tts.py).
+// <name> is the syllable in Telex letters (â=aa ê=ee ô=oo ă=aw ơ=ow ư=uw đ=dd) followed by the tone digit
+// 0 ngang, 1 sắc, 2 huyền, 3 hỏi, 4 ngã, 5 nặng: tân = taan0, việt = vieet5. tools/make_tts.py has the same rule.
+const TTS_DIR = new URL('../../chunom-assets/audio/tts/vi-VN-Standard-A/', document.currentScript ? document.currentScript.src : location.href);
+function syllableFileName(text) {
+    const TONE = { '\u0300': 2, '\u0301': 1, '\u0309': 3, '\u0303': 4, '\u0323': 5 };
+    const MARK = { '\u0302': 'a', '\u0306': 'w', '\u031B': 'w' }; // circumflex, breve, horn
+    let out = '', tone = 0;
+    const s = String(text).trim().toLowerCase().normalize('NFC').replace(/đ/g, 'd\u0000');
+    if (!/^[a-zà-ỹ\u0000]+$/.test(s)) return null; // a single syllable only
+    for (const c of s.normalize('NFD')) {
+        if (c === '\u0000') out += 'd';                 // the second d of dd
+        else if (c in TONE) tone = TONE[c];
+        else if (c in MARK) out += (c === '\u0302' ? out.slice(-1) : 'w');
+        else if (/[a-z]/.test(c)) out += c;
+        else return null;
+    }
+    return out + tone;
+}
+
 class EventEmitter {
     constructor() { this.events = {}; }
     on(evt, fn) { (this.events[evt] = this.events[evt] || []).push(fn); }
@@ -126,6 +146,12 @@ class AudioManager {
     async speak(text, mode = 'auto', rate = 0.8) {
         if (!this.state.isSpeechOn) return;
 
+        // a recorded syllable first, the same voice everywhere; anything else (or a missing file) as before
+        if (mode === 'auto') {
+            const name = syllableFileName(text);
+            if (name && await this.playRecorded(new URL(name + '.mp3', TTS_DIR).href)) return;
+        }
+
         if (!this.voice && window.speechSynthesis) {
             this.voice = window.speechSynthesis.getVoices().find(v => v.lang.startsWith('vi'));
         }
@@ -149,6 +175,18 @@ class AudioManager {
             }
             await this.speakCloud(text);
         }
+    }
+
+    // resolves true if the file was played, false if it is missing or cannot be played
+    playRecorded(url) {
+        return new Promise(resolve => {
+            const audio = new Audio(url);
+            let started = false;
+            audio.onplaying = () => { started = true; this.stopSpeech(); this.currentCloudAudio = audio; };
+            audio.onended = () => { this.currentCloudAudio = null; resolve(true); };
+            audio.onerror = () => resolve(started);
+            audio.play().catch(() => resolve(false));
+        });
     }
 
     async speakCloud(text, lang= "vi-VN", voice = "vi-VN-Standard-A", ssml = false) {
