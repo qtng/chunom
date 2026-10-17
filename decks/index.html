@@ -45,6 +45,7 @@
         /* deck cards */
         .deck-thumb { width: 4rem; height: 4rem; object-fit: cover; border-radius: .9rem; flex: none; }
         .deck-title { font-weight: 600; }
+        .deck-top { cursor: pointer; }   /* the upper part of a card opens the deck, like the Details button */
         .empty-box { background: color-mix(in srgb, currentColor 4%, transparent); border: 1px dashed var(--field); }
 
         /* grey placeholders while the decks load: the same layout as a deck card, so nothing jumps */
@@ -261,7 +262,7 @@
 
                 el.innerHTML = data.map(d => { const pr = isPersonal ? this.progressOf(d) : null; return `
                     <div class="card-box">
-                        <div class="d-flex align-items-start gap-3">
+                        <div class="d-flex align-items-start gap-3 deck-top" data-open="${d.id}">
                             <span class="deck-thumb-slot" data-deck="${d.id}"></span>
                             <div class="text-start flex-grow-1">
                                 <div class="deck-title">${this.escape(d.title)}</div>
@@ -278,6 +279,7 @@
                         </div>
                     </div>
                 `; }).join('');
+                el.querySelectorAll('[data-open]').forEach(top => top.addEventListener('click', () => { location.href = `deck.html?id=${top.dataset.open}`; }));
                 el.querySelectorAll('[data-remove]').forEach(btn => btn.addEventListener('click', async () => {
                     const d = data.find(x => x.id === btn.dataset.remove);
                     if (!confirm(`Remove "${d.title}" from My decks? Your progress is kept.`)) return;
