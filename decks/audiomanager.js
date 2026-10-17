@@ -13,8 +13,8 @@ function syllableFileName(text) {
     const TONE = { '\u0300': 2, '\u0301': 1, '\u0309': 3, '\u0303': 4, '\u0323': 5 };
     const MARK = { '\u0302': 'a', '\u0306': 'w', '\u031B': 'w' }; // circumflex, breve, horn
     let out = '', tone = 0;
-    const s = String(text).trim().toLowerCase().normalize('NFC').replace(/đ/g, 'd\u0000');
-    if (!/^[a-zà-ỹ\u0000]+$/.test(s)) return null; // a single syllable only
+    const s = String(text).trim().toLowerCase().normalize('NFC').replace(/\u0111/g, 'd\u0000');
+    if (!/^[a-z\u00e0-\u1ef9\u0000]+$/.test(s)) return null; // a single syllable only
     for (const c of s.normalize('NFD')) {
         if (c === '\u0000') out += 'd';                 // the second d of dd
         else if (c in TONE) tone = TONE[c];
@@ -140,43 +140,39 @@ class AudioManager {
 
     /**
      * @param {string} text - The text to be spoken
-     * @param {string} mode - 'auto' (default), 'browser' (force local), 'cloud' (force Google)
+     * @param {string} mode - 'auto' (default: recording, Google, the browser voice only as the last resort), 'cloud' (Google only)
      * @param {number} rate - Speaking rate for browser TTS
      */
     async speak(text, mode = 'auto', rate = 0.8) {
         if (!this.state.isSpeechOn) return;
 
-        // a recorded syllable first, the same voice everywhere; anything else (or a missing file) as before
+        // 'auto': a recorded syllable, else Google TTS, the browser voice only as the last resort
         if (mode === 'auto') {
             const name = syllableFileName(text);
             if (name && await this.playRecorded(new URL(name + '.mp3', TTS_DIR).href)) return;
         }
+        if (await this.speakCloud(text)) return;
+        if (mode === 'auto') await this.speakBrowser(text, rate);
+    }
 
+    // the voice of the browser, if it has a Vietnamese one; resolves when it has finished (or was stopped)
+    speakBrowser(text, rate = 0.8) {
         if (!this.voice && window.speechSynthesis) {
             this.voice = window.speechSynthesis.getVoices().find(v => v.lang.startsWith('vi'));
         }
-
-        const forceCloud = (mode === 'cloud');
-        const forceBrowser = (mode === 'browser');
-
-        if (!forceCloud && (forceBrowser || mode === 'auto') && this.voice) {
-            // resolves when the voice has finished (or was stopped), like the recorded and the cloud voice
-            return new Promise(resolve => setTimeout(() => {
-                const u = new SpeechSynthesisUtterance(text);
-                u.voice = this.voice;
-                u.lang = 'vi-VN';
-                u.rate = rate;
-                u.onend = u.onerror = () => resolve();
-                this.stopSpeech();
-                speechSynthesis.speak(u);
-            }, 50));
-        } else {
-            if (forceBrowser && !this.voice) {
-                console.warn("Browser voice forced but not found.");
-                return;
-            }
-            await this.speakCloud(text);
+        if (!this.voice) {
+            console.warn("No Vietnamese browser voice found.");
+            return Promise.resolve();
         }
+        return new Promise(resolve => setTimeout(() => {
+            const u = new SpeechSynthesisUtterance(text);
+            u.voice = this.voice;
+            u.lang = 'vi-VN';
+            u.rate = rate;
+            u.onend = u.onerror = () => resolve();
+            this.stopSpeech();
+            speechSynthesis.speak(u);
+        }, 50));
     }
 
     // resolves true if the file was played, false if it is missing or cannot be played
@@ -192,7 +188,7 @@ class AudioManager {
     }
 
     async speakCloud(text, lang= "vi-VN", voice = "vi-VN-Standard-A", ssml = false) {
-        if (!this.googleApiKey) return;
+        if (!this.googleApiKey) return false;
 
         const url = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${this.googleApiKey}`;
         const input = !ssml ? {text: text} : {ssml: text};
@@ -211,30 +207,32 @@ class AudioManager {
 
             if (!response.ok) {
                 console.error(`Google Cloud TTS API error (HTTP ${response.status}):`, result.error || result);
-                return;
+                return false;
             }
 
             if (result.audioContent) {
                 return new Promise((resolve) => {
+                    this.stopSpeech();
                     const audio = new Audio(`data:audio/mp3;base64,${result.audioContent}`);
                     this.currentCloudAudio = audio;
                     audio.onended = () => {
                         this.currentCloudAudio = null;
-                        resolve();
+                        resolve(true);
                     };
                     audio.onerror = () => {
                         this.currentCloudAudio = null;
-                        resolve();
+                        resolve(false);
                     };
-                    this.stopSpeech();
-                    audio.play().catch(resolve);
+                    audio.play().catch(() => resolve(false));
                 });
             }
             else {
                 console.warn("Google TTS response had no audioContent:", result);
+                return false;
             }
         } catch (err) {
             console.error("Cloud TTS failed:", err);
+            return false;
         }
     }
 
