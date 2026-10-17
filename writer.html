@@ -226,7 +226,7 @@
             ime.hide();
             showPending();
         });
-        font.addEventListener('change', () => { store.set('font', font.value); applyFont(); });
+        font.addEventListener('change', applyFont);   // the font is not stored: every visit starts with Pen
         size.addEventListener('input', () => { store.set('size', size.value); applyFont(); });
 
         function setQatt(value) {
@@ -405,8 +405,7 @@
             typer.focus();
         });
 
-        font.value = store.get('font', DEFAULT_FONT);
-        if (!font.value) font.value = DEFAULT_FONT;   // a stored font that is no longer in the list
+        font.value = DEFAULT_FONT;
         size.value = store.get('size', '100');
         qattSwitch.checked = store.get('qatt', 'true') === 'true' && !qattSwitch.closest('.form-check').hidden;
         setQatt(qattSwitch.checked);
