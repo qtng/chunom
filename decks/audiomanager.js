@@ -140,7 +140,7 @@ class AudioManager {
 
     /**
      * @param {string} text - The text to be spoken
-     * @param {string} mode - 'auto' (default: recording, Google, browser as the last resort), 'browser' (force local), 'cloud' (force Google, no browser)
+     * @param {string} mode - 'auto' (default: recording, Google, the browser voice only as the last resort), 'cloud' (Google only)
      * @param {number} rate - Speaking rate for browser TTS
      */
     async speak(text, mode = 'auto', rate = 0.8) {
@@ -151,11 +151,8 @@ class AudioManager {
             const name = syllableFileName(text);
             if (name && await this.playRecorded(new URL(name + '.mp3', TTS_DIR).href)) return;
         }
-        if (mode !== 'browser') {
-            if (await this.speakCloud(text)) return;
-            if (mode === 'cloud') return;
-        }
-        await this.speakBrowser(text, rate);
+        if (await this.speakCloud(text)) return;
+        if (mode === 'auto') await this.speakBrowser(text, rate);
     }
 
     // the voice of the browser, if it has a Vietnamese one; resolves when it has finished (or was stopped)
