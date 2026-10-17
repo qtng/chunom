@@ -328,7 +328,7 @@ class ChunomDict {
         this.search(this.searchInput.value);
       }), { once: true });
     }
-    this.ime.update({ telex: on, candidates: on });
+    this.ime.update({ telex: on, candidates: false });   // no candidate list in the search
   }
 
   // Verwandte Zeichen: Varianten, vereinfachte und traditionelle Formen (js/glyph_relations.json, siehe build_glyph_relations.py)
