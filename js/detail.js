@@ -56,8 +56,9 @@ const STYLE = `
 #detailModal .nom-char { cursor: pointer; }
 #detailModal .nom-char, #detailModal .nom-char img { border-radius: .25rem; transition: background-color .15s, box-shadow .15s; }
 #detailModal .nom-char:hover img, #detailModal .nom-char:not(:has(img)):hover { background-color: color-mix(in srgb, #2fa4d6 25%, transparent); box-shadow: 0 0 0 .2rem color-mix(in srgb, #2fa4d6 25%, transparent); }
-#detailModal qatt-code { cursor: pointer; vertical-align: sub; transition: filter .2s; }
-#detailModal qatt-code:hover { filter: brightness(1.3); }
+#detailModal :is(qatt-code, .qatt-glyph) { cursor: pointer; vertical-align: sub; transition: filter .2s; }
+#detailModal :is(qatt-code, .qatt-glyph):hover { filter: brightness(1.3); }
+.qatt-font { font-size: 1.6em; line-height: 1; font-weight: 400; font-style: normal; }   /* the glyphs of a font (option qattFont), as big as the SVG */
 #detailModal qatt-code svg { stroke: currentColor; stroke-linecap: round; fill: transparent; vertical-align: baseline; display: inline-block; height: 2em; position: relative; top: -.25em; }
 #detailModal .deck-toggle { display: inline-flex; align-items: center; gap: .35rem; white-space: nowrap; }   /* btn-quiet, btn-cinnabar when the character is in a deck */
 #detailModal .ipa-box { color: #4f9a5a; font-size: 1.05rem; line-height: 1.35; }
@@ -237,7 +238,7 @@ class ChunomDetail {
   initClickHandler() {
     document.addEventListener('click', e => {
       if (!e.target.closest('#detailModal')) return;
-      const glyph = e.target.closest('qatt-code');
+      const glyph = e.target.closest('qatt-code, .qatt-glyph');
       if (glyph?.title) {
         e.stopPropagation();
         const query = glyph.title.toLowerCase();
@@ -475,12 +476,18 @@ class ChunomDetail {
     return rows;
   }
 
+  // The glyphs of a Quốc Ngữ text, one element per syllable. With the option qattFont (a family of js/fonts.js of qatt.org, e.g. 'QATT Pen'; the page loads qatt-text.js and
+  // fonts.js) they are text of that font (QattText.word, as the editor does it; a syllable without a glyph is left out), else <qatt-code> elements that qatt.js draws as SVG.
   qattCodes(quocNgu, fontSize = 'inherit') {
-    const codes = [];
+    const codes = [], font = this.options.qattFont;
     for (const word of (quocNgu && this.parser ? quocNgu.split(/\s+/) : [])) {
       const parsed = word && this.parser.parse(word);
       // the glyph after the rhyme table of the decoding; a syllable without a glyph is left out
-      if (parsed?.qatt) codes.push(' ', el('qatt-code', { title: word, style: `font-size: ${fontSize}`, textContent: parsed.qatt }));
+      if (!parsed?.qatt) continue;
+      if (!font) { codes.push(' ', el('qatt-code', { title: word, style: `font-size: ${fontSize}`, textContent: parsed.qatt })); continue; }
+      const text = typeof QattText != 'undefined' ? QattText.word(word, this.parser) : null;
+      // the outer span has the size of the place, the inner one makes the glyph as big as the SVG was (1.6 em)
+      if (text) codes.push(' ', el('span', { className: 'qatt-glyph', title: word, style: `font-size: ${fontSize}` }, el('span', { className: 'qatt-font', style: `font-family: "${font}", sans-serif`, textContent: text })));
     }
     return codes.slice(1);
   }

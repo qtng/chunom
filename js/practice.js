@@ -1,10 +1,10 @@
-// The practice: lessons of the script (qatt.org/practice) and the words of a deck (decks/practice.html) as questions with four answers,
+// The practice: lessons of the script (the former practice of qatt.org, removed there) and the words of a deck (decks/practice.html) as questions with four answers,
 // with energy, progress, score and leaderboard.
 // Needs the scripts of qatt.org (js/navigation.js, qatt.js, parser.js, supabase.js) and the style css/practice.css.
 //
 // Options of App.init(container, options):
 //   forms: the forms in which words are asked and answered, a list of "nom" (Nôm characters), "qatt" (glyphs) and "text" (quốc ngữ).
-//          The practice of chunom uses ["nom", "text"], the practice of qatt ["qatt", "text"]. Without it the lessons of the script
+//          The practice of the decks uses ["nom", "text"], the former practice of qatt used ["qatt", "text"]. Without it the lessons of the script
 //          ask glyph and text, decks all three forms.
 //   requireLogin: true  only signed-in users practice; the others get a page with the sign-in dialog and init() gives null.
 const CHUNOM_SITE = new URL('../../', document.currentScript?.src || location.href).href; // the root of the Chunom site, also when qatt.org loads this script
