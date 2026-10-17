@@ -45,6 +45,9 @@ class AudioManager {
 
         // Crossfade: config.crossfadeAfter (seconds of playing time after which the next song is faded in; 0 = off)
         // and config.crossfadeDuration (seconds the fade lasts). A song that ends sooner is faded out at its end.
+        // config.musicVolume (0..1, default 1): the level of the songs, so that the speech is heard well above them
+        const mv = parseFloat(config.musicVolume);
+        this.musicVolume = isFinite(mv) ? Math.min(1, Math.max(0, mv)) : 1;
         this.crossfadeAfter = parseFloat(config.crossfadeAfter) || 0;
         this.crossfadeDuration = parseFloat(config.crossfadeDuration) || 4;
         this.fading = false;
@@ -115,8 +118,11 @@ class AudioManager {
     initMusicEngine() {
         if (!this.ctx) {
             this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            // gentle: the songs are mastered up to 0 dB, the default attack of 3 ms follows the waves of a low tone (the binaural beats at 200 Hz last 5 ms) and distorts them
             this.masterCompressor = this.ctx.createDynamicsCompressor();
-            this.masterCompressor.threshold.setValueAtTime(-15, this.ctx.currentTime);
+            const c = this.masterCompressor, t0 = this.ctx.currentTime;
+            c.threshold.setValueAtTime(-10, t0); c.knee.setValueAtTime(10, t0); c.ratio.setValueAtTime(3, t0);
+            c.attack.setValueAtTime(0.03, t0); c.release.setValueAtTime(0.3, t0);
             this.masterCompressor.connect(this.ctx.destination);
 
             if (!this.sourceAttached) {
@@ -124,7 +130,7 @@ class AudioManager {
                 this.gains = new Map();
                 for (const el of [this.el1, this.el2]) {
                     const gain = this.ctx.createGain();
-                    gain.gain.value = (el === this.el1) ? 1 : 0;
+                    gain.gain.value = (el === this.el1) ? this.musicVolume : 0;
                     this.ctx.createMediaElementSource(el).connect(gain);
                     gain.connect(this.masterCompressor);
                     this.gains.set(el, gain);
@@ -309,7 +315,9 @@ class AudioManager {
         const beatFreq = typeCfg.freq;
         let vol = this.state.binauralVolume;
         this.binauralGainNode = this.ctx.createGain();
-        this.binauralGainNode.gain.value = vol * 0.15;
+        const now = this.ctx.currentTime;
+        this.binauralGainNode.gain.setValueAtTime(0, now);   // faded in: a tone that starts at full level clicks
+        this.binauralGainNode.gain.linearRampToValueAtTime(vol * 0.15, now + 0.5);
         this.binauralGainNode.connect(this.masterCompressor);
         const freqs = [baseFreq - (beatFreq / 2), baseFreq + (beatFreq / 2)];
         freqs.forEach((f, i) => {
@@ -324,12 +332,19 @@ class AudioManager {
     }
 
     stopBinaural() {
-        this.oscs.forEach(o => { try { o.stop(); o.disconnect(); } catch(e) {} });
+        const oscs = this.oscs, node = this.binauralGainNode;
         this.oscs = [];
-        if (this.binauralGainNode) {
-            this.binauralGainNode.disconnect();
-            this.binauralGainNode = null;
-        }
+        this.binauralGainNode = null;
+        if (!node) { oscs.forEach(o => { try { o.stop(); o.disconnect(); } catch(e) {} }); return; }
+        // faded out first: a tone that is cut off clicks
+        const now = this.ctx.currentTime;
+        node.gain.cancelScheduledValues(now);
+        node.gain.setValueAtTime(node.gain.value, now);
+        node.gain.linearRampToValueAtTime(0, now + 0.15);
+        setTimeout(() => {
+            oscs.forEach(o => { try { o.stop(); o.disconnect(); } catch(e) {} });
+            node.disconnect();
+        }, 200);
     }
 
     _trackUrl(idx) {
@@ -352,8 +367,8 @@ class AudioManager {
             const up = new Float32Array(n), down = new Float32Array(n);
             for (let i = 0; i < n; i++) {
                 const x = i / (n - 1);
-                up[i] = Math.sin(x * Math.PI / 2);
-                down[i] = Math.cos(x * Math.PI / 2);
+                up[i] = this.musicVolume * Math.sin(x * Math.PI / 2);
+                down[i] = this.musicVolume * Math.cos(x * Math.PI / 2);
             }
             for (const [g, curve] of [[gIn, up], [gOut, down]]) {
                 g.gain.cancelScheduledValues(t);
@@ -381,7 +396,7 @@ class AudioManager {
         for (const el of [this.el1, this.el2]) if (el !== this.el) el.pause();
         if (this.gains) {
             const t = this.ctx.currentTime;
-            for (const [el, g] of this.gains) { g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(el === this.el ? 1 : 0, t); }
+            for (const [el, g] of this.gains) { g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(el === this.el ? this.musicVolume : 0, t); }
         }
         this.el.pause();
         this.el.src = this._trackUrl(this.state.currentTrackIdx);

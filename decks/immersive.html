@@ -408,6 +408,7 @@
                 this.audio = new AudioManager(document.getElementById('bg-audio'), { 
                     playlist: APP_CONFIG.playlist, 
                     binaural: APP_CONFIG.binaural,
+                    musicVolume: 0.4,   // the songs are quieter than the speech (about -8 dB)
                     crossfadeAfter: 120,   // seconds: then the next song is faded in
                     crossfadeDuration: 5   // seconds the crossfade lasts
                 }, {
