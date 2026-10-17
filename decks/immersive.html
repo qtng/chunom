@@ -174,10 +174,10 @@
         #start-button { display: none; margin-bottom: 1.5rem; padding-left: 2.5rem; padding-right: 2.5rem; text-transform: uppercase; letter-spacing: 2px; }
         .btn-start-icon { font-size: 2.2rem; vertical-align: middle; }
 
-        .sl-info { max-width: 26rem; margin: 0 auto 1.25rem; padding: 0 1rem; text-align: center; color: rgba(255,255,255,.7); }
-        .sl-steps { display: flex; justify-content: center; gap: .4rem; margin-bottom: .6rem; }
-        .sl-steps > span { display: inline-flex; align-items: center; gap: .35rem; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; padding: .2rem .65rem; border: 1px solid rgba(255,255,255,.18); border-radius: 99px; background: rgba(255,255,255,.06); }
-        .sl-info p { font-size: .8rem; line-height: 1.5; margin: 0; }
+        .sl-info { max-width: 26rem; margin: 0 auto 1.25rem; padding: 0 1rem; text-align: center; }
+        #loading-overlay .sl-info h2 { font: 600 1rem 'Inter', system-ui, sans-serif; letter-spacing: .04em; text-transform: none; color: #fff; text-shadow: none; background: none; border: 0; padding: 0; margin: 0 0 .4rem; }   /* the ids beat the h2 rules of a theme */
+        .sl-info h2 .bi { color: var(--accent-start); margin-right: .2rem; }
+        .sl-info p { font-size: .9rem; line-height: 1.55; margin: 0; color: rgba(255,255,255,.75); }
         .deck-index-card { background: rgba(20, 20, 20, 0.7) !important; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.15) !important; max-height: 45vh; overflow-y: auto; border-radius: 16px !important; }
         .index-item { border-color: rgba(255,255,255,0.08) !important; background: transparent !important; color: white !important; padding: 0.75rem 1.25rem !important; gap: 1rem; }
         .index-nom-cell { font-family: var(--nom-font-stack); font-size: 1.4rem; line-height: 1; min-width: 2.5rem; display: flex; align-items: center; gap: 2px; }
@@ -198,12 +198,8 @@
             <i class="bi bi-play-fill me-1 btn-start-icon"></i><span data-vi="Bắt đầu">Start session</span>
         </button>
         <div class="sl-info">
-            <div class="sl-steps">
-                <span><i class="bi bi-moon-stars"></i><span data-vi="Thư giãn">Relax</span></span>
-                <span><i class="bi bi-wind"></i><span data-vi="Hít thở">Breathe</span></span>
-                <span><i class="bi bi-music-note-beamed"></i><span data-vi="Lắng nghe">Listen</span></span>
-            </div>
-            <p data-vi="Superlearning (Suggestopedia) là phương pháp học do Georgi Lozanov phát triển vào những năm 1970. Phương pháp kết hợp thư giãn, nhịp thở đều và âm nhạc, thường là nhạc Baroque, để tạo trạng thái tâm trí bình tĩnh, dễ tiếp nhận. Ít căng thẳng, ít rào cản tâm lý hơn: mục tiêu là tiếp thu và ghi nhớ từ vựng, kiến thức nhanh hơn so với cách học thông thường.">Superlearning (Suggestopedia) is a learning method developed by Georgi Lozanov in the 1970s. It combines relaxation, rhythmic breathing and music, often Baroque, to create a calm, receptive state of mind. Less stress, fewer mental blocks: the aim is to absorb and keep vocabulary and facts faster than with ordinary study.</p>
+            <h2><i class="bi bi-moon-stars"></i> <span data-vi="Superlearning là gì?">What is superlearning?</span></h2>
+            <p data-vi="Một phương pháp học từ những năm 1970 của Georgi Lozanov, còn gọi là Suggestopedia. Ý tưởng: một tâm trí bình tĩnh, thư giãn tiếp nhận từ mới dễ hơn. Vì vậy hãy ngồi thoải mái, hít thở chậm và để nhạc chơi trong khi các chữ lần lượt hiện ra. Không kiểm tra, không gắng sức: chỉ nhìn và lắng nghe.">A learning method from the 1970s by Georgi Lozanov, also called Suggestopedia. The idea: a calm, relaxed mind takes in new words more easily. So sit comfortably, breathe slowly and let the music play while the characters pass by. No testing, no effort: just look and listen.</p>
         </div>
         <div id="index-toggle-wrapper" class="d-none text-center">
             <a class="text-secondary small text-decoration-none" data-bs-toggle="collapse" href="#deck-index-collapse">
