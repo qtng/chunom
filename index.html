@@ -14,6 +14,8 @@
   <script src="https://qatt.org/js/navigation.js"></script>
   <script defer src="https://qatt.org/js/qatt.js"></script>
   <script defer src="https://qatt.org/js/parser.js"></script>
+  <script defer src="https://qatt.org/js/qatt-text.js"></script>   <!-- the glyphs as text of a QATT font (QattText.word) -->
+  <script defer src="https://qatt.org/js/fonts.js"></script>   <!-- the QATT fonts and their @font-face rules -->
   <script defer src="https://qatt.org/vendor/supabase/supabase.min.js"></script>
   <script defer src="https://qatt.org/js/supabase.js"></script>
   <script defer src="https://qatt.org/js/login.js"></script>
@@ -275,6 +277,7 @@ class ChunomDict {
 
     // the popup of a character is shared with the other pages (js/detail.js)
     this.detail = ChunomDetail.get().configure({
+      qattFont: 'QATT Pen', // the glyphs are text of the Pen font (not SVG)
       urlFor: nom => this.linkUrl('detail', nom), // the link of the open popup can be shared
       onClose: () => this.updateUrl(this.searchInput.value.trim()), // the entry before the popup may still carry an older search term
       onQattClick: query => { // a glyph in the popup searches for its reading
