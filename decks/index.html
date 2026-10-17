@@ -275,7 +275,7 @@
                             <a href="immersive.html?id=${d.id}" class="btn btn-sm btn-cinnabar px-3"><i class="bi bi-headphones me-1"></i> Superlearn</a>
                             <a href="practice.html?id=${d.id}" class="btn btn-sm btn-quiet px-3"><i class="bi bi-lightning-charge-fill"></i> <span data-vi="Luyện tập">Practice</span></a>
                             ${d.saved ? `<button type="button" class="btn btn-sm btn-link text-secondary text-decoration-none ms-auto" data-remove="${d.id}"><i class="bi bi-x-lg me-1"></i>Remove</button>` : '<span class="ms-auto"></span>'}
-                            <a href="deck.html?id=${d.id}" class="btn btn-sm btn-quiet px-3" data-vi="Chi tiết">Details</a>
+                            <a href="deck.html?id=${d.id}" class="btn btn-sm btn-quiet px-3" aria-label="Details" data-vi-aria-label="Chi tiết"><span class="d-none d-sm-inline me-1" data-vi="Chi tiết">Details</span><i class="bi bi-arrow-right"></i></a>
                         </div>
                     </div>
                 `; }).join('');
