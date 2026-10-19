@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Chữ Nôm → Quốc Ngữ (draft)</title>
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://qatt.org/css/site.css">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/chunom-assets/fonts/fonts.css">
+  <script src="https://qatt.org/js/navigation.js"></script>
+  <script defer src="https://qatt.org/vendor/supabase/supabase.min.js"></script>
+  <script defer src="https://qatt.org/js/supabase.js"></script>
+  <script defer src="https://qatt.org/js/login.js"></script>
+  <script defer src="/chunom/js/detail.js"></script>
+  <style>
+    :root { --ink: #2b2118; --accent: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
+    body { margin: 0; background: var(--paper); color: var(--ink); }
+    /* the header of the pages of qatt.org and the Chunom site (.hero): the look of the theme "classic"; other themes override it */
+    .hero {
+      background:
+        radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%),
+        linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%);
+      border-bottom: 1px solid #e8dcc0;
+      color: var(--ink);
+    }
+    .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: .01em; }
+    .hero .han { color: var(--accent); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; }
+    .hero .han { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }   /* Nôm characters outside the usual fonts */
+    .hero .lead { max-width: 38rem; color: #4a3d30; }
+    @media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
+    main { max-width: 44rem; margin: 0 auto; padding: 0 1rem 2rem; }
+    /* loading animation (the answer can take up to a minute): the four characters of "Quốc ngữ chữ Nôm" (國語𡨸喃) light up in a wave, a bar creeps forward and never stops
+       at the end, the message changes every few seconds and says how long it has been, so nobody thinks that something is broken */
+    .loading { display: flex; flex-direction: column; align-items: center; gap: .6rem; padding: 1.1rem 0 .3rem; }
+    .loading[hidden] { display: none; }
+    .loading .chars { display: flex; gap: 1rem; }
+    .loading .ch { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 2.6rem; line-height: 1; color: var(--accent); opacity: .15; animation: ink 2s ease-in-out infinite; }
+    .loading .ch:nth-child(2) { animation-delay: .25s; } .loading .ch:nth-child(3) { animation-delay: .5s; } .loading .ch:nth-child(4) { animation-delay: .75s; }
+    @keyframes ink { 0%, 100% { opacity: .15; transform: translateY(0); } 35% { opacity: 1; transform: translateY(-.45rem); } 70% { opacity: .4; transform: translateY(0); } }
+    .loading .bar { width: min(18rem, 80%); height: .4rem; border-radius: .2rem; background: var(--line); overflow: hidden; }
+    .loading .bar i { display: block; height: 100%; width: 3%; border-radius: .2rem; transition: width .5s linear;
+      background: repeating-linear-gradient(-45deg, var(--accent) 0 .6rem, #c4574a .6rem 1.2rem); background-size: 200% 100%; animation: stripes 1s linear infinite; }
+    @keyframes stripes { to { background-position: 1.7rem 0; } }
+    .loading .msg { color: var(--muted); font-size: .95rem; text-align: center; min-height: 1.5em; }
+    @media (prefers-reduced-motion: reduce) { .loading .ch { animation: none; opacity: .7; } .loading .bar i { animation: none; } }
+    .card-box { margin: 0 0 .4rem; padding: .8rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .14); }
+    textarea { width: 100%; min-height: 11.1rem; resize: vertical; border: 1px solid var(--field); border-radius: .5rem; padding: .5rem .7rem; font-size: 1.1rem; background: #fff; }
+    textarea:focus { outline: 2px solid rgba(168, 54, 42, .35); }
+    .count { font-size: .8rem; color: var(--muted); }
+    #status { min-height: 1.6rem; margin-top: .6rem; color: var(--accent); font-weight: 600; }
+    #status.error { color: #842029; }
+    #result { margin-top: 1rem; }
+    .flag { color: #842029; }
+    .font-serif { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }
+    /* the result as text in the Nôm font (selectable, copyable), every character with its Quốc Ngữ as ruby text above it */
+    .nom { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 2rem; line-height: 1.5; }
+    .nom ruby { ruby-position: over; }
+    .nom rt { font: .75rem/1.2 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--muted); user-select: none; }   /* not copied with the text */
+    .nom.no-rt rt { display: none; }
+    .nom .ch { cursor: pointer; border-radius: .25rem; transition: background-color .15s; }
+    .nom .ch:hover { background-color: color-mix(in srgb, #2fa4d6 25%, transparent); }
+    .nom .txt { font-size: 1.3rem; }
+    /* characters as images (as on the dictionary page), each one opens the popup of the character */
+    .nom-char { cursor: pointer; }
+    .nom-char, .nom-char img { border-radius: .25rem; transition: background-color .15s, box-shadow .15s; }
+    .nom-char:hover img, .nom-char:not(:has(img)):hover { background-color: color-mix(in srgb, #2fa4d6 25%, transparent); box-shadow: 0 0 0 .2rem color-mix(in srgb, #2fa4d6 25%, transparent); }
+    /* how sure a word is: green = sure, orange dashed = differs from the dictionary, red = uncertain, dotted yellow = not checked */
+    .unit { display: inline-block; white-space: nowrap; margin: 0 .08em; padding-bottom: .05em; border-bottom: .22rem solid transparent; }   /* a word (a compound too) is never split over two lines */
+    .unit.sure { border-bottom-color: #3f8a4f; }
+    .unit.differs { border-bottom-color: #d9822b; border-bottom-style: dashed; }
+    .unit.uncertain { border-bottom-color: #c0392b; }
+    .unit.unchecked { border-bottom-color: #c9a227; border-bottom-style: dotted; }
+    .state { white-space: nowrap; font-weight: 600; }
+    .state.sure { color: #2f6f3e; }
+    .state.differs { color: #a35a12; }
+    .state.uncertain { color: #842029; }
+    .state.unchecked { color: #8a6d0b; }
+    .legend { font-size: .8rem; }
+    .legend .unit { margin-right: .6em; }
+    table.units { font-size: .85rem; }
+    table.units th { border-bottom: 1px solid var(--line); }
+    table.units td, table.units th { vertical-align: top; }
+    table.units tbody td { border-top: 1px solid var(--line); }
+    table.units tbody tr:first-child td { border-top: 0; }
+    table.units td.chars-cell { white-space: nowrap; }
+    .def { color: var(--muted); }
+    /* alternative candidates: in the last column under the definition, muted, with a small title over the first one */
+    .alts { margin-top: .4rem; color: var(--muted); font-size: .8rem; }
+    .alts .alts-title { font-size: .75rem; }
+    .alts .alt { display: flex; align-items: center; gap: .5rem; margin-top: .15rem; }
+    .alts .alt .alt-chars { white-space: nowrap; flex-shrink: 0; }
+    /* characters without an image are shown as font text, as big as the images (32 px in the table, 24 px for alternatives) */
+    td.chars-cell .nom-char { font-size: 32px; line-height: 1; }
+    .alts .alt-chars .nom-char { font-size: 24px; line-height: 1; }
+    .alts .alt img { opacity: .8; }
+    /* a word with other options: a click on it opens the list to choose from (#pick) */
+    .nom .unit.has-alts { cursor: pointer; }
+    #pick { position: absolute; z-index: 1055; background: Canvas; color: CanvasText; border: 1px solid var(--field); border-radius: .5rem; box-shadow: 0 .4rem 1rem rgba(0, 0, 0, .15); padding: .35rem; min-width: 12rem; max-width: min(22rem, calc(100vw - 16px)); max-height: 60vh; overflow: auto; }
+    #pick .pick-title { font-size: .75rem; color: var(--muted); padding: .1rem .4rem .3rem; }
+    #pick .pick-item { display: flex; align-items: center; gap: .6rem; width: 100%; text-align: left; background: none; border: 0; border-radius: .35rem; padding: .15rem .4rem; color: inherit; }
+    #pick .pick-item:hover:not(:disabled) { background: color-mix(in srgb, #2fa4d6 22%, transparent); }
+    #pick .pick-item:disabled { background: color-mix(in srgb, CanvasText 8%, transparent); }
+    #pick .pc { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 1.7rem; line-height: 1.25; flex-shrink: 0; }
+    #pick .pm { font-size: .8rem; color: var(--muted); }
+    #pick .pick-hint { font-size: .8rem; color: var(--muted); padding: 0 .4rem .3rem; }
+    #pick .pick-type { display: flex; gap: .4rem; align-items: center; padding: .15rem .4rem .3rem; }
+    #pick .pick-type input { min-width: 0; font-size: 1.4rem; }
+    #pick .pick-msg { font-size: .8rem; color: #842029; padding: 0 .4rem .3rem; }
+    #pick .pick-more { border-top: 1px solid var(--line); margin-top: .25rem; padding-top: .25rem; }
+    #pick .pick-more .pick-item { font-size: .8rem; color: var(--muted); }
+    .account { font-size: .85rem; color: var(--muted); margin-top: 1.2rem; text-align: center; }
+  </style>
+</head>
+<body>
+<header class="hero pt-5 pb-4 mb-4">
+  <div class="container text-center">
+    <div class="han mb-2">喃國語</div>
+    <h1 class="mb-3">Chữ Nôm → Quốc Ngữ</h1>
+    <p class="lead mx-auto mb-0">The way back: the reading of Chữ Nôm text in Quốc Ngữ. <span class="badge text-bg-warning align-middle">draft</span></p>
+  </div>
+</header>
+<main>
+  <div class="card-box">
+    <div class="d-flex justify-content-between align-items-baseline"><label for="text" class="form-label fw-semibold">Chữ Nôm → Quốc Ngữ</label><span class="count"><span id="count">0</span>/400</span></div>
+    <textarea id="text" lang="vi-Hani" maxlength="400" spellcheck="false" placeholder="𠊛越南" style="min-height: 7rem; font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 1.5rem"></textarea>
+    <div class="count text-center mt-1" id="quota" hidden></div>
+    <div class="d-flex justify-content-center align-items-center flex-wrap gap-2 mt-2">
+      <button type="button" class="btn btn-quiet btn-pill" id="dict">Read (dictionary only)</button>
+      <select id="lang" class="form-select w-auto" aria-label="Translation"><option value="">Reading only</option><option value="en">+ English</option><option value="de">+ Deutsch</option><option value="vi">+ Tiếng Việt</option></select>
+      <button type="button" class="btn btn-cinnabar btn-pill" id="go">Read with AI</button>
+    </div>
+    <div class="loading" id="loading" role="status" aria-live="polite" hidden>
+      <div class="chars"><span class="ch" aria-hidden="true">喃</span><span class="ch" aria-hidden="true">國</span><span class="ch" aria-hidden="true">語</span><span class="ch" aria-hidden="true">讀</span></div>
+      <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+      <div class="msg" id="msg">Reading…</div>
+    </div>
+    <div id="status" role="status" aria-live="polite"></div>
+  </div>
+
+  <section id="result" hidden>
+    <div class="card-box">
+      <div class="d-flex align-items-center flex-wrap gap-3 mb-2">
+        <button type="button" class="btn btn-quiet btn-sm" id="copy"><i class="bi bi-clipboard"></i> Copy the reading</button>
+        <span class="count" id="how"></span>
+      </div>
+      <div class="nom" id="nom" lang="vi-Hani"></div>
+      <p class="fs-5 mt-2 mb-0" id="qn"></p>
+      <p class="mt-2 mb-0" id="translation" hidden></p>
+      <div class="alert alert-warning py-2 px-3 mt-3 mb-0">
+        <div class="legend"><span class="unit sure">one reading, or chosen by the model from the list / by you</span><br><span class="unit unchecked">first reading of the dictionary, not checked in the context</span><br><span class="unit differs">the model's own reading (not in the list)</span><br><span class="unit uncertain">no reading known</span></div>
+        <div class="small mt-1">A word with other readings can be clicked to choose another one.</div>
+      </div>
+    </div>
+    <div class="count mt-3" id="version"></div>
+    <details class="mt-2 small"><summary class="fw-semibold">Lists sent to the model</summary><pre class="mt-2 p-2 bg-white border rounded" id="lists" style="white-space: pre-wrap"></pre></details>
+  </section>
+
+  <div id="pick" hidden></div>
+  <p class="account" id="account"></p>
+  <p class="count text-center mt-1">A draft, linked only from the admin area. With "Read with AI" your text is processed by a Google AI service.</p>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const $ = id => document.getElementById(id);
+  const norm = x => String(x || '').normalize('NFC').toLowerCase().trim().replace(/\s+/g, ' ');
+  const text = $('text'), status = $('status');
+  text.addEventListener('input', () => { $('count').textContent = [...text.value].length; });
+  const say = (msg, error) => { status.textContent = msg; status.className = error ? 'error' : ''; };
+  const ERRORS = { sign_in: 'Please sign in.', limit: 'The limit of today is used up.', empty: 'There is no Chữ Nôm in the text.', too_long: 'The text is too long (400 characters at most).', bad_request: 'The request was not valid.', busy: 'The service is busy, please try again.', failed: 'Something went wrong. Please try again.' };
+
+  const ready = async () => {
+    for (let i = 0; i < 100 && !(typeof SupabaseService !== 'undefined' && typeof QattLogin !== 'undefined'); i++) await new Promise(r => setTimeout(r, 50));
+    const sp = new SupabaseService(); await sp.init(); return sp;
+  };
+
+  // ---- the dictionaries: dict.csv (reading, characters, meaning, "standard") turned around (characters -> readings), and the input method of js/ime.js (lookupGlyph)
+  const csvReady = fetch('/chunom/dict.csv').then(r => r.text()).then(csv => {
+    const map = new Map();
+    for (const line of csv.split('\n')) {
+      const m = /^"((?:[^"]|"")*)","((?:[^"]|"")*)"(?:,"((?:[^"]|"")*)")?(.*)$/.exec(line);
+      if (!m) continue;
+      const han = m[2].replace(/""/g, '"');
+      if (!map.has(han)) map.set(han, []);
+      map.get(han).push({ q: norm(m[1].replace(/""/g, '"')), m: (m[3] || '').replace(/""/g, '"'), score: /"standard"\s*$/.test(m[4]) ? 30 : 20 });
+    }
+    return map;
+  }).catch(e => { console.warn('dict.csv not loaded', e); return new Map(); });
+  const imeReady = typeof ChunomDetail !== 'undefined' ? ChunomDetail.loadIme() : Promise.resolve();
+  const sp = await ready();
+  QattLogin.status(sp, $('account'), '[Sign in] to read with AI.', '[Đăng nhập] để dùng AI.');
+
+  const MAX_OPTIONS = 15, HAN = /\p{Script=Han}/u;
+  const optionCache = new Map();
+  const optionsFor = (han, csv) => {   // the readings of exactly these characters: [{q, m, s}], the usual one first
+    if (optionCache.has(han)) return optionCache.get(han);
+    const n = [...han].length, out = new Map();
+    for (const e of csv.get(han) || []) out.set(e.q, { ...e });
+    if (window.VietIme && window.VietIme.lookupGlyph) {
+      for (const e of window.VietIme.lookupGlyph(han)) {
+        if (e.glyph !== han) continue;
+        const q = norm(e.reading), prev = out.get(q);
+        if (prev) { if (!prev.m) prev.m = e.definition; } else out.set(q, { q, m: e.definition, score: e.definition ? 10 : 1 });
+      }
+    }
+    const list = [...out.values()].filter(o => o.q.split(' ').length === n).sort((a, b) => b.score - a.score).slice(0, MAX_OPTIONS).map(({ q, m, score }) => ({ q, m, s: score >= 30 ? 1 : 0 }));
+    optionCache.set(han, list);
+    return list;
+  };
+  // the text as characters (Han script) and the rest; all spans of 1 to 4 characters that have readings
+  const analyse = (value, csv) => {
+    const tokens = [], chars = [];
+    for (const ch of value) {
+      if (HAN.test(ch)) { tokens.push({ han: true, ch, i: chars.length }); chars.push(ch); }
+      else if (tokens.length && !tokens[tokens.length - 1].han) tokens[tokens.length - 1].ch += ch;
+      else tokens.push({ han: false, ch });
+    }
+    const spans = [], full = new Map();
+    for (let at = 0; at < chars.length; at++) for (let len = 1; len <= 4 && at + len <= chars.length; len++) {
+      const options = optionsFor(chars.slice(at, at + len).join(''), csv);
+      if (!options.length) continue;
+      full.set(at + '+' + len, options);
+      spans.push({ at, len, options: options.map(o => ({ q: o.q, s: o.s })) });
+    }
+    return { tokens, chars, spans, full };
+  };
+  // without the model: from the left the longest span that has readings, its first (usual) reading
+  const baseline = ({ chars, full }) => {
+    const words = [];
+    for (let at = 0; at < chars.length;) {
+      let len = Math.min(4, chars.length - at);
+      while (len > 1 && !full.has(at + '+' + len)) len--;
+      const options = full.get(at + '+' + len) || [];
+      words.push({ id: words.length + 1, at, len, nom: chars.slice(at, at + len).join(''), chosen: options.length ? options[0].q : '?', own: !options.length, alt: [], state: !options.length ? 'uncertain' : options.length > 1 ? 'unchecked' : 'sure' });
+      at += len;
+    }
+    return words;
+  };
+
+  let current = null;   // { analysis, words, result }
+  const stateOf = w => w.state || (w.chosen === '?' ? 'uncertain' : w.own ? 'differs' : 'sure');
+  const mk = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt !== undefined) e.textContent = txt; return e; };
+  function render() {
+    const { analysis, words } = current;
+    const nom = $('nom'); nom.replaceChildren();
+    const qn = [];
+    for (const tk of analysis.tokens) {
+      if (!tk.han) { if (tk.ch.trim()) { nom.append(mk('span', 'txt', tk.ch.trim() + ' ')); qn.push(tk.ch.trim()); } continue; }
+      const w = words.find(x => x.at === tk.i);
+      if (!w) continue;
+      const unit = mk('span', 'unit ' + stateOf(w) + ((analysis.full.get(w.at + '+' + w.len) || []).length > 1 || w.chosen === '?' ? ' has-alts' : ''));
+      unit.dataset.w = w.id;
+      const ruby = mk('ruby'); ruby.append(w.nom, mk('rt', '', w.chosen));
+      unit.append(ruby); nom.append(unit); qn.push(w.chosen);
+    }
+    $('qn').textContent = qn.join(' ');
+    $('result').hidden = false;
+  }
+  function show(words, analysis, how, result) {
+    current = { analysis, words, result };
+    $('how').textContent = how;
+    const tr = $('translation'); tr.hidden = !(result && result.translation); tr.textContent = result && result.translation || '';
+    $('version').textContent = result && result.version ? 'prompts ' + result.version + (result.fallback ? ' (fallback: the model did not manage it)' : '') : '';
+    $('lists').textContent = analysis.spans.map(s => s.at + '+' + s.len + '  ' + analysis.chars.slice(s.at, s.at + s.len).join('') + '  ' + s.options.map(o => o.q + (o.s ? '*' : '')).join(' | ')).join('\n');
+    render();
+  }
+
+  // ---- the list to choose another reading of a word
+  const pick = $('pick');
+  const closePick = () => { pick.hidden = true; };
+  document.addEventListener('click', e => { if (!pick.contains(e.target) && !e.target.closest('.unit.has-alts')) closePick(); });
+  $('nom').addEventListener('click', e => {
+    const unit = e.target.closest('.unit.has-alts'); if (!unit || !current) return;
+    const w = current.words.find(x => x.id === Number(unit.dataset.w)), options = current.analysis.full.get(w.at + '+' + w.len) || [];
+    pick.replaceChildren(mk('div', 'pick-title', w.nom + ': other readings'));
+    if (!options.length) pick.append(mk('div', 'pick-hint', 'The dictionaries know no reading for these characters.'));
+    for (const o of options) {
+      const b = mk('button', 'pick-item'); b.type = 'button'; b.disabled = o.q === w.chosen;
+      b.append(mk('span', '', o.q + (o.s ? ' *' : '')), mk('span', 'pm', o.m));
+      b.onclick = () => { w.chosen = o.q; w.own = false; w.state = 'sure'; w.alt = []; closePick(); render(); };
+      pick.append(b);
+    }
+    const r = unit.getBoundingClientRect();
+    pick.style.left = Math.max(8, Math.min(r.left + scrollX, scrollX + innerWidth - 300)) + 'px'; pick.style.top = (r.bottom + scrollY + 4) + 'px';
+    pick.hidden = false;
+  });
+
+  $('dict').addEventListener('click', async () => {
+    const value = text.value.trim();
+    if (!value) return say(ERRORS.empty, true);
+    say('');
+    const [csv] = await Promise.all([csvReady, imeReady]);
+    const analysis = analyse(value, csv);
+    if (!analysis.chars.length) return say(ERRORS.empty, true);
+    show(baseline(analysis), analysis, 'From the dictionaries only.');
+  });
+
+  // the answer can take up to a minute: a bar that creeps forward and a message
+  let waitTimer = null;
+  const waitStart = () => { const t0 = Date.now(); $('bar').style.width = '3%'; waitTimer = setInterval(() => { const s = (Date.now() - t0) / 1000; $('bar').style.width = Math.min(92, 3 + 90 * (1 - Math.exp(-s / 15))) + '%'; $('msg').textContent = s < 6 ? 'Reading…' : s < 20 ? 'Still reading… (' + Math.round(s) + ' s)' : 'The service is busy, please wait… (' + Math.round(s) + ' s)'; }, 500); };
+  const waitStop = () => { clearInterval(waitTimer); waitTimer = null; };
+  const quotaSet = n => { $('quota').hidden = false; $('quota').textContent = n + ' requests left today'; };
+
+  $('go').addEventListener('click', async () => {
+    const value = text.value.trim();
+    if (!value) return say(ERRORS.empty, true);
+    if (!(await QattLogin.require(sp, 'Sign in to read with AI.'))) return;
+    $('go').disabled = true; $('result').hidden = true; say(''); $('loading').hidden = false; waitStart();
+    try {
+      const [csv] = await Promise.all([csvReady, imeReady]);
+      const analysis = analyse(value, csv);
+      if (!analysis.chars.length) throw new Error('empty');
+      const session = (await sp.client.auth.getSession()).data.session;
+      const res = await fetch(`${sp.url}/functions/v1/translate_nom`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: sp.key, Authorization: 'Bearer ' + session.access_token },
+        body: JSON.stringify({ text: value, spans: analysis.spans, lang: $('lang').value }),
+      });
+      if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error || 'failed'); }
+      const reader = res.body.getReader(), dec = new TextDecoder();
+      let buf = '', done = false;
+      while (true) {
+        const { value: chunk, done: end } = await reader.read();
+        if (chunk) buf += dec.decode(chunk, { stream: true });
+        const lines = buf.split('\n'); buf = lines.pop();
+        if (end && buf.trim()) lines.push(buf);
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          const m = JSON.parse(line);
+          if (m.error) throw new Error(m.error);
+          if (m.result) { show(m.result.words.map(w => ({ ...w })), analysis, 'Read by the model from the lists of the dictionaries.', m.result); if (typeof m.result.left === 'number') quotaSet(m.result.left); done = true; }
+        }
+        if (end) break;
+      }
+      if (!done) throw new Error('failed');
+    } catch (e) {
+      if (e.message === 'limit') quotaSet(0);
+      say(ERRORS[e.message] || ERRORS.failed, true);
+    } finally { $('go').disabled = false; $('loading').hidden = true; waitStop(); }
+  });
+
+  $('copy').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText($('qn').textContent); say('Copied.'); setTimeout(() => say(''), 1500); } catch { /* no clipboard permission */ }
+  });
+});
+</script>
+</body>
+</html>
