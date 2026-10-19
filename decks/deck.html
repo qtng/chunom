@@ -80,10 +80,9 @@
         /* the form to add or change an item */
         #itemForm { border: 1px solid var(--line); border-radius: .8rem; padding: .9rem; margin-bottom: 1rem; background: color-mix(in srgb, currentColor 3%, transparent); }
         #itemNom { font-family: 'Nom Na Tong Supplement', 'pa', serif; font-size: 1.4rem; }
-        .reading-group { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin-bottom: .35rem; }
-        .reading-group .han { font-family: 'Nom Na Tong Supplement', 'pa', serif; font-size: 1.2rem; min-width: 1.6rem; }
-        .reading-chip { border: 1px solid var(--field); border-radius: 2rem; background: transparent; color: inherit; padding: .1rem .7rem; font-size: .9rem; }
-        .reading-chip[aria-pressed="true"] { border-color: var(--cinnabar); background: color-mix(in srgb, var(--cinnabar) 12%, transparent); }
+        .reading-row { display: flex; align-items: center; gap: .4rem; margin-bottom: .35rem; }
+        .reading-row .han { font-family: 'Nom Na Tong Supplement', 'pa', serif; font-size: 1.3rem; min-width: 1.8rem; }
+        .reading-row .form-select, .reading-row .form-control { flex: 1; min-width: 0; }
 
         .account-footer { margin-top: 3rem; text-align: center; font-size: .85rem; color: var(--muted); }
         .account-footer a { color: var(--cinnabar); text-decoration: none; }
@@ -159,9 +158,8 @@
                     <div id="itemForm" hidden>
                         <label for="itemNom" class="form-label text-secondary small text-uppercase" data-vi="Chữ Nôm">Chữ Nôm</label>
                         <input type="text" class="form-control shadow-none mb-2" id="itemNom" autocomplete="off" spellcheck="false" maxlength="40" placeholder="e.g. troi (Telex) or paste">
-                        <div id="itemChoices" class="mb-2"></div>
-                        <label for="itemQn" class="form-label text-secondary small text-uppercase" data-vi="Cách đọc">Reading</label>
-                        <input type="text" class="form-control shadow-none mb-2" id="itemQn" autocomplete="off" maxlength="80" lang="vi">
+                        <label class="form-label text-secondary small text-uppercase" data-vi="Cách đọc">Reading</label>
+                        <div id="itemReadings" class="mb-2"></div>
                         <button type="button" class="btn btn-sm btn-link px-0" id="itemMeaningBtn" aria-expanded="false" aria-controls="itemMeaning"><i class="bi bi-chevron-right me-1"></i><span data-vi="Nghĩa (không bắt buộc)">Meaning (optional)</span> <span class="text-secondary" id="itemMeaningHint"></span></button>
                         <div id="itemMeaning" hidden>
                             <label for="itemEn" class="form-label text-secondary small text-uppercase">English</label>
@@ -486,7 +484,7 @@
                 $('itemOk').addEventListener('click', () => this.commitItem());
                 $('itemNom').addEventListener('input', () => this.suggest());
                 $('itemMeaningBtn').addEventListener('click', () => this.showMeaning(!$('itemMeaning').hidden ? false : true));
-                for (const id of ['itemQn', 'itemEn', 'itemVi']) $(id).addEventListener('input', () => { this.item.touched[id] = true; this.meaningHint(); });
+                for (const id of ['itemEn', 'itemVi']) $(id).addEventListener('input', () => { this.item.touched[id] = true; this.meaningHint(); });
                 $('itemForm').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.tagName === 'INPUT' && !e.defaultPrevented) { e.preventDefault(); this.commitItem(); } });
                 // dict.csv: reading, characters, meaning
                 this.csv = fetch('/chunom/dict.csv').then(r => r.text()).then(text => {
@@ -519,19 +517,18 @@
 
             openItem(word) {
                 const $ = id => document.getElementById(id);
-                this.item = { word, touched: {}, groups: [], picks: [] };
+                this.item = { word, touched: {}, rows: [], sig: null, qn: word?.qn || '' };
                 if (!this.ime && window.VietIme) this.ime = new VietIme($('itemNom'), { candidates: true, defer: true, returnSelect: true });
                 else if (!window.VietIme) ChunomDetail.loadIme().then(() => { if (!this.ime && window.VietIme) this.ime = new VietIme($('itemNom'), { candidates: true, defer: true, returnSelect: true }); });
                 $('itemNom').value = word?.n || '';
-                $('itemQn').value = word?.qn || '';
                 $('itemEn').value = word?.m?.en || '';
                 $('itemVi').value = word?.m?.vi || '';
-                if (word) this.item.touched = { itemQn: true, itemEn: true, itemVi: true };
+                if (word) this.item.touched = { itemEn: true, itemVi: true };
                 $('itemError').hidden = true;
-                $('itemChoices').replaceChildren();
+                $('itemReadings').replaceChildren();
                 $('itemForm').hidden = false;
                 this.showMeaning(!!(word?.m?.en || word?.m?.vi));
-                if (word) this.suggest();
+                this.suggest();
                 $('itemForm').scrollIntoView({ block: 'nearest' });
                 $('itemNom').focus();
             }
@@ -556,59 +553,88 @@
                 return [...out.values()].filter(o => o.q.split(/\s+/).length === n);
             }
 
-            // chips for the readings of the typed Chữ Nôm: of the whole word if the dictionaries know it, else one row per character
+            // the readings of the typed Chữ Nôm as a drop-down per row (of the whole word if the dictionaries know it, else one row per character);
+            // "Own entry" turns it into an input, and without any option there is the input only
             async suggest() {
                 const item = this.item;
                 if (!item) return;
                 const han = Array.from(document.getElementById('itemNom').value.trim()).filter(c => /\p{Script=Han}/u.test(c));
                 const csv = await this.csv;
                 if (this.item !== item) return;
-                const whole = han.length ? this.readingsOf(han.join(''), csv) : [];
-                item.groups = whole.length || han.length < 2 ? [{ han: han.join(''), options: whole }]
-                    : han.map(ch => ({ han: ch, options: this.readingsOf(ch, csv) }));
-                if (!item.groups.some(g => g.options.length)) item.groups = [];
-                item.picks = item.groups.map(() => -1);
-                item.groups.forEach((g, i) => { if (g.options.length) item.picks[i] = 0; });
-                this.renderChoices();
+                const sig = han.join('');
+                if (sig === item.sig) return;   // the same characters: keep what was chosen or typed
+                const known = item.rows.length ? null : item.qn;   // the reading of the item being changed
+                item.sig = sig;
+                const whole = han.length ? this.readingsOf(sig, csv) : [];
+                let groups = whole.length || han.length < 2 ? [{ han: sig, options: whole }] : han.map(ch => ({ han: ch, options: this.readingsOf(ch, csv) }));
+                let parts = known ? [known] : [];
+                if (known && groups.length > 1) { const w = known.split(/\s+/); if (w.length === groups.length) parts = w; else groups = [{ han: sig, options: [] }]; }
+                item.rows = groups.map((g, i) => {
+                    const at = parts[i] === undefined ? (g.options.length ? 0 : -1) : g.options.findIndex(o => o.q === parts[i]);
+                    return { ...g, pick: at, text: at < 0 ? parts[i] || '' : '', custom: at < 0 && (parts[i] !== undefined || !g.options.length) };
+                });
+                item.qn = '';
+                this.renderReadings();
                 this.applyPicks();
             }
 
-            renderChoices() {
-                const box = document.getElementById('itemChoices'), item = this.item;
-                const rows = item.groups.map((g, gi) => {
-                    const row = document.createElement('div');
-                    row.className = 'reading-group';
-                    if (item.groups.length > 1) { const h = document.createElement('span'); h.className = 'han'; h.textContent = g.han; row.append(h); }
-                    g.options.forEach((o, oi) => {
-                        const chip = document.createElement('button');
-                        chip.type = 'button';
-                        chip.className = 'reading-chip';
-                        chip.lang = 'vi';
-                        chip.textContent = o.q;
-                        chip.title = o.m || '';
-                        chip.setAttribute('aria-pressed', item.picks[gi] === oi);
-                        chip.addEventListener('click', () => { item.picks[gi] = oi; item.touched.itemQn = item.touched.itemEn = false; this.renderChoices(); this.applyPicks(); });
-                        row.append(chip);
+            renderReadings() {
+                const rows = this.item.rows.map((row, i) => {
+                    const box = document.createElement('div');
+                    box.className = 'reading-row';
+                    if (this.item.rows.length > 1) { const h = document.createElement('span'); h.className = 'han'; h.textContent = row.han; box.append(h); }
+                    const input = document.createElement('input');
+                    input.type = 'text'; input.className = 'form-control shadow-none'; input.lang = 'vi'; input.maxLength = 80; input.autocomplete = 'off';
+                    input.value = row.text;
+                    input.setAttribute('aria-label', 'Reading');
+                    input.addEventListener('input', () => { row.text = input.value; });
+                    if (!row.options.length) return box.append(input), box;
+                    const sel = document.createElement('select');
+                    sel.className = 'form-select shadow-none';
+                    sel.setAttribute('aria-label', 'Reading');
+                    row.options.forEach((o, oi) => sel.add(new Option(o.q + (o.m ? ' — ' + (o.m.length > 30 ? o.m.slice(0, 30) + '…' : o.m) : ''), oi)));
+                    const own = new Option(window.Lang ? Lang.t('Own entry…', 'Nhập cách đọc khác…') : 'Own entry…', 'own');
+                    own.dataset.vi = 'Nhập cách đọc khác…';
+                    sel.add(own);
+                    sel.value = row.custom ? 'own' : row.pick;
+                    sel.addEventListener('change', () => {
+                        row.custom = sel.value === 'own';
+                        if (!row.custom) { row.pick = +sel.value; this.item.touched.itemEn = false; }
+                        this.renderReadings();
+                        this.applyPicks();
+                        if (row.custom) this.item.focus = i;
                     });
-                    return row;
+                    if (row.custom) {
+                        const back = document.createElement('button');
+                        back.type = 'button'; back.className = 'btn btn-sm btn-quiet'; back.title = 'Choose from the list'; back.setAttribute('aria-label', 'Choose from the list');
+                        back.innerHTML = '<i class="bi bi-list"></i>';
+                        back.addEventListener('click', () => { row.custom = false; row.pick = Math.max(row.pick, 0); this.renderReadings(); this.applyPicks(); });
+                        box.append(input, back);
+                        if (this.item.focus === i) setTimeout(() => input.focus());
+                    } else box.append(sel);
+                    return box;
                 });
-                box.replaceChildren(...rows);
+                this.item.focus = null;
+                document.getElementById('itemReadings').replaceChildren(...rows);
             }
 
-            // the chosen chips fill reading and English meaning, as long as the user has not typed there
+            // a chosen option fills the English meaning, as long as the user has not typed there
             applyPicks() {
-                const $ = id => document.getElementById(id), item = this.item;
-                if (!item.groups.length) return;
-                const chosen = item.groups.map((g, i) => g.options[item.picks[i]]);
-                if (!item.touched.itemQn && chosen.every(Boolean)) $('itemQn').value = chosen.map(o => o.q).join(' ');
-                if (!item.touched.itemEn) $('itemEn').value = item.groups.length === 1 && chosen[0] ? chosen[0].m : '';
+                const $ = id => document.getElementById(id), { rows, touched } = this.item;
+                const one = rows.length === 1 && !rows[0].custom && rows[0].options[rows[0].pick];
+                if (!touched.itemEn) $('itemEn').value = one ? one.m || '' : '';
                 this.meaningHint();
+            }
+
+            readingValue() {
+                return this.item.rows.map(r => (r.custom || !r.options.length ? r.text : r.options[r.pick]?.q) || '').join(' ').trim().replace(/\s+/g, ' ');
             }
 
             commitItem() {
                 const $ = id => document.getElementById(id), item = this.item;
-                const n = $('itemNom').value.trim(), qn = $('itemQn').value.trim().replace(/\s+/g, ' ');
+                const n = $('itemNom').value.trim(), qn = this.readingValue();
                 const en = $('itemEn').value.trim(), vi = $('itemVi').value.trim();
+                $('itemError').hidden = true;
                 const fail = (msg, vi) => { const e = $('itemError'); e.textContent = window.Lang ? Lang.t(msg, vi) : msg; e.hidden = false; };
                 if (!n) return fail('Please enter the Chữ Nôm.', 'Hãy nhập chữ Nôm.');
                 if (!qn) return fail('Please enter the reading.', 'Hãy nhập cách đọc.');
