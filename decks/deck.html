@@ -73,6 +73,18 @@
         .entry-row .btn-remove { color: var(--muted); border: 0; background: none; padding: .2rem .5rem; border-radius: 2rem; }
         .entry-row .btn-remove:hover, .entry-row .btn-remove:focus-visible { color: var(--cinnabar); background: color-mix(in srgb, var(--cinnabar) 10%, transparent); }
 
+        .entry-row .entry-text { flex: 1; min-width: 0; }
+        .entry-row .btn-edit { color: var(--muted); border: 0; background: none; padding: .2rem .5rem; border-radius: 2rem; }
+        .entry-row .btn-edit:hover, .entry-row .btn-edit:focus-visible { color: var(--cinnabar); background: color-mix(in srgb, var(--cinnabar) 10%, transparent); }
+        .item-meaning { display: block; font-size: .8rem; color: var(--muted); overflow-wrap: anywhere; }
+        /* the form to add or change an item */
+        #itemForm { border: 1px solid var(--line); border-radius: .8rem; padding: .9rem; margin-bottom: 1rem; background: color-mix(in srgb, currentColor 3%, transparent); }
+        #itemNom { font-family: 'Nom Na Tong Supplement', 'pa', serif; font-size: 1.4rem; }
+        .reading-group { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin-bottom: .35rem; }
+        .reading-group .han { font-family: 'Nom Na Tong Supplement', 'pa', serif; font-size: 1.2rem; min-width: 1.6rem; }
+        .reading-chip { border: 1px solid var(--field); border-radius: 2rem; background: transparent; color: inherit; padding: .1rem .7rem; font-size: .9rem; }
+        .reading-chip[aria-pressed="true"] { border-color: var(--cinnabar); background: color-mix(in srgb, var(--cinnabar) 12%, transparent); }
+
         .account-footer { margin-top: 3rem; text-align: center; font-size: .85rem; color: var(--muted); }
         .account-footer a { color: var(--cinnabar); text-decoration: none; }
         .account-footer a:hover { text-decoration: underline; }
@@ -141,8 +153,30 @@
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <span id="editCount" class="text-secondary small ms-auto"></span>
                     </div>
+                    <div class="mb-2">
+                        <button type="button" class="btn btn-sm btn-quiet px-3" id="addItemBtn"><i class="bi bi-plus-lg me-1"></i> <span data-vi="Thêm chữ">Add item</span></button>
+                    </div>
+                    <div id="itemForm" hidden>
+                        <label for="itemNom" class="form-label text-secondary small text-uppercase" data-vi="Chữ Nôm">Chữ Nôm</label>
+                        <input type="text" class="form-control shadow-none mb-2" id="itemNom" autocomplete="off" spellcheck="false" maxlength="40" placeholder="e.g. troi (Telex) or paste">
+                        <div id="itemChoices" class="mb-2"></div>
+                        <label for="itemQn" class="form-label text-secondary small text-uppercase" data-vi="Cách đọc">Reading</label>
+                        <input type="text" class="form-control shadow-none mb-2" id="itemQn" autocomplete="off" maxlength="80" lang="vi">
+                        <button type="button" class="btn btn-sm btn-link px-0" id="itemMeaningBtn" aria-expanded="false" aria-controls="itemMeaning"><i class="bi bi-chevron-right me-1"></i><span data-vi="Nghĩa (không bắt buộc)">Meaning (optional)</span> <span class="text-secondary" id="itemMeaningHint"></span></button>
+                        <div id="itemMeaning" hidden>
+                            <label for="itemEn" class="form-label text-secondary small text-uppercase">English</label>
+                            <textarea class="form-control shadow-none mb-2" id="itemEn" rows="2" maxlength="300"></textarea>
+                            <label for="itemDe" class="form-label text-secondary small text-uppercase">Deutsch</label>
+                            <textarea class="form-control shadow-none mb-2" id="itemDe" rows="2" maxlength="300"></textarea>
+                        </div>
+                        <div class="text-danger small mb-2" id="itemError" hidden></div>
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-sm btn-quiet" id="itemCancel" data-vi="Hủy">Cancel</button>
+                            <button type="button" class="btn btn-sm btn-cinnabar px-3" id="itemOk" data-vi="Xong">Done</button>
+                        </div>
+                    </div>
                     <div id="editWords"></div>
-                    <p class="text-secondary small mt-3 mb-0">Add characters in the dictionary: open a character and tap “Add to deck”.</p>
+                    <p class="text-secondary small mt-3 mb-0">You can also add characters in the dictionary: open a character and tap “Add to deck”.</p>
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-quiet" data-bs-dismiss="modal">Cancel</button>
@@ -169,6 +203,7 @@
                     document.getElementById('saveEditBtn').addEventListener('click', () => this.saveEdit());
                     document.getElementById('coverInput').addEventListener('change', e => this.pickCover(e.target.files[0]));
                     document.getElementById('coverRemove').addEventListener('click', () => this.setCover(null));
+                    this.initItemForm();
                     // a character was added to or removed from this deck in the popup: show the new list
                     document.addEventListener('chunom:deckchange', e => { if (e.detail.deckId === this.id) this.load(); });
                     await this.load();
@@ -333,6 +368,7 @@
                     qn.className = 'flex-grow-1';
                     qn.lang = 'vi';
                     qn.textContent = word.qn || '';
+                    this.appendMeaning(qn, word);
                     const row = document.createElement('a');
                     row.className = 'card-box deck-item';
                     row.href = `../index.html?detail=${encodeURIComponent(word.n || '')}`; // opens the character in the dictionary
@@ -354,6 +390,16 @@
                     rows.push(empty);
                 }
                 document.getElementById('deck-words').replaceChildren(...rows);
+            }
+
+            // the meaning of an item (m: { en, de }, both optional) under its reading: English, else German
+            appendMeaning(box, word) {
+                const text = word.m?.en || word.m?.de || '';
+                if (!text) return;
+                const small = document.createElement('small');
+                small.className = 'item-meaning';
+                small.textContent = text;
+                box.append(small);
             }
 
             // an item as images (one per character) with the font as fallback, like in the dictionary
@@ -384,6 +430,7 @@
                 this.showCover(this.sp.deckImageUrl(deck.image_path));
                 document.getElementById('editTitleInput').value = deck.title || '';
                 document.getElementById('publicInput').checked = !!deck.is_public;
+                this.closeItem();
                 this.renderEditWords();
                 bootstrap.Modal.getOrCreateInstance(document.getElementById('editDeckModal')).show();
             }
@@ -430,6 +477,151 @@
                     : 'Everybody can find the deck, learn it and see your user name. You can take it back at any time.';
             }
 
+            // ---- add or change an item: the Chữ Nôm (js/ime.js: Telex and candidates), the readings and meaning of dict.csv as suggestions
+            initItemForm() {
+                const $ = id => document.getElementById(id);
+                $('addItemBtn').addEventListener('click', () => this.openItem(null));
+                $('itemCancel').addEventListener('click', () => this.closeItem());
+                $('itemOk').addEventListener('click', () => this.commitItem());
+                $('itemNom').addEventListener('input', () => this.suggest());
+                $('itemMeaningBtn').addEventListener('click', () => this.showMeaning(!$('itemMeaning').hidden ? false : true));
+                for (const id of ['itemQn', 'itemEn', 'itemDe']) $(id).addEventListener('input', () => { this.item.touched[id] = true; this.meaningHint(); });
+                $('itemForm').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.tagName === 'INPUT' && !e.defaultPrevented) { e.preventDefault(); this.commitItem(); } });
+                // dict.csv: reading, characters, meaning
+                this.csv = fetch('/chunom/dict.csv').then(r => r.text()).then(text => {
+                    const map = new Map();
+                    for (const line of text.split('\n')) {
+                        const m = /^"((?:[^"]|"")*)","((?:[^"]|"")*)"(?:,"((?:[^"]|"")*)")?(.*)$/.exec(line);
+                        if (!m) continue;
+                        const han = m[2].replace(/""/g, '"');
+                        if (!map.has(han)) map.set(han, []);
+                        map.get(han).push({ q: m[1].replace(/""/g, '"').normalize('NFC').toLowerCase().trim(), m: (m[3] || '').replace(/""/g, '"'), standard: /"standard"\s*$/.test(m[4]) });
+                    }
+                    return map;
+                }).catch(() => new Map());
+            }
+
+            showMeaning(on) {
+                document.getElementById('itemMeaning').hidden = !on;
+                const btn = document.getElementById('itemMeaningBtn');
+                btn.setAttribute('aria-expanded', on);
+                btn.querySelector('i').className = `bi ${on ? 'bi-chevron-down' : 'bi-chevron-right'} me-1`;
+                this.meaningHint();
+            }
+
+            // behind the closed button: what the meaning is now (so a suggestion taken over from the dictionary is not hidden)
+            meaningHint() {
+                const $ = id => document.getElementById(id);
+                const text = $('itemEn').value.trim() || $('itemDe').value.trim();
+                $('itemMeaningHint').textContent = !$('itemMeaning').hidden || !text ? '' : '· ' + (text.length > 40 ? text.slice(0, 40) + '…' : text);
+            }
+
+            openItem(word) {
+                const $ = id => document.getElementById(id);
+                this.item = { word, touched: {}, groups: [], picks: [] };
+                if (!this.ime && window.VietIme) this.ime = new VietIme($('itemNom'), { candidates: true, defer: true, returnSelect: true });
+                else if (!window.VietIme) ChunomDetail.loadIme().then(() => { if (!this.ime && window.VietIme) this.ime = new VietIme($('itemNom'), { candidates: true, defer: true, returnSelect: true }); });
+                $('itemNom').value = word?.n || '';
+                $('itemQn').value = word?.qn || '';
+                $('itemEn').value = word?.m?.en || '';
+                $('itemDe').value = word?.m?.de || '';
+                if (word) this.item.touched = { itemQn: true, itemEn: true, itemDe: true };
+                $('itemError').hidden = true;
+                $('itemChoices').replaceChildren();
+                $('itemForm').hidden = false;
+                this.showMeaning(!!(word?.m?.en || word?.m?.de));
+                if (word) this.suggest();
+                $('itemForm').scrollIntoView({ block: 'nearest' });
+                $('itemNom').focus();
+            }
+
+            closeItem() {
+                this.item = null;
+                document.getElementById('itemForm').hidden = true;
+            }
+
+            // the readings of exactly these characters: dict.csv first (the usual one first), then the input method; [{ q, m }]
+            readingsOf(han, csv) {
+                const out = new Map();
+                for (const e of [...(csv.get(han) || [])].sort((a, b) => b.standard - a.standard)) if (!out.has(e.q)) out.set(e.q, { q: e.q, m: e.m });
+                if (window.VietIme) {
+                    for (const e of VietIme.lookupGlyph(han)) {
+                        if (e.glyph !== han) continue;
+                        const q = e.reading.normalize('NFC').toLowerCase().trim(), prev = out.get(q);
+                        if (prev) { if (!prev.m) prev.m = e.definition; } else out.set(q, { q, m: e.definition });
+                    }
+                }
+                const n = [...han].length;
+                return [...out.values()].filter(o => o.q.split(/\s+/).length === n);
+            }
+
+            // chips for the readings of the typed Chữ Nôm: of the whole word if the dictionaries know it, else one row per character
+            async suggest() {
+                const item = this.item;
+                if (!item) return;
+                const han = Array.from(document.getElementById('itemNom').value.trim()).filter(c => /\p{Script=Han}/u.test(c));
+                const csv = await this.csv;
+                if (this.item !== item) return;
+                const whole = han.length ? this.readingsOf(han.join(''), csv) : [];
+                item.groups = whole.length || han.length < 2 ? [{ han: han.join(''), options: whole }]
+                    : han.map(ch => ({ han: ch, options: this.readingsOf(ch, csv) }));
+                if (!item.groups.some(g => g.options.length)) item.groups = [];
+                item.picks = item.groups.map(() => -1);
+                item.groups.forEach((g, i) => { if (g.options.length) item.picks[i] = 0; });
+                this.renderChoices();
+                this.applyPicks();
+            }
+
+            renderChoices() {
+                const box = document.getElementById('itemChoices'), item = this.item;
+                const rows = item.groups.map((g, gi) => {
+                    const row = document.createElement('div');
+                    row.className = 'reading-group';
+                    if (item.groups.length > 1) { const h = document.createElement('span'); h.className = 'han'; h.textContent = g.han; row.append(h); }
+                    g.options.forEach((o, oi) => {
+                        const chip = document.createElement('button');
+                        chip.type = 'button';
+                        chip.className = 'reading-chip';
+                        chip.lang = 'vi';
+                        chip.textContent = o.q;
+                        chip.title = o.m || '';
+                        chip.setAttribute('aria-pressed', item.picks[gi] === oi);
+                        chip.addEventListener('click', () => { item.picks[gi] = oi; item.touched.itemQn = item.touched.itemEn = false; this.renderChoices(); this.applyPicks(); });
+                        row.append(chip);
+                    });
+                    return row;
+                });
+                box.replaceChildren(...rows);
+            }
+
+            // the chosen chips fill reading and English meaning, as long as the user has not typed there
+            applyPicks() {
+                const $ = id => document.getElementById(id), item = this.item;
+                if (!item.groups.length) return;
+                const chosen = item.groups.map((g, i) => g.options[item.picks[i]]);
+                if (!item.touched.itemQn && chosen.every(Boolean)) $('itemQn').value = chosen.map(o => o.q).join(' ');
+                if (!item.touched.itemEn) $('itemEn').value = item.groups.length === 1 && chosen[0] ? chosen[0].m : '';
+                this.meaningHint();
+            }
+
+            commitItem() {
+                const $ = id => document.getElementById(id), item = this.item;
+                const n = $('itemNom').value.trim(), qn = $('itemQn').value.trim().replace(/\s+/g, ' ');
+                const en = $('itemEn').value.trim(), de = $('itemDe').value.trim();
+                const fail = (msg, vi) => { const e = $('itemError'); e.textContent = window.Lang ? Lang.t(msg, vi) : msg; e.hidden = false; };
+                if (!n) return fail('Please enter the Chữ Nôm.', 'Hãy nhập chữ Nôm.');
+                if (!qn) return fail('Please enter the reading.', 'Hãy nhập cách đọc.');
+                const { words, removed } = this.editing;
+                if (words.some(w => w !== item.word && !removed.has(w) && w.n === n && (w.qn || '') === qn)) return fail('This item is in the deck already.', 'Chữ này đã có trong bộ thẻ.');
+                const entry = { ...(item.word || {}), n, qn };
+                delete entry.m;
+                if (en || de) entry.m = { ...(en && { en }), ...(de && { de }) };
+                const at = item.word ? words.indexOf(item.word) : -1;
+                if (at >= 0) words[at] = entry; else words.push(entry);
+                this.closeItem();
+                this.renderEditWords();
+            }
+
             renderEditWords() {
                 const { words, removed } = this.editing;
                 const shown = words.filter(w => w.n !== '.config' && !removed.has(w));
@@ -439,9 +631,17 @@
                 this.updatePublish(shown.length);
                 const rows = shown.map(word => {
                     const qn = document.createElement('span');
-                    qn.className = 'flex-grow-1';
+                    qn.className = 'entry-text';
                     qn.lang = 'vi';
                     qn.textContent = word.qn || '';
+                    this.appendMeaning(qn, word);
+                    const edit = document.createElement('button');
+                    edit.type = 'button';
+                    edit.className = 'btn-edit';
+                    edit.title = 'Edit';
+                    edit.setAttribute('aria-label', 'Edit');
+                    edit.innerHTML = '<i class="bi bi-pencil"></i>';
+                    edit.addEventListener('click', () => this.openItem(word));
                     const remove = document.createElement('button');
                     remove.type = 'button';
                     remove.className = 'btn-remove';
@@ -451,7 +651,7 @@
                     remove.addEventListener('click', () => { removed.add(word); this.renderEditWords(); });
                     const row = document.createElement('div');
                     row.className = 'entry-row';
-                    row.append(this.glyph(word.n || ''), qn, remove);
+                    row.append(this.glyph(word.n || ''), qn, edit, remove);
                     return row;
                 });
                 if (!rows.length) {
