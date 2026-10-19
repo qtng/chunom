@@ -165,9 +165,9 @@
                         <button type="button" class="btn btn-sm btn-link px-0" id="itemMeaningBtn" aria-expanded="false" aria-controls="itemMeaning"><i class="bi bi-chevron-right me-1"></i><span data-vi="Nghĩa (không bắt buộc)">Meaning (optional)</span> <span class="text-secondary" id="itemMeaningHint"></span></button>
                         <div id="itemMeaning" hidden>
                             <label for="itemEn" class="form-label text-secondary small text-uppercase">English</label>
-                            <textarea class="form-control shadow-none mb-2" id="itemEn" rows="2" maxlength="300"></textarea>
-                            <label for="itemDe" class="form-label text-secondary small text-uppercase">Deutsch</label>
-                            <textarea class="form-control shadow-none mb-2" id="itemDe" rows="2" maxlength="300"></textarea>
+                            <textarea class="form-control shadow-none mb-2" id="itemEn" rows="2" maxlength="300" placeholder="e.g. to tell homonyms apart" data-vi-placeholder="vd. để phân biệt chữ đồng âm"></textarea>
+                            <label for="itemVi" class="form-label text-secondary small text-uppercase">Tiếng Việt</label>
+                            <textarea class="form-control shadow-none mb-2" id="itemVi" rows="2" maxlength="300" lang="vi" placeholder="vd. để phân biệt chữ đồng âm" data-vi-placeholder="vd. để phân biệt chữ đồng âm"></textarea>
                         </div>
                         <div class="text-danger small mb-2" id="itemError" hidden></div>
                         <div class="d-flex justify-content-end gap-2">
@@ -392,9 +392,10 @@
                 document.getElementById('deck-words').replaceChildren(...rows);
             }
 
-            // the meaning of an item (m: { en, de }, both optional) under its reading: English, else German
+            // the meaning of an item (m: { en, vi }, both optional) under its reading: in the language of the page, else the other one
             appendMeaning(box, word) {
-                const text = word.m?.en || word.m?.de || '';
+                const m = word.m || {};
+                const text = (window.Lang && Lang.current === 'vi' ? m.vi || m.en : m.en || m.vi) || '';
                 if (!text) return;
                 const small = document.createElement('small');
                 small.className = 'item-meaning';
@@ -485,7 +486,7 @@
                 $('itemOk').addEventListener('click', () => this.commitItem());
                 $('itemNom').addEventListener('input', () => this.suggest());
                 $('itemMeaningBtn').addEventListener('click', () => this.showMeaning(!$('itemMeaning').hidden ? false : true));
-                for (const id of ['itemQn', 'itemEn', 'itemDe']) $(id).addEventListener('input', () => { this.item.touched[id] = true; this.meaningHint(); });
+                for (const id of ['itemQn', 'itemEn', 'itemVi']) $(id).addEventListener('input', () => { this.item.touched[id] = true; this.meaningHint(); });
                 $('itemForm').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.tagName === 'INPUT' && !e.defaultPrevented) { e.preventDefault(); this.commitItem(); } });
                 // dict.csv: reading, characters, meaning
                 this.csv = fetch('/chunom/dict.csv').then(r => r.text()).then(text => {
@@ -512,7 +513,7 @@
             // behind the closed button: what the meaning is now (so a suggestion taken over from the dictionary is not hidden)
             meaningHint() {
                 const $ = id => document.getElementById(id);
-                const text = $('itemEn').value.trim() || $('itemDe').value.trim();
+                const text = $('itemEn').value.trim() || $('itemVi').value.trim();
                 $('itemMeaningHint').textContent = !$('itemMeaning').hidden || !text ? '' : '· ' + (text.length > 40 ? text.slice(0, 40) + '…' : text);
             }
 
@@ -524,12 +525,12 @@
                 $('itemNom').value = word?.n || '';
                 $('itemQn').value = word?.qn || '';
                 $('itemEn').value = word?.m?.en || '';
-                $('itemDe').value = word?.m?.de || '';
-                if (word) this.item.touched = { itemQn: true, itemEn: true, itemDe: true };
+                $('itemVi').value = word?.m?.vi || '';
+                if (word) this.item.touched = { itemQn: true, itemEn: true, itemVi: true };
                 $('itemError').hidden = true;
                 $('itemChoices').replaceChildren();
                 $('itemForm').hidden = false;
-                this.showMeaning(!!(word?.m?.en || word?.m?.de));
+                this.showMeaning(!!(word?.m?.en || word?.m?.vi));
                 if (word) this.suggest();
                 $('itemForm').scrollIntoView({ block: 'nearest' });
                 $('itemNom').focus();
@@ -607,7 +608,7 @@
             commitItem() {
                 const $ = id => document.getElementById(id), item = this.item;
                 const n = $('itemNom').value.trim(), qn = $('itemQn').value.trim().replace(/\s+/g, ' ');
-                const en = $('itemEn').value.trim(), de = $('itemDe').value.trim();
+                const en = $('itemEn').value.trim(), vi = $('itemVi').value.trim();
                 const fail = (msg, vi) => { const e = $('itemError'); e.textContent = window.Lang ? Lang.t(msg, vi) : msg; e.hidden = false; };
                 if (!n) return fail('Please enter the Chữ Nôm.', 'Hãy nhập chữ Nôm.');
                 if (!qn) return fail('Please enter the reading.', 'Hãy nhập cách đọc.');
@@ -615,7 +616,7 @@
                 if (words.some(w => w !== item.word && !removed.has(w) && w.n === n && (w.qn || '') === qn)) return fail('This item is in the deck already.', 'Chữ này đã có trong bộ thẻ.');
                 const entry = { ...(item.word || {}), n, qn };
                 delete entry.m;
-                if (en || de) entry.m = { ...(en && { en }), ...(de && { de }) };
+                if (en || vi) entry.m = { ...(en && { en }), ...(vi && { vi }) };
                 const at = item.word ? words.indexOf(item.word) : -1;
                 if (at >= 0) words[at] = entry; else words.push(entry);
                 this.closeItem();
