@@ -275,7 +275,7 @@ class ChunomDict {
 
     // the popup of a character is shared with the other pages (js/detail.js)
     this.detail = ChunomDetail.get().configure({
-      qattFont: 'QATT Pen', // the glyphs are text of the Pen font (not SVG)
+      qattFont: 'QATT Pen Medium', // the glyphs are text of the Pen medium font (not SVG; a font that fonts.js offers to every visitor)
       urlFor: nom => this.linkUrl('detail', nom), // the link of the open popup can be shared
       onClose: () => this.updateUrl(this.searchInput.value.trim()), // the entry before the popup may still carry an older search term
       onQattClick: query => { // a glyph in the popup searches for its reading
