@@ -35,8 +35,9 @@ main { max-width: 56rem; }
 .meta .notes, .shelf-page .notes { white-space: pre-line; color: var(--muted); font-size: .9rem; overflow-wrap: anywhere; }
 .jump ol { columns: 2 16rem; padding-left: 1.6rem; }
 .jump a { text-decoration: none; }
-.shelf-tools { position: sticky; top: 60px; z-index: 5; display: flex; gap: 1.5rem; padding: .45rem .9rem; margin: 1rem 0; background: var(--bs-body-bg, #fffdf8); border: 1px solid var(--line); border-radius: .7rem; }
+.shelf-tools { position: sticky; top: 60px; z-index: 5; display: flex; flex-wrap: wrap; gap: .2rem 1.5rem; padding: .45rem .9rem; margin: 1rem 0; background: var(--bs-body-bg, #fffdf8); border: 1px solid var(--line); border-radius: .7rem; }
 .shelf-tools .form-check { margin: 0; }
+.shelf-tools .form-check-label { white-space: nowrap; }
 .read { font-family: var(--nom-font); }
 .read .line { display: flex; align-items: baseline; gap: .8rem; margin: 0 0 .75rem; }
 .read .line .no { flex: none; width: 2.2rem; text-align: right; font: .75rem/1 system-ui, sans-serif; color: var(--muted); text-decoration: none; }
@@ -49,6 +50,12 @@ main { max-width: 56rem; }
 .read .p { font-size: 1em; margin-right: .1em; }
 .read .note { flex: 1 1 100%; font: .85rem/1.4 var(--bs-body-font-family); color: var(--muted); padding-left: 3rem; }
 .shelf-no-notes .read .note { display: none; }
+/* a translated passage: below its last line, indented like the note; both languages are in the HTML, data-only (site.css of qatt.org) shows one */
+.read .tr { margin: -.2rem 0 1.1rem 3rem; padding: .45rem .9rem; font: .95rem/1.5 var(--bs-body-font-family); border-left: 3px solid var(--accent, var(--cinnabar)); border-radius: 0 .5rem .5rem 0; background: color-mix(in srgb, currentColor 4%, transparent); }
+.read .tr p { margin: 0; }
+.tr-ok { color: var(--accent, var(--cinnabar)); }
+@media (max-width: 575.98px) { .read .tr { margin-left: 2.1rem; } }
+.shelf-no-trans .tr, .shelf-no-trans .tr-note { display: none; }
 .cjk { cursor: pointer; border-radius: .15em; }
 .cjk:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
 .summary-vi h3 { color: var(--muted); }
