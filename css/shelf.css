@@ -92,3 +92,7 @@ main { max-width: 56rem; }
 .cover-side { flex: none; width: 16rem; height: 16rem; }
 .cover-top { display: none; width: 100%; max-width: 26rem; height: auto; aspect-ratio: 1; margin: 0 auto 1rem; }
 @media (max-width: 767.98px) { .cover-side { display: none; } .cover-top { display: block; } }
+
+/* the footnote of a card: lines and transcriber, then author and date, dimmed so the summary stands out */
+.cd { display: block; }
+.works small.d-block, .card-cover .body small { opacity: .6; }
