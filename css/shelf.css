@@ -58,6 +58,8 @@ main { max-width: 56rem; }
 .cjk { cursor: pointer; border-radius: .15em; }
 .cjk:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
 .summary-vi h3 { color: var(--muted); }
+.summary-toggle { display: block; width: 100%; margin: .35rem 0 -.2rem; padding: .1rem 0; border: 0; background: none; color: var(--muted); font-size: .9rem; line-height: 1; cursor: pointer; }
+.summary-toggle:hover, .summary-toggle:focus-visible { color: var(--accent, var(--cinnabar)); }
 .read .line { flex-wrap: wrap; }
 .shelf-page h2 { font-family: Georgia, "Times New Roman", var(--nom-font); font-weight: 400; font-size: 1.35rem; margin: 2.2rem 0 .2rem; padding-bottom: .3rem; border-bottom: 1px solid var(--line); }
 .shelf-page h2 .no { display: inline-block; min-width: 1.8rem; color: var(--cinnabar); }
