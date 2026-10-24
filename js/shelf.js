@@ -214,10 +214,9 @@ Raise ?v=N in build_shelf.py (VERSION) with every change: the file is cached for
     });
   }
   var looked = {};
-  function inDictionary(ch) {   // the Telex dictionaries (ime.js) and the csv of the popup
-    return load('/chunom/js/detail.js').then(function () { return ChunomDetail.loadIme(); }).then(function () {
-      if (window.VietIme && VietIme.lookupGlyph(ch).length) return true;
-      return ChunomDetail.loadData().then(function (rows) { return rows.some(function (r) { return r[1] && r[1].indexOf(ch) >= 0; }); });
+  function inDictionary(ch) {   // ime.js holds every character of dict.csv, so its dictionaries decide
+    return load('/chunom/js/ime.js').then(function () { return VietIme.load(); }).then(function () {
+      return VietIme.lookupGlyph(ch).length > 0;
     }).catch(function () { return false; });
   }
   document.addEventListener('click', function (e) {
@@ -225,9 +224,9 @@ Raise ?v=N in build_shelf.py (VERSION) with every change: the file is cached for
     if (!sp) return;
     var ch = sp.dataset.char;
     if (!(ch in looked)) looked[ch] = inDictionary(ch);
-    looked[ch].then(function (has) { if (has) ChunomDetail.open(ch); });
+    looked[ch].then(function (has) { if (has) load('/chunom/js/detail.js').then(function () { ChunomDetail.open(ch); }); });
   });
-  if (read) hydrateChars();
+  if (read) window.addEventListener('load', hydrateChars);
 
   // the summary in the language of the page: its text is translated by data-vi, so its lang follows
   function syncSummaryLang() {
