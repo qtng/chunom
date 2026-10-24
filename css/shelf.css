@@ -116,3 +116,4 @@ a.card-cover:hover .card-play { background: rgba(20, 12, 6, .75); }
 /* the footnote of a card: lines and transcriber, then author and date, dimmed so the summary stands out */
 .cd { display: block; }
 .works small.d-block, .card-cover .body small, .hero small.d-block { opacity: .6; }
+.cover-auto .cover-ai { padding: 0 .35rem; border: 1px solid rgba(255, 255, 255, .8); border-radius: .3rem; font-size: .7rem; font-weight: 700; letter-spacing: .04em; }   /* the recording is AI-made */
