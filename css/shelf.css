@@ -24,6 +24,7 @@ main { max-width: 56rem; }
 .works .work:hover { border-color: var(--cinnabar); }
 .work .nom { display: block; font-family: var(--nom-font); font-size: 1.7rem; line-height: 1.3; }
 .work rt { display: none; }   /* the reading is the line below */
+.works .card-sum { display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; font-size: .92rem; margin-top: .15rem; }
 .work .qn { display: block; font-family: Georgia, "Times New Roman", var(--nom-font); font-size: 1.15rem; }
 
 /* a work */
