@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://qatt.org/css/site.css">
   <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
   <link rel="stylesheet" href="/chunom-assets/fonts/fonts.css">
+  <link rel="stylesheet" href="/chunom/css/shelf-cards.css?v=34">
   <script defer src="https://qatt.org/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script defer src="/chunom/js/ime.js"></script>
   <script defer src="/chunom/js/detail.js"></script>
@@ -88,6 +89,7 @@
       flex-direction: column; align-items: center; justify-content: flex-end;
     }
     .clip-box.is-clipped > .clip-more { display: flex; }
+    #shelf-teaser .works { grid-template-columns: repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr)); }   /* four cards in a row on a wide screen */
     .clip-more:hover { color: var(--ink); }
     /* Öffentliche Decks im Masonry-Stil: Spalten, Karten brechen nicht um */
     .deck-masonry { column-count: 2; column-gap: .75rem; }
@@ -244,8 +246,27 @@
     </section>
 
     <div id="results" class="list-group w-100"></div>
+
+    <!-- the first works of the Bookshelf: the cards are written by the shelf generator (shelf/featured.html) -->
+    <section id="shelf-teaser" class="mt-5 mb-5">
+      <div class="d-flex justify-content-between align-items-baseline mb-3">
+        <h2 class="h5 font-serif mb-0" data-vi="Tủ sách">Bookshelf</h2>
+        <a href="shelf/" class="small"><span data-vi="Tất cả tác phẩm">All works</span> <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+      </div>
+      <div class="shelf-teaser-cards" style="min-height: 22rem"></div>
+    </section>
   </main>
 
+  <script>
+  // the cards of the Bookshelf (an HTML fragment of the shelf generator); the box keeps its height until they are there
+  (function () {
+    var box = document.getElementById('shelf-teaser');
+    fetch('/chunom/shelf/featured.html').then(function (r) { return r.ok ? r.text() : Promise.reject(); }).then(function (html) {
+      var cards = box.querySelector('.shelf-teaser-cards');
+      cards.innerHTML = html; cards.style.minHeight = '';
+    }).catch(function () { box.hidden = true; });
+  })();
+  </script>
   <script>
 // Kleiner DOM-Helfer: el('div', { className: 'x', 'data-copy': '…' }, kind, 'Text', [weitere]).
 // Texte werden Textknoten, nie HTML; bekannte Properties direkt, alles andere (data-*, aria-*, role) per setAttribute.
