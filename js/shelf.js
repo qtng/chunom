@@ -259,6 +259,20 @@ Raise ?v=N in build_shelf.py (VERSION) with every change: the file is cached for
   document.addEventListener('langchange', syncSummaryLang);
   syncSummaryLang();
 
+  // the rest of a long summary opens with the triangle at the bottom of its box
+  var sumToggle = document.querySelector('.summary-toggle'), sumMore = document.getElementById('summary-more');
+  if (sumToggle && sumMore) {
+    var paintToggle = function () {
+      var open = !sumMore.hidden;
+      sumToggle.setAttribute('aria-expanded', open);
+      sumToggle.setAttribute('aria-label', open ? T('Show less', 'Thu gọn') : T('Show more', 'Xem thêm'));
+      sumToggle.firstElementChild.className = 'bi ' + (open ? 'bi-caret-up-fill' : 'bi-caret-down-fill');
+    };
+    sumToggle.addEventListener('click', function () { sumMore.hidden = !sumMore.hidden; paintToggle(); });
+    document.addEventListener('langchange', paintToggle);
+    paintToggle();
+  }
+
   var legend = document.querySelector('.legend');
   if (document.querySelector('span.ids')) {
     if (legend) {
