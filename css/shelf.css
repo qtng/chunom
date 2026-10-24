@@ -4,8 +4,9 @@
 body { min-height: 100vh; color: var(--ink); background: #fffdf8; }
 .hero { background: radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%), linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%); border-bottom: 1px solid #e8dcc0; color: var(--ink); }
 .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2rem, 6vw, 3.2rem); letter-spacing: .01em; }
-.hero .han { font-family: var(--nom-font); color: var(--cinnabar); font-size: 1.6rem; line-height: 1.3; }
-.hero .han rt { font-size: .45em; }
+.hero .qn { color: var(--cinnabar); font-size: 1.1rem; letter-spacing: .02em; }
+.hero h1[lang] { font-family: var(--nom-font); font-size: clamp(2.4rem, 9vw, 4rem); line-height: 1.25; letter-spacing: 0; }
+.hero rt { display: none; }   /* the reading of the title is the small line above it */
 .hero .lead { max-width: 40rem; color: #4a3d30; }
 .card-box { padding: 1rem; margin-bottom: .6rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .06); }
 .text-secondary { color: var(--muted) !important; }
@@ -21,6 +22,10 @@ main { max-width: 56rem; }
 
 /* a work */
 .meta { font-size: .92rem; }
+.meta summary { cursor: pointer; list-style: none; font-weight: 500; }
+.meta summary::-webkit-details-marker { display: none; }
+.meta summary::before { content: "▸"; display: inline-block; width: 1.1em; transition: transform .15s; }
+.meta[open] summary::before { transform: rotate(90deg); }
 .meta dt { font-weight: 500; color: var(--muted); }
 .meta dd { overflow-wrap: anywhere; }
 @media (max-width: 575.98px) { .meta dt { margin-top: .5rem; } .read .line .no { width: 1.6rem; } .read .line { gap: .5rem; } .read .line .t { font-size: 1.55rem; } }
@@ -34,8 +39,8 @@ main { max-width: 56rem; }
 .read .line .no { flex: none; width: 2.2rem; text-align: right; font: .75rem/1 system-ui, sans-serif; color: var(--muted); text-decoration: none; }
 .read .line .t { font-size: 1.7rem; line-height: 2.1; }
 .read ruby { ruby-position: over; margin-right: .08em; }
-.read rt, .hero rt, .work rt { font-family: system-ui, sans-serif; font-size: .42em; line-height: 1.1; font-weight: 400; color: var(--muted); user-select: none; letter-spacing: 0; }
-.read rt.qatt, .hero rt.qatt, .work rt.qatt { font-family: "QATT Pen Medium"; font-size: .6em; color: var(--bs-body-color, var(--ink)); }
+.read rt, .work rt { font-family: system-ui, sans-serif; font-size: .42em; line-height: 1.1; font-weight: 400; color: var(--muted); user-select: none; letter-spacing: 0; }
+.read rt.qatt, .work rt.qatt { font-family: "QATT Pen Medium"; font-size: .6em; color: var(--bs-body-color, var(--ink)); }
 .read[data-ruby="off"] rt { display: none; }
 .read .p { font-size: 1em; margin-right: .1em; }
 .read .note { flex: 1 1 100%; font: .85rem/1.4 system-ui, sans-serif; color: var(--muted); padding-left: 3rem; }
@@ -49,9 +54,9 @@ main { max-width: 56rem; }
 /* IDS sequences: the ones that are not in Unicode are the interesting ones (rare forms, maybe for Unicode): highlighted */
 .ids.open { background: var(--bs-warning-bg-subtle, #fff1c2); outline: 1px dashed var(--bs-warning-border-subtle, var(--cinnabar)); border-radius: .2em; padding: 0 .1em; color: var(--bs-warning-text-emphasis, inherit); }
 .ids.open:not(.drawn) { font-size: .6em; font-family: monospace; }
-.ids.open.drawn { line-height: 1; }
-.ids.open.drawn svg, .ids.open.drawn svg * { fill: currentColor; stroke: none; }
-.ids.open.drawn svg { display: inline-block; height: 1.1em; width: 1.1em; vertical-align: -.15em; }
-.ids.enc { background: var(--bs-info-bg-subtle, #dff1ff); border-radius: .2em; }
+.ids.drawn { line-height: 1; }
+.ids.drawn svg, .ids.drawn svg * { fill: currentColor; stroke: none; }
+.ids.drawn svg { display: inline-block; height: 1.1em; width: 1.1em; vertical-align: -.15em; }
+.ids.enc { background: var(--bs-info-bg-subtle, #dff1ff); border-radius: .2em; padding: 0 .1em; color: var(--bs-info-text-emphasis, inherit); }
 .unk { background: color-mix(in srgb, currentColor 12%, transparent); border-radius: .2em; }
 .legend .ids { font-size: 1rem !important; }
