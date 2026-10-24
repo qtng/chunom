@@ -62,5 +62,8 @@ main { max-width: 56rem; }
 .ids.drawn svg, .ids.drawn svg * { fill: currentColor; stroke: none; }
 .ids.drawn svg { display: inline-block; height: 1.1em; width: 1.1em; vertical-align: -.15em; }
 .ids.enc { background: var(--bs-info-bg-subtle, #dff1ff); border-radius: .2em; padding: 0 .1em; color: var(--bs-info-text-emphasis, inherit); }
+.unk.drawn svg { fill: currentColor; vertical-align: -.25em; }
 .unk { background: color-mix(in srgb, currentColor 12%, transparent); border-radius: .2em; }
 .legend .ids { font-size: 1rem !important; }
+
+.summary h2 .badge { font-size: .7em; vertical-align: middle; }

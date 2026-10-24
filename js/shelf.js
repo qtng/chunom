@@ -154,6 +154,28 @@ Raise ?v=N in build_shelf.py (VERSION) with every change: the file is cached for
   }
   markMissing();
 
+  function unkSpans() {   // the placeholder 〓 (a character nobody could read or encode), alone in its span
+    return Array.prototype.filter.call(document.querySelectorAll('span.unk'), function (sp) { return sp.textContent === '\u3013'; });
+  }
+  function drawUnk() {   // a device without a font for 〓 gets it drawn with KAGE from GlyphWiki (u3013)
+    var spans = unkSpans();
+    if (!spans.length) return;
+    var canvas = document.createElement('canvas'), g = canvas.getContext && canvas.getContext('2d');
+    if (!g) return;
+    canvas.width = canvas.height = 48;
+    var ink = function (ch, family) {
+      g.clearRect(0, 0, 48, 48); g.font = '32px ' + family; g.fillStyle = '#000'; g.textBaseline = 'alphabetic'; g.fillText(ch, 4, 36);
+      var d = g.getImageData(0, 0, 48, 48).data, key = '', sum = 0;
+      for (var i = 3; i < d.length; i += 4) { sum += d[i]; key += d[i] > 127 ? '1' : '0'; }
+      return { blank: sum === 0, key: key };
+    };
+    var family = getComputedStyle(spans[0]).fontFamily, mine = ink('\u3013', family), none = ink('\u{3FFFD}', family);
+    if (!(mine.blank || mine.key === none.key)) return;   // the device has it
+    drawIds({ ch: '\u3013' }, 'unk').then(function (svg) {
+      spans.forEach(function (sp) { sp.innerHTML = svg; sp.classList.add('drawn'); sp.setAttribute('role', 'img'); sp.setAttribute('aria-label', '\u3013'); });
+    }).catch(function () { /* stays text */ });
+  }
+
   var legend = document.querySelector('.legend');
   if (document.querySelector('span.ids')) {
     if (legend) {
@@ -161,6 +183,7 @@ Raise ?v=N in build_shelf.py (VERSION) with every change: the file is cached for
       legend.innerHTML = '<span class="ids open">⿰</span> <span data-vi="Chữ chưa có trong Unicode, vẽ lại từ các bộ phận (có thể là chữ cần đưa vào Unicode)">a character that is not in Unicode, drawn from its parts (a candidate for Unicode)</span> · ' +
         '<span class="ids enc">字</span> <span data-vi="Chữ nay đã có trong Unicode (đưa chuột vào để xem mã; ■ nếu thiết bị chưa có phông)">now a character of Unicode (hover for the code point; ■ if your device has no font for it)</span>';
     }
-    if (document.querySelector('span.ids.open[data-ids]')) load(QATT + 'js/kage-engine.min.js').then(drawAll).catch(function () { /* stays text */ });
   }
+  if (document.querySelector('span.ids.open[data-ids]') || unkSpans().length)
+    load(QATT + 'js/kage-engine.min.js').then(function () { drawAll(); drawUnk(); }).catch(function () { /* stays text */ });
 })();
