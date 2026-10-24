@@ -259,18 +259,26 @@ Raise ?v=N in build_shelf.py (VERSION) with every change: the file is cached for
   document.addEventListener('langchange', syncSummaryLang);
   syncSummaryLang();
 
-  // the rest of a long summary opens with the triangle at the bottom of its box
-  var sumToggle = document.querySelector('.summary-toggle'), sumMore = document.getElementById('summary-more');
-  if (sumToggle && sumMore) {
+  // the rest of a long summary: open from the start on a wide screen; on a phone or tablet it is closed and the whole summary is the button (the triangle shows the state),
+  // on a wide screen only the triangle opens and closes it
+  var sumBox = document.querySelector('.summary'), sumToggle = document.querySelector('.summary-toggle'), sumMore = document.getElementById('summary-more');
+  if (sumBox && sumToggle && sumMore) {
+    var wide = window.matchMedia('(min-width: 992px)'), touched = false;
     var paintToggle = function () {
       var open = !sumMore.hidden;
       sumToggle.setAttribute('aria-expanded', open);
       sumToggle.setAttribute('aria-label', open ? T('Show less', 'Thu gọn') : T('Show more', 'Xem thêm'));
       sumToggle.firstElementChild.className = 'bi ' + (open ? 'bi-caret-up-fill' : 'bi-caret-down-fill');
     };
-    sumToggle.addEventListener('click', function () { sumMore.hidden = !sumMore.hidden; paintToggle(); });
+    var follow = function () { if (!touched) { sumMore.hidden = !wide.matches; paintToggle(); } };
+    sumBox.addEventListener('click', function (ev) {
+      if (ev.target.closest('a')) return;
+      if (wide.matches ? !ev.target.closest('.summary-toggle') : (window.getSelection && String(window.getSelection()))) return;   // wide: only the triangle; narrow: not while text is being selected
+      touched = true; sumMore.hidden = !sumMore.hidden; paintToggle();
+    });
     document.addEventListener('langchange', paintToggle);
-    paintToggle();
+    if (wide.addEventListener) wide.addEventListener('change', follow);
+    follow();
   }
 
   var legend = document.querySelector('.legend');
