@@ -31,7 +31,7 @@ main { max-width: 56rem; }
 .meta { font-size: .92rem; }
 .meta dt { font-weight: 500; color: var(--muted); }
 .meta dd { overflow-wrap: anywhere; }
-@media (max-width: 575.98px) { .meta dt { margin-top: .5rem; } .read .line .no { width: 1.6rem; } .read .line { gap: .5rem; } } }
+@media (max-width: 575.98px) { .meta dt { margin-top: .5rem; } .read .line .no { width: 1.6rem; } .read .line { gap: .5rem; } }
 .meta .notes, .shelf-page .notes { white-space: pre-line; color: var(--muted); font-size: .9rem; overflow-wrap: anywhere; }
 .jump ol { columns: 2 16rem; padding-left: 1.6rem; }
 .jump a { text-decoration: none; }
@@ -40,8 +40,8 @@ main { max-width: 56rem; }
 .read { font-family: var(--nom-font); }
 .read .line { display: flex; align-items: baseline; gap: .8rem; margin: 0 0 .75rem; }
 .read .line .no { flex: none; width: 2.2rem; text-align: right; font: .75rem/1 system-ui, sans-serif; color: var(--muted); text-decoration: none; }
-.read .line .t { font-size: 1.9rem; line-height: 2.1; white-space: nowrap; }
-.read { overflow-x: auto; }   /* a line that does not fit scrolls inside the text, the page does not */
+.read .line .t { flex: 1 1 0; min-width: 0; font-size: 1.9rem; line-height: 2.1; overflow-wrap: anywhere; }
+.read .line .no { align-self: flex-start; margin-top: .9rem; }
 .read ruby { ruby-position: over; margin-right: .08em; }
 .read rt, .work rt { font-family: var(--bs-body-font-family); font-size: .42em; line-height: 1.1; font-weight: 400; color: var(--muted); user-select: none; letter-spacing: 0; }
 .read rt.qatt, .work rt.qatt { font-family: "QATT Pen Medium"; font-size: .6em; color: var(--bs-body-color, var(--ink)); }
