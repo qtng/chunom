@@ -83,3 +83,11 @@ main { max-width: 56rem; }
 .card-cover .body { margin: 0 .6rem .6rem; padding: .7rem .9rem; background: rgba(255, 253, 248, .84); border-radius: .6rem; color: #1a1410; }
 .card-cover .body * { color: #1a1410 !important; }
 .card-cover .body .text-secondary, .card-cover .body small { color: #4a3d30 !important; }
+
+/* the cover of a work: right in the header on wide screens, large above the content on phones */
+.hero .has-cover { display: flex; gap: 2rem; align-items: center; justify-content: space-between; }
+.hero-text { flex: 1 1 auto; min-width: 0; }
+.cover-side, .cover-top { border-radius: 1rem; border: 1px solid var(--line); box-shadow: 0 .5rem 1.2rem rgba(60, 40, 20, .2); }
+.cover-side { flex: none; width: 16rem; height: 16rem; }
+.cover-top { display: none; width: 100%; max-width: 26rem; height: auto; aspect-ratio: 1; margin: 0 auto 1rem; }
+@media (max-width: 767.98px) { .cover-side { display: none; } .cover-top { display: block; } }
