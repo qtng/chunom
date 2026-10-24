@@ -54,7 +54,7 @@ main { max-width: 56rem; }
 .read .tr p { margin: 0; }
 .tr-ok { color: var(--accent, var(--cinnabar)); }
 @media (max-width: 575.98px) { .read .tr { margin-left: 2.1rem; } }
-.shelf-no-trans .tr, .shelf-no-trans .tr-note { display: none; }
+.shelf-no-trans .tr { display: none; }
 .cjk { cursor: pointer; border-radius: .15em; }
 .cjk:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
 .summary-vi h3 { color: var(--muted); }
