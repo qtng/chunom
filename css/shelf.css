@@ -45,6 +45,7 @@ main { max-width: 56rem; }
 .read[data-ruby="off"] rt { display: none; }
 .read .p { font-size: 1em; margin-right: .1em; }
 .read .note { flex: 1 1 100%; font: .85rem/1.4 system-ui, sans-serif; color: var(--muted); padding-left: 3rem; }
+.shelf-no-notes .read .note { display: none; }
 .read .line { flex-wrap: wrap; }
 .shelf-page h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.35rem; margin: 2.2rem 0 .2rem; padding-bottom: .3rem; border-bottom: 1px solid var(--line); }
 .shelf-page h2 .no { display: inline-block; min-width: 1.8rem; color: var(--cinnabar); }
