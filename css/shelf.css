@@ -8,6 +8,8 @@ body { min-height: 100vh; color: var(--ink); background: #fffdf8; }
 .crumbs a { color: var(--cinnabar); text-decoration: none; }
 .crumbs a:hover { text-decoration: underline; }
 .hero .qn { color: var(--cinnabar); font-size: 1.1rem; letter-spacing: .02em; }
+.hero .han { color: var(--cinnabar); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; font-family: var(--nom-font); }
+@media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
 .hero h1[lang] { font-family: var(--nom-font); font-size: clamp(2.4rem, 9vw, 4rem); line-height: 1.25; letter-spacing: 0; }
 .hero rt { display: none; }   /* the reading of the title is the small line above it */
 .hero .lead { max-width: 40rem; color: #4a3d30; }
@@ -25,10 +27,6 @@ main { max-width: 56rem; }
 
 /* a work */
 .meta { font-size: .92rem; }
-.meta summary { cursor: pointer; list-style: none; font-weight: 500; }
-.meta summary::-webkit-details-marker { display: none; }
-.meta summary::before { content: "▸"; display: inline-block; width: 1.1em; transition: transform .15s; }
-.meta[open] summary::before { transform: rotate(90deg); }
 .meta dt { font-weight: 500; color: var(--muted); }
 .meta dd { overflow-wrap: anywhere; }
 @media (max-width: 575.98px) { .meta dt { margin-top: .5rem; } .read .line .no { width: 1.6rem; } .read .line { gap: .5rem; } .read .line .t { font-size: 1.55rem; } }
@@ -66,4 +64,4 @@ main { max-width: 56rem; }
 .unk { background: color-mix(in srgb, currentColor 12%, transparent); border-radius: .2em; }
 .legend .ids { font-size: 1rem !important; }
 
-.summary h2 .badge { font-size: .7em; vertical-align: middle; }
+.summary h2 .fst-italic { font-size: .8em; }
