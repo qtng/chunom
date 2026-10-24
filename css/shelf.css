@@ -86,7 +86,7 @@ main { max-width: 56rem; }
 .card-cover .body .text-secondary, .card-cover .body small { color: #4a3d30 !important; }
 
 /* the cover of a work: right in the header on wide screens, large above the content on phones */
-.hero .has-cover { display: flex; gap: 2rem; align-items: center; justify-content: space-between; }
+.hero .has-cover { display: flex; gap: 2rem; align-items: center; justify-content: center; }
 .hero-text { flex: 1 1 auto; min-width: 0; }
 .cover-side, .cover-top { border-radius: 1rem; border: 1px solid var(--line); box-shadow: 0 .5rem 1.2rem rgba(60, 40, 20, .2); }
 .cover-side { flex: none; width: 16rem; height: 16rem; }
@@ -95,4 +95,4 @@ main { max-width: 56rem; }
 
 /* the footnote of a card: lines and transcriber, then author and date, dimmed so the summary stands out */
 .cd { display: block; }
-.works small.d-block, .card-cover .body small { opacity: .6; }
+.works small.d-block, .card-cover .body small, .hero small.d-block { opacity: .6; }
