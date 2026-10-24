@@ -89,7 +89,9 @@
       flex-direction: column; align-items: center; justify-content: flex-end;
     }
     .clip-box.is-clipped > .clip-more { display: flex; }
-    #shelf-teaser .works { grid-template-columns: repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr)); }   /* four cards in a row on a wide screen */
+    #shelf-teaser .works { grid-template-columns: 1fr; }   /* the four cards: one column on a phone, 2 × 2 from 576px, four in a row from 1200px */
+    @media (min-width: 576px) { #shelf-teaser .works { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1200px) { #shelf-teaser .works { grid-template-columns: repeat(4, 1fr); } }
     .clip-more:hover { color: var(--ink); }
     /* Öffentliche Decks im Masonry-Stil: Spalten, Karten brechen nicht um */
     .deck-masonry { column-count: 2; column-gap: .75rem; }
@@ -254,6 +256,7 @@
         <a href="shelf/" class="small"><span data-vi="Tất cả tác phẩm">All works</span> <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
       </div>
       <div class="shelf-teaser-cards" style="min-height: 22rem"></div>
+      <div class="text-center mt-3 d-sm-none"><a class="btn btn-cinnabar btn-pill" href="shelf/"><span data-vi="Tất cả tác phẩm">All works</span> <i class="bi bi-arrow-right" aria-hidden="true"></i></a></div>
     </section>
   </main>
 
