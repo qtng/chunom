@@ -4,6 +4,9 @@
 body { min-height: 100vh; color: var(--ink); background: #fffdf8; }
 .hero { background: radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%), linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%); border-bottom: 1px solid #e8dcc0; color: var(--ink); }
 .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2rem, 6vw, 3.2rem); letter-spacing: .01em; }
+.crumbs { font-size: .9rem; color: var(--muted); }
+.crumbs a { color: var(--cinnabar); text-decoration: none; }
+.crumbs a:hover { text-decoration: underline; }
 .hero .qn { color: var(--cinnabar); font-size: 1.1rem; letter-spacing: .02em; }
 .hero h1[lang] { font-family: var(--nom-font); font-size: clamp(2.4rem, 9vw, 4rem); line-height: 1.25; letter-spacing: 0; }
 .hero rt { display: none; }   /* the reading of the title is the small line above it */
@@ -55,6 +58,7 @@ main { max-width: 56rem; }
 .ids.open { background: var(--bs-warning-bg-subtle, #fff1c2); outline: 1px dashed var(--bs-warning-border-subtle, var(--cinnabar)); border-radius: .2em; padding: 0 .1em; color: var(--bs-warning-text-emphasis, inherit); }
 .ids.open:not(.drawn) { font-size: .6em; font-family: monospace; }
 .ids.drawn { line-height: 1; }
+.ids.enc.missing { font-family: system-ui, sans-serif; font-size: .8em; }
 .ids.drawn svg, .ids.drawn svg * { fill: currentColor; stroke: none; }
 .ids.drawn svg { display: inline-block; height: 1.1em; width: 1.1em; vertical-align: -.15em; }
 .ids.enc { background: var(--bs-info-bg-subtle, #dff1ff); border-radius: .2em; padding: 0 .1em; color: var(--bs-info-text-emphasis, inherit); }
