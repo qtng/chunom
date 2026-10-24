@@ -1,0 +1,57 @@
+/* The pages of the Bookshelf (shelf/): layout only; colours come from the variables of the page and of Bootstrap, so the themes of qatt.org and the dark ones work.
+   The classic look of the header (.hero) and of the panels (.card-box) as on the other pages of the Chunom site; a theme overrides it. */
+:root { --ink: #2b2118; --cinnabar: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; --nom-font: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }
+body { min-height: 100vh; color: var(--ink); background: #fffdf8; }
+.hero { background: radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%), linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%); border-bottom: 1px solid #e8dcc0; color: var(--ink); }
+.hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2rem, 6vw, 3.2rem); letter-spacing: .01em; }
+.hero .han { font-family: var(--nom-font); color: var(--cinnabar); font-size: 1.6rem; line-height: 1.3; }
+.hero .han rt { font-size: .45em; }
+.hero .lead { max-width: 40rem; color: #4a3d30; }
+.card-box { padding: 1rem; margin-bottom: .6rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .06); }
+.text-secondary { color: var(--muted) !important; }
+main { max-width: 56rem; }
+
+/* the table of contents */
+.works { display: grid; gap: .6rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); }
+.works .work { color: inherit; margin: 0; }
+.works .work:hover { border-color: var(--cinnabar); }
+.work .nom { display: block; font-family: var(--nom-font); font-size: 1.7rem; line-height: 1.3; }
+.work rt { display: none; }   /* the reading is the line below */
+.work .qn { display: block; font-family: Georgia, "Times New Roman", serif; font-size: 1.15rem; }
+
+/* a work */
+.meta { font-size: .92rem; }
+.meta dt { font-weight: 500; color: var(--muted); }
+.meta dd { overflow-wrap: anywhere; }
+@media (max-width: 575.98px) { .meta dt { margin-top: .5rem; } .read .line .no { width: 1.6rem; } .read .line { gap: .5rem; } .read .line .t { font-size: 1.55rem; } }
+.meta .notes, .shelf-page .notes { white-space: pre-line; color: var(--muted); font-size: .9rem; overflow-wrap: anywhere; }
+.jump ol { columns: 2 16rem; padding-left: 1.6rem; }
+.jump a { text-decoration: none; }
+.shelf-tools { position: sticky; top: 60px; z-index: 5; display: flex; gap: 1.5rem; padding: .45rem .9rem; margin: 1rem 0; background: var(--bs-body-bg, #fffdf8); border: 1px solid var(--line); border-radius: .7rem; }
+.shelf-tools .form-check { margin: 0; }
+.read { font-family: var(--nom-font); }
+.read .line { display: flex; align-items: baseline; gap: .8rem; margin: 0 0 .75rem; }
+.read .line .no { flex: none; width: 2.2rem; text-align: right; font: .75rem/1 system-ui, sans-serif; color: var(--muted); text-decoration: none; }
+.read .line .t { font-size: 1.7rem; line-height: 2.1; }
+.read ruby { ruby-position: over; margin-right: .08em; }
+.read rt, .hero rt, .work rt { font-family: system-ui, sans-serif; font-size: .42em; line-height: 1.1; font-weight: 400; color: var(--muted); user-select: none; letter-spacing: 0; }
+.read rt.qatt, .hero rt.qatt, .work rt.qatt { font-family: "QATT Pen Medium"; font-size: .6em; color: var(--bs-body-color, var(--ink)); }
+.read[data-ruby="off"] rt { display: none; }
+.read .p { font-size: 1em; margin-right: .1em; }
+.read .note { flex: 1 1 100%; font: .85rem/1.4 system-ui, sans-serif; color: var(--muted); padding-left: 3rem; }
+.read .line { flex-wrap: wrap; }
+.shelf-page h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.35rem; margin: 2.2rem 0 .2rem; padding-bottom: .3rem; border-bottom: 1px solid var(--line); }
+.shelf-page h2 .no { display: inline-block; min-width: 1.8rem; color: var(--cinnabar); }
+.shelf-page h2 [lang] { font-family: var(--nom-font); font-size: 1.5rem; }
+.shelf-page h2 rt { font-size: .4em; }
+.shelf-page .en { margin: 0 0 .4rem; color: var(--muted); }
+
+/* IDS sequences: the ones that are not in Unicode are the interesting ones (rare forms, maybe for Unicode): highlighted */
+.ids.open { background: var(--bs-warning-bg-subtle, #fff1c2); outline: 1px dashed var(--bs-warning-border-subtle, var(--cinnabar)); border-radius: .2em; padding: 0 .1em; color: var(--bs-warning-text-emphasis, inherit); }
+.ids.open:not(.drawn) { font-size: .6em; font-family: monospace; }
+.ids.open.drawn { line-height: 1; }
+.ids.open.drawn svg, .ids.open.drawn svg * { fill: currentColor; stroke: none; }
+.ids.open.drawn svg { display: inline-block; height: 1.1em; width: 1.1em; vertical-align: -.15em; }
+.ids.enc { background: var(--bs-info-bg-subtle, #dff1ff); border-radius: .2em; }
+.unk { background: color-mix(in srgb, currentColor 12%, transparent); border-radius: .2em; }
+.legend .ids { font-size: 1rem !important; }
