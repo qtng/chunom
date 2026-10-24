@@ -54,7 +54,7 @@ main { max-width: 56rem; }
 .read .tr p { margin: 0; }
 .tr-ok { color: var(--accent, var(--cinnabar)); }
 @media (max-width: 575.98px) { .read .tr { margin-left: 2.1rem; } }
-.shelf-no-trans .tr, .shelf-no-trans .tr-note { display: none; }
+.shelf-no-trans .tr { display: none; }
 .cjk { cursor: pointer; border-radius: .15em; }
 .cjk:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
 .summary-vi h3 { color: var(--muted); }
@@ -116,4 +116,3 @@ a.card-cover:hover .card-play { background: rgba(20, 12, 6, .75); }
 /* the footnote of a card: lines and transcriber, then author and date, dimmed so the summary stands out */
 .cd { display: block; }
 .works small.d-block, .card-cover .body small, .hero small.d-block { opacity: .6; }
-.cover-auto .cover-ai { padding: 0 .35rem; border: 1px solid rgba(255, 255, 255, .8); border-radius: .3rem; font-size: .7rem; font-weight: 700; letter-spacing: .04em; }   /* the recording is AI-made */
