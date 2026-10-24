@@ -181,6 +181,62 @@ Raise ?v=N in build_shelf.py (VERSION) with every change: the file is cached for
     }).catch(function () { /* stays text */ });
   }
 
+  // ---------- characters: a click on a Chữ Nôm character opens its popup (js/detail.js) if the dictionary has it ----------
+  var CJK_ALL = /[㐀-䶿一-鿿豈-﫿]|[\uD840-\uD87F][\uDC00-\uDFFF]/g;   // the Han blocks, the extensions B to I as surrogate pairs
+  var TEXT_ROOTS = 'article.read [lang="vi-Hani"], .hero [lang="vi-Hani"]';
+  function charSpan(ch) {
+    var hex = ch.codePointAt(0).toString(16).toUpperCase(), sp = document.createElement('span');
+    sp.className = 'cjk'; sp.dataset.char = ch; sp.title = ch + ' · U+' + (hex.length < 4 ? ('000' + hex).slice(-4) : hex);
+    sp.textContent = ch;
+    return sp;
+  }
+  function hydrateChars() {
+    document.querySelectorAll(TEXT_ROOTS).forEach(function (root) {
+      root.querySelectorAll('span.ids.enc').forEach(function (sp) {   // a character of Unicode: its whole span is the character
+        sp.classList.add('cjk'); sp.dataset.char = sp.dataset.char || sp.dataset.ch || sp.textContent;
+        sp.title = sp.title || (sp.dataset.char + ' · U+' + sp.dataset.char.codePointAt(0).toString(16).toUpperCase());
+      });
+      var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: function (n) {
+        return CJK_ALL.test(n.nodeValue) && !n.parentNode.closest('rt, .ids, .unk') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      } });
+      CJK_ALL.lastIndex = 0;
+      var nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach(function (n) {
+        var text = n.nodeValue, frag = document.createDocumentFragment(), last = 0, m;
+        CJK_ALL.lastIndex = 0;
+        while ((m = CJK_ALL.exec(text))) {
+          if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+          frag.appendChild(charSpan(m[0])); last = m.index + m[0].length;
+        }
+        if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+        n.parentNode.replaceChild(frag, n);
+      });
+    });
+  }
+  var looked = {};
+  function inDictionary(ch) {   // the Telex dictionaries (ime.js) and the csv of the popup
+    return load('/chunom/js/detail.js').then(function () { return ChunomDetail.loadIme(); }).then(function () {
+      if (window.VietIme && VietIme.lookupGlyph(ch).length) return true;
+      return ChunomDetail.loadData().then(function (rows) { return rows.some(function (r) { return r[1] && r[1].indexOf(ch) >= 0; }); });
+    }).catch(function () { return false; });
+  }
+  document.addEventListener('click', function (e) {
+    var sp = e.target.closest && e.target.closest('.cjk');
+    if (!sp) return;
+    var ch = sp.dataset.char;
+    if (!(ch in looked)) looked[ch] = inDictionary(ch);
+    looked[ch].then(function (has) { if (has) ChunomDetail.open(ch); });
+  });
+  if (read) hydrateChars();
+
+  // the summary in the language of the page: its text is translated by data-vi, so its lang follows
+  function syncSummaryLang() {
+    var vi = window.Lang && Lang.current === 'vi';
+    document.querySelectorAll('.summary > p[data-vi]').forEach(function (p) { p.lang = vi ? 'vi' : 'en'; });
+  }
+  document.addEventListener('langchange', syncSummaryLang);
+  syncSummaryLang();
+
   var legend = document.querySelector('.legend');
   if (document.querySelector('span.ids')) {
     if (legend) {
