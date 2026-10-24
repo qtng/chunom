@@ -45,7 +45,6 @@ main { max-width: 56rem; }
 .read .line .no { align-self: flex-start; margin-top: .9rem; }
 .read ruby { ruby-position: over; margin-right: .08em; }
 .read rt, .work rt { font-family: var(--bs-body-font-family); font-size: .42em; line-height: 1.1; font-weight: 400; color: var(--muted); user-select: none; letter-spacing: 0; }
-.read rt.qatt, .work rt.qatt { font-family: "QATT Pen Medium"; font-size: .6em; color: var(--bs-body-color, var(--ink)); }
 .read[data-ruby="off"] rt { display: none; }
 .read .p { font-size: 1em; margin-right: .1em; }
 .read .note { flex: 1 1 100%; font: .85rem/1.4 var(--bs-body-font-family); color: var(--muted); padding-left: 3rem; }
