@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // input method, those with a definition first; at most 15
   const MAX_OPTIONS = 15, MAX_SENT = 15;   // the model gets the characters only (no meanings): its own knowledge decides, the list only limits the choice
   // how many words on each side of a gap of the dictionary (a word for which the model had to use a character of its own) the function stores for the improvement of the
-  // dictionary and the model (1 to 2; see qtng/qatt db/translate_log.sql): CONTEXT_ON with the switch "Help improve the model" (on at every visit, not remembered), else CONTEXT_OFF.
+  // dictionary and the model (1 to 2; see tools/db/translate_log.sql of qtng/chunom-private): CONTEXT_ON with the switch "Help improve the model" (on at every visit, not remembered), else CONTEXT_OFF.
   const CONTEXT_ON = 2, CONTEXT_OFF = 1;
   const optionCache = new Map();
   const optionsFor = (key, csv) => {
