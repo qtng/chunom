@@ -86,16 +86,5 @@ main { max-width: 56rem; }
 .cover-top { display: none; width: 100%; max-width: 26rem; aspect-ratio: 1; margin: 0 auto 1rem; }
 @media (max-width: 767.98px) { .cover-side { display: none; } .cover-top { display: block; } }
 
-/* a work with a recording: the play triangle over its card, the play/pause button and the switch Autoplay on its cover */
-.cover-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 4.2rem; height: 4.2rem; padding: 0; display: flex; align-items: center; justify-content: center; border: 0; border-radius: 50%; background: rgba(20, 12, 6, .55); color: #fff; font-size: 2.8rem; line-height: 1; text-shadow: 0 2px 8px rgba(0, 0, 0, .7); box-shadow: 0 2px 12px rgba(0, 0, 0, .45); cursor: pointer; transition: opacity .2s, background .2s; }
-.cover-play:hover, .cover-play:focus-visible { background: rgba(20, 12, 6, .78); }
-.cover-play .bi-play-fill { margin-left: .2rem; }
-.cover-play.playing { opacity: .55; }
-.cover:hover .cover-play.playing, .cover-play.playing:focus-visible { opacity: 1; }
-@media (hover: none) { .cover-play.playing { opacity: .8; } }
-.cover-auto { position: absolute; right: .5rem; bottom: .5rem; display: flex; align-items: center; gap: .45rem; margin: 0; padding: .2rem .7rem; border-radius: 2rem; background: rgba(20, 12, 6, .62); color: #fff; font-size: .8rem; line-height: 1.4; cursor: pointer; white-space: nowrap; text-shadow: 0 1px 3px rgba(0, 0, 0, .6); }
-.cover-auto .form-check-input { float: none; margin: 0; flex: none; cursor: pointer; }
-
 /* the footnote of a card: lines and transcriber, then author and date, dimmed so the summary stands out */
 .hero small.d-block { opacity: .6; }
-.cover-auto .cover-ai { padding: 0 .35rem; border: 1px solid rgba(255, 255, 255, .8); border-radius: .3rem; font-size: .7rem; font-weight: 700; letter-spacing: .04em; }   /* the recording is AI-made */
