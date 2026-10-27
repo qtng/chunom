@@ -16,5 +16,5 @@
 .card-cover .body { margin: 0 .6rem .6rem; padding: .7rem .9rem; background: rgba(255, 253, 248, .84); border-radius: .6rem; color: #1a1410; }
 .card-cover .body * { color: #1a1410 !important; }
 .card-cover .body .text-secondary, .card-cover .body small { color: #4a3d30 !important; }
-a.card-cover:hover .cd { display: block; }
+.cd { display: block; }
 .works small.d-block, .card-cover .body small { opacity: .6; }
