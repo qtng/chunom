@@ -88,3 +88,4 @@ main { max-width: 56rem; }
 
 /* the footnote of a card: lines and transcriber, then author and date, dimmed so the summary stands out */
 .hero small.d-block { opacity: .6; }
+.meta > summary { cursor: pointer; font-weight: 600; } .meta[open] > summary { margin-bottom: .5rem; }
