@@ -63,7 +63,7 @@ main { max-width: 56rem; }
 
 /* IDS sequences: the ones that are not in Unicode are the interesting ones (rare forms, maybe for Unicode): highlighted */
 .ids.open { background: var(--bs-warning-bg-subtle, #fff1c2); outline: 1px dashed var(--bs-warning-border-subtle, var(--cinnabar)); border-radius: .2em; padding: 0 .1em; color: var(--bs-warning-text-emphasis, inherit); }
-.ids.open:not(.drawn) { font-size: .6em; font-family: monospace; }
+.ids.open:not(.drawn) { font-size: .6em; }   /* the Nôm font of the text, so the parts of the sequence are not tofu */
 .ids.drawn { line-height: 1; }
 .ids.enc.missing { font-family: system-ui, sans-serif; font-size: .8em; }
 .ids.drawn svg, .ids.drawn svg * { fill: currentColor; stroke: none; }
