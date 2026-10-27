@@ -16,8 +16,5 @@
 .card-cover .body { margin: 0 .6rem .6rem; padding: .7rem .9rem; background: rgba(255, 253, 248, .84); border-radius: .6rem; color: #1a1410; }
 .card-cover .body * { color: #1a1410 !important; }
 .card-cover .body .text-secondary, .card-cover .body small { color: #4a3d30 !important; }
-.card-play { position: absolute; top: 50%; left: 50%; z-index: 2; transform: translate(-50%, -50%); width: 4.2rem; height: 4.2rem; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(20, 12, 6, .55); color: #fff; font-size: 2.8rem; line-height: 1; text-shadow: 0 2px 8px rgba(0, 0, 0, .7); box-shadow: 0 2px 12px rgba(0, 0, 0, .45); pointer-events: none; }
-.card-play .bi { margin-left: .2rem; }   /* the triangle looks centred when it sits a little to the right */
-a.card-cover:hover .card-play { background: rgba(20, 12, 6, .75); }
-.cd { display: block; }
+a.card-cover:hover .cd { display: block; }
 .works small.d-block, .card-cover .body small { opacity: .6; }
