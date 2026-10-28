@@ -86,8 +86,7 @@ Raise ?v=N in build_shelf.py (VERSION) with every change: the file is cached for
     return key;
   }
   var cache = {}, pending = {};
-  function loadPart(name) {   // GlyphWiki data of a part, and recursively of the glyphs it uses
-    if (cache[name]) return Promise.resolve();
+  function loadPart(name) {   // GlyphWiki data of a part, and recursively of the glyphs it uses (the promise, not the cache: a part in the cache may still wait for its own parts)
     if (!pending[name]) pending[name] = fetch(GLYPHWIKI + name).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (j) {
       if (!j || !j.data) throw 0;
       cache[name] = j.data;
