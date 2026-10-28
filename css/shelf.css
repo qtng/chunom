@@ -31,7 +31,9 @@ main { max-width: 56rem; }
 .shelf-tools { position: sticky; top: 60px; z-index: 5; display: flex; flex-wrap: wrap; gap: .2rem 1.5rem; padding: .45rem .9rem; margin: 1rem 0; background: var(--bs-body-bg, #fffdf8); border: 1px solid var(--line); border-radius: .7rem; }
 .shelf-tools .form-check { margin: 0; }
 .shelf-tools .form-check-label { white-space: nowrap; }
-.read { font-family: var(--nom-font); }
+/* the QATT characters of the source texts (private use, no reading): the font of qatt.org, loaded only where they occur */
+@font-face { font-family: "QATT Pen Medium"; src: url(https://qatt.org/fonts/qatt-pen-medium.woff2?v=6) format("woff2"), url(https://qatt.org/fonts/qatt-pen-medium.ttf?v=6) format("truetype"); unicode-range: U+F0000-F00FF; }
+.read { font-family: "QATT Pen Medium", var(--nom-font); }
 .read .line { display: flex; align-items: baseline; gap: .8rem; margin: 0 0 .75rem; }
 .read .line .no { flex: none; width: 2.2rem; text-align: right; font: .75rem/1 system-ui, sans-serif; color: var(--muted); text-decoration: none; }
 .read .line .t { flex: 1 1 0; min-width: 0; font-size: 1.9rem; line-height: 2.1; overflow-wrap: anywhere; }
