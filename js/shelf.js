@@ -105,7 +105,7 @@ Raise ?v=N in build_shelf.py (VERSION) with every change: the file is cached for
       Object.keys(buhin).forEach(function (n) { k.kBuhin.push(n, buhin[n]); });
       var p = new Kage.Polygons();
       k.makeGlyph(p, top);
-      var svg = p.generateSVG().replace(/^<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
+      var svg = p.generateSVG().replace(/^<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '').replace(/fill="black"/g, 'fill="currentColor"');   // KAGE writes black into the drawing: take the colour of the text
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="1.3em" height="1.3em" fill="currentColor">' + svg + '</svg>';
     });
   }
