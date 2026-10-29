@@ -129,27 +129,7 @@
       display: none !important;
     }
 
-    /* Styling für die Echtzeit-Suchvorschau */
     #results:not(:empty) { margin-top: 1rem; }
-    #search-preview {
-      display: none;
-      align-items: center;
-      justify-content: flex-start;
-      border-left: none;
-      min-width: 0;
-      white-space: nowrap;
-      padding-top: 0;
-      padding-bottom: 0;
-    }
-    #search-preview:not(:empty) {
-      display: flex;
-      min-width: 40px;
-      max-width: 30vw;
-      overflow-x: auto;
-    }
-    #search-preview svg {
-      height: 1.4em;
-    }
 
     /* ---------- the skeleton of qatt.org: colours from the variables, the theme draws the rest ---------- */
     :root { --ink: #2b2118; --cinnabar: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
@@ -178,7 +158,6 @@
     .search-card .form-control { border-color: var(--field); background: Canvas; color: var(--ink); }
     .search-card .form-control:focus { border-color: var(--cinnabar); box-shadow: 0 0 0 .2rem rgba(168, 54, 42, .15); outline: none; }
     .search-card .form-check-input:checked { background-color: var(--cinnabar); border-color: var(--cinnabar); }
-    #search-preview { background: color-mix(in srgb, #f3d99c 70%, Canvas) !important; border-color: var(--field) !important; color: var(--ink); }
 
     #discovery .nav-tabs { border-bottom-color: var(--line); }
     #discovery .nav-link { color: var(--muted); }
@@ -231,7 +210,6 @@
       <div class="input-group">
         <label class="input-group-text justify-content-center" style="width:110px" data-vi="Tìm kiếm">Search</label>
         <input type="search" id="search" class="form-control" disabled>
-        <div id="search-preview" class="input-group-text bg-warning border"></div>
         <div id="dict-status" class="input-group-text">
           <div class="spinner-border spinner-border-sm text-info" role="status"></div>
         </div>
@@ -296,7 +274,6 @@ class ChunomDict {
   constructor(apiUrl, searchInputId, resultsContainerId, statusId) {
     this.apiUrl = apiUrl;
     this.searchInput = document.getElementById(searchInputId);
-    this.searchPreview = document.getElementById('search-preview');
     this.resultsContainer = document.getElementById(resultsContainerId);
     this.discoveryContainer = document.getElementById('discovery');
     this.decksContainer = document.getElementById('public-decks');
@@ -444,7 +421,6 @@ class ChunomDict {
   // the popup and the elements of characters and glyphs are those of js/detail.js
   showDetails(clickedId, nom, row) { return this.detail.open(nom, clickedId, row); }
   nomChars(text, size) { return this.detail.nomChars(text, size); }
-  qattCodes(quocNgu, fontSize) { return this.detail.qattCodes(quocNgu, fontSize); }
 
   // Codepunkt → Zeichen ("U+4E00" oder "4E00"), sonst null.
   // strict (Suche): ohne "U+" nur Han-Zeichen, sonst wäre es von Quốc Ngữ nicht eindeutig zu unterscheiden
@@ -562,7 +538,6 @@ class ChunomDict {
     const tile = el('div', { className: 'pt-4 p-2 rounded text-center h-100 d-flex flex-column justify-content-center border border-secondary border-opacity-25 position-relative shadow-sm tile', style: 'cursor: pointer' },
       r[5] && el('span', { className: 'position-absolute top-0 start-0 m-1 badge badge-rank', style: 'opacity: 0.8', textContent: `#${r[5]}` }),
       el('div', { className: 'h3 font-serif mb-0' }, this.nomChars(r[1], 50)),
-      el('div', { className: 'd-flex align-items-center justify-content-center gap-1 mt-1 overflow-hidden flex-wrap' }, this.qattCodes(r[0], '0.7rem')),
       el('div', { className: 'text-secondary small opacity-75 text-truncate w-100 qn-text', lang: 'vi', textContent: r[0] }));
     this.makeActivatable(tile, () => this.showDetails(r[5], r[1]));
     return el('div', { className: 'col' }, tile);
@@ -574,12 +549,6 @@ class ChunomDict {
     const query = this.codePointChar(term, true) || term.trim().toLowerCase();
     // Bei offenem Popup gehört die Adresse dem Popup; nach dem Schließen setzt popstate sie
     if (!history.state?.modalOpen) this.updateUrl(term.trim());
-
-    if (this.searchPreview) {
-      const codes = query && !/[一-鿿]/.test(query) ? this.qattCodes(query, '1.4em') : [];
-      this.searchPreview.replaceChildren(...codes);
-      this.searchInput.style.borderRight = codes.length ? 'none' : '';
-    }
 
     this.resultsContainer.replaceChildren();
 
@@ -616,8 +585,7 @@ class ChunomDict {
       el('div', { className: 'd-flex w-100 align-items-center mb-1' },
         el('div', { className: 'me-auto d-flex align-items-center' },
           el('span', { className: 'fs-2 me-2' }, this.nomChars(nom)),
-          el('span', { className: 'text-secondary fw-bold qn-text', lang: 'vi', textContent: quocNgu })),
-        el('div', { className: 'text-end d-flex align-items-center gap-2 flex-wrap justify-content-end' }, this.qattCodes(quocNgu))),
+          el('span', { className: 'text-secondary fw-bold qn-text', lang: 'vi', textContent: quocNgu }))),
       el('div', { className: 'd-flex justify-content-between align-items-center w-100' },
         el('p', { className: 'mb-0 text-secondary small text-truncate flex-grow-1', textContent: meaning }),
         id && el('span', { className: 'badge badge-rank ms-2', textContent: `#${id}` })));

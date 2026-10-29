@@ -635,8 +635,7 @@ class ChunomDetail {
           el('div', { className: 'd-flex align-items-center justify-content-between mb-1' },
             el('div', { className: 'd-flex align-items-center flex-wrap' },
               el('span', { className: 'fs-3 me-2' }, this.nomChars(r[1])),
-              el('span', { className: 'text-secondary fw-bold fs-5 qn-text', lang: 'vi', textContent: r[0] })),
-            el('div', { className: 'text-end d-flex align-items-center gap-2 flex-wrap justify-content-end' }, this.qattCodes(r[0]))),
+              el('span', { className: 'text-secondary fw-bold fs-5 qn-text', lang: 'vi', textContent: r[0] }))),
           el('div', { className: 'd-flex justify-content-between align-items-center w-100' },
             el('div', { className: 'text-secondary small text-truncate flex-grow-1', textContent: r[2] || 'No description' }),
             r[5] && el('span', { className: 'badge badge-rank ms-2', textContent: `#${r[5]}` })));
