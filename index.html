@@ -155,6 +155,8 @@
     /* the search field: a pill like the search bar of qatt.org */
     .search-card .input-group { --bs-border-radius: 2rem; }
     .search-card .input-group-text { background: color-mix(in srgb, var(--paper) 70%, Canvas); border-color: var(--field); color: var(--muted); }
+    /* once the loading spinner is hidden the field is the last visible part: Bootstrap only rounds :last-child, so round its right side like the left of the label */
+    .search-card .input-group > .form-control:has(+ #dict-status.d-none) { border-top-right-radius: var(--bs-border-radius); border-bottom-right-radius: var(--bs-border-radius); }
     .search-card .form-control { border-color: var(--field); background: Canvas; color: var(--ink); }
     .search-card .form-control:focus { border-color: var(--cinnabar); box-shadow: 0 0 0 .2rem rgba(168, 54, 42, .15); outline: none; }
     .search-card .form-check-input:checked { background-color: var(--cinnabar); border-color: var(--cinnabar); }
