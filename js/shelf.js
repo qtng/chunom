@@ -86,8 +86,7 @@ Raise ?v=N in build_shelf.py (VERSION) with every change: the file is cached for
     return key;
   }
   var cache = {}, pending = {};
-  function loadPart(name) {   // GlyphWiki data of a part, and recursively of the glyphs it uses
-    if (cache[name]) return Promise.resolve();
+  function loadPart(name) {   // GlyphWiki data of a part, and recursively of the glyphs it uses (the promise, not the cache: a part in the cache may still wait for its own parts)
     if (!pending[name]) pending[name] = fetch(GLYPHWIKI + name).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (j) {
       if (!j || !j.data) throw 0;
       cache[name] = j.data;
@@ -106,7 +105,7 @@ Raise ?v=N in build_shelf.py (VERSION) with every change: the file is cached for
       Object.keys(buhin).forEach(function (n) { k.kBuhin.push(n, buhin[n]); });
       var p = new Kage.Polygons();
       k.makeGlyph(p, top);
-      var svg = p.generateSVG().replace(/^<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
+      var svg = p.generateSVG().replace(/^<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '').replace(/fill="black"/g, 'fill="currentColor"');   // KAGE writes black into the drawing: take the colour of the text
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="1.3em" height="1.3em" fill="currentColor">' + svg + '</svg>';
     });
   }
