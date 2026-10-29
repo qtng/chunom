@@ -32,7 +32,7 @@ main { max-width: 56rem; }
 .shelf-tools .form-check { margin: 0; }
 .shelf-tools .form-check-label { white-space: nowrap; }
 /* the QATT characters of the source texts (private use, no reading): the font of qatt.org, loaded only where they occur */
-@font-face { font-family: "QATT Pen Medium"; src: url(https://qatt.org/fonts/qatt-pen-medium.woff2?v=6) format("woff2"), url(https://qatt.org/fonts/qatt-pen-medium.ttf?v=6) format("truetype"); unicode-range: U+F0000-F00FF; }
+@font-face { font-family: "QATT Pen Medium"; src: url(https://qatt.org/fonts/qatt-pen-medium.woff2) format("woff2"), url(https://qatt.org/fonts/qatt-pen-medium.ttf) format("truetype"); unicode-range: U+F0000-F00FF; }
 .read { font-family: "QATT Pen Medium", var(--nom-font); }
 .read .line { display: flex; align-items: baseline; gap: .8rem; margin: 0 0 .75rem; }
 .read .line .no { flex: none; width: 2.2rem; text-align: right; font: .75rem/1 system-ui, sans-serif; color: var(--muted); text-decoration: none; }
