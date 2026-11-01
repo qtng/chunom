@@ -57,7 +57,7 @@
       el('div.body', {},
         el('h2', { text: f.name }),
         el('div.tag', {}, f.tagline),
-        el('div.specimen', {}, fitted(el('div.sample', { style: `font-family: ${stack(f, regular(f))}`, text: data.sample.line }), 90)),
+        el('div.specimen', {}, fitted(el('div.sample', { style: `font-family: ${stack(f, regular(f))}`, text: Array.from(data.sample.line).slice(0, 8).join('') }), 140)),
         el('div.styles', { text: f.styles.map(s => s.name).join(' · ') + (f.styles.length > 1 ? '' : '') }))))));
     root.append(otherFonts(data, null));
   }
