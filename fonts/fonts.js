@@ -131,7 +131,7 @@
 
   function charset(data) {
     return el('div.card-box', {}, el('h2', {}, { en: 'Unicode ranges', vi: 'Phạm vi Unicode' }),
-      el('p.mb-2', {}, { en: `Every style has the same set: ${data.characters.toLocaleString('en')} characters in each file.`, vi: `Mọi kiểu đều có cùng một bộ ký tự, ${data.characters.toLocaleString('vi')} ký tự trong mỗi tệp.` }),
+      el('p.mb-2', {}, { en: `Each font file has the same set of ${data.characters.toLocaleString('en')} characters.`, vi: `Mỗi tệp phông có cùng một bộ ${data.characters.toLocaleString('vi')} ký tự.` }),
       el('div.table-responsive', {}, el('table.ranges', {},
         el('thead', {}, el('tr', {}, el('th', { text: 'Group' }), el('th', { text: 'Blocks' }), el('th', { text: 'Range' }), el('th.n', { text: 'Characters' }))),
         el('tbody', {}, data.charset.map(([g, b, r, n]) => el('tr', {}, el('th', { scope: 'row', text: g }), el('td', { text: b }), el('td.r', { text: r }), el('td.n', { text: n.toLocaleString('en') })))))),
@@ -154,7 +154,7 @@
   function otherFonts(data, font) {
     const ours = font ? data.fonts.filter(f => f !== font) : [];
     return el('div.card-box.links', {},
-      ours.length ? el('h2', {}, { en: 'More QATT fonts', vi: 'Các phông QATT khác' }) : null,
+      ours.length ? el('h2', {}, { en: 'More fonts', vi: 'Các phông khác' }) : null,
       ours.length ? el('ul', {}, ours.map(f => el('li', {}, el('a', { href: new URL(f.id + '/', BASE).pathname, text: f.name }), ' – ', f.tagline))) : null,
       el('h2', { class: ours.length ? 'mt-3' : '' }, { en: 'More Chữ Nôm fonts', vi: 'Các phông chữ Nôm khác' }),
       el('ul', {}, data.external.map(x => el('li', {}, el('a', { href: x.url, target: '_blank', rel: 'noopener', text: x.name }), ' – ', { en: x.en, vi: x.vi }))));
