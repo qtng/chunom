@@ -1,6 +1,6 @@
 /* The pages of the Bookshelf (shelf/): layout only; colours come from the variables of the page and of Bootstrap, so the themes of qatt.org and the dark ones work.
    The classic look of the header (.hero) and of the panels (.card-box) as on the other pages of the Chunom site; a theme overrides it. */
-:root { --bs-body-font-family: var(--bs-font-sans-serif), 'QATT Hannom Pen', serif; --ink: #2b2118; --cinnabar: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; --nom-font: 'QATT Hannom Pen', serif; }
+:root { --bs-body-font-family: var(--bs-font-sans-serif), 'QATT Pen', serif; --ink: #2b2118; --cinnabar: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; --nom-font: 'QATT Pen', serif; }
 body { min-height: 100vh; color: var(--ink); background: #fffdf8; }
 .hero { background: radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%), linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%); border-bottom: 1px solid #e8dcc0; color: var(--ink); }
 .hero h1 { font-family: Georgia, "Times New Roman", var(--nom-font); font-weight: 400; font-size: clamp(2rem, 6vw, 3.2rem); letter-spacing: .01em; }
