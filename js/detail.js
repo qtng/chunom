@@ -42,8 +42,8 @@ const STYLE = `
 :where(#detailModal) .modal-header, :where(#detailModal) .modal-footer { border-color: var(--dm-line); }
 :where(#detailModal) .modal-title { font-family: Georgia, "Times New Roman", serif; font-weight: 400; }
 #detailModal .text-secondary { color: var(--dm-muted) !important; }
-#detailModal .font-serif { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }
-#detailModal .font-monospace { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', monospace; }
+#detailModal .font-serif { font-family: 'QATT Hannom Pen', serif; }
+#detailModal .font-monospace { font-family: 'QATT Hannom Pen', monospace; }
 #detailModal .lh-sm { line-height: 1.1; }
 #detailModal .list-group { border-top: 1px solid var(--dm-line) !important; }
 #detailModal .list-group-item { background: transparent !important; border: 0 !important; border-bottom: 1px solid var(--dm-line) !important; border-radius: 0 !important; margin: 0 !important; color: var(--dm-ink); }

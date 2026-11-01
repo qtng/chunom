@@ -27,7 +27,7 @@
     }
     .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: .01em; }
     .hero .han { color: var(--accent); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; }
-    .hero .han { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }   /* Nôm characters outside the usual fonts */
+    .hero .han { font-family: 'QATT Hannom Pen', serif; }   /* Nôm characters outside the usual fonts */
     .hero .lead { max-width: 38rem; color: #4a3d30; }
     @media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
     main { max-width: 44rem; margin: 0 auto; padding: 0 1rem 2rem; }
@@ -36,7 +36,7 @@
     .loading { display: flex; flex-direction: column; align-items: center; gap: .6rem; padding: 1.1rem 0 .3rem; }
     .loading[hidden] { display: none; }
     .loading .chars { display: flex; gap: 1rem; }
-    .loading .ch { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 2.6rem; line-height: 1; color: var(--accent); opacity: .15; animation: ink 2s ease-in-out infinite; }
+    .loading .ch { font-family: 'QATT Hannom Pen', serif; font-size: 2.6rem; line-height: 1; color: var(--accent); opacity: .15; animation: ink 2s ease-in-out infinite; }
     .loading .ch:nth-child(2) { animation-delay: .25s; } .loading .ch:nth-child(3) { animation-delay: .5s; } .loading .ch:nth-child(4) { animation-delay: .75s; }
     @keyframes ink { 0%, 100% { opacity: .15; transform: translateY(0); } 35% { opacity: 1; transform: translateY(-.45rem); } 70% { opacity: .4; transform: translateY(0); } }
     .loading .bar { width: min(18rem, 80%); height: .4rem; border-radius: .2rem; background: var(--line); overflow: hidden; }
@@ -53,9 +53,9 @@
     #status.error { color: #842029; }
     #result { margin-top: 1rem; }
     .flag { color: #842029; }
-    .font-serif { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }
+    .font-serif { font-family: 'QATT Hannom Pen', serif; }
     /* the result as text in the Nôm font (selectable, copyable), every character with its Quốc Ngữ as ruby text above it */
-    .nom { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 2rem; line-height: 1.5; }
+    .nom { font-family: 'QATT Hannom Pen', serif; font-size: 2rem; line-height: 1.5; }
     .nom ruby { ruby-position: over; }
     .nom rt { font: .75rem/1.2 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--muted); user-select: none; }   /* not copied with the text */
     .nom.no-rt rt { display: none; }
@@ -102,7 +102,7 @@
     #pick .pick-item { display: flex; align-items: center; gap: .6rem; width: 100%; text-align: left; background: none; border: 0; border-radius: .35rem; padding: .15rem .4rem; color: inherit; }
     #pick .pick-item:hover:not(:disabled) { background: color-mix(in srgb, #2fa4d6 22%, transparent); }
     #pick .pick-item:disabled { background: color-mix(in srgb, CanvasText 8%, transparent); }
-    #pick .pc { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; font-size: 1.7rem; line-height: 1.25; flex-shrink: 0; }
+    #pick .pc { font-family: 'QATT Hannom Pen', serif; font-size: 1.7rem; line-height: 1.25; flex-shrink: 0; }
     #pick .pm { font-size: .8rem; color: var(--muted); }
     #pick .pick-hint { font-size: .8rem; color: var(--muted); padding: 0 .4rem .3rem; }
     #pick .pick-type { display: flex; gap: .4rem; align-items: center; padding: .15rem .4rem .3rem; }
@@ -165,7 +165,7 @@
     <div class="count mt-3" id="version"></div>
     <details class="mt-2 small" id="lists-box">
       <summary class="fw-semibold" data-vi="Danh sách gửi cho mô hình">Lists sent to the model</summary>
-      <pre class="mt-2 p-2 bg-white border rounded" id="lists" style="white-space: pre-wrap; font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif;"></pre>
+      <pre class="mt-2 p-2 bg-white border rounded" id="lists" style="white-space: pre-wrap; font-family: 'QATT Hannom Pen', serif;"></pre>
     </details>
   </section>
 
