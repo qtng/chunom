@@ -410,6 +410,7 @@
                         box.append(ch);
                         continue;
                     }
+                    if (!window.ChunomDetail?.nomImages()) { box.append(ch); continue; } // the font (the .glyph class sets it); the images by switch
                     const img = new Image(32, 32);
                     img.alt = ch;
                     img.style.verticalAlign = 'middle';

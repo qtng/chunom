@@ -202,6 +202,10 @@
             <label class="form-check-label text-secondary" for="toggle-qn" data-vi="Hiện Quốc Ngữ">Show Quốc Ngữ</label>
           </div>
           <div class="ms-3 form-check form-switch small mb-0">
+            <input class="form-check-input" type="checkbox" role="switch" id="toggle-images">
+            <label class="form-check-label text-secondary" for="toggle-images" data-vi="Chữ bằng ảnh">Characters as images</label>
+          </div>
+          <div class="ms-3 form-check form-switch small mb-0">
             <input class="form-check-input" type="checkbox" role="switch" id="toggle-telex">
             <label class="form-check-label text-secondary" for="toggle-telex">Telex</label>
           </div>
@@ -316,6 +320,14 @@ class ChunomDict {
       const hidden = e.target.checked;
       localStorage.setItem(this.qnHiddenKey,! hidden);
       document.body.classList.toggle('hide-qn', !hidden);
+    });
+
+    // characters in lists as font (default) or images; ChunomDetail.nomImages() also takes ?nomimages=1|0 from the address
+    this.imagesToggle = document.getElementById('toggle-images');
+    this.imagesToggle.checked = ChunomDetail.nomImages();
+    this.imagesToggle.addEventListener('change', (e) => {
+      localStorage.nomImages = e.target.checked ? '1' : '0';
+      location.reload(); // the shown characters are drawn again; the address keeps the search
     });
 
     // Telex-IME von chunom.org: standardmäßig an (gespeicherte Wahl hat Vorrang)

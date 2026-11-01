@@ -144,6 +144,16 @@ class ChunomDetail {
     if (!document.getElementById('chunom-detail-style')) document.head.append(el('style', { id: 'chunom-detail-style', textContent: STYLE }));
   }
 
+  // Characters in lists and overviews: font (default) or the images of chunom-assets. ?nomimages=1 / 0 in the address sets it, the switch of the search page too;
+  // kept in localStorage.nomImages. The characters shown for learning (practice, immersive) are always images.
+  static nomImages() {
+    try {
+      const q = new URLSearchParams(location.search).get('nomimages');
+      if (q === '1' || q === '0') localStorage.nomImages = q;
+      return localStorage.nomImages === '1';
+    } catch { return false; }
+  }
+
   static open(nom, clickedId = null, row = null) { return ChunomDetail.get().open(nom, clickedId, row); }
 
   /** The rows of the dictionary [reading, nom, meaning, …, rank] (loaded once). */
@@ -495,9 +505,11 @@ class ChunomDetail {
   // Nôm-Zeichen als Bild aus chunom-assets (Schrift als Ersatz), einzeln anklickbar
 
   nomChars(text, size) {
+    const asImage = ChunomDetail.nomImages();
     return [...(text || '')].map(ch => {
       if (!NOM_CHAR.test(ch)) return ch;
       if (!size) size = 32;
+      if (!asImage) return el('span', { className: 'font-serif nom-char', 'data-char': ch, style: `font-size: ${size}px; line-height: 1.1` }, ch);
       const assetSize = size > 40 ? 160 : 32;
       const hex = ch.codePointAt(0).toString(16).toUpperCase();
       return el('span', { className: 'font-serif nom-char', 'data-char': ch },
