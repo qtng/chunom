@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QATT Pen fonts</title>
-  <meta name="description" content="QATT Pen, a pen-line font for Chữ Nôm, Han characters and Quốc Ngữ in four weights, to download.">
+  <meta name="description" content="QATT Pen: Quốc Ngữ, Chữ Nôm and Quốc Âm Tân Tự in one modern pen font, in four weights, to download.">
   <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://qatt.org/css/site.css">
   <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
@@ -54,6 +54,18 @@
     .weight .mid { font-size: 1.75rem; line-height: 1.6; white-space: nowrap; overflow-x: auto; }
     .weight .small { font-size: 1rem; line-height: 1.6; white-space: nowrap; overflow-x: auto; }
     .weight .dl { margin-top: .5rem; }
+    .hero .slogan { font-size: clamp(.9rem, 4vw, 1.25rem); white-space: nowrap; letter-spacing: .02em; }
+    .hero .slogan a, .hero .slogan a:hover { color: inherit !important; text-decoration: none !important; }
+    .others { margin-top: 1rem; }
+    .others h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.35rem; margin: .2rem 0 .6rem; }
+    .others ul { margin: 0; padding-left: 1.2rem; }
+    .others li { margin: .3rem 0; }
+    .ranges { width: 100%; font-size: .85rem; border-collapse: collapse; }
+    .ranges th, .ranges td { padding: .35rem .6rem .35rem 0; border-top: 1px solid var(--line); vertical-align: top; }
+    .ranges thead th { border-top: 0; color: var(--muted); font-weight: 400; }
+    .ranges tbody th { font-weight: 600; }
+    .ranges .r { white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .ranges .n { text-align: right; font-variant-numeric: tabular-nums; }
     .note { font-size: .8rem; color: var(--muted); margin: 1rem 0 0; }
   </style>
 </head>
@@ -62,7 +74,8 @@
   <div class="container text-center">
     <div class="han mb-2">𡨸喃</div>
     <h1 class="mb-3" data-vi="Phông chữ QATT Pen">QATT Pen fonts</h1>
-    <p class="lead mx-auto mb-0" data-vi="Nét bút mảnh cho chữ Nôm, chữ Hán và Quốc Ngữ, bốn độ đậm để tải về.">A pen line for Chữ Nôm, Han characters and Quốc Ngữ, in four weights to download.</p>
+    <p class="slogan mb-2">Quốc Ngữ • Chữ Nôm • <a href="https://qatt.org/">Quốc Âm Tân Tự</a></p>
+    <p class="lead mx-auto mb-0" data-vi="Cả ba chữ viết trong một phông chữ hiện đại, bốn độ đậm, tải về cho máy tính.">All three scripts in one modern font, in four weights, to download for your desktop.</p>
   </div>
 </header>
 <main>
@@ -74,7 +87,41 @@
     </div>
     <div id="weights"></div>
   </div>
-  <p class="note" data-vi="Cùng một họ phông: cài cả bốn, trình đơn phông sẽ hiện chúng là các kiểu Thin, Light, Regular và Medium của &quot;Qatt.org-Pen&quot;.">One family: install all four and the font menus show them as the styles Thin, Light, Regular and Medium of "Qatt.org-Hannom Pen".</p>
+  <div class="card-box others">
+    <h2 data-vi="Phạm vi Unicode">Unicode ranges</h2>
+    <p class="mb-2" data-vi="Mọi kiểu đều có cùng một bộ ký tự, 39.561 ký tự trong mỗi tệp.">Every style has the same set: 39,561 characters in each file.</p>
+    <div class="table-responsive">
+      <table class="ranges">
+        <thead><tr><th>Group</th><th>Blocks</th><th>Range</th><th class="n">Characters</th></tr></thead>
+        <tbody>
+        <tr><th scope="row">Latin (ASCII, Latin-1, Quốc Ngữ)</th><td>Basic Latin, Latin-1 Supplement, Latin Extended-A/B, Latin Extended Additional</td><td class="r">U+0020–024F, U+1E00–1EFF</td><td class="n">293</td></tr>
+        <tr><th scope="row">Punctuation</th><td>General Punctuation (dashes, curly quotes, ellipsis)</td><td class="r">U+2013–2026</td><td class="n">7</td></tr>
+        <tr><th scope="row">Han radicals</th><td>CJK Radicals Supplement, Kangxi Radicals, Ideographic Description Characters</td><td class="r">U+2E80–2FFF</td><td class="n">345</td></tr>
+        <tr><th scope="row">CJK punctuation</th><td>CJK Symbols and Punctuation</td><td class="r">U+3000–303F</td><td class="n">64</td></tr>
+        <tr><th scope="row">Kana</th><td>Hiragana, Katakana, Katakana Phonetic Extensions</td><td class="r">U+3040–30FF, U+31F0–31FF</td><td class="n">205</td></tr>
+        <tr><th scope="row">Zhuyin</th><td>Bopomofo, Bopomofo Extended</td><td class="r">U+3100–312F, U+31A0–31BF</td><td class="n">75</td></tr>
+        <tr><th scope="row">Hangul</th><td>Hangul Compatibility Jamo</td><td class="r">U+3130–318F</td><td class="n">94</td></tr>
+        <tr><th scope="row">Han characters and Chữ Nôm</th><td>CJK Unified Ideographs, Extension A</td><td class="r">U+3400–4DBF, U+4E00–9FFF</td><td class="n">27,583</td></tr>
+        <tr><th scope="row">Han characters and Chữ Nôm (more)</th><td>Extensions B, C, D, E, F, G, H, J, Compatibility Ideographs and Supplement</td><td class="r">U+F900–FAFF, U+20000–2EBEF, U+2F800–2FA1F, U+30000–3347F</td><td class="n">10,405</td></tr>
+        <tr><th scope="row">Fullwidth forms</th><td>Halfwidth and Fullwidth Forms</td><td class="r">U+FF00–FFEF</td><td class="n">225</td></tr>
+        <tr><th scope="row">Kanbun and CJK strokes</th><td>Kanbun, CJK Strokes</td><td class="r">U+3190–319F, U+31C0–31EF</td><td class="n">37</td></tr>
+        <tr><th scope="row">Vietnamese reading marks</th><td>Ideographic Symbols and Punctuation</td><td class="r">U+16FF0–16FF1</td><td class="n">2</td></tr>
+        <tr><th scope="row">Sans-serif letters and digits</th><td>Mathematical Alphanumeric Symbols</td><td class="r">U+1D5A0–1D5D3, U+1D7E2–1D7EB</td><td class="n">62</td></tr>
+        <tr><th scope="row">QATT letters</th><td>Private use (the QATT script)</td><td class="r">U+F0000–F00A3</td><td class="n">164</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note mb-0" data-vi="Ký tự nào thiếu trong bộ chữ nguồn thì không có trong phông.">A character missing in the source data is missing in the font.</p>
+  </div>
+  <div class="card-box others">
+    <h2 data-vi="Các phông chữ Nôm khác">More Chữ Nôm fonts</h2>
+    <ul>
+      <li><a href="https://github.com/nomfoundation/font" target="_blank" rel="noopener">Nom Na Tong</a> – <span data-vi="phông kiểu Tống của Hội Bảo tồn chữ Nôm Việt Nam">Song style font by the Vietnamese Nôm Preservation Foundation</span></li>
+      <li><a href="https://github.com/TKYKmori/Gothic-Nguyen" target="_blank" rel="noopener">Han Nom Gothic</a> – <span data-vi="phông không chân của Han-Nom RCV">A sans-serif font by Han-Nom RCV</span></li>
+    </ul>
+  </div>
+  <p class="note"><span data-vi="QATT là viết tắt của">QATT stands for</span> <a href="https://qatt.org/">Quốc Âm Tân Tự</a><span data-vi=", chữ viết ghi âm cho tiếng Việt. Phông này có các chữ QATT cùng với chữ Hán và chữ Nôm.">, a phonetic script for Vietnamese. This font has the QATT letters together with Han characters and Chữ Nôm.</span></p>
+  <p class="note" data-vi="Cùng một họ phông: cài cả bốn, trình đơn phông sẽ hiện chúng là các kiểu Thin, Light, Regular và Medium của &quot;Qatt.org-Pen&quot;.">One family: install all four and the font menus show them as the styles Thin, Light, Regular and Medium of "Qatt.org-Pen".</p>
   <p class="note"><span data-vi="Các chữ QATT là bản quyền của qatt.org; nét của các ký tự khác vẽ từ dữ liệu GlyphWiki (KAGE, GPL-3.0). Chi tiết trong giấy phép của phông.">The QATT letters are © qatt.org; the strokes of the other characters are drawn from the data of GlyphWiki (KAGE, GPL-3.0). See the licence inside the font.</span></p>
 </main>
 <script defer src="/chunom/js/ime.js"></script>
