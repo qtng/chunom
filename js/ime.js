@@ -319,8 +319,7 @@
 	// ---------- Input field ----------
 
 	const PUNCTUATION = ' \\`^°-_.,:;?!/+*#=<>(){}[]\'"&~%|';
-	const DEFAULT_FONTS = ['sans-serif', 'han-nom gothic', 'han-nom gothic supplement', 'Heiti TC', 'Heiti SC', 'nom na tong',
-		'nom na tong supplement', 'hanaminb', 'hanamina', 'MingLiU-ExtB', 'PMingLiU-ExtB', 'SimSun-ExtB'];
+	const DEFAULT_FONTS = ['QATT Hannom Pen', 'sans-serif', 'Heiti TC', 'Heiti SC', 'hanaminb', 'hanamina', 'MingLiU-ExtB', 'PMingLiU-ExtB', 'SimSun-ExtB'];   // Hannom Pen (chunom-assets/fonts/fonts.css, loaded only for CJK characters) first
 	const fontFamily = list => list.map(f => /^(serif|sans-serif|monospace|system-ui)$/.test(f) ? f : `"${f}"`).join(', ');
 	const TYPING_ATTRIBUTES = { autocomplete: 'off', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'false' };
 

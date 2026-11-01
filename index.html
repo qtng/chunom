@@ -39,10 +39,10 @@
       color: inherit;
     }
     .font-serif {
-      font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif;
+      font-family: 'QATT Hannom Pen', serif;
     }
     .font-monospace {
-      font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', monospace;
+      font-family: 'QATT Hannom Pen', monospace;
     }
     .lh-sm {
       line-height: 1.1;
@@ -144,7 +144,7 @@
     }
     .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: .01em; }
     .hero .han { color: var(--cinnabar); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; }
-    .hero .han { font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }   /* Nôm characters outside the usual fonts */
+    .hero .han { font-family: 'QATT Hannom Pen', serif; }   /* Nôm characters outside the usual fonts */
     .hero .lead { max-width: 38rem; color: #4a3d30; }
     @media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
     .home-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; }
@@ -199,10 +199,14 @@
     <div class="card-box search-card">
       <div class="mb-3 d-flex justify-content-between align-items-center">
         <!-- Toggle für Quốc Ngữ ausblenden -->
-        <div class="d-inline-flex">
+        <div class="d-inline-flex text-nowrap">
           <div class="form-check form-switch small mb-0">
             <input class="form-check-input" type="checkbox" role="switch" id="toggle-qn">
-            <label class="form-check-label text-secondary" for="toggle-qn" data-vi="Hiện Quốc Ngữ">Show Quốc Ngữ</label>
+            <label class="form-check-label text-secondary" for="toggle-qn" data-vi="Quốc Ngữ">Quốc Ngữ</label>
+          </div>
+          <div class="ms-3 form-check form-switch small mb-0">
+            <input class="form-check-input" type="checkbox" role="switch" id="toggle-images">
+            <label class="form-check-label text-secondary" for="toggle-images" data-vi="Hiện ảnh">Show images</label>
           </div>
           <div class="ms-3 form-check form-switch small mb-0">
             <input class="form-check-input" type="checkbox" role="switch" id="toggle-telex">
@@ -319,6 +323,14 @@ class ChunomDict {
       const hidden = e.target.checked;
       localStorage.setItem(this.qnHiddenKey,! hidden);
       document.body.classList.toggle('hide-qn', !hidden);
+    });
+
+    // characters in lists as font (default) or images; ChunomDetail.nomImages() also takes ?nomimages=1|0 from the address
+    this.imagesToggle = document.getElementById('toggle-images');
+    this.imagesToggle.checked = ChunomDetail.nomImages();
+    this.imagesToggle.addEventListener('change', (e) => {
+      localStorage.nomImages = e.target.checked ? '1' : '0';
+      location.reload(); // the shown characters are drawn again; the address keeps the search
     });
 
     // Telex-IME von chunom.org: standardmäßig an (gespeicherte Wahl hat Vorrang)

@@ -739,6 +739,12 @@ class App {
   nomChars(text, size = 160) {
     return [...(text || "")].map(ch => {
       if (!/[一-鿿㐀-䶿\u{20000}-\u{323af}]/u.test(ch)) return document.createTextNode(ch);
+      if (size < 100 && !window.ChunomDetail?.nomImages()) { // lists: the font; the big character shown for learning stays an image
+        const span = document.createElement("span");
+        span.textContent = ch;
+        span.style.fontFamily = "'QATT Hannom Pen', serif";
+        return span;
+      }
       const img = document.createElement("img");
       img.alt = ch;
       const hex = ch.codePointAt(0).toString(16).toUpperCase();

@@ -20,7 +20,7 @@
     
     <style>
         :root {
-            --nom-font-stack: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', 'Radicals Supplement', 'pa', 'HanaMinA', 'HanaMinB', serif;
+            --nom-font-stack: 'QATT Hannom Pen', 'Radicals Supplement', 'pa', 'HanaMinA', 'HanaMinB', serif;
             --ui-color: white;
             --ui-bg-alpha: rgba(255, 255, 255, 0.1);
             --ui-border: rgba(255, 255, 255, 0.15);
@@ -550,6 +550,8 @@
             nomChars(text, size = 32) {
                 return [...(text || '')].map(ch => {
                     if (!/[一-鿿㐀-䶿\u{20000}-\u{323af}]/u.test(ch)) return document.createTextNode(ch);
+                    // the index list: always the font; the characters of the play mode (160) are images, the font only as the fallback below
+                    if (size < 100) return document.createTextNode(ch);
                     const img = document.createElement('img');
                     img.alt = ch;
                     img.loading = 'lazy';
