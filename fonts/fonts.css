@@ -51,7 +51,7 @@ main { max-width: 60rem; margin: 0 auto; padding: 0 1rem 2rem; }
 .sizes .row-size { display: flex; align-items: baseline; gap: .8rem; padding: .2rem 0; border-top: 1px solid color-mix(in srgb, currentColor 8%, transparent); }
 .sizes .row-size:first-child { border-top: 0; }
 .sizes .px { flex: 0 0 2.6rem; font-size: .7rem; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
-.sizes .txt { white-space: nowrap; overflow: hidden; line-height: 1.5; min-width: 0; flex: 1 1 auto; }
+.sizes .txt { white-space: nowrap; overflow-x: auto; scrollbar-width: thin; line-height: 1.5; min-width: 0; flex: 1 1 auto; }
 .sizes .pick { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .6rem; }
 .sizes .pick button { background: none; border: 1px solid var(--line); border-radius: 2rem; padding: .1rem .8rem; font-size: .8rem; color: inherit; }
 .sizes .pick button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
@@ -76,4 +76,4 @@ html[data-specimen="dark"] .specimen { background: #000; color: #fff; }
 .toolbar label { margin: 0; }
 
 /* a line whose font size fills the width of its box (fit in fonts.js) */
-.fit { white-space: nowrap; overflow: hidden; width: 100%; }
+.fit { white-space: nowrap; overflow-x: auto; scrollbar-width: thin; width: 100%; }

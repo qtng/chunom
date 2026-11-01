@@ -33,8 +33,8 @@
       "name": "QATT Celluloid",
       "family": "Qatt.org-Celluloid",
       "tagline": { "en": "A cinematic display face", "vi": "Phông tiêu đề mang chất điện ảnh" },
-      "lead": { "en": "The pen line with the contrast of Mincho: thin horizontals, heavy verticals, round tops and square feet.", "vi": "Nét bút với độ tương phản của Mincho: nét ngang mảnh, nét dọc đậm, góc trên tròn, chân vuông." },
-      "about": { "en": "Built on QATT Pen: the top corners of boxes round, their feet square with the verticals standing a little below, straight thin horizontals, geometric circles and arcs as tone marks of the QATT letters. Kana, Zhuyin, Hangul, punctuation and Latin are those of QATT Pen.", "vi": "Dựa trên QATT Pen: góc trên của các ô được bo tròn, chân vuông với nét dọc nhô xuống một chút, nét ngang thẳng và mảnh, dấu thanh của chữ QATT là vòng tròn và cung hình học. Kana, chú âm, Hangul, dấu câu và chữ Latin giống QATT Pen." },
+      "lead": { "en": "The contrast of Mincho: thin horizontals, heavy verticals, round tops and square feet.", "vi": "Độ tương phản của Mincho: nét ngang mảnh, nét dọc đậm, góc trên tròn, chân vuông." },
+      "about": { "en": "Rounded top corners on the boxes, their feet square with the verticals standing a little below, straight thin horizontals, geometric circles and arcs as tone marks of the QATT letters. Kana, Zhuyin, Hangul, punctuation and Latin are drawn in the pen style of the QATT family.", "vi": "Góc trên của các ô được bo tròn, chân vuông với nét dọc nhô xuống một chút, nét ngang thẳng và mảnh, dấu thanh của chữ QATT là vòng tròn và cung hình học. Kana, chú âm, Hangul, dấu câu và chữ Latin vẽ theo kiểu nét bút của họ QATT." },
       "cover": "cover.jpg",
       "styles": [
         { "name": "Regular", "weight": 400, "stroke": 10, "file": "qatt-celluloid", "mb": 24 }
