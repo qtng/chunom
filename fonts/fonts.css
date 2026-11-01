@@ -1,0 +1,79 @@
+/* The font pages (/chunom/fonts/): the catalogue and one page per font, drawn by fonts.js from fonts.json. Layout only, plus the classic look of the header (as the other pages of the
+   Chunom site); colours come from the variables, so the themes of qatt.org work here too. */
+:root { --ink: #2b2118; --accent: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
+body { margin: 0; background: var(--paper); color: var(--ink); }
+.hero {
+  background:
+    radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%),
+    linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%);
+  border-bottom: 1px solid #e8dcc0;
+  color: var(--ink);
+}
+.hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: .01em; }
+.hero .han { color: var(--accent); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }
+.hero .lead { max-width: 40rem; color: #4a3d30; }
+.hero .slogan { font-size: clamp(.9rem, 4vw, 1.25rem); white-space: nowrap; letter-spacing: .02em; }
+.hero .slogan a, .hero .slogan a:hover { color: inherit !important; text-decoration: none !important; }
+@media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
+main { max-width: 60rem; margin: 0 auto; padding: 0 1rem 2rem; }
+.card-box { padding: 1rem 1.4rem; margin-bottom: 1rem; }
+@media (max-width: 575.98px) { .card-box { padding: .8rem 1rem; } }
+.card-box h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.35rem; margin: .2rem 0 .6rem; }
+.note { font-size: .8rem; color: var(--muted); margin: .8rem 0 0; }
+
+/* the cover: the picture of the font, as wide as the content */
+.cover { display: block; width: 100%; aspect-ratio: 2752 / 1536; object-fit: cover; border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .18); }
+
+/* catalogue: one card per font */
+.catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 26rem), 1fr)); gap: 1.2rem; }
+.font-card, .font-card:hover { color: var(--ink) !important; text-decoration: none !important; }   /* the card is a link: no link colour for its texts */
+.font-card { display: flex; flex-direction: column; padding: 0; overflow: hidden; color: inherit; text-decoration: none; transition: transform .15s; }
+.font-card:hover { transform: translateY(-2px); }
+.font-card .cover { border-radius: 0; box-shadow: none; }
+.font-card .body { padding: .9rem 1.2rem 1.1rem; }
+.font-card h2 { margin: 0 0 .2rem; }
+.font-card .tag { color: var(--muted); font-size: .9rem; }
+.font-card .sample { line-height: 1.3; }
+.font-card .styles { font-size: .8rem; color: var(--muted); }
+
+/* a font page: own text, the styles, the sizes */
+.try label { font-size: .85rem; color: var(--muted); }
+.style { padding: 1.4rem 0; border-top: 1px solid var(--line); }
+.style:first-of-type { border-top: 0; padding-top: .6rem; }
+.style .head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .3rem 1rem; margin-bottom: .4rem; }
+.style h3 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.35rem; margin: 0; }
+.style .facts { font-size: .8rem; color: var(--muted); flex: 1 1 auto; }
+.style .big { line-height: 1.25; }
+.style .line { line-height: 1.5; }
+.style .qatt { line-height: 1.7; }
+.style .latin { line-height: 1.5; }
+.style .dl { margin-top: .6rem; }
+.sizes .row-size { display: flex; align-items: baseline; gap: .8rem; padding: .2rem 0; border-top: 1px solid color-mix(in srgb, currentColor 8%, transparent); }
+.sizes .row-size:first-child { border-top: 0; }
+.sizes .px { flex: 0 0 2.6rem; font-size: .7rem; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+.sizes .txt { white-space: nowrap; overflow: hidden; line-height: 1.5; min-width: 0; flex: 1 1 auto; }
+.sizes .pick { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .6rem; }
+.sizes .pick button { background: none; border: 1px solid var(--line); border-radius: 2rem; padding: .1rem .8rem; font-size: .8rem; color: inherit; }
+.sizes .pick button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.ranges { width: 100%; font-size: .85rem; border-collapse: collapse; }
+.ranges th, .ranges td { padding: .35rem .6rem .35rem 0; border-top: 1px solid var(--line); vertical-align: top; }
+.ranges thead th { border-top: 0; color: var(--muted); font-weight: 400; }
+.ranges tbody th { font-weight: 600; }
+.ranges .r { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ranges .n { text-align: right; font-variant-numeric: tabular-nums; }
+.links ul { margin: 0; padding-left: 1.2rem; }
+.links li { margin: .3rem 0; }
+
+/* the characters always black on white, or white on black (the switch of the page, html[data-specimen="dark"], stored in localStorage.fontsSpecimen) whatever the theme */
+.specimen { background: #fff; color: #000; border-radius: .6rem; padding: .2rem 1rem .6rem; }
+html[data-specimen="dark"] .specimen { background: #000; color: #fff; }
+.specimen .sizes-row, .specimen .row-size { border-color: color-mix(in srgb, currentColor 12%, transparent); }
+.font-card .specimen { margin: .5rem 0 .3rem; padding: .3rem .7rem; }
+.scheme { display: inline-flex; border: 1px solid var(--line); border-radius: 2rem; overflow: hidden; }
+.scheme button { border: 0; padding: .2rem .8rem; font-size: .8rem; background: none; color: inherit; }
+.scheme button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: .4rem; }
+.toolbar label { margin: 0; }
+
+/* a line whose font size fills the width of its box (fit in fonts.js) */
+.fit { white-space: nowrap; overflow: hidden; width: 100%; }
