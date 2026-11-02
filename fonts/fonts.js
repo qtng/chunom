@@ -1,7 +1,7 @@
 /* The font pages of the Chunom site (/chunom/fonts/): the catalogue (fonts/index.html) and one page per font (fonts/<id>/index.html), both drawn from fonts.json.
    A page has <main id="fonts" data-page="catalog"> or data-page="font" data-font="<id>"; the header (title, lead) is written in the page itself for search engines.
    fonts.json: assets (the folder of the font files), sizes (the waterfall), sample (the texts of the specimen), fonts [{id, name, family, tagline, lead, about, cover, styles
-   [{name, weight, stroke, file, mb}]}], external (other fonts), charset (the Unicode table). A style's files are <assets><file>.ttf (download), .woff2 (the whole font,
+   [{name, weight, stroke, file, mb, ext (the woff2 is two files, see faces)}]}], external (other fonts), charset (the Unicode table). A style's files are <assets><file>.ttf (download), .woff2 (the whole font,
    loaded only for a character the specimen lacks) and -specimen.woff2 (about 150 KB: the 100 most common characters, the sample texts, Latin and the QATT letters).
    Texts in English and Vietnamese ({en, vi}) are put into tags with data-vi, so the Lang of navigation.js translates them (the Vietnamese texts are drafts). */
 (() => {
@@ -24,7 +24,9 @@
   function faces(data) {
     const css = data.fonts.flatMap(f => f.styles.map(s =>
       `@font-face { font-family: "${fam(f, s)}"; src: url("${data.assets}${s.file}-specimen.woff2") format("woff2"); }\n` +
-      `@font-face { font-family: "${fam(f, s)} Full"; src: url("${data.assets}${s.file}.woff2") format("woff2"); }`)).join('\n');
+      `@font-face { font-family: "${fam(f, s)} Full"; src: url("${data.assets}${s.file}.woff2") format("woff2");${s.ext ? ' unicode-range: U+0-1FFFF, U+40000-10FFFF;' : ''} }` +
+      // ext: a font over 30 MB (unpacked, the limit of the browsers) is two files, <file>-ext.woff2 has the supplementary ideographs
+      (s.ext ? `\n@font-face { font-family: "${fam(f, s)} Full"; src: url("${data.assets}${s.file}-ext.woff2") format("woff2"); unicode-range: U+20000-3FFFF; }` : ''))).join('\n');
     document.head.append(el('style', { text: css }));
   }
   // black on white (default) or white on black: one switch for the page, remembered in this browser
