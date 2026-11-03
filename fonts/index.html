@@ -39,6 +39,7 @@
     .pair img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform .4s; }
     .pair a:hover img { transform: scale(1.03); }
     @media (max-width: 575.98px) { .pair { gap: .75rem; padding: 1.25rem 1rem; } .pair a { border-radius: 8px; } }
+    .os { display: flex; justify-content: center; gap: 1.5rem; font-size: 1.6rem; color: var(--muted, #777); }
   </style>
 </head>
 <body>
@@ -46,8 +47,8 @@
   <div class="container text-center">
     <div class="han mb-2">𡨸喃</div>
     <h1 class="mb-3" data-vi="Phông chữ CJK của chúng tôi">Our CJK fonts</h1>
-    <p class="slogan mb-2">Quốc Ngữ • Chữ Nôm • <a href="https://qatt.org/">Quốc Âm Tân Tự</a></p>
-    <p class="lead mx-auto mb-0">Chữ Nôm, Chinese characters and the QATT script in one family of styles, 39,036 CJK characters each. Choose a font to see and download it.</p>
+    <p class="slogan mb-3">Quốc Ngữ • Chữ Nôm • <a href="https://qatt.org/">Quốc Âm Tân Tự</a></p>
+    <div class="os" aria-hidden="true"><i class="bi bi-windows"></i><i class="bi bi-apple"></i><i class="bi bi-android2"></i></div>
   </div>
 </header>
 
@@ -117,7 +118,6 @@
   </div></section>
 
   <div class="closing">
-    <p class="mb-3">Free to download for Windows, macOS and Linux.</p>
     <div id="fonts" data-page="catalog"></div>   <!-- fonts.js: the other Chữ Nôm fonts (fonts.json, external) -->
   </div>
 </main>
