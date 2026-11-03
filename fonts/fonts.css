@@ -1,4 +1,4 @@
-/* The font pages (/chunom/fonts/): the catalogue and one page per font, drawn by fonts.js from fonts.json. Layout only, plus the classic look of the header (as the other pages of the
+/* The font catalogue (/chunom/fonts/) and the popup of a font (fonts.js). Layout only, plus the classic look of the header (as the other pages of the
    Chunom site); colours come from the variables, so the themes of qatt.org work here too. */
 :root { --ink: #2b2118; --accent: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
 body { margin: 0; background: var(--paper); color: var(--ink); }
@@ -21,40 +21,6 @@ main { max-width: 60rem; margin: 0 auto; padding: 0 1rem 2rem; }
 .card-box h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.35rem; margin: .2rem 0 .6rem; }
 .note { font-size: .8rem; color: var(--muted); margin: .8rem 0 0; }
 
-/* the cover: the picture of the font, as wide as the content */
-.cover { display: block; width: 100%; aspect-ratio: 2752 / 1536; object-fit: cover; border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .18); }
-
-/* catalogue: one card per font */
-.catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 26rem), 1fr)); gap: 1.2rem; }
-.font-card, .font-card:hover { color: var(--ink) !important; text-decoration: none !important; }   /* the card is a link: no link colour for its texts */
-.font-card { display: flex; flex-direction: column; padding: 0; overflow: hidden; color: inherit; text-decoration: none; transition: transform .15s; }
-.font-card:hover { transform: translateY(-2px); }
-.font-card .cover { border-radius: 0; box-shadow: none; }
-.font-card .body { padding: .9rem 1.2rem 1.1rem; }
-.font-card h2 { margin: 0 0 .2rem; }
-.font-card .tag { color: var(--muted); font-size: .9rem; }
-.font-card .sample { line-height: 1.3; }
-.font-card .styles { font-size: .8rem; color: var(--muted); }
-
-/* a font page: own text, the styles, the sizes */
-.try label { font-size: .85rem; color: var(--muted); }
-.style { padding: 1.4rem 0; border-top: 1px solid var(--line); }
-.style:first-of-type { border-top: 0; padding-top: .6rem; }
-.style .head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .3rem 1rem; margin-bottom: .4rem; }
-.style h3 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.35rem; margin: 0; }
-.style .facts { font-size: .8rem; color: var(--muted); flex: 1 1 auto; }
-.style .big { line-height: 1.25; }
-.style .line { line-height: 1.5; }
-.style .qatt { line-height: 1.7; }
-.style .latin { line-height: 1.5; }
-.style .dl { margin-top: .6rem; }
-.sizes .row-size { display: flex; align-items: baseline; gap: .8rem; padding: .2rem 0; border-top: 1px solid color-mix(in srgb, currentColor 8%, transparent); }
-.sizes .row-size:first-child { border-top: 0; }
-.sizes .px { flex: 0 0 2.6rem; font-size: .7rem; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
-.sizes .txt { white-space: nowrap; overflow-x: auto; scrollbar-width: thin; line-height: 1.5; min-width: 0; flex: 1 1 auto; }
-.sizes .pick { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .6rem; }
-.sizes .pick button { background: none; border: 1px solid var(--line); border-radius: 2rem; padding: .1rem .8rem; font-size: .8rem; color: inherit; }
-.sizes .pick button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
 .ranges { width: 100%; font-size: .85rem; border-collapse: collapse; }
 .ranges th, .ranges td { padding: .35rem .6rem .35rem 0; border-top: 1px solid var(--line); vertical-align: top; }
 .ranges thead th { border-top: 0; color: var(--muted); font-weight: 400; }
@@ -64,16 +30,46 @@ main { max-width: 60rem; margin: 0 auto; padding: 0 1rem 2rem; }
 .links ul { margin: 0; padding-left: 1.2rem; }
 .links li { margin: .3rem 0; }
 
-/* the characters always black on white, or white on black (the switch of the page, html[data-specimen="dark"], stored in localStorage.fontsSpecimen) whatever the theme */
-.specimen { background: #fff; color: #000; border-radius: .6rem; padding: .2rem 1rem .6rem; }
-html[data-specimen="dark"] .specimen { background: #000; color: #fff; }
-.specimen .sizes-row, .specimen .row-size { border-color: color-mix(in srgb, currentColor 12%, transparent); }
-.font-card .specimen { margin: .5rem 0 .3rem; padding: .3rem .7rem; }
-.scheme { display: inline-flex; border: 1px solid var(--line); border-radius: 2rem; overflow: hidden; }
-.scheme button { border: 0; padding: .2rem .8rem; font-size: .8rem; background: none; color: inherit; }
-.scheme button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
-.toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: .4rem; }
-.toolbar label { margin: 0; }
 
-/* a line whose font size fills the width of its box (fit in fonts.js) */
-.fit { white-space: nowrap; overflow-x: auto; scrollbar-width: thin; width: 100%; }
+/* the folded boxes below the bands (characters, licence) */
+.fold summary { font-family: Georgia, "Times New Roman", serif; font-size: 1.2rem; cursor: pointer; }
+.fold[open] summary { margin-bottom: .6rem; }
+
+/* the popup of a font: a sheet from below on the phone, a window in the middle from 768 px; the colours of its band (--b-*), the same in every theme */
+html.fp-open { overflow: hidden; }
+.fp-back { position: fixed; inset: 0; z-index: 1060; display: flex; align-items: flex-end; justify-content: center; background: rgba(43, 33, 24, .45); backdrop-filter: blur(3px); }
+.fp-back[hidden] { display: none; }
+.fp { --b-bg: #fdf8ee; --b-ink: #2b2118; --b-accent: #a8362a; --b-line: color-mix(in srgb, var(--b-ink) 14%, transparent);
+  position: relative; width: 100%; max-height: 92vh; overflow-y: auto; overscroll-behavior: contain; background: var(--b-bg); color: var(--b-ink);
+  border-radius: 20px 20px 0 0; box-shadow: 0 -10px 40px rgba(0, 0, 0, .25); outline: none; }
+.fp-grip { width: 42px; height: 5px; border-radius: 3px; background: color-mix(in srgb, var(--b-ink) 20%, transparent); margin: .6rem auto 0; }
+.fp-x { position: absolute; top: .8rem; right: .9rem; z-index: 1; width: 2.4rem; height: 2.4rem; border: 0; border-radius: 50%; display: grid; place-items: center;
+  background: color-mix(in srgb, var(--b-ink) 7%, transparent); color: var(--b-ink); font-size: 1.05rem; }
+.fp-hd { position: relative; overflow: hidden; padding: .9rem 1.4rem .9rem; }
+.fp-wm { position: absolute; right: .5rem; top: .2rem; font-size: 7.5rem; line-height: 1; opacity: .09; pointer-events: none; user-select: none; }
+.fp-no { font: 700 .75rem system-ui, sans-serif; letter-spacing: .14em; color: var(--b-accent); }
+.fp .fp-name { font-size: 2.4rem; font-weight: 400; font-style: normal; margin: .1rem 0 0; padding: 0; border: 0; background: none; color: var(--b-ink); text-transform: none; letter-spacing: 0; text-shadow: none; }   /* no heading look of a theme */
+.fp-sec { padding: 1.1rem 1.4rem; border-top: 1px solid var(--b-line); }
+.fp .fp-sec h3 { font: normal 700 .72rem system-ui, sans-serif !important; padding: 0; border: 0; background: none; letter-spacing: .14em; text-transform: uppercase; color: var(--b-accent); margin: 0 0 .7rem; }
+.fp-sc { display: block; min-width: 0; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }   /* a line too wide for the box scrolls */
+.fp-sc::-webkit-scrollbar { display: none; }
+.fp .fp-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: .8rem; align-items: center; padding: .55rem .7rem; margin: 0 -.7rem; border-radius: 10px;
+  color: var(--b-ink) !important; text-decoration: none !important; }
+.fp-row + .fp-row { border-top: 1px dashed var(--b-line); }
+.fp-row:hover { background: color-mix(in srgb, var(--b-ink) 5%, transparent); }
+.fp-sample { font-size: 1.65rem; line-height: 1.4; }
+.fp-meta { text-align: right; line-height: 1.15; } .fp-meta b { display: block; font-size: .9rem; } .fp-meta small { font-size: .7rem; opacity: .6; }
+.fp-dl { width: 2.4rem; height: 2.4rem; border-radius: 50%; display: grid; place-items: center; background: var(--b-accent); color: #fff; }
+.fp .fp-note { font-size: .78rem; color: var(--b-ink) !important; opacity: .65; margin: .6rem 0 0; }
+.fp .fp-try { font-size: 1.6rem; padding: .6rem .9rem; border-radius: 12px !important; border: 1.5px solid var(--b-line) !important; background: rgba(255, 255, 255, .6) !important; color: var(--b-ink) !important;
+  box-shadow: none !important; }   /* the field of the band, not of a theme (the dark one makes fields dark) */
+.fp .fp-try:focus { border-color: var(--b-accent) !important; }
+.fp .fp-try::placeholder { color: var(--b-ink); opacity: .35; }
+.fp-lad > div { display: grid; grid-template-columns: 1.8rem minmax(0, 1fr); align-items: baseline; line-height: 1.3; }
+.fp-lad small { font: 500 .65rem system-ui, sans-serif; opacity: .5; }
+@media (min-width: 768px) {
+  .fp-back { align-items: center; padding: 1.5rem; }
+  .fp { max-width: 46rem; max-height: 88vh; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, .3); }
+  .fp-grip { display: none; }
+  .fp-hd { padding-top: 1.4rem; }
+}

@@ -1,76 +1,173 @@
 {
   "assets": "/chunom-assets/fonts/",
   "characters": 39561,
-  "sizes": [14, 18, 24, 32, 48, 72],
+  "sizes": [
+    64,
+    40,
+    24,
+    16
+  ],
   "sample": {
-    "display": "𤾓𠄼𥪝𡎝𠊛些",
     "line": "𤾓𠄼𥪝𡎝𠊛些𡨸才𡨸命窖𱺵恄憢",
-    "text": "𤾓𠄼𥪝𡎝𠊛些𡨸才𡨸命窖𱺵恄憢",
-    "qatt": "Quốc âm tân tự, chữ Nôm, tiếng Việt.",
-    "latin": "Quốc Ngữ – Chữ Nôm – Quốc Âm Tân Tự",
-    "fixedQatt": "󰀜󰂚󰁂󰂢󰀀󰂚󰀾󰀿󰂚󰀽󰀿󰂚󰀡󰂡󰂌󰂚󰁧󰂣󰀸󰂚󰀉",
-    "fixedLatin": "trăm năm trong cõi người ta chữ tài chữ mệnh",
-    "fixedSize": 28
+    "qatt": "󰀜󰂚󰁂󰂢󰀀󰂚󰀾󰀿󰂚󰀽󰀿󰂚󰀡󰂡󰂌󰂚󰁧󰂣󰀸󰂚󰀉"
   },
   "fonts": [
     {
       "id": "pen",
       "name": "QATT Pen",
       "family": "Qatt.org-Pen",
-      "tagline": { "en": "Soft curved strokes with a hint of clerical", "vi": "Nét cong mềm mại, thoáng dáng chữ Lệ" },
-      "lead": { "en": "Four weights, from Thin to Medium, to download for your desktop.", "vi": "Bốn độ đậm, từ Thin đến Medium, tải về cho máy tính." },
-      "about": { "en": "The strokes of a felt-tip pen: round ends, a slight bow in the horizontals, a hint of clerical script. One family in four weights; install all of them and the font menus show the styles Thin, Light, Regular and Medium of \"Qatt.org-Pen\".", "vi": "Nét bút dạ: đầu nét tròn, nét ngang hơi cong, thoáng dáng chữ Lệ. Một họ phông bốn độ đậm; cài cả bốn, trình đơn phông sẽ hiện các kiểu Thin, Light, Regular và Medium của \"Qatt.org-Pen\"." },
-      "cover": "cover.jpg",
       "styles": [
-        { "name": "Thin",    "weight": 100, "stroke": 4,  "file": "qatt-pen-thin",   "mb": 30 },
-        { "name": "Light",   "weight": 300, "stroke": 7,  "file": "qatt-pen-light",  "mb": 30 },
-        { "name": "Regular", "weight": 400, "stroke": 10, "file": "qatt-pen",        "mb": 30 },
-        { "name": "Medium",  "weight": 500, "stroke": 13, "file": "qatt-pen-medium", "mb": 29 }
+        {
+          "name": "Thin",
+          "css": "QATT Pen Thin",
+          "file": "qatt-pen-thin",
+          "mb": 27.6
+        },
+        {
+          "name": "Light",
+          "css": "QATT Pen Light",
+          "file": "qatt-pen-light",
+          "mb": 28.3
+        },
+        {
+          "name": "Regular",
+          "css": "QATT Pen",
+          "file": "qatt-pen",
+          "mb": 27.5
+        },
+        {
+          "name": "Medium",
+          "css": "QATT Pen Medium",
+          "file": "qatt-pen-medium",
+          "mb": 26.6
+        }
       ]
     },
     {
       "id": "migoi",
       "name": "Migoi",
       "family": "Migoi",
-      "tagline": { "en": "Playful and rounded", "vi": "Tròn trịa và vui tươi" },
-      "lead": { "en": "Soft, rounded boxes, round corners and light, even strokes.", "vi": "Ô vuông mềm mại, góc bo tròn, nét mảnh và đều." },
-      "about": { "en": "Named after mì gói, instant noodles. Every part of a character swells a little like a balloon: the outer lines bow outwards, small boxes more than big ones, the corners are round, and a horizontal between two verticals floats free of them. One even stroke width throughout.", "vi": "Đặt tên theo mì gói. Mỗi bộ phận của chữ phồng lên một chút như quả bóng: nét ngoài cong ra, ô nhỏ cong hơn ô lớn, góc bo tròn, nét ngang giữa hai nét dọc tách rời khỏi chúng. Nét đều một độ dày." },
-      "cover": "cover.jpg",
       "styles": [
-        { "name": "Regular", "weight": 400, "stroke": 8, "file": "migoi", "mb": 38 }
+        {
+          "name": "Regular",
+          "css": "Migoi",
+          "file": "migoi",
+          "mb": 37.9
+        }
       ]
     },
     {
       "id": "celluloid",
       "name": "Celluloid",
       "family": "Celluloid",
-      "tagline": { "en": "A cinematic display face", "vi": "Phông tiêu đề mang chất điện ảnh" },
-      "lead": { "en": "High contrast: thin horizontals, heavy verticals, round tops and square feet.", "vi": "Tương phản cao: nét ngang mảnh, nét dọc đậm, góc trên tròn, chân vuông." },
-      "about": { "en": "Rounded top corners on the boxes, their feet square with the verticals standing a little below, straight thin horizontals, geometric circles and arcs as tone marks of the QATT letters. Kana, Zhuyin, Hangul, punctuation and Latin are included, drawn to match.", "vi": "Góc trên của các ô được bo tròn, chân vuông với nét dọc nhô xuống một chút, nét ngang thẳng và mảnh, dấu thanh của chữ QATT là vòng tròn và cung hình học. Kana, chú âm, Hangul, dấu câu và chữ Latin đều có, vẽ cho hợp." },
-      "cover": "cover.jpg",
       "styles": [
-        { "name": "Regular", "weight": 400, "stroke": 10, "file": "celluloid", "mb": 24 }
+        {
+          "name": "Regular",
+          "css": "Celluloid",
+          "file": "celluloid",
+          "mb": 24.3
+        }
       ]
     }
   ],
   "external": [
-    { "name": "Nom Na Tong", "url": "https://github.com/nomfoundation/font", "en": "Song style font by the Vietnamese Nôm Preservation Foundation", "vi": "phông kiểu Tống của Hội Bảo tồn chữ Nôm Việt Nam" },
-    { "name": "Han Nom Gothic", "url": "https://github.com/TKYKmori/Gothic-Nguyen", "en": "A sans-serif font by Han-Nom RCV", "vi": "phông không chân của Han-Nom RCV" }
+    {
+      "name": "Nom Na Tong",
+      "url": "https://github.com/nomfoundation/font",
+      "en": "Song style font by the Vietnamese Nôm Preservation Foundation",
+      "vi": "phông kiểu Tống của Hội Bảo tồn chữ Nôm Việt Nam"
+    },
+    {
+      "name": "Han Nom Gothic",
+      "url": "https://github.com/TKYKmori/Gothic-Nguyen",
+      "en": "A sans-serif font by Han-Nom RCV",
+      "vi": "phông không chân của Han-Nom RCV"
+    }
   ],
   "charset": [
-    ["Latin (ASCII, Latin-1, Quốc Ngữ)", "Basic Latin, Latin-1 Supplement, Latin Extended-A/B, Latin Extended Additional", "U+0020–024F, U+1E00–1EFF", 293],
-    ["Punctuation", "General Punctuation (dashes, curly quotes, ellipsis)", "U+2013–2026", 7],
-    ["Han radicals", "CJK Radicals Supplement, Kangxi Radicals, Ideographic Description Characters", "U+2E80–2FFF", 345],
-    ["CJK punctuation", "CJK Symbols and Punctuation", "U+3000–303F", 64],
-    ["Kana", "Hiragana, Katakana, Katakana Phonetic Extensions", "U+3040–30FF, U+31F0–31FF", 205],
-    ["Zhuyin", "Bopomofo, Bopomofo Extended", "U+3100–312F, U+31A0–31BF", 75],
-    ["Hangul", "Hangul Compatibility Jamo", "U+3130–318F", 94],
-    ["Han characters and Chữ Nôm", "CJK Unified Ideographs, Extension A", "U+3400–4DBF, U+4E00–9FFF", 27583],
-    ["Han characters and Chữ Nôm (more)", "Extensions B, C, D, E, F, G, H, J, Compatibility Ideographs and Supplement", "U+F900–FAFF, U+20000–2EBEF, U+2F800–2FA1F, U+30000–3347F", 10405],
-    ["Fullwidth forms", "Halfwidth and Fullwidth Forms", "U+FF00–FFEF", 225],
-    ["Kanbun and CJK strokes", "Kanbun, CJK Strokes", "U+3190–319F, U+31C0–31EF", 37],
-    ["Vietnamese reading marks", "Ideographic Symbols and Punctuation", "U+16FF0–16FF1", 2],
-    ["Sans-serif letters and digits", "Mathematical Alphanumeric Symbols", "U+1D5A0–1D5D3, U+1D7E2–1D7EB", 62],
-    ["QATT letters", "Private use (the QATT script)", "U+F0000–F00A3", 164]
+    [
+      "Latin (ASCII, Latin-1, Quốc Ngữ)",
+      "Basic Latin, Latin-1 Supplement, Latin Extended-A/B, Latin Extended Additional",
+      "U+0020–024F, U+1E00–1EFF",
+      293
+    ],
+    [
+      "Punctuation",
+      "General Punctuation (dashes, curly quotes, ellipsis)",
+      "U+2013–2026",
+      7
+    ],
+    [
+      "Han radicals",
+      "CJK Radicals Supplement, Kangxi Radicals, Ideographic Description Characters",
+      "U+2E80–2FFF",
+      345
+    ],
+    [
+      "CJK punctuation",
+      "CJK Symbols and Punctuation",
+      "U+3000–303F",
+      64
+    ],
+    [
+      "Kana",
+      "Hiragana, Katakana, Katakana Phonetic Extensions",
+      "U+3040–30FF, U+31F0–31FF",
+      205
+    ],
+    [
+      "Zhuyin",
+      "Bopomofo, Bopomofo Extended",
+      "U+3100–312F, U+31A0–31BF",
+      75
+    ],
+    [
+      "Hangul",
+      "Hangul Compatibility Jamo",
+      "U+3130–318F",
+      94
+    ],
+    [
+      "Han characters and Chữ Nôm",
+      "CJK Unified Ideographs, Extension A",
+      "U+3400–4DBF, U+4E00–9FFF",
+      27583
+    ],
+    [
+      "Han characters and Chữ Nôm (more)",
+      "Extensions B, C, D, E, F, G, H, J, Compatibility Ideographs and Supplement",
+      "U+F900–FAFF, U+20000–2EBEF, U+2F800–2FA1F, U+30000–3347F",
+      10405
+    ],
+    [
+      "Fullwidth forms",
+      "Halfwidth and Fullwidth Forms",
+      "U+FF00–FFEF",
+      225
+    ],
+    [
+      "Kanbun and CJK strokes",
+      "Kanbun, CJK Strokes",
+      "U+3190–319F, U+31C0–31EF",
+      37
+    ],
+    [
+      "Vietnamese reading marks",
+      "Ideographic Symbols and Punctuation",
+      "U+16FF0–16FF1",
+      2
+    ],
+    [
+      "Sans-serif letters and digits",
+      "Mathematical Alphanumeric Symbols",
+      "U+1D5A0–1D5D3, U+1D7E2–1D7EB",
+      62
+    ],
+    [
+      "QATT letters",
+      "Private use (the QATT script)",
+      "U+F0000–F00A3",
+      164
+    ]
   ]
 }
