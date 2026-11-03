@@ -33,6 +33,12 @@
     .b-phong  { --b-bg: #eef0f3; --b-ink: #23262b; --b-accent: #4b6b9a; }
     .band { background: var(--b-bg); }
     .closing { max-width: 52rem; margin: 0 auto; padding: 2rem 1.25rem 3rem; }
+    /* between the bands of the Pen and the others: the covers of Migoi and Celluloid, side by side in 21:9 (the middle of the picture: the names stay whole), with room around them */
+    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; max-width: 60rem; margin: 0 auto; padding: 2rem 1.25rem; }
+    .pair a { display: block; aspect-ratio: 21 / 9; overflow: hidden; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,.15); }
+    .pair img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform .4s; }
+    .pair a:hover img { transform: scale(1.03); }
+    @media (max-width: 575.98px) { .pair { gap: .75rem; padding: 1.25rem 1rem; } .pair a { border-radius: 8px; } }
   </style>
 </head>
 <body>
@@ -75,6 +81,11 @@
     <div class="desc">The same pen, bold for headings</div>
     <div class="more"><a href="/chunom/fonts/pen/"><span data-vi="Xem và tải về">See and download</span> <i class="bi bi-arrow-right" aria-hidden="true"></i></a></div>
   </div></section>
+
+  <div class="pair">
+    <a href="/chunom/fonts/migoi/"><img src="/chunom/fonts/migoi/cover.jpg" alt="Migoi" loading="lazy"></a>
+    <a href="/chunom/fonts/celluloid/"><img src="/chunom/fonts/celluloid/cover.jpg" alt="Celluloid" loading="lazy"></a>
+  </div>
 
   <section class="band b-migoi"><div class="inner">
     <div class="wm" style="font-family: 'Migoi'" aria-hidden="true">越</div>
