@@ -742,7 +742,7 @@ class App {
       if (size < 100 && !window.ChunomDetail?.nomImages()) { // lists: the font; the big character shown for learning stays an image
         const span = document.createElement("span");
         span.textContent = ch;
-        span.style.fontFamily = "'QATT Pen', serif";
+        span.style.fontFamily = 'var(--font-cjk), serif';
         return span;
       }
       const img = document.createElement("img");

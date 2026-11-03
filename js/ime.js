@@ -319,8 +319,8 @@
 	// ---------- Input field ----------
 
 	const PUNCTUATION = ' \\`^°-_.,:;?!/+*#=<>(){}[]\'"&~%|';
-	const DEFAULT_FONTS = ['QATT Pen', 'sans-serif', 'Heiti TC', 'Heiti SC', 'hanaminb', 'hanamina', 'MingLiU-ExtB', 'PMingLiU-ExtB', 'SimSun-ExtB'];   // Hannom Pen (chunom-assets/fonts/fonts.css, loaded only for CJK characters) first
-	const fontFamily = list => list.map(f => /^(serif|sans-serif|monospace|system-ui)$/.test(f) ? f : `"${f}"`).join(', ');
+	const DEFAULT_FONTS = ['var(--font-cjk, "QATT Pen")', 'sans-serif', 'Heiti TC', 'Heiti SC', 'hanaminb', 'hanamina', 'MingLiU-ExtB', 'PMingLiU-ExtB', 'SimSun-ExtB'];   // Hannom Pen (chunom-assets/fonts/fonts.css, loaded only for CJK characters) first
+	const fontFamily = list => list.map(f => /^(serif|sans-serif|monospace|system-ui|var\(.*\))$/.test(f) ? f : `"${f}"`).join(', ');   // var(--font-cjk, …): the CJK font of qatt.org/css/site.css, the name for a page without it
 	const TYPING_ATTRIBUTES = { autocomplete: 'off', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'false' };
 
 	// styles a textarea mirror needs to wrap its text exactly like the textarea

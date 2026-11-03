@@ -37,7 +37,7 @@
       "about": { "en": "Named after mì gói, instant noodles. Every part of a character swells a little like a balloon: the outer lines bow outwards, small boxes more than big ones, the corners are round, and a horizontal between two verticals floats free of them. One even stroke width throughout.", "vi": "Đặt tên theo mì gói. Mỗi bộ phận của chữ phồng lên một chút như quả bóng: nét ngoài cong ra, ô nhỏ cong hơn ô lớn, góc bo tròn, nét ngang giữa hai nét dọc tách rời khỏi chúng. Nét đều một độ dày." },
       "cover": "cover.jpg",
       "styles": [
-        { "name": "Regular", "weight": 400, "stroke": 8, "file": "migoi", "mb": 38, "ext": true }
+        { "name": "Regular", "weight": 400, "stroke": 8, "file": "migoi", "mb": 38 }
       ]
     },
     {

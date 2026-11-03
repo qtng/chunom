@@ -10,7 +10,7 @@ body { margin: 0; background: var(--paper); color: var(--ink); }
   color: var(--ink);
 }
 .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: .01em; }
-.hero .han { color: var(--accent); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; font-family: 'Nom Na Tong Supplement', 'NomKhai-Supplement', 'Han-Nom Gothic Supplement', serif; }
+.hero .han { color: var(--accent); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; font-family: var(--font-cjk); }
 .hero .lead { max-width: 40rem; color: #4a3d30; }
 .hero .slogan { font-size: clamp(.9rem, 4vw, 1.25rem); white-space: nowrap; letter-spacing: .02em; }
 .hero .slogan a, .hero .slogan a:hover { color: inherit !important; text-decoration: none !important; }

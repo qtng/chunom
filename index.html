@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://qatt.org/css/site.css">
   <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="/chunom-assets/fonts/fonts.css">
   <link rel="stylesheet" href="/chunom/css/shelf-cards.css">
   <script defer src="https://qatt.org/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script defer src="/chunom/js/ime.js"></script>
@@ -15,7 +14,6 @@
   <script src="https://qatt.org/js/navigation.js"></script>
   <script defer src="https://qatt.org/js/parser.js"></script>
   <script defer src="https://qatt.org/js/qatt-text.js"></script>   <!-- the glyphs as text of a QATT font (QattText.word) -->
-  <script defer src="https://qatt.org/js/fonts.js"></script>   <!-- the QATT fonts and their @font-face rules -->
   <script defer src="https://qatt.org/vendor/supabase/supabase.min.js"></script>
   <script defer src="https://qatt.org/js/supabase.js"></script>
   <script defer src="https://qatt.org/js/login.js"></script>
@@ -39,10 +37,10 @@
       color: inherit;
     }
     .font-serif {
-      font-family: 'QATT Pen', serif;
+      font-family: var(--font-cjk), serif;
     }
     .font-monospace {
-      font-family: 'QATT Pen', monospace;
+      font-family: var(--font-cjk), monospace;
     }
     .lh-sm {
       line-height: 1.1;
@@ -144,7 +142,6 @@
     }
     .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: .01em; }
     .hero .han { color: var(--cinnabar); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; }
-    .hero .han { font-family: 'QATT Pen', serif; }   /* Nôm characters outside the usual fonts */
     .hero .lead { max-width: 38rem; color: #4a3d30; }
     @media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
     .home-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; }

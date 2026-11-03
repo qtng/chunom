@@ -26,7 +26,7 @@ body {
       background: linear-gradient(180deg, var(--paper) 0, #fffdf8 16rem) no-repeat, #fffdf8;
       min-height: 100vh;
       color: var(--ink);
-      font-family: system-ui, -apple-system, sans-serif, 'QATT Pen', 'Radicals Supplement', 'pa', 'HanaMinA', 'HanaMinB'; /* the Nôm fonts for names with Han characters */
+      font-family: system-ui, -apple-system, sans-serif, var(--font-cjk), 'pa', 'HanaMinA', 'HanaMinB'; /* the Nôm fonts for names with Han characters */
       padding-top: calc(var(--external-nav-height) + var(--nav-height) + 15px);
       padding-bottom: 100px; 
     }
@@ -275,7 +275,7 @@ svg use[href^="#qt"] { stroke-width: calc(var(--stroke-width) * 3 / 4) }
 
 /* words of decks: Nôm characters as images (black on transparent) with the font as fallback, and glyphs of several syllables */
 .nom-chars { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .05em; line-height: 1.1;
-             font-family: 'QATT Pen', 'Radicals Supplement', 'pa', 'HanaMinA', 'HanaMinB', serif; }
+             font-family: var(--font-cjk), 'pa', 'HanaMinA', 'HanaMinB', serif; }
 .nom-chars img { height: 2.3rem; width: auto; }
 .options .nom-chars { font-size: 2.3rem; }
 .symbol-card .nom-chars { font-size: 5rem; }

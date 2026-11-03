@@ -1,8 +1,8 @@
 /* The font pages of the Chunom site (/chunom/fonts/): the catalogue (fonts/index.html) and one page per font (fonts/<id>/index.html), both drawn from fonts.json.
    A page has <main id="fonts" data-page="catalog"> or data-page="font" data-font="<id>"; the header (title, lead) is written in the page itself for search engines.
    fonts.json: assets (the folder of the font files), sizes (the waterfall), sample (the texts of the specimen), fonts [{id, name, family, tagline, lead, about, cover, styles
-   [{name, weight, stroke, file, mb, ext (the woff2 is two files, see faces)}]}], external (other fonts), charset (the Unicode table). A style's files are <assets><file>.ttf (download), .woff2 (the whole font,
-   loaded only for a character the specimen lacks) and -specimen.woff2 (about 150 KB: the 100 most common characters, the sample texts, Latin and the QATT letters).
+   [{name, weight, stroke, file, mb}]}], external (other fonts), charset (the Unicode table). A style's files are <assets><file>.ttf (download), -specimen.woff2 (about 150 KB:
+   the 100 most common characters, the sample texts, Latin and the QATT letters) and, for a character the specimen lacks, the web files web/<file>-latin.woff2 and web/<file>-NN.woff2 (see faces).
    Texts in English and Vietnamese ({en, vi}) are put into tags with data-vi, so the Lang of navigation.js translates them (the Vietnamese texts are drafts). */
 (() => {
   const BASE = new URL('./', document.currentScript.src);   // /chunom/fonts/
@@ -18,15 +18,16 @@
   };
   const tr = t => el('span', { 'data-vi': t.vi }, t.en);
   const fam = (font, style) => `QATT Font ${font.id} ${style.name}`;
-  const stack = (font, style) => `"${fam(font, style)}", "${fam(font, style)} Full", serif`;
+  const stack = (font, style) => `"${fam(font, style)}", "${fam(font, style)} Latin", "${fam(font, style)} Full", serif`;
 
-  // @font-face for every style: the specimen first, the whole font only when a character is missing from it
-  function faces(data) {
+  // @font-face for every style: the specimen first; a character it lacks comes from the web files of the font (hannom_web_slices.py of the private repository):
+  // "<style> Latin" (web/<file>-latin.woff2: ASCII, Latin-1, Quốc Ngữ) and "<style> Full" (the CJK slices web/<file>-NN.woff2, each with its unicode-range of
+  // web/slices.json, so a typed rare character loads a slice of a few hundred KB, not the whole font); the QATT letters are all in the specimen
+  function faces(data, slices) {
     const css = data.fonts.flatMap(f => f.styles.map(s =>
       `@font-face { font-family: "${fam(f, s)}"; src: url("${data.assets}${s.file}-specimen.woff2") format("woff2"); }\n` +
-      `@font-face { font-family: "${fam(f, s)} Full"; src: url("${data.assets}${s.file}.woff2") format("woff2");${s.ext ? ' unicode-range: U+0-1FFFF, U+40000-10FFFF;' : ''} }` +
-      // ext: a font over 30 MB (unpacked, the limit of the browsers) is two files, <file>-ext.woff2 has the supplementary ideographs
-      (s.ext ? `\n@font-face { font-family: "${fam(f, s)} Full"; src: url("${data.assets}${s.file}-ext.woff2") format("woff2"); unicode-range: U+20000-3FFFF; }` : ''))).join('\n');
+      `@font-face { font-family: "${fam(f, s)} Latin"; src: url("${data.assets}web/${s.file}-latin.woff2") format("woff2"); }\n` +
+      slices.map((range, i) => `@font-face { font-family: "${fam(f, s)} Full"; src: url("${data.assets}web/${s.file}-${String(i).padStart(2, '0')}.woff2") format("woff2"); unicode-range: ${range}; }`).join('\n'))).join('\n');
     document.head.append(el('style', { text: css }));
   }
   // black on white (default) or white on black: one switch for the page, remembered in this browser
@@ -162,9 +163,9 @@
       el('ul', {}, data.external.map(x => el('li', {}, el('a', { href: x.url, target: '_blank', rel: 'noopener', text: x.name }), ' – ', { en: x.en, vi: x.vi }))));
   }
 
-  fetch(new URL('fonts.json', BASE)).then(r => r.json()).then(data => {
+  fetch(new URL('fonts.json', BASE)).then(r => r.json()).then(async data => {
     const root = $('#fonts');
-    faces(data);
+    faces(data, (await fetch(data.assets + 'web/slices.json').then(r => r.json())).slices);
     if (root.dataset.page === 'catalog') catalog(root, data); else page(root, data, root.dataset.font);
   }).catch(e => { $('#fonts').append(el('p', { text: 'The font list could not be loaded.' })); console.error(e); });
 })();

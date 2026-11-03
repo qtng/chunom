@@ -1,17 +1,17 @@
 /* The pages of the Bookshelf (shelf/): layout only; colours come from the variables of the page and of Bootstrap, so the themes of qatt.org and the dark ones work.
    The classic look of the header (.hero) and of the panels (.card-box) as on the other pages of the Chunom site; a theme overrides it. */
-:root { --bs-body-font-family: var(--bs-font-sans-serif), 'QATT Pen', serif; --ink: #2b2118; --cinnabar: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; --nom-font: 'QATT Pen', serif; }
+:root { --bs-body-font-family: var(--bs-font-sans-serif), var(--font-cjk), serif; --ink: #2b2118; --cinnabar: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
 body { min-height: 100vh; color: var(--ink); background: #fffdf8; }
 .hero { background: radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%), linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%); border-bottom: 1px solid #e8dcc0; color: var(--ink); }
-.hero h1 { font-family: Georgia, "Times New Roman", var(--nom-font); font-weight: 400; font-size: clamp(2rem, 6vw, 3.2rem); letter-spacing: .01em; }
+.hero h1 { font-family: Georgia, "Times New Roman", var(--font-cjk), serif; font-weight: 400; font-size: clamp(2rem, 6vw, 3.2rem); letter-spacing: .01em; }
 .crumbs { font-size: .9rem; color: var(--muted); }
 .crumbs a { color: var(--cinnabar); text-decoration: none; }
 .crumbs a.back { display: inline-block; padding: 0 .3rem; margin-left: -.3rem; }
 .crumbs a:hover { text-decoration: underline; }
 .hero .qn { color: var(--cinnabar); font-size: 1.1rem; letter-spacing: .02em; }
-.hero .han { color: var(--cinnabar); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; font-family: var(--nom-font); }
+.hero .han { color: var(--cinnabar); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; font-family: var(--font-cjk), serif; }
 @media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
-.hero h1[lang] { font-family: var(--nom-font); font-size: clamp(2.4rem, 9vw, 4rem); line-height: 1.25; letter-spacing: 0; }
+.hero h1[lang] { font-family: var(--font-cjk), serif; font-size: clamp(2.4rem, 9vw, 4rem); line-height: 1.25; letter-spacing: 0; }
 .hero rt { display: none; }   /* the reading of the title is the small line above it */
 .hero .lead { max-width: 40rem; color: #4a3d30; }
 .card-box { padding: 1rem; margin-bottom: .6rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .06); }
@@ -33,7 +33,7 @@ main { max-width: 56rem; }
 .shelf-tools .form-check-label { white-space: nowrap; }
 /* the QATT characters of the source texts (private use, no reading): the font of qatt.org, loaded only where they occur */
 @font-face { font-family: "QATT Pen Medium"; src: url(https://qatt.org/fonts/qatt-pen-medium-letters.woff2) format("woff2"), url(https://qatt.org/fonts/qatt-pen-medium-letters.ttf) format("truetype"); unicode-range: U+F0000-F00FF; }
-.read { font-family: "QATT Pen Medium", var(--nom-font); }
+.read { font-family: "QATT Pen Medium", var(--font-cjk), serif; }
 .read .line { display: flex; align-items: baseline; gap: .8rem; margin: 0 0 .75rem; }
 .read .line .no { flex: none; width: 2.2rem; text-align: right; font: .75rem/1 system-ui, sans-serif; color: var(--muted); text-decoration: none; }
 .read .line .t { flex: 1 1 0; min-width: 0; font-size: 1.9rem; line-height: 2.1; overflow-wrap: anywhere; }
@@ -57,9 +57,9 @@ main { max-width: 56rem; }
 @media (max-width: 991.98px) { .summary:has(.summary-toggle) { cursor: pointer; } }
 .summary-toggle:hover, .summary-toggle:focus-visible { color: var(--accent, var(--cinnabar)); }
 .read .line { flex-wrap: wrap; }
-.shelf-page h2 { font-family: Georgia, "Times New Roman", var(--nom-font); font-weight: 400; font-size: 1.35rem; margin: 2.2rem 0 .2rem; padding-bottom: .3rem; border-bottom: 1px solid var(--line); }
+.shelf-page h2 { font-family: Georgia, "Times New Roman", var(--font-cjk), serif; font-weight: 400; font-size: 1.35rem; margin: 2.2rem 0 .2rem; padding-bottom: .3rem; border-bottom: 1px solid var(--line); }
 .shelf-page h2 .no { display: inline-block; min-width: 1.8rem; color: var(--cinnabar); }
-.shelf-page h2 [lang] { font-family: var(--nom-font); font-size: 1.5rem; }
+.shelf-page h2 [lang] { font-family: var(--font-cjk), serif; font-size: 1.5rem; }
 .shelf-page h2 rt { font-size: .4em; }
 .shelf-page .en { margin: 0 0 .4rem; color: var(--muted); }
 

@@ -9,7 +9,6 @@
     <link href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://qatt.org/css/site.css">
     <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="/chunom-assets/fonts/fonts.css">
     <script src="https://qatt.org/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://qatt.org/vendor/supabase/supabase.min.js"></script>
     <script src="https://qatt.org/js/navigation.js"></script>
@@ -20,7 +19,6 @@
     
     <style>
         :root {
-            --nom-font-stack: 'QATT Pen', 'Radicals Supplement', 'pa', 'HanaMinA', 'HanaMinB', serif;
             --ui-color: white;
             --ui-bg-alpha: rgba(255, 255, 255, 0.1);
             --ui-border: rgba(255, 255, 255, 0.15);
@@ -118,9 +116,9 @@
         }
         .layer-show { opacity: 1 !important; transform: scale(1.4); transition: all 4s ease-in-out; }
 
-        .nom-display-large { font-family: var(--nom-font-stack); font-size: 9rem; line-height: 1; }
+        .nom-display-large { font-family: var(--font-cjk); font-size: 9rem; line-height: 1; }
         @media (min-width: 992px) { .nom-display-large { font-size: 12rem; } }
-        .nom-display-mini { font-family: var(--nom-font-stack); font-size: 4.5rem; margin-bottom: 1.5rem; opacity: 0.6; }
+        .nom-display-mini { font-family: var(--font-cjk); font-size: 4.5rem; margin-bottom: 1.5rem; opacity: 0.6; }
         /* the characters as images; the width of the screen is shared between them */
         .nom-display-large, .nom-display-mini { display: flex; justify-content: center; align-items: center; }
         .nom-display-large img, .nom-display-mini img { width: auto; max-width: none; filter: var(--glyph-filter) drop-shadow(0 4px 15px var(--ui-shadow)); }
@@ -129,7 +127,6 @@
         .nom-display-mini img { height: min(4.5rem, calc(88vw / var(--n, 1))); }
         .qatt-container { display: flex; gap: 0.5rem; justify-content: center; align-items: center; }
         /* QATT glyphs: text in the QATT font (QattText) */
-        @font-face { font-family: "QATT Pen"; src: url(https://qatt.org/fonts/qatt-pen-letters.woff2) format("woff2"), url(https://qatt.org/fonts/qatt-pen-letters.ttf) format("truetype"); }
         .qatt-glyph { font-family: "QATT Pen", sans-serif; line-height: 1; }
         .qatt-container { color: var(--ui-color); }
         .qatt-container .qatt-glyph { font-size: 2.5rem; filter: drop-shadow(0 4px 15px var(--ui-shadow)); }
@@ -182,7 +179,7 @@
         .sl-info .sl-why { font-size: .85rem; line-height: 1.45; margin-top: .25rem; color: rgba(255,255,255,.55); }
         .deck-index-card { background: rgba(20, 20, 20, 0.7) !important; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.15) !important; max-height: 45vh; overflow-y: auto; border-radius: 16px !important; }
         .index-item { border-color: rgba(255,255,255,0.08) !important; background: transparent !important; color: white !important; padding: 0.75rem 1.25rem !important; gap: 1rem; }
-        .index-nom-cell { font-family: var(--nom-font-stack); font-size: 1.4rem; line-height: 1; min-width: 2.5rem; display: flex; align-items: center; gap: 2px; }
+        .index-nom-cell { font-family: var(--font-cjk); font-size: 1.4rem; line-height: 1; min-width: 2.5rem; display: flex; align-items: center; gap: 2px; }
         .index-nom-cell img { width: 1.9rem; height: 1.9rem; filter: invert(1); } /* the glyph images are black on transparent */
         .index-qn-cell { color: rgba(255,255,255,0.6); font-size: 0.95rem; font-weight: 300; flex: 1; text-align: right; }
         .index-qatt-cell { display: flex; align-items: center; justify-content: center; gap: .25rem; min-width: 3.5rem; color: rgba(255,255,255,0.85); }
