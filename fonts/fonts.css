@@ -50,6 +50,7 @@ html.fp-open { overflow: hidden; }
 .fp-no { font: 700 .75rem system-ui, sans-serif; letter-spacing: .14em; color: var(--b-accent); }
 .fp .fp-name { font-size: 2.4rem; font-weight: 400; font-style: normal; margin: .1rem 0 0; padding: 0; border: 0; background: none; color: var(--b-ink); text-transform: none; letter-spacing: 0; text-shadow: none; }   /* no heading look of a theme */
 .fp-sec { padding: 1.1rem 1.4rem; border-top: 1px solid var(--b-line); }
+.fp-sec:last-child { padding-bottom: 2.5rem; }   /* room below the last section (about Bootstrap's pb-5 less a little) */
 .fp-sec:has(.fp-lad) { background: #fff; }   /* the samples (Sizes, QATT) on white to the edges: only the upper part of the popup has the colour of the band */
 .fp .fp-sec h3 { font: normal 700 .72rem system-ui, sans-serif !important; padding: 0; border: 0; background: none; letter-spacing: .14em; text-transform: uppercase; color: var(--b-accent); margin: 0 0 .7rem; }
 .fp-sc { display: block; min-width: 0; white-space: nowrap; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }   /* a line too wide for the box scrolls sideways only (overflow-x alone would let it scroll a few pixels up and down too, and catch the swipe that should scroll the popup) */
