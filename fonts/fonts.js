@@ -1,5 +1,5 @@
 /* The font pages of the Chunom site (/chunom/fonts/): the catalogue (fonts/index.html) and one page per font (fonts/<id>/index.html), both drawn from fonts.json.
-   A page has <main id="fonts" data-page="catalog"> or data-page="font" data-font="<id>"; the header (title, lead) is written in the page itself for search engines.
+   A page has <main id="fonts" data-page="catalog"> (the catalogue: its bands are in the page, fonts.js adds the list of the other fonts) or data-page="font" data-font="<id>"; the header (title, lead) is written in the page itself for search engines.
    fonts.json: assets (the folder of the font files), sizes (the waterfall), sample (the texts of the specimen), fonts [{id, name, family, tagline, lead, about, cover, styles
    [{name, weight, stroke, file, mb}]}], external (other fonts), charset (the Unicode table). A style's files are <assets><file>.ttf (download), -specimen.woff2 (about 150 KB:
    the 100 most common characters, the sample texts, Latin and the QATT letters) and, for a character the specimen lacks, the web files web/<file>-latin.woff2 and web/<file>-NN.woff2 (see faces).
@@ -53,15 +53,7 @@
   const regular = f => f.styles.find(s => s.name === 'Regular') || f.styles[0];
 
   // ---- the catalogue
-  function catalog(root, data) {
-    root.append(el('div.toolbar', {}, el('span'), scheme()));
-    root.append(el('div.catalog', {}, data.fonts.map(f => el('a.card-box.font-card', { href: new URL(f.id + '/', BASE).pathname },
-      el('img.cover', { src: new URL(`${f.id}/${f.cover}`, BASE).pathname, alt: f.name, loading: 'lazy' }),
-      el('div.body', {},
-        el('h2', { text: f.name }),
-        el('div.tag', {}, f.tagline),
-        el('div.specimen', {}, fitted(el('div.sample', { style: `font-family: ${stack(f, regular(f))}`, text: Array.from(data.sample.line).slice(0, 8).join('') }), 140)),
-        el('div.styles', { text: f.styles.map(s => s.name).join(' · ') + (f.styles.length > 1 ? '' : '') }))))));
+  function catalog(root, data) {   // the catalogue (fonts/index.html) shows our fonts itself, as bands with specimens; here only the other Chữ Nôm fonts
     root.append(otherFonts(data, null));
   }
 
