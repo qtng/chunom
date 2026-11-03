@@ -70,14 +70,14 @@
       ]
     },
     {
-      "id": "phong-thao",
+      "id": "phongthao",
       "name": "Phong Thảo",
-      "family": "Qatt.org-Phong Thao",
+      "family": "PhongThao",
       "styles": [
         {
           "name": "Regular",
-          "css": "QATT Phong Thao",
-          "file": "qatt-phong-thao",
+          "css": "PhongThao",
+          "file": "phongthao",
           "mb": 36.6
         }
       ]

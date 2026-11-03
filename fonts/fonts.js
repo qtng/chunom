@@ -58,7 +58,7 @@
       const styles = font.styles.filter(s => WGHT[s.name]), name = regular(font).css;
       if (!webOpts.wght) webOpts.wght = new Set([400]);
       const w = styles.map(s => WGHT[s.name]).filter(x => webOpts.wght.has(x)).sort((a, b) => a - b);
-      const q = `family=${name.replace(/ /g, '+')}${styles.length > 1 ? ':weight@' + (w.length ? w : [400]).join(';') : ''}${webOpts.latin ? '&latin=1' : ''}`;
+      const q = `family=${name.toLowerCase().replace(/ /g, '+')}${styles.length > 1 ? ':weight@' + (w.length ? w : [400]).join(';') : ''}${webOpts.latin ? '&latin=1' : ''}`;
       const opt = (label, on, fn) => el('label.fp-opt', {}, el('input', { type: 'checkbox', ...(on ? { checked: '' } : {}) }), ' ', label);
       const ctl = [];
       for (const s of styles.length > 1 ? styles : []) {
