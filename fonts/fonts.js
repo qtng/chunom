@@ -44,8 +44,8 @@
     // the field in the font (its Latin first, for Telex): ime.js sets the font of the field itself (fontList), so it is given there once it runs
     const fontList = () => font ? [regular(font).css + ' Latin', regular(font).css] : [];
     const setFont = () => { if (ime) { ime.options.fontList = fontList(); ime.update(); } else own.style.fontFamily = fontList().map(f => `"${f}"`).join(', '); };
-    const ladder = (into, text, family) => into.replaceChildren(...data.sizes.map(px =>
-      el('div', {}, el('small', { text: px }), el('span.fp-sc', { style: `font-family: "${family}"; font-size: ${px}px`, text }))));
+    const ladder = (into, text, family) => into.replaceChildren(...data.sizes.map(px =>   // with the Latin of the font: a typed text may still be Quốc Ngữ
+      el('div', {}, el('small', { text: px }), el('span.fp-sc', { style: `font-family: "${family}", "${family} Latin"; font-size: ${px}px`, text }))));
     const drawSizes = () => font && ladder(sizes, own.value.trim() || data.sample.line, regular(font).css);
 
     function show(id, band) {

@@ -46,7 +46,7 @@ html.fp-open { overflow: hidden; }
 .fp-x { position: absolute; top: .8rem; right: .9rem; z-index: 1; width: 2.4rem; height: 2.4rem; border: 0; border-radius: 50%; display: grid; place-items: center;
   background: color-mix(in srgb, var(--b-ink) 7%, transparent); color: var(--b-ink); font-size: 1.05rem; }
 .fp-hd { position: relative; overflow: hidden; padding: .9rem 1.4rem .9rem; }
-.fp-wm { position: absolute; right: .5rem; top: .2rem; font-size: 7.5rem; line-height: 1; opacity: .09; pointer-events: none; user-select: none; }
+.fp-wm { position: absolute; right: .6rem; top: .3rem; font-size: 5.2rem; line-height: 1; opacity: .09; pointer-events: none; user-select: none; }
 .fp-no { font: 700 .75rem system-ui, sans-serif; letter-spacing: .14em; color: var(--b-accent); }
 .fp .fp-name { font-size: 2.4rem; font-weight: 400; font-style: normal; margin: .1rem 0 0; padding: 0; border: 0; background: none; color: var(--b-ink); text-transform: none; letter-spacing: 0; text-shadow: none; }   /* no heading look of a theme */
 .fp-sec { padding: 1.1rem 1.4rem; border-top: 1px solid var(--b-line); }
@@ -72,4 +72,5 @@ html.fp-open { overflow: hidden; }
   .fp { max-width: 46rem; max-height: 88vh; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, .3); }
   .fp-grip { display: none; }
   .fp-hd { padding-top: 1.4rem; }
+  .fp-wm { font-size: 6.3rem; right: .5rem; top: .4rem; }   /* the header is higher here: a bigger watermark than on the phone */
 }

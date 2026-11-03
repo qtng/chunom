@@ -68,6 +68,19 @@
           "mb": 24.3
         }
       ]
+    },
+    {
+      "id": "phong-thao",
+      "name": "Phong Thảo",
+      "family": "Qatt.org-Phong Thao",
+      "styles": [
+        {
+          "name": "Regular",
+          "css": "QATT Phong Thao",
+          "file": "qatt-phong-thao",
+          "mb": 36.6
+        }
+      ]
     }
   ],
   "external": [

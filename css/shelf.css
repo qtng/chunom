@@ -11,7 +11,7 @@ body { min-height: 100vh; color: var(--ink); background: #fffdf8; }
 .hero .qn { color: var(--cinnabar); font-size: 1.1rem; letter-spacing: .02em; }
 .hero .han { color: var(--cinnabar); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; font-family: var(--font-cjk), serif; }
 @media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
-.hero h1[lang] { font-family: var(--font-cjk), serif; font-size: clamp(2.4rem, 9vw, 4rem); line-height: 1.25; letter-spacing: 0; }
+.hero h1[lang] { font-family: var(--font-cjk), serif !important; font-style: normal !important; font-weight: 400 !important; font-size: clamp(2.4rem, 9vw, 4rem); line-height: 1.25; letter-spacing: 0; }   /* the CJK title in the CJK font, also in a theme that gives headings a font of its own (boho: an italic serif) */
 .hero rt { display: none; }   /* the reading of the title is the small line above it */
 .hero .lead { max-width: 40rem; color: #4a3d30; }
 .card-box { padding: 1rem; margin-bottom: .6rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .06); }
@@ -59,7 +59,7 @@ main { max-width: 56rem; }
 .read .line { flex-wrap: wrap; }
 .shelf-page h2 { font-family: Georgia, "Times New Roman", var(--font-cjk), serif; font-weight: 400; font-size: 1.35rem; margin: 2.2rem 0 .2rem; padding-bottom: .3rem; border-bottom: 1px solid var(--line); }
 .shelf-page h2 .no { display: inline-block; min-width: 1.8rem; color: var(--cinnabar); }
-.shelf-page h2 [lang] { font-family: var(--font-cjk), serif; font-size: 1.5rem; }
+.shelf-page h2 [lang] { font-family: var(--font-cjk), serif; font-style: normal; font-size: 1.5rem; }
 .shelf-page h2 rt { font-size: .4em; }
 .shelf-page .en { margin: 0 0 .4rem; color: var(--muted); }
 
