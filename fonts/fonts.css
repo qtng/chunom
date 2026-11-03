@@ -76,3 +76,9 @@ html.fp-open { overflow: hidden; }
   .fp-hd { padding-top: 1.4rem; }
   .fp-wm { font-size: 6.3rem; right: .5rem; top: .4rem; }   /* the header is higher here: a bigger watermark than on the phone */
 }
+
+/* For websites: the script line of chunom-fonts.js */
+.fp-ctl { display: flex; flex-wrap: wrap; gap: .4rem .9rem; align-items: center; margin-bottom: .6rem; font-size: .85rem; }
+.fp-opt { display: inline-flex; gap: .3rem; align-items: center; cursor: pointer; }
+.fp-code { margin: 0 0 .4rem; padding: .55rem .75rem; border-radius: 8px; background: color-mix(in srgb, var(--b-ink) 6%, transparent); font: .78rem/1.45 ui-monospace, monospace; white-space: pre-wrap; word-break: break-all; }
+.fp-cp { text-align: right; }

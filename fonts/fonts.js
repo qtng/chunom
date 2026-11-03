@@ -29,11 +29,16 @@
     const close = el('button.fp-x', { type: 'button', 'aria-label': 'Close', 'data-vi-aria-label': 'Đóng' }, el('i.bi.bi-x-lg'));
     const no = el('div.fp-no'), wm = el('div.fp-wm', { 'aria-hidden': 'true' }), title = el('h2.fp-name#fp-name');
     const dl = el('div'), note = el('p.fp-note'), sizes = el('div.fp-lad'), qatt = el('div.fp-lad.fp-qatt');
+    // for websites: the script qatt.org/cdn/v1/webfonts.js, Google-Fonts style: the font and the weights in its query
+    const WGHT = { Thin: 100, Light: 300, Regular: 400, Medium: 500 }, SRC = 'https://qatt.org/cdn/v1/webfonts.js';
+    const web = el('div.fp-web'), code = el('pre.fp-code'), codeCss = el('pre.fp-code');
+    const copy = el('button.btn.btn-quiet.btn-pill.btn-sm', { type: 'button' }, el('i.bi.bi-clipboard'), ' ', { en: 'Copy', vi: 'Sao chép' });
     const sec = (h, ...kids) => el('section.fp-sec', {}, el('h3', {}, h), ...kids);
     const box = el('div.fp', { role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'fp-name', tabindex: '-1' },
       el('div.fp-grip', { 'aria-hidden': 'true' }), close,
       el('header.fp-hd', {}, wm, no, title),
       sec({ en: 'Download', vi: 'Tải về' }, dl, note),
+      sec({ en: 'For websites', vi: 'Cho trang web' }, web),
       sec({ en: 'Try it', vi: 'Gõ thử' }, own),
       sec({ en: 'Sizes', vi: 'Cỡ chữ' }, sizes),
       sec({ en: 'QATT', vi: 'QATT' }, qatt));
@@ -47,6 +52,24 @@
     const ladder = (into, text, family) => into.replaceChildren(...data.sizes.map(px =>   // with the Latin of the font: a typed text may still be Quốc Ngữ
       el('div', {}, el('small', { text: px }), el('span.fp-sc', { style: `font-family: "${family}", "${family} Latin"; font-size: ${px}px`, text }))));
     const drawSizes = () => font && ladder(sizes, own.value.trim() || data.sample.line, regular(font).css);
+
+    const webOpts = { latin: false, wght: null };
+    function drawWeb() {
+      const styles = font.styles.filter(s => WGHT[s.name]), name = regular(font).css;
+      if (!webOpts.wght) webOpts.wght = new Set([400]);
+      const w = styles.map(s => WGHT[s.name]).filter(x => webOpts.wght.has(x)).sort((a, b) => a - b);
+      const q = `family=${name.replace(/ /g, '+')}${styles.length > 1 ? ':weight@' + (w.length ? w : [400]).join(';') : ''}${webOpts.latin ? '&latin=1' : ''}`;
+      const opt = (label, on, fn) => el('label.fp-opt', {}, el('input', { type: 'checkbox', ...(on ? { checked: '' } : {}) }), ' ', label);
+      const ctl = [];
+      for (const s of styles.length > 1 ? styles : []) {
+        const l = opt(s.name, webOpts.wght.has(WGHT[s.name])); l.firstChild.onchange = e => { e.target.checked ? webOpts.wght.add(WGHT[s.name]) : webOpts.wght.delete(WGHT[s.name]); drawWeb(); }; ctl.push(l);
+      }
+      const lat = opt({ en: 'Latin / Quốc Ngữ', vi: 'Latin / Quốc Ngữ' }, webOpts.latin); lat.firstChild.onchange = e => { webOpts.latin = e.target.checked; drawWeb(); }; ctl.push(lat);
+      web.replaceChildren(el('div.fp-ctl', {}, ...ctl), code, codeCss, el('div.fp-cp', {}, copy));
+      code.textContent = `<script src="${SRC}?${q}"></script>`;
+      codeCss.textContent = `font-family: "${name}", serif;`;
+    }
+    copy.onclick = () => navigator.clipboard.writeText(code.textContent + '\n' + codeCss.textContent).then(() => { const o = copy.lastChild; const t = o.textContent; copy.lastChild.textContent = ' ✓'; setTimeout(() => (copy.lastChild.textContent = t), 1200); }, () => {});
 
     function show(id, band) {
       font = data.fonts.find(f => f.id === id);
@@ -64,6 +87,7 @@
         el('span.fp-dl', { 'aria-hidden': 'true' }, el('i.bi.bi-download')))));
       note.replaceChildren(...(font.styles.length > 1 ? [{ en: `One family: install them all and your apps show them as the styles of “${font.family}”.`,
         vi: `Một họ phông: cài tất cả, các ứng dụng sẽ hiện chúng là các kiểu của “${font.family}”.` }].map(tr) : []));
+      webOpts.wght = null; drawWeb();
       setFont();
       drawSizes();
       ladder(qatt, data.sample.qatt, regular(font).css);
@@ -127,7 +151,7 @@
   function licence() {
     return el('details.card-box.fold#licence', {}, el('summary', {}, { en: 'Licence', vi: 'Giấy phép' }),
       el('p.mb-2', {}, el('b', {}, { en: 'QATT letters', vi: 'Chữ QATT' }), ' (U+F0000–F00A3): © 2026 qatt.org, ', { en: 'all rights reserved.', vi: 'bảo lưu mọi quyền.' }, ' ',
-        { en: 'You may use them to read, write and print QATT text, for yourself and for others, and embed subsets in documents such as PDF files.', vi: 'Bạn được dùng để đọc, viết và in văn bản QATT, cho mình và cho người khác, và nhúng tập con vào tài liệu như PDF.' }, ' ',
+        { en: 'You may use them to read, write and print QATT text, for yourself and for others, embed subsets in documents such as PDF files, and use them on web pages by loading them from qatt.org or chunom.org (see “For websites”).', vi: 'Bạn được dùng để đọc, viết và in văn bản QATT, cho mình và cho người khác, nhúng tập con vào tài liệu như PDF, và dùng trên trang web bằng cách tải từ qatt.org hoặc chunom.org (xem “Cho trang web”).' }, ' ',
         { en: 'Changing them, building other fonts or works on them, and copying or passing them on need the written permission of qatt.org.', vi: 'Sửa đổi, dùng làm cơ sở cho phông khác, sao chép lại hay phân phối cần có sự cho phép bằng văn bản của qatt.org.' }, ' ',
         el('a', { href: 'https://qatt.org/fonts/LICENSE.txt', 'data-vi': 'Toàn văn giấy phép' }, 'Full licence text')),
       el('p.mb-2', {}, el('b', {}, { en: 'All other characters', vi: 'Các ký tự khác' }), ' (', { en: 'Han, Chữ Nôm, kana, Latin …', vi: 'chữ Hán, chữ Nôm, kana, Latin…' }, '): ',
