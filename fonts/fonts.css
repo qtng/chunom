@@ -50,9 +50,11 @@ html.fp-open { overflow: hidden; }
 .fp-no { font: 700 .75rem system-ui, sans-serif; letter-spacing: .14em; color: var(--b-accent); }
 .fp .fp-name { font-size: 2.4rem; font-weight: 400; font-style: normal; margin: .1rem 0 0; padding: 0; border: 0; background: none; color: var(--b-ink); text-transform: none; letter-spacing: 0; text-shadow: none; }   /* no heading look of a theme */
 .fp-sec { padding: 1.1rem 1.4rem; border-top: 1px solid var(--b-line); }
+.fp-sec:has(.fp-lad) { background: #fff; }   /* the samples (Sizes, QATT) on white to the edges: only the upper part of the popup has the colour of the band */
 .fp .fp-sec h3 { font: normal 700 .72rem system-ui, sans-serif !important; padding: 0; border: 0; background: none; letter-spacing: .14em; text-transform: uppercase; color: var(--b-accent); margin: 0 0 .7rem; }
 .fp-sc { display: block; min-width: 0; white-space: nowrap; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }   /* a line too wide for the box scrolls sideways only (overflow-x alone would let it scroll a few pixels up and down too, and catch the swipe that should scroll the popup) */
 .fp-sc::-webkit-scrollbar { display: none; }
+.fp-lad .fp-sc { padding: .1em 0 .15em; margin: -.1em 0 -.15em; }   /* room for what stands out of the line (the tone marks of QATT reach .32em below the baseline), without more space between the lines */
 .fp .fp-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: .8rem; align-items: center; padding: .55rem .7rem; margin: 0 -.7rem; border-radius: 10px;
   color: var(--b-ink) !important; text-decoration: none !important; }
 .fp-row + .fp-row { border-top: 1px dashed var(--b-line); }
