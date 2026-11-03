@@ -45,7 +45,8 @@
     .pair img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform .4s; }
     .pair a:hover img { transform: scale(1.03); }
     @media (max-width: 575.98px) { .pair { gap: .75rem; padding: 1.25rem 1rem; } .pair a { border-radius: 8px; } }
-    .os { display: flex; justify-content: center; gap: 1.5rem; font-size: 1.6rem; color: var(--muted, #777); }
+    .os { display: flex; justify-content: center; align-items: center; gap: 1.5rem; font-size: 1.6rem; color: var(--muted, #777); }
+    .os .cdn { width: 2.4rem; height: 1.56rem; overflow: visible; }   /* the CDN mark in the row of the icons: a box in the colour of the row with the letters cut out (SVG mask), so the background shows through */
   </style>
 </head>
 <body>
@@ -54,7 +55,7 @@
     <div class="han mb-2">𡨸喃</div>
     <h1 class="mb-3" data-vi="Phông chữ CJK của chúng tôi">Our CJK fonts</h1>
     <p class="slogan mb-3">Quốc Ngữ • Chữ Nôm • <a href="https://qatt.org/">Quốc Âm Tân Tự</a></p>
-    <div class="os" aria-hidden="true"><i class="bi bi-windows"></i><i class="bi bi-apple"></i><i class="bi bi-android2"></i></div>
+    <div class="os" aria-hidden="true"><i class="bi bi-windows"></i><i class="bi bi-apple"></i><i class="bi bi-android2"></i><svg class="cdn" viewBox="0 0 46 30" fill="currentColor"><mask id="cdn-cut"><rect width="46" height="30" fill="#fff"/><text x="23" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="800" font-size="14" letter-spacing="1" fill="#000">CDN</text></mask><rect width="46" height="30" rx="6" mask="url(#cdn-cut)"/></svg></div>
   </div>
 </header>
 
