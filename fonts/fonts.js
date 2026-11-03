@@ -53,19 +53,18 @@
       el('div', {}, el('small', { text: px }), el('span.fp-sc', { style: `font-family: "${family}", "${family} Latin"; font-size: ${px}px`, text }))));
     const drawSizes = () => font && ladder(sizes, own.value.trim() || data.sample.line, regular(font).css);
 
-    const webOpts = { latin: false, wght: null };
+    const webOpts = { wght: null };
     function drawWeb() {
       const styles = font.styles.filter(s => WGHT[s.name]), name = regular(font).css;
       if (!webOpts.wght) webOpts.wght = new Set([400]);
       const w = styles.map(s => WGHT[s.name]).filter(x => webOpts.wght.has(x)).sort((a, b) => a - b);
-      const q = `family=${name.toLowerCase().replace(/ /g, '+')}${styles.length > 1 ? ':weight@' + (w.length ? w : [400]).join(';') : ''}${webOpts.latin ? '&latin=1' : ''}`;
+      const q = `family=${name.toLowerCase().replace(/ /g, '+')}${styles.length > 1 ? ':weight@' + (w.length ? w : [400]).join(';') : ''}`;
       const opt = (label, on, fn) => el('label.fp-opt', {}, el('input', { type: 'checkbox', ...(on ? { checked: '' } : {}) }), ' ', label);
       const ctl = [];
       for (const s of styles.length > 1 ? styles : []) {
         const l = opt(s.name, webOpts.wght.has(WGHT[s.name])); l.firstChild.onchange = e => { e.target.checked ? webOpts.wght.add(WGHT[s.name]) : webOpts.wght.delete(WGHT[s.name]); drawWeb(); }; ctl.push(l);
       }
-      const lat = opt({ en: 'Latin / Quốc Ngữ', vi: 'Latin / Quốc Ngữ' }, webOpts.latin); lat.firstChild.onchange = e => { webOpts.latin = e.target.checked; drawWeb(); }; ctl.push(lat);
-      web.replaceChildren(el('div.fp-ctl', {}, ...ctl), code, codeCss, el('div.fp-cp', {}, copy));
+      web.replaceChildren(...(ctl.length ? [el('div.fp-ctl', {}, ...ctl)] : []), code, codeCss, el('div.fp-cp', {}, copy));
       code.textContent = `<script src="${SRC}?${q}"></script>`;
       codeCss.textContent = `font-family: "${name}", serif;`;
     }
@@ -140,8 +139,8 @@
   // ---- below the bands: the characters, the licence (both folded), the other Chữ Nôm fonts
   function charset(data) {
     return el('details.card-box.fold', {}, el('summary', {}, { en: 'Characters', vi: 'Ký tự' }),
-      el('p.mb-2', {}, { en: `Every font file has the same ${data.characters.toLocaleString('en')} characters: Han characters and Chữ Nôm, the QATT letters, kana, Zhuyin, Hangul and Latin with Quốc Ngữ.`,
-        vi: `Mỗi tệp phông có cùng ${data.characters.toLocaleString('vi')} ký tự: chữ Hán và chữ Nôm, chữ QATT, kana, chú âm, Hangul và chữ Latin với Quốc Ngữ.` }),
+      el('p.mb-2', {}, { en: `Every font file has the same ${data.characters.toLocaleString('en')} characters: Han characters and Chữ Nôm, the QATT letters and Latin with Quốc Ngữ.`,
+        vi: `Mỗi tệp phông có cùng ${data.characters.toLocaleString('vi')} ký tự: chữ Hán và chữ Nôm, chữ QATT và chữ Latin với Quốc Ngữ.` }),
       el('div.table-responsive', {}, el('table.ranges', {},
         el('thead', {}, el('tr', {}, el('th', { text: 'Group' }), el('th', { text: 'Blocks' }), el('th', { text: 'Range' }), el('th.n', { text: 'Characters' }))),
         el('tbody', {}, data.charset.map(([g, b, r, n]) => el('tr', {}, el('th', { scope: 'row', text: g }), el('td', { text: b }), el('td.r', { text: r }), el('td.n', { text: n.toLocaleString('en') })))))),
@@ -154,7 +153,7 @@
         { en: 'You may use them to read, write and print QATT text, for yourself and for others, embed subsets in documents such as PDF files, and use them on web pages by loading them from qatt.org or chunom.org (see “For websites”).', vi: 'Bạn được dùng để đọc, viết và in văn bản QATT, cho mình và cho người khác, nhúng tập con vào tài liệu như PDF, và dùng trên trang web bằng cách tải từ qatt.org hoặc chunom.org (xem “Cho trang web”).' }, ' ',
         { en: 'Changing them, building other fonts or works on them, and copying or passing them on need the written permission of qatt.org.', vi: 'Sửa đổi, dùng làm cơ sở cho phông khác, sao chép lại hay phân phối cần có sự cho phép bằng văn bản của qatt.org.' }, ' ',
         el('a', { href: 'https://qatt.org/fonts/LICENSE.txt', 'data-vi': 'Toàn văn giấy phép' }, 'Full licence text')),
-      el('p.mb-2', {}, el('b', {}, { en: 'All other characters', vi: 'Các ký tự khác' }), ' (', { en: 'Han, Chữ Nôm, kana, Latin …', vi: 'chữ Hán, chữ Nôm, kana, Latin…' }, '): ',
+      el('p.mb-2', {}, el('b', {}, { en: 'All other characters', vi: 'Các ký tự khác' }), ' (', { en: 'Han, Chữ Nôm, Latin …', vi: 'chữ Hán, chữ Nôm, Latin…' }, '): ',
         { en: 'the outlines are drawn by qatt.org with its own stroke designs (Pen, Migoi, Celluloid, Phong Thảo) on the stroke skeletons of', vi: 'nét chữ do qatt.org vẽ bằng các thiết kế nét riêng (Pen, Migoi, Celluloid, Phong Thảo) trên khung nét của' }, ' ', el('a', { href: 'https://glyphwiki.org/', target: '_blank', rel: 'noopener', text: 'GlyphWiki' }),
         { en: ', used under the terms of GlyphWiki.', vi: ', được dùng theo điều khoản của GlyphWiki.' }),
       el('p.note.mb-0', {}, { en: 'The fonts are not free software or open source and are provided as is, without warranty. The full text is inside every font file.', vi: 'Các phông này không phải phần mềm tự do hay mã nguồn mở, và được cung cấp nguyên trạng, không bảo hành. Toàn văn nằm trong mỗi tệp phông.' }));
