@@ -22,9 +22,14 @@
     .band .qatt { font-size: clamp(1.6rem, 5.5vw, 2.4rem); letter-spacing: .06em; color: var(--b-accent); margin-bottom: .7rem; }
     .band .latin { font-size: clamp(1.05rem, 3.4vw, 1.35rem); line-height: 1.45; opacity: .85; }
     .band .desc { font: .8rem system-ui, sans-serif; letter-spacing: .05em; text-transform: uppercase; opacity: .65; margin-top: 1rem; }
-    .band .more { font: .9rem system-ui, sans-serif; margin-top: .4rem; }
+    .band .more { font: .9rem system-ui, sans-serif; margin-top: 1rem; }
     .band .more a, .band .more a:hover { color: var(--b-accent) !important; }   /* the colours of the band, also in a theme that colours links */
     .band, .band .name, .band .latin, .band .poem { color: var(--b-ink) !important; }
+    /* on the phone the link stands on the right and the whole band is the link (its ::after covers the band; the band clips it) */
+    @media (max-width: 767.98px) {
+      .band .more { text-align: right; }
+      .band .more a::after { content: ""; position: absolute; top: -3rem; bottom: -3rem; left: -50vw; right: -50vw; }
+    }
     .b-pen    { --b-bg: #fdf8ee; --b-ink: #2b2118; --b-accent: #a8362a; }
     .b-light  { --b-bg: #f3efe6; --b-ink: #2b2118; --b-accent: #6b7a8f; }
     .b-medium { --b-bg: #f1e6cf; --b-ink: #2b2118; --b-accent: #9a6b1f; }
