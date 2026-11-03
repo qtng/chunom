@@ -123,24 +123,6 @@
       64
     ],
     [
-      "Kana",
-      "Hiragana, Katakana, Katakana Phonetic Extensions",
-      "U+3040–30FF, U+31F0–31FF",
-      205
-    ],
-    [
-      "Zhuyin",
-      "Bopomofo, Bopomofo Extended",
-      "U+3100–312F, U+31A0–31BF",
-      75
-    ],
-    [
-      "Hangul",
-      "Hangul Compatibility Jamo",
-      "U+3130–318F",
-      94
-    ],
-    [
       "Han characters and Chữ Nôm",
       "CJK Unified Ideographs, Extension A",
       "U+3400–4DBF, U+4E00–9FFF",
@@ -154,9 +136,9 @@
     ],
     [
       "Fullwidth forms",
-      "Halfwidth and Fullwidth Forms",
-      "U+FF00–FFEF",
-      225
+      "Fullwidth Forms",
+      "U+FF00–FF60, U+FFE0–FFEE",
+      112
     ],
     [
       "Kanbun and CJK strokes",
