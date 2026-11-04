@@ -153,7 +153,7 @@
       for (const r of rows) {
         const tr = document.createElement('tr');
         tr.innerHTML = `<td><span class="gv-char">${esc(String.fromCodePoint(r.cp))}</span> <span class="gv-hex">${label(r.cp)}</span></td>
-          <td>${r.base && r.base !== r.variant ? prev(r.base) + ' <span class="mx-1">\u2192</span> ' : ''}${prev(r.variant)} <span class="gv-name">${r.base && r.base !== r.variant ? esc(r.base) + ' \u2192 ' : ''}${esc(r.variant)}</span></td>
+          <td>${r.base ? (r.base !== r.variant ? prev(r.base) : '<span class="gv-prev" style="opacity:.4"></span>') : '<span class="gv-hex">\u2013</span>'} <span class="mx-1">\u2192</span> ${prev(r.variant)} <span class="gv-name">${r.base ? esc(r.base) + ' \u2192 ' : ''}${esc(r.variant)}</span></td>
           <td class="gv-score">${sign(r.score)} <span class="gv-hex">${r.up}↑ ${r.down}↓</span></td>
           <td>${stBadge(r.status)}</td><td>${mineIcon(r.my_vote)}</td><td class="hide-sm">${r.posts}</td>`;
         tr.addEventListener('click', () => openChar(r.cp));
