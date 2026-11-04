@@ -24,6 +24,10 @@
     .gv-table tbody tr { cursor: pointer; }
     .gv-table tbody tr:hover { background: color-mix(in srgb, currentColor 5%, transparent); }
     .gv-char { font-family: var(--font-cjk), serif; font-size: 1.8rem; line-height: 1; }
+    .gv-chg { display: flex; align-items: center; gap: .35rem; flex-wrap: nowrap; }
+    .gv-arrow { color: var(--muted); }
+    .gv-font-tile { display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-cjk), serif; font-size: 1.9rem; line-height: 1; color: #666; }
+    .gv-names { margin-top: .2rem; white-space: nowrap; font-size: .78rem; }
     .gv-hex { font: .75rem ui-monospace, monospace; color: var(--muted); }
     .gv-prev { display: inline-block; width: 2.6rem; height: 2.6rem; background: #fff; border: 1px solid var(--line); border-radius: 6px; vertical-align: middle; padding: 2px; }
     .gv-prev.big { width: 5.2rem; height: 5.2rem; }
@@ -84,7 +88,7 @@
     <div id="list-msg" class="gv-msg"></div>
     <table class="gv-table">
       <thead><tr>
-        <th data-vi="Chữ">Character</th><th data-vi="Biến thể">Variant</th><th data-vi="Điểm">Score</th>
+        <th data-vi="Thay đổi">Change</th><th data-vi="Điểm">Score</th>
         <th data-vi="Trạng thái">Status</th><th data-vi="Của bạn">Yours</th><th class="hide-sm" data-vi="Bài viết">Posts</th>
       </tr></thead>
       <tbody id="rows"></tbody>
@@ -152,9 +156,12 @@
       if (!rows.length) { msg.textContent = T('No proposals here yet.', 'Chưa có đề xuất nào.'); return; }
       for (const r of rows) {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td><span class="gv-char">${esc(String.fromCodePoint(r.cp))}</span> <span class="gv-hex">${label(r.cp)}</span></td>
-          <td>${r.base ? (r.base !== r.variant ? prev(r.base) : '<span class="gv-prev" style="opacity:.4"></span>') : '<span class="gv-hex">\u2013</span>'} <span class="mx-1">\u2192</span> ${prev(r.variant)} <span class="gv-name">${r.base ? esc(r.base) + ' \u2192 ' : ''}${esc(r.variant)}</span></td>
-          <td class="gv-score">${sign(r.score)} <span class="gv-hex">${r.up}↑ ${r.down}↓</span></td>
+        // the change: the default of the build (its glyph; without a default the character as it is in the font) -> the proposal, the names in a line of their own below
+        const from = r.base && r.base !== r.variant ? prev(r.base) : `<span class="gv-prev gv-font-tile">${esc(String.fromCodePoint(r.cp))}</span>`;
+        tr.title = label(r.cp);
+        tr.innerHTML = `<td><div class="gv-chg">${from}<span class="gv-arrow">\u2192</span>${prev(r.variant)}</div>
+            <div class="gv-name gv-names">${r.base && r.base !== r.variant ? esc(r.base) + ' \u2192 ' : ''}${esc(r.variant)}</div></td>
+          <td class="gv-score">${sign(r.score)}<br><span class="gv-hex">${r.up}\u2191 ${r.down}\u2193</span></td>
           <td>${stBadge(r.status)}</td><td>${mineIcon(r.my_vote)}</td><td class="hide-sm">${r.posts}</td>`;
         tr.addEventListener('click', () => openChar(r.cp));
         tb.appendChild(tr);
