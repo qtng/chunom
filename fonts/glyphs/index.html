@@ -171,17 +171,17 @@
       return !!t && !!JSON.parse(t).data;
     } catch (e) { return false; }
   }
-  async function derivedDefault(cp) {
+  // the names of the ranking that GlyphWiki has for the character, in the order of the ranking (the base glyph last); the first one is the default of the build
+  async function variantsOf(cp) {
     if (defCache.has(cp)) return defCache.get(cp);
-    let key = 'gvdef:' + cp, hit = null;
-    try { hit = sessionStorage.getItem(key); } catch (e) { /* ignore */ }
-    if (hit) { defCache.set(cp, hit); return hit; }
+    const key = 'gvvars:' + cp;
+    try { const hit = sessionStorage.getItem(key); if (hit) { const v = JSON.parse(hit); defCache.set(cp, v); return v; } } catch (e) { /* ignore */ }
     const base = 'u' + hexOf(cp);
     const names = RANKED.map((s) => base + '-' + s).concat([base]);
     const ok = await Promise.all(names.map(glyphExists));
-    const found = names[ok.indexOf(true)] || base;
+    const found = names.filter((_, i) => ok[i]);
     defCache.set(cp, found);
-    try { sessionStorage.setItem(key, found); } catch (e) { /* ignore */ }
+    try { sessionStorage.setItem(key, JSON.stringify(found)); } catch (e) { /* ignore */ }
     return found;
   }
 
@@ -200,7 +200,8 @@
     const cp = current;
     $('ref').innerHTML = $('props').innerHTML = $('thread').innerHTML = '';
     try {
-      const [rows, thread, def] = await Promise.all([rpc('glyph_list', { p_filter: 'all', p_limit: 100, p_offset: 0, p_cp: cp }), rpc('glyph_thread', { p_cp: cp }), derivedDefault(cp)]);
+      const [rows, thread, vars] = await Promise.all([rpc('glyph_list', { p_filter: 'all', p_limit: 100, p_offset: 0, p_cp: cp }), rpc('glyph_thread', { p_cp: cp }), variantsOf(cp)]);
+      const def = vars[0] || 'u' + hexOf(cp);
       if (cp !== current) return;
       const win = rows.find((r) => r.is_winner);
       const bld = win ? win.variant : def;
@@ -210,7 +211,7 @@
       const box = $('props');
       if (!rows.length) box.innerHTML = `<div class="gv-msg">${esc(T('No proposal yet.', 'Chưa có đề xuất.'))}</div>`;
       for (const r of rows) box.appendChild(propCard(r, bld));
-      renderNew(rows, bld);
+      renderNew(rows, bld, vars);
       renderThread(thread);
     } catch (e) { $('props').innerHTML = `<div class="gv-msg err">${esc(e.message)}</div>`; }
   }
@@ -234,9 +235,12 @@
     if (!can) d.addEventListener('click', askLogin);
     return d;
   }
-  function renderNew(rows, bld) {
+  function renderNew(rows, bld, vars) {
     const cp = current, base = 'u' + hexOf(cp), can = signedIn();
-    $('newp').innerHTML = `<div class="gv-msg">${esc(T('Look up the glyph on GlyphWiki, copy its name (like', 'Tìm dạng chữ trên GlyphWiki, chép tên của nó (ví dụ'))} <span class="gv-name">${base}-v</span>) →
+    const offer = vars.filter((n) => n !== bld && !rows.some((r) => r.variant === n));
+    $('newp').innerHTML = (offer.length ? `<div class="gv-msg">${esc(T('Variants GlyphWiki has for this character (click one to propose it):', 'Các dạng GlyphWiki có cho chữ này (nhấp để đề xuất):'))}</div>
+      <div class="d-flex flex-wrap gap-2 mb-2">${offer.map((n) => `<button type="button" class="btn btn-quiet btn-sm d-flex align-items-center gap-2" data-offer="${esc(n)}" ${can ? '' : 'disabled'}>${prev(n)}<span class="gv-name">${esc(n)}</span></button>`).join('')}</div>` : '') +
+      `<div class="gv-msg">${esc(T('Another form: look up the glyph on GlyphWiki, copy its name (like', 'Tìm dạng chữ trên GlyphWiki, chép tên của nó (ví dụ'))} <span class="gv-name">${base}-v</span>) →
         <a href="https://glyphwiki.org/wiki/${base}" target="_blank" rel="noopener">GlyphWiki ${label(cp)} <i class="bi bi-box-arrow-up-right"></i></a></div>
       <div class="d-flex flex-wrap gap-2"><input id="np-name" class="form-control form-control-sm" style="max-width:16rem" placeholder="${base}-v" autocapitalize="off" autocomplete="off" spellcheck="false" ${can ? '' : 'disabled'}>
         <button id="np-check" class="btn btn-quiet btn-sm" type="button" ${can ? '' : 'disabled'}>${esc(T('Check', 'Kiểm tra'))}</button></div>
@@ -245,6 +249,7 @@
         <button id="np-send" class="btn btn-cinnabar btn-pill btn-sm" type="button" disabled>${esc(T('Propose', 'Đề xuất'))}</button></div>
       <div id="np-msg" class="gv-msg"></div>`;
     if (!can) { $('newp').addEventListener('click', askLogin); return; }
+    $('newp').querySelectorAll('[data-offer]').forEach((b) => b.addEventListener('click', () => post(b.dataset.offer, null, $('np-comment').value)));
     let okName = null;
     const msg = (t, err) => { $('np-msg').textContent = t; $('np-msg').className = 'gv-msg' + (err ? ' err' : ''); };
     $('np-name').addEventListener('input', () => { okName = null; $('np-send').disabled = true; $('np-prev').innerHTML = ''; msg(''); });
