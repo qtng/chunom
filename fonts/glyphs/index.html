@@ -257,9 +257,10 @@
   }
   function renderNew(rows, bld, vars) {
     const cp = current, base = 'u' + hexOf(cp), can = signedIn();
-    const offer = vars.filter((n) => n !== bld && !rows.some((r) => r.variant === n));
-    $('newp').innerHTML = (offer.length ? `<div class="gv-msg">${esc(T('Variants GlyphWiki has for this character (click one to propose it):', 'Các dạng GlyphWiki có cho chữ này (nhấp để đề xuất):'))}</div>
-      <div class="d-flex flex-wrap gap-2 mb-2">${offer.map((n) => `<button type="button" class="btn btn-quiet btn-sm d-flex align-items-center gap-2" data-offer="${esc(n)}" ${can ? '' : 'disabled'}>${prev(n)}<span class="gv-name">${esc(n)}</span></button>`).join('')}</div>` : '') +
+    // every variant GlyphWiki has; the default of the build and the ones already proposed are shown faded and cannot be chosen
+    const why = (n) => (n === bld ? T('This is the default of the build.', 'Đây là dạng mặc định của build.') : rows.some((r) => r.variant === n) ? T('Already proposed: vote on it above.', 'Đã được đề xuất: hãy bình chọn ở trên.') : '');
+    $('newp').innerHTML = (vars.length ? `<div class="gv-msg">${esc(T('Variants GlyphWiki has for this character (click one to propose it):', 'Các dạng GlyphWiki có cho chữ này (nhấp để đề xuất):'))}</div>
+      <div class="d-flex flex-wrap gap-2 mb-2">${vars.map((n) => { const w = why(n); return `<button type="button" class="btn btn-quiet btn-sm d-flex align-items-center gap-2" data-offer="${esc(n)}" ${can && !w ? '' : 'disabled'} ${w ? `title="${esc(w)}" style="opacity:.45"` : ''}>${prev(n)}<span class="gv-name">${esc(n)}</span></button>`; }).join('')}</div>` : '') +
       `<div class="gv-msg">${esc(T('Another form: look up the glyph on GlyphWiki, copy its name (like', 'Tìm dạng chữ trên GlyphWiki, chép tên của nó (ví dụ'))} <span class="gv-name">${base}-v</span>) →
         <a href="https://glyphwiki.org/wiki/${base}" target="_blank" rel="noopener">GlyphWiki ${label(cp)} <i class="bi bi-box-arrow-up-right"></i></a></div>
       <div class="d-flex flex-wrap gap-2"><input id="np-name" class="form-control form-control-sm" style="max-width:16rem" placeholder="${base}-v" autocapitalize="off" autocomplete="off" spellcheck="false" ${can ? '' : 'disabled'}>
