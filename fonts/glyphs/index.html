@@ -133,7 +133,7 @@
   const mineIcon = (v) => (v === 1 ? '<i class="bi bi-hand-thumbs-up-fill gv-mine"></i>' : v === -1 ? '<i class="bi bi-hand-thumbs-down-fill gv-mine"></i>' : '');
 
   const sp = new SupabaseService();
-  let client = null, user = null, current = null;
+  let client = null, user = null, current = null, curDef = null;   // curDef: the default of the build as derived in the popup, sent with every post (shown in the overview)
 
   async function rpc(name, args) {
     const { data, error } = await client.rpc(name, args);
@@ -153,7 +153,7 @@
       for (const r of rows) {
         const tr = document.createElement('tr');
         tr.innerHTML = `<td><span class="gv-char">${esc(String.fromCodePoint(r.cp))}</span> <span class="gv-hex">${label(r.cp)}</span></td>
-          <td>${prev(r.variant)} <span class="gv-name">${esc(r.variant)}</span></td>
+          <td>${r.base && r.base !== r.variant ? prev(r.base) + ' <span class="mx-1">\u2192</span> ' : ''}${prev(r.variant)} <span class="gv-name">${r.base && r.base !== r.variant ? esc(r.base) + ' \u2192 ' : ''}${esc(r.variant)}</span></td>
           <td class="gv-score">${sign(r.score)} <span class="gv-hex">${r.up}↑ ${r.down}↓</span></td>
           <td>${stBadge(r.status)}</td><td>${mineIcon(r.my_vote)}</td><td class="hide-sm">${r.posts}</td>`;
         tr.addEventListener('click', () => openChar(r.cp));
@@ -164,12 +164,19 @@
 
   // ---- the default of the build, derived live from the ranking ----
   const defCache = new Map();
+  // true / false only when GlyphWiki answered with HTTP 200 (an empty body = no such glyph); any other answer or a network error is tried again twice, then it throws:
+  // a failed query must never count as "does not exist" (the derived default would be wrong)
   async function glyphExists(name) {
-    try {
-      const r = await fetch('https://glyphwiki.org/api/glyph?name=' + encodeURIComponent(name));
-      const t = await r.text();
-      return !!t && !!JSON.parse(t).data;
-    } catch (e) { return false; }
+    let last = null;
+    for (let i = 0; i < 3; i++) {
+      try {
+        const r = await fetch('https://glyphwiki.org/api/glyph?name=' + encodeURIComponent(name));
+        if (r.status === 200) { const t = await r.text(); return !!t.trim() && !!JSON.parse(t).data; }
+        last = new Error('GlyphWiki answered ' + r.status);
+      } catch (e) { last = e; }
+      await new Promise((res) => setTimeout(res, 400 * (i + 1)));
+    }
+    throw last;
   }
   // the names of the ranking that GlyphWiki has for the character, in the order of the ranking (the base glyph last); the first one is the default of the build
   async function variantsOf(cp) {
@@ -200,8 +207,10 @@
     const cp = current;
     $('ref').innerHTML = $('props').innerHTML = $('thread').innerHTML = '';
     try {
+      curDef = null;
       const [rows, thread, vars] = await Promise.all([rpc('glyph_list', { p_filter: 'all', p_limit: 100, p_offset: 0, p_cp: cp }), rpc('glyph_thread', { p_cp: cp }), variantsOf(cp)]);
       const def = vars[0] || 'u' + hexOf(cp);
+      curDef = def;
       if (cp !== current) return;
       const win = rows.find((r) => r.is_winner);
       const bld = win ? win.variant : def;
@@ -213,7 +222,11 @@
       for (const r of rows) box.appendChild(propCard(r, bld));
       renderNew(rows, bld, vars);
       renderThread(thread);
-    } catch (e) { $('props').innerHTML = `<div class="gv-msg err">${esc(e.message)}</div>`; }
+    } catch (e) {
+      curDef = null;   // no post without the default: it would be stored wrong
+      $('props').innerHTML = `<div class="gv-msg err">${esc(e.message)} ${esc(T('The default could not be determined, so nothing can be posted now.', 'Không xác định được dạng mặc định nên hiện chưa thể đăng bài.'))} <button type="button" class="btn btn-quiet btn-sm" id="retry">${esc(T('Try again', 'Thử lại'))}</button></div>`;
+      $('retry').addEventListener('click', renderChar);
+    }
   }
   function propCard(r, bld) {
     const d = document.createElement('div'); d.className = 'gv-prop';
@@ -258,7 +271,8 @@
       okName = null; $('np-send').disabled = true; $('np-prev').innerHTML = '';
       if (!NAME_RE.test(n) || n.length > 40 || n.split('-')[0] !== base) return msg(T('The name must be a GlyphWiki name of this character, like ', 'Tên phải là tên GlyphWiki của chữ này, ví dụ ') + base + '-v', true);
       if (rows.some((r) => r.variant === n)) return msg(T('This variant is already proposed: vote on it above.', 'Dạng này đã được đề xuất: hãy bình chọn ở trên.'), true);
-      if (!(await glyphExists(n))) return msg(T('GlyphWiki has no glyph with this name.', 'GlyphWiki không có chữ nào tên này.'), true);
+      let there; try { there = await glyphExists(n); } catch (e) { return msg(T('GlyphWiki could not be reached, please try again.', 'Không kết nối được GlyphWiki, hãy thử lại.'), true); }
+      if (!there) return msg(T('GlyphWiki has no glyph with this name.', 'GlyphWiki không có chữ nào tên này.'), true);
       okName = n; $('np-prev').innerHTML = `${prev(bld, true)} <span class="mx-2">→</span> ${prev(n, true)} <span class="gv-name">${esc(n)}</span>`;
       $('np-send').disabled = false; msg('');
     });
@@ -285,8 +299,9 @@
   }
   async function post(variant, vote, comment) {
     if (!signedIn()) return askLogin();
+    if (!curDef) { alert(T('The default of the build could not be determined yet, please try again.', 'Chưa xác định được dạng mặc định, hãy thử lại.')); return; }
     try {
-      await rpc('glyph_post', { p_cp: current, p_variant: variant, p_vote: vote, p_comment: (comment || '').trim() || null });
+      await rpc('glyph_post', { p_cp: current, p_variant: variant, p_vote: vote, p_comment: (comment || '').trim() || null, p_base: curDef });
       await renderChar(); loadList();
     } catch (e) {
       const m = $('np-msg') || $('list-msg'); m.textContent = e.message; m.className = 'gv-msg err';
