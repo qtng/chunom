@@ -28,6 +28,7 @@
     .gv-arrow { color: var(--muted); }
     .gv-font-tile { display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-cjk), serif; font-size: 1.9rem; line-height: 1; color: #666; }
     .gv-names { margin-top: .2rem; white-space: nowrap; font-size: .78rem; }
+    .gv-dlg .btn[data-offer].active { outline: 2px solid var(--accent, currentColor); outline-offset: 1px; }
     .gv-hex { font: .75rem ui-monospace, monospace; color: var(--muted); }
     .gv-prev { display: inline-block; width: 2.6rem; height: 2.6rem; background: #fff; border: 1px solid var(--line); border-radius: 6px; vertical-align: middle; padding: 2px; }
     .gv-prev.big { width: 5.2rem; height: 5.2rem; }
@@ -245,7 +246,7 @@
         <div class="acts">
           <button class="btn btn-quiet btn-sm${on(1)}" data-v="1" title="${esc(T('Approve', 'Đồng ý'))}" ${can ? '' : 'disabled'}><i class="bi bi-hand-thumbs-up"></i></button>
           <button class="btn btn-quiet btn-sm${on(-1)}" data-v="-1" title="${esc(T('Reject', 'Phản đối'))}" ${can ? '' : 'disabled'}><i class="bi bi-hand-thumbs-down"></i></button>
-          ${r.my_vote ? `<button class="btn btn-quiet btn-sm" data-v="0" title="${esc(T('Withdraw my vote', 'Rút phiếu của tôi'))}"><i class="bi bi-x-lg"></i></button>` : ''}
+          ${r.my_vote ? `<button class="btn btn-quiet btn-sm" data-v="0" title="${esc(T('Withdraw my vote (deletes the proposal if nobody else took part)', 'Rút phiếu của tôi (xóa đề xuất nếu không ai khác tham gia)'))}"><i class="bi bi-x-lg"></i></button>` : ''}
         </div></div>
       <div class="cm"><input class="form-control form-control-sm" maxlength="1000" placeholder="${esc(T('Comment (optional)', 'Bình luận (không bắt buộc)'))}" ${can ? '' : 'disabled'}>
         <button class="btn btn-quiet btn-sm" data-c="1" ${can ? '' : 'disabled'}>${esc(T('Comment', 'Bình luận'))}</button></div>`;
@@ -270,10 +271,11 @@
         <button id="np-send" class="btn btn-cinnabar btn-pill btn-sm" type="button" disabled>${esc(T('Propose', 'Đề xuất'))}</button></div>
       <div id="np-msg" class="gv-msg"></div>`;
     if (!can) { $('newp').addEventListener('click', askLogin); return; }
-    $('newp').querySelectorAll('[data-offer]').forEach((b) => b.addEventListener('click', () => post(b.dataset.offer, null, $('np-comment').value)));
+    $('newp').querySelectorAll('[data-offer]').forEach((b) => b.addEventListener('click', () => { $('np-name').value = b.dataset.offer; $('np-name').dispatchEvent(new Event('input')); $('np-check').click(); }));
     let okName = null;
     const msg = (t, err) => { $('np-msg').textContent = t; $('np-msg').className = 'gv-msg' + (err ? ' err' : ''); };
-    $('np-name').addEventListener('input', () => { okName = null; $('np-send').disabled = true; $('np-prev').innerHTML = ''; msg(''); });
+    const mark = () => { const n = $('np-name').value.trim().toLowerCase(); $('newp').querySelectorAll('[data-offer]').forEach((b) => b.classList.toggle('active', b.dataset.offer === n)); };
+    $('np-name').addEventListener('input', () => { mark(); okName = null; $('np-send').disabled = true; $('np-prev').innerHTML = ''; msg(''); });
     $('np-check').addEventListener('click', async () => {
       const n = $('np-name').value.trim().toLowerCase();
       okName = null; $('np-send').disabled = true; $('np-prev').innerHTML = '';
@@ -281,7 +283,7 @@
       if (rows.some((r) => r.variant === n)) return msg(T('This variant is already proposed: vote on it above.', 'Dạng này đã được đề xuất: hãy bình chọn ở trên.'), true);
       let there; try { there = await glyphExists(n); } catch (e) { return msg(T('GlyphWiki could not be reached, please try again.', 'Không kết nối được GlyphWiki, hãy thử lại.'), true); }
       if (!there) return msg(T('GlyphWiki has no glyph with this name.', 'GlyphWiki không có chữ nào tên này.'), true);
-      okName = n; $('np-prev').innerHTML = `${prev(bld, true)} <span class="mx-2">→</span> ${prev(n, true)} <span class="gv-name">${esc(n)}</span>`;
+      okName = n; $('np-comment').focus(); $('np-prev').innerHTML = `${prev(bld, true)} <span class="mx-2">→</span> ${prev(n, true)} <span class="gv-name">${esc(n)}</span>`;
       $('np-send').disabled = false; msg('');
     });
     $('np-send').addEventListener('click', () => { if (okName) post(okName, null, $('np-comment').value, true); });
