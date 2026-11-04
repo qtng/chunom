@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Glyph variants</title>
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://qatt.org/css/site.css">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/chunom/fonts/fonts.css">
+  <script src="https://qatt.org/vendor/supabase/supabase.min.js"></script>
+  <script src="https://qatt.org/js/navigation.js"></script>
+  <script src="https://qatt.org/js/supabase.js"></script>
+  <script src="https://qatt.org/js/login.js"></script>
+  <style>
+    /* layout only; colours come from the variables, so the themes work here too */
+    .gv-bar { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin-bottom: .8rem; }
+    .gv-bar input { max-width: 14rem; }
+    .gv-bar select { max-width: 12rem; }
+    .gv-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+    .gv-table th, .gv-table td { padding: .45rem .5rem; border-top: 1px solid var(--line); vertical-align: middle; }
+    .gv-table thead th { border-top: 0; color: var(--muted); font-weight: 400; font-size: .8rem; }
+    .gv-table tbody tr { cursor: pointer; }
+    .gv-table tbody tr:hover { background: color-mix(in srgb, currentColor 5%, transparent); }
+    .gv-char { font-family: var(--font-cjk), serif; font-size: 1.8rem; line-height: 1; }
+    .gv-hex { font: .75rem ui-monospace, monospace; color: var(--muted); }
+    .gv-prev { display: inline-block; width: 2.6rem; height: 2.6rem; background: #fff; border: 1px solid var(--line); border-radius: 6px; vertical-align: middle; padding: 2px; }
+    .gv-prev.big { width: 5.2rem; height: 5.2rem; }
+    .gv-score { font-variant-numeric: tabular-nums; font-weight: 600; }
+    .gv-st { font-size: .75rem; padding: .1rem .5rem; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+    .gv-st.approved { color: #2e7d32; } .gv-st.rejected { color: #b3261e; } .gv-st.pending { color: var(--muted); }
+    .gv-mine { font-size: 1.1rem; }
+    .gv-name { font: .85rem ui-monospace, monospace; word-break: break-all; }
+    dialog.gv-dlg { width: min(46rem, 96vw); max-height: 92vh; padding: 0; border: 1px solid var(--line); border-radius: 12px; background: Canvas; color: CanvasText; }
+    dialog.gv-dlg::backdrop { background: rgba(0, 0, 0, .45); }
+    .gv-dlg .hd { display: flex; align-items: center; gap: .8rem; padding: .8rem 1.1rem; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: Canvas; z-index: 1; }
+    .gv-dlg .hd .gv-char { font-size: 2.6rem; }
+    .gv-dlg .bd { padding: .9rem 1.1rem 1.2rem; overflow-y: auto; }
+    .gv-dlg h3 { font-size: 1rem; margin: 1.1rem 0 .5rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+    .gv-ref { display: flex; flex-wrap: wrap; gap: 1.2rem; }
+    .gv-ref > div { display: flex; align-items: center; gap: .6rem; }
+    .gv-ref .lbl { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+    .gv-font { font-family: var(--font-cjk), serif; font-size: 4.2rem; line-height: 1; }
+    .gv-prop { border: 1px solid var(--line); border-radius: 10px; padding: .6rem .8rem; margin-bottom: .6rem; }
+    .gv-prop .top { display: flex; flex-wrap: wrap; align-items: center; gap: .7rem; }
+    .gv-prop .grow { flex: 1; min-width: 8rem; }
+    .gv-prop .acts { display: flex; gap: .3rem; }
+    .gv-prop .acts .btn.on { outline: 2px solid currentColor; }
+    .gv-prop .cm { margin-top: .5rem; display: flex; gap: .4rem; }
+    .gv-post { padding: .45rem 0; border-top: 1px solid var(--line); font-size: .9rem; }
+    .gv-post:first-child { border-top: 0; }
+    .gv-post .meta { color: var(--muted); font-size: .78rem; }
+    .gv-post .txt { white-space: pre-wrap; word-break: break-word; }
+    .gv-msg { font-size: .85rem; margin: .4rem 0; }
+    .gv-msg.err { color: #b3261e; }
+    @media (max-width: 575.98px) { .gv-table .hide-sm { display: none; } }
+  </style>
+</head>
+<body>
+<header class="hero pt-4 pt-sm-5 pb-4">
+  <div class="container text-center">
+    <div class="han mb-2">𡨸喃</div>
+    <h1 class="mb-3" data-vi="Biến thể chữ">Glyph variants</h1>
+    <p class="lead mx-auto mb-0" data-vi="Cùng chọn dạng chữ cho phông chữ.">Choose together which GlyphWiki glyph the fonts use for a character.</p>
+  </div>
+</header>
+<main>
+  <section class="card-box mt-3">
+    <div class="gv-bar">
+      <select id="filter" class="form-select form-select-sm" aria-label="Filter">
+        <option value="all" data-vi="Tất cả">All</option>
+        <option value="pending" data-vi="Đang chờ">Pending</option>
+        <option value="approved" data-vi="Đã duyệt">Approved</option>
+        <option value="rejected" data-vi="Bị từ chối">Rejected</option>
+        <option value="mine" data-vi="Của tôi">Mine</option>
+        <option value="unvoted" data-vi="Chưa bình chọn">Not voted by me</option>
+      </select>
+      <input id="jump" class="form-control form-control-sm" placeholder="U+5B57 / 字" data-vi-placeholder="U+5B57 / 字" aria-label="Character">
+      <button id="jump-go" class="btn btn-quiet btn-pill btn-sm" type="button" data-vi="Mở">Open</button>
+      <span id="who" class="ms-auto small" style="color: var(--muted)"></span>
+      <button id="signin" class="btn btn-cinnabar btn-pill btn-sm" type="button" hidden data-vi="Đăng nhập">Sign in</button>
+    </div>
+    <div id="list-msg" class="gv-msg"></div>
+    <table class="gv-table">
+      <thead><tr>
+        <th data-vi="Chữ">Character</th><th data-vi="Biến thể">Variant</th><th data-vi="Điểm">Score</th>
+        <th data-vi="Trạng thái">Status</th><th data-vi="Của bạn">Yours</th><th class="hide-sm" data-vi="Bài viết">Posts</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="note" data-vi="Nhấp vào một dòng để xem, bình chọn và thảo luận.">Click a row to see it, vote and discuss. To propose a variant for a character, open it with the field above.</p>
+  </section>
+</main>
+
+<dialog class="gv-dlg" id="dlg" aria-labelledby="dlg-title">
+  <div class="hd">
+    <span class="gv-char" id="dlg-char"></span>
+    <div><div id="dlg-title" class="fw-semibold"></div><div class="gv-hex" id="dlg-sub"></div></div>
+    <button type="button" class="btn-close ms-auto" id="dlg-close" aria-label="Close"></button>
+  </div>
+  <div class="bd">
+    <h3 data-vi="Hiện tại">Now</h3>
+    <div class="gv-ref" id="ref"></div>
+    <h3 data-vi="Đề xuất">Proposals</h3>
+    <div id="props"></div>
+    <h3 data-vi="Đề xuất mới">New proposal</h3>
+    <div id="newp"></div>
+    <h3 data-vi="Thảo luận">Discussion</h3>
+    <div id="thread"></div>
+    <div id="cm-general" class="mt-2"></div>
+  </div>
+</dialog>
+
+<script>
+(() => {
+  'use strict';
+  const T = (en, vi) => (window.Lang ? Lang.t(en, vi) : en);
+  const $ = (id) => document.getElementById(id);
+  // the CJK code point ranges the database accepts (kept equal to glyph_cp_ok in tools/db/glyph_posts.sql of the private repository)
+  const GLYPH_RANGES = [[11904, 12255], [13312, 19903], [19968, 40959], [63744, 64255], [131072, 192095], [194560, 195103], [196608, 205743]];
+  const RANKED = ['v', 'vv', 't', 'tv', 'j', 'jv', 'g', 'gv', 'k', 'kv', 'h', 'hv', 'm', 'mv'];   // the ranking of the font build without tudien (an inaccuracy of this tool)
+  const NAME_RE = /^u[0-9a-f]{4,6}(-[a-z0-9-]+)?$/;
+  const inRange = (cp) => GLYPH_RANGES.some(([a, b]) => cp >= a && cp <= b);
+  const hexOf = (cp) => cp.toString(16);
+  const label = (cp) => 'U+' + cp.toString(16).toUpperCase().padStart(4, '0');
+  const svgUrl = (name) => 'https://glyphwiki.org/glyph/' + encodeURIComponent(name) + '.svg';
+  const prev = (name, big) => `<img class="gv-prev${big ? ' big' : ''}" src="${svgUrl(name)}" alt="${name}" loading="lazy">`;
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const sign = (n) => (n > 0 ? '+' + n : n < 0 ? '−' + (-n) : '0');
+  const STATUS = { approved: ['approved', 'đã duyệt'], rejected: ['rejected', 'bị từ chối'], pending: ['pending', 'đang chờ'] };
+  const stBadge = (s) => `<span class="gv-st ${s}">${esc(T(STATUS[s][0], STATUS[s][1]))}</span>`;
+  const mineIcon = (v) => (v === 1 ? '<i class="bi bi-hand-thumbs-up-fill gv-mine"></i>' : v === -1 ? '<i class="bi bi-hand-thumbs-down-fill gv-mine"></i>' : '');
+
+  const sp = new SupabaseService();
+  let client = null, user = null, current = null;
+
+  async function rpc(name, args) {
+    const { data, error } = await client.rpc(name, args);
+    if (error) throw new Error(error.message || String(error));
+    return data;
+  }
+  const signedIn = () => !!user;
+  function askLogin() { QattLogin.open(sp, T('Sign in to vote and write.', 'Đăng nhập để bình chọn và viết bài.')); }
+
+  // ---- the overview ----
+  async function loadList() {
+    const msg = $('list-msg'); msg.textContent = ''; msg.className = 'gv-msg';
+    try {
+      const rows = await rpc('glyph_list', { p_filter: $('filter').value, p_limit: 200, p_offset: 0, p_cp: null });
+      const tb = $('rows'); tb.textContent = '';
+      if (!rows.length) { msg.textContent = T('No proposals here yet.', 'Chưa có đề xuất nào.'); return; }
+      for (const r of rows) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td><span class="gv-char">${esc(String.fromCodePoint(r.cp))}</span> <span class="gv-hex">${label(r.cp)}</span></td>
+          <td>${prev(r.variant)} <span class="gv-name">${esc(r.variant)}</span></td>
+          <td class="gv-score">${sign(r.score)} <span class="gv-hex">${r.up}↑ ${r.down}↓</span></td>
+          <td>${stBadge(r.status)}</td><td>${mineIcon(r.my_vote)}</td><td class="hide-sm">${r.posts}</td>`;
+        tr.addEventListener('click', () => openChar(r.cp));
+        tb.appendChild(tr);
+      }
+    } catch (e) { msg.textContent = e.message; msg.className = 'gv-msg err'; }
+  }
+
+  // ---- the default of the build, derived live from the ranking ----
+  const defCache = new Map();
+  async function glyphExists(name) {
+    try {
+      const r = await fetch('https://glyphwiki.org/api/glyph?name=' + encodeURIComponent(name));
+      const t = await r.text();
+      return !!t && !!JSON.parse(t).data;
+    } catch (e) { return false; }
+  }
+  async function derivedDefault(cp) {
+    if (defCache.has(cp)) return defCache.get(cp);
+    let key = 'gvdef:' + cp, hit = null;
+    try { hit = sessionStorage.getItem(key); } catch (e) { /* ignore */ }
+    if (hit) { defCache.set(cp, hit); return hit; }
+    const base = 'u' + hexOf(cp);
+    const names = RANKED.map((s) => base + '-' + s).concat([base]);
+    const ok = await Promise.all(names.map(glyphExists));
+    const found = names[ok.indexOf(true)] || base;
+    defCache.set(cp, found);
+    try { sessionStorage.setItem(key, found); } catch (e) { /* ignore */ }
+    return found;
+  }
+
+  // ---- the popup of a character ----
+  async function openChar(cp) {
+    if (!inRange(cp)) { $('list-msg').textContent = T('This is not a CJK character.', 'Đây không phải chữ CJK.'); $('list-msg').className = 'gv-msg err'; return; }
+    current = cp;
+    if (location.hash !== '#' + label(cp)) history.pushState(null, '', '#' + label(cp));
+    $('dlg-char').textContent = String.fromCodePoint(cp);
+    $('dlg-title').textContent = label(cp);
+    $('dlg-sub').textContent = 'u' + hexOf(cp);
+    if (!$('dlg').open) $('dlg').showModal();
+    await renderChar();
+  }
+  async function renderChar() {
+    const cp = current;
+    $('ref').innerHTML = $('props').innerHTML = $('thread').innerHTML = '';
+    try {
+      const [rows, thread, def] = await Promise.all([rpc('glyph_list', { p_filter: 'all', p_limit: 100, p_offset: 0, p_cp: cp }), rpc('glyph_thread', { p_cp: cp }), derivedDefault(cp)]);
+      if (cp !== current) return;
+      const win = rows.find((r) => r.is_winner);
+      const bld = win ? win.variant : def;
+      $('ref').innerHTML = `
+        <div><span class="gv-font">${esc(String.fromCodePoint(cp))}</span><div><div class="lbl">${esc(T('in the font now', 'trong phông chữ hiện nay'))}</div></div></div>
+        <div>${prev(bld, true)}<div><div class="lbl">${esc(win ? T('winner, in the font after the next build', 'dạng thắng, sẽ có trong lần build tới') : T('default of the build (derived)', 'mặc định của build (suy ra)'))}</div><div class="gv-name">${esc(bld)}</div></div></div>`;
+      const box = $('props');
+      if (!rows.length) box.innerHTML = `<div class="gv-msg">${esc(T('No proposal yet.', 'Chưa có đề xuất.'))}</div>`;
+      for (const r of rows) box.appendChild(propCard(r, bld));
+      renderNew(rows, bld);
+      renderThread(thread);
+    } catch (e) { $('props').innerHTML = `<div class="gv-msg err">${esc(e.message)}</div>`; }
+  }
+  function propCard(r, bld) {
+    const d = document.createElement('div'); d.className = 'gv-prop';
+    const can = signedIn();
+    const on = (v) => (r.my_vote === v ? ' on' : '');
+    d.innerHTML = `<div class="top">${prev(r.variant)}
+        <div class="grow"><div class="gv-name">${esc(bld)} → ${esc(r.variant)}</div>
+          <div><span class="gv-score">${sign(r.score)}</span> <span class="gv-hex">${r.up}↑ ${r.down}↓</span> ${stBadge(r.status)}</div></div>
+        <div class="acts">
+          <button class="btn btn-quiet btn-sm${on(1)}" data-v="1" title="${esc(T('Approve', 'Đồng ý'))}" ${can ? '' : 'disabled'}><i class="bi bi-hand-thumbs-up"></i></button>
+          <button class="btn btn-quiet btn-sm${on(-1)}" data-v="-1" title="${esc(T('Reject', 'Phản đối'))}" ${can ? '' : 'disabled'}><i class="bi bi-hand-thumbs-down"></i></button>
+          ${r.my_vote ? `<button class="btn btn-quiet btn-sm" data-v="0" title="${esc(T('Withdraw my vote', 'Rút phiếu của tôi'))}"><i class="bi bi-x-lg"></i></button>` : ''}
+        </div></div>
+      <div class="cm"><input class="form-control form-control-sm" maxlength="1000" placeholder="${esc(T('Comment (optional)', 'Bình luận (không bắt buộc)'))}" ${can ? '' : 'disabled'}>
+        <button class="btn btn-quiet btn-sm" data-c="1" ${can ? '' : 'disabled'}>${esc(T('Comment', 'Bình luận'))}</button></div>`;
+    const inp = d.querySelector('input');
+    d.querySelectorAll('[data-v]').forEach((b) => b.addEventListener('click', () => post(r.variant, +b.dataset.v, inp.value)));
+    d.querySelector('[data-c]').addEventListener('click', () => { if (inp.value.trim()) post(r.variant, null, inp.value); });
+    if (!can) d.addEventListener('click', askLogin);
+    return d;
+  }
+  function renderNew(rows, bld) {
+    const cp = current, base = 'u' + hexOf(cp), can = signedIn();
+    $('newp').innerHTML = `<div class="gv-msg">${esc(T('Look up the glyph on GlyphWiki, copy its name (like', 'Tìm dạng chữ trên GlyphWiki, chép tên của nó (ví dụ'))} <span class="gv-name">${base}-v</span>) →
+        <a href="https://glyphwiki.org/wiki/${base}" target="_blank" rel="noopener">GlyphWiki ${label(cp)} <i class="bi bi-box-arrow-up-right"></i></a></div>
+      <div class="d-flex flex-wrap gap-2"><input id="np-name" class="form-control form-control-sm" style="max-width:16rem" placeholder="${base}-v" autocapitalize="off" autocomplete="off" spellcheck="false" ${can ? '' : 'disabled'}>
+        <button id="np-check" class="btn btn-quiet btn-sm" type="button" ${can ? '' : 'disabled'}>${esc(T('Check', 'Kiểm tra'))}</button></div>
+      <div id="np-prev" class="my-2"></div>
+      <div class="d-flex gap-2"><input id="np-comment" class="form-control form-control-sm" maxlength="1000" placeholder="${esc(T('Comment (optional)', 'Bình luận (không bắt buộc)'))}" ${can ? '' : 'disabled'}>
+        <button id="np-send" class="btn btn-cinnabar btn-pill btn-sm" type="button" disabled>${esc(T('Propose', 'Đề xuất'))}</button></div>
+      <div id="np-msg" class="gv-msg"></div>`;
+    if (!can) { $('newp').addEventListener('click', askLogin); return; }
+    let okName = null;
+    const msg = (t, err) => { $('np-msg').textContent = t; $('np-msg').className = 'gv-msg' + (err ? ' err' : ''); };
+    $('np-name').addEventListener('input', () => { okName = null; $('np-send').disabled = true; $('np-prev').innerHTML = ''; msg(''); });
+    $('np-check').addEventListener('click', async () => {
+      const n = $('np-name').value.trim().toLowerCase();
+      okName = null; $('np-send').disabled = true; $('np-prev').innerHTML = '';
+      if (!NAME_RE.test(n) || n.length > 40 || n.split('-')[0] !== base) return msg(T('The name must be a GlyphWiki name of this character, like ', 'Tên phải là tên GlyphWiki của chữ này, ví dụ ') + base + '-v', true);
+      if (rows.some((r) => r.variant === n)) return msg(T('This variant is already proposed: vote on it above.', 'Dạng này đã được đề xuất: hãy bình chọn ở trên.'), true);
+      if (!(await glyphExists(n))) return msg(T('GlyphWiki has no glyph with this name.', 'GlyphWiki không có chữ nào tên này.'), true);
+      okName = n; $('np-prev').innerHTML = `${prev(bld, true)} <span class="mx-2">→</span> ${prev(n, true)} <span class="gv-name">${esc(n)}</span>`;
+      $('np-send').disabled = false; msg('');
+    });
+    $('np-send').addEventListener('click', () => { if (okName) post(okName, null, $('np-comment').value, true); });
+  }
+  function renderThread(thread) {
+    const box = $('thread'); box.textContent = '';
+    if (!thread.length) box.innerHTML = `<div class="gv-msg">${esc(T('Nothing here yet.', 'Chưa có gì.'))}</div>`;
+    for (const p of thread) {
+      const d = document.createElement('div'); d.className = 'gv-post';
+      const v = p.vote === 1 ? '<i class="bi bi-hand-thumbs-up-fill"></i>' : p.vote === -1 ? '<i class="bi bi-hand-thumbs-down-fill"></i>' : p.vote === 0 ? '<i class="bi bi-x-lg"></i>' : '';
+      const ch = p.changed_from != null && p.vote != null && p.changed_from !== p.vote ? ' ' + esc(T('(changed)', '(đã đổi)')) : '';
+      const who = p.username == null ? esc(T('A user', 'Một người dùng')) : esc(p.username);
+      d.innerHTML = `<div class="meta">${who} · ${esc(new Date(p.created_at).toLocaleString())}${p.variant ? ` · <span class="gv-name">${esc(p.variant)}</span>` : ''} ${v}${ch}</div>` +
+        (p.hidden ? `<div class="txt" style="color:var(--muted)">${esc(T('[hidden by an admin]', '[đã bị quản trị viên ẩn]'))}</div>` : p.comment ? `<div class="txt">${esc(p.comment)}</div>` : '');
+      box.appendChild(d);
+    }
+    const g = $('cm-general');
+    if (signedIn()) {
+      g.innerHTML = `<div class="d-flex gap-2"><input class="form-control form-control-sm" maxlength="1000" placeholder="${esc(T('Write a comment on this character', 'Viết bình luận về chữ này'))}"><button class="btn btn-quiet btn-sm">${esc(T('Comment', 'Bình luận'))}</button></div>`;
+      const i = g.querySelector('input');
+      g.querySelector('button').addEventListener('click', () => { if (i.value.trim()) post(null, null, i.value); });
+    } else { g.innerHTML = ''; }
+  }
+  async function post(variant, vote, comment) {
+    if (!signedIn()) return askLogin();
+    try {
+      await rpc('glyph_post', { p_cp: current, p_variant: variant, p_vote: vote, p_comment: (comment || '').trim() || null });
+      await renderChar(); loadList();
+    } catch (e) {
+      const m = $('np-msg') || $('list-msg'); m.textContent = e.message; m.className = 'gv-msg err';
+      alert(e.message);
+    }
+  }
+
+  // ---- start ----
+  function parseJump(s) {
+    s = s.trim(); if (!s) return null;
+    const m = s.match(/^(?:U\+)?([0-9a-f]{4,6})$/i);
+    if (m) return parseInt(m[1], 16);
+    return [...s].length === 1 ? s.codePointAt(0) : null;
+  }
+  function fromHash() {
+    const cp = parseJump(decodeURIComponent(location.hash.slice(1)));
+    if (cp != null && inRange(cp)) openChar(cp); else if ($('dlg').open) $('dlg').close();
+  }
+  async function start() {
+    try { user = await sp.initQuiet(); client = sp.client; } catch (e) { /* no login */ }
+    if (!client) { $('list-msg').textContent = T('The database is not reachable.', 'Không kết nối được cơ sở dữ liệu.'); return; }
+    if (user) { try { $('who').textContent = (await sp.getDisplayName()) || ''; } catch (e) { /* ignore */ } } else { $('signin').hidden = false; }
+    $('signin').addEventListener('click', askLogin);
+    $('filter').addEventListener('change', loadList);
+    const go = () => { const cp = parseJump($('jump').value); if (cp != null) openChar(cp); };
+    $('jump-go').addEventListener('click', go);
+    $('jump').addEventListener('keydown', (e) => { if (e.key === 'Enter') go(); });
+    $('dlg-close').addEventListener('click', () => $('dlg').close());
+    $('dlg').addEventListener('close', () => { if (location.hash) history.replaceState(null, '', location.pathname + location.search); current = null; });
+    window.addEventListener('hashchange', fromHash);
+    await loadList();
+    if (location.hash) fromHash();
+  }
+  start();
+})();
+</script>
+</body>
+</html>
