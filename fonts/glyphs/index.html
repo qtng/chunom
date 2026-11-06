@@ -29,6 +29,9 @@
     .gv-font-tile { display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-cjk), serif; font-size: 1.9rem; line-height: 1; color: #666; }
     .gv-names { margin-top: .2rem; white-space: nowrap; font-size: .78rem; }
     .gv-dlg .btn[data-offer].active { outline: 2px solid var(--accent, currentColor); outline-offset: 1px; }
+    .gv-box { border: 1px solid var(--line); border-radius: 10px; padding: .55rem .8rem; }
+    .gv-box summary { cursor: pointer; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; font-size: .85rem; color: var(--muted); }
+    .gv-box[open] summary { margin-bottom: .2rem; }
     .gv-hex { font: .75rem ui-monospace, monospace; color: var(--muted); }
     .gv-prev { display: inline-block; width: 2.6rem; height: 2.6rem; background: #fff; border: 1px solid var(--line); border-radius: 6px; vertical-align: middle; padding: 2px; }
     .gv-prev.big { width: 5.2rem; height: 5.2rem; }
@@ -109,11 +112,13 @@
     <div class="gv-ref" id="ref"></div>
     <h3 data-vi="Đề xuất">Proposals</h3>
     <div id="props"></div>
-    <h3 data-vi="Đề xuất mới">New proposal</h3>
-    <div id="newp"></div>
+    <details id="newp-box" class="gv-box mt-3">
+      <summary data-vi="Đề xuất mới">New proposal</summary>
+      <div id="newp" class="pt-2"></div>
+    </details>
     <h3 data-vi="Thảo luận">Discussion</h3>
+    <div id="cm-general" class="mb-2"></div>
     <div id="thread"></div>
-    <div id="cm-general" class="mt-2"></div>
   </div>
 </dialog>
 
@@ -229,6 +234,7 @@
       if (!rows.length) box.innerHTML = `<div class="gv-msg">${esc(T('No proposal yet.', 'Chưa có đề xuất.'))}</div>`;
       for (const r of rows) box.appendChild(propCard(r, bld));
       renderNew(rows, bld, vars);
+      $('newp-box').open = !rows.length;   // folded as soon as there are proposals
       renderThread(thread);
     } catch (e) {
       curDef = null;   // no post without the default: it would be stored wrong
@@ -291,7 +297,7 @@
   function renderThread(thread) {
     const box = $('thread'); box.textContent = '';
     if (!thread.length) box.innerHTML = `<div class="gv-msg">${esc(T('Nothing here yet.', 'Chưa có gì.'))}</div>`;
-    for (const p of thread) {
+    for (const p of [...thread].reverse()) {   // newest first
       const d = document.createElement('div'); d.className = 'gv-post';
       const v = p.vote === 1 ? '<i class="bi bi-hand-thumbs-up-fill"></i>' : p.vote === -1 ? '<i class="bi bi-hand-thumbs-down-fill"></i>' : p.vote === 0 ? '<i class="bi bi-x-lg"></i>' : '';
       const ch = p.changed_from != null && p.vote != null && p.changed_from !== p.vote ? ' ' + esc(T('(changed)', '(đã đổi)')) : '';
