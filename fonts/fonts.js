@@ -2,7 +2,7 @@
    field to try it, the sizes), the boxes about the characters and the licence and the list of the other Chữ Nôm fonts, all from fonts.json.
    The popup of a font has an address of its own, /chunom/fonts#<id> (the old font pages fonts/<id>/ forward there): a link to #<id> opens it, the back button and Esc close it.
    It takes the colours, the number and the watermark of the band it was opened from (opened from an address: the first band that links to it).
-   fonts.json: assets (the folder of the .ttf files), characters (how many every file has), sizes (the size ladder), sample (line: the CJK sample, qatt: the QATT sample),
+   fonts.json: assets (the folder of the .ttf files: /cdn/fonts/, the GitHub Pages of the repository qtng/cdn), characters (how many every file has), sizes (the size ladder), sample (line: the CJK sample, qatt: the QATT sample),
    fonts [{id, name, family (the name in the font menus), styles [{name, css (the family of js/fonts.js of qatt.org: CJK slices, "<css> Latin"), file, mb}]}],
    external (other fonts), charset (the Unicode table).
    The fonts are those of js/fonts.js of qatt.org (written by navigation.js), so the popup loads only the slices of the characters it shows.
