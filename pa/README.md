@@ -1,0 +1,7 @@
+# PA script (side project)
+
+`index.html` is the page https://chunom.org/chunom/pa/ (not in the menu): a guide to the PA script, built from the archived old page of `qtng/pages` (`docs/pa/`, `docs/pa-editor/`, still at `/pages/pa/`, with the earlier font and the two chart images, which this page links), and below it the specification. English; the headings have `data-vi`.
+
+The specification covers the grammar (stem = onset + nucleus, extension = coda + tone | tone), the 61 characters and their names (`PA ONSET B`, `PA VOWEL AW`, ...) in `U+F00B0..U+F00EE`, directly behind the QATT range, the own joiner and combiner (`U+F00B0`, `U+F00B1`), the stacked cell, the reading of Quốc Ngữ and the conversion from the earlier font `pa.ttf`. The PA font is a file of its own; only the code points are kept compatible with QATT, so a font for both could be built later.
+
+PA is typed in the writer (`writer.html`, the editor of `qtng/qatt` `js/qatt-writer.js`): on this site PA replaces QATT there: the switch "Phonetic annotation" turns it on (`writer.html?pa=1` has it on from the start, which is what the guide links), then Space converts the word before the cursor to PA and Enter picks the first Nôm character (`js/pa-text.js` of `qtng/qatt` splits a syllable with `parser.js` and writes it back). The fonts are `pa.woff2` and `pa-phongthao.woff2` in `qtng/cdn`. The font build is in the private repository `qtng/chunom-private`.
