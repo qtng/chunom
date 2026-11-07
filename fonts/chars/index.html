@@ -19,15 +19,20 @@
     .co-src .btn.active { outline: 2px solid var(--accent, currentColor); outline-offset: 1px; }
     .co-src .n { color: var(--muted); font-size: .8em; }
     .co-note { color: var(--muted); font-size: .85rem; margin-bottom: .8rem; }
-    .co-grid { border-collapse: collapse; margin: 0 auto; }
-    .co-grid th { font: .75rem ui-monospace, monospace; color: var(--muted); font-weight: 400; padding: .1rem .5rem; text-align: center; position: sticky; top: 0; background: Canvas; }
-    .co-grid th.rh { text-align: right; position: static; background: none; padding-right: .7rem; }
-    .co-grid td { width: 3.4rem; height: 3.4rem; text-align: center; border: 1px solid var(--line); font-size: 2rem; line-height: 1; padding: 0; cursor: pointer; }
-    .co-grid td:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
-    .co-grid td.e { cursor: default; border-color: transparent; }
-    .co-wrap { overflow-x: auto; }
-    .co-pager { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; justify-content: center; margin: 1rem 0; }
-    @media (max-width: 575.98px) { .co-grid td { width: 2.2rem; height: 2.2rem; font-size: 1.35rem; } .co-grid th.rh { padding-right: .3rem; } }
+    .co-rad { display: grid; grid-template-columns: repeat(auto-fill, minmax(2.6rem, 1fr)); gap: 2px; margin-bottom: 1.2rem; }
+    .co-rad button { border: 1px solid var(--line); background: none; color: inherit; border-radius: 6px; padding: .1rem 0 0; line-height: 1.1; cursor: pointer; }
+    .co-rad button:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
+    .co-rad button.active { outline: 2px solid var(--accent, currentColor); }
+    .co-rad button.zero { opacity: .3; cursor: default; }
+    .co-rad .g { display: block; font-size: 1.4rem; }
+    .co-rad .c { display: block; font: .6rem ui-monospace, monospace; color: var(--muted); }
+    .co-tiles { display: flex; flex-wrap: wrap; gap: .25rem; }
+    .co-tile { width: 5.4rem; text-align: center; border: 1px solid var(--line); border-radius: 6px; padding: .25rem .1rem; cursor: pointer; overflow: hidden; }
+    .co-tile:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
+    .co-tile .g { display: block; font-size: 32px; line-height: 38px; }
+    .co-tile .s, .co-tile .n { display: block; font: .55rem/1.2 ui-monospace, monospace; color: var(--muted); word-break: break-all; }
+    .co-tile .s { color: inherit; font-weight: 700; }
+    .co-pager { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; justify-content: center; margin: 1rem 0 0; }
   </style>
 </head>
 <body>
@@ -35,7 +40,7 @@
   <div class="container text-center">
     <div class="han mb-2">𡨸喃</div>
     <h1 class="mb-2" data-vi="Tổng quan chữ">Character overview</h1>
-    <p class="slogan mb-0" data-vi="Chữ của phông theo nguồn GlyphWiki">The characters of the fonts by GlyphWiki source</p>
+    <p class="slogan mb-0" data-vi="Chữ của phông theo bộ thủ và nguồn GlyphWiki">The characters of the fonts by radical and GlyphWiki source</p>
   </div>
 </header>
 
@@ -47,118 +52,96 @@
       <span class="co-note mb-0" id="info"></span>
     </div>
     <div class="co-src" id="src"></div>
+    <div class="co-rad" id="rad"></div>
     <div class="co-note" id="note"></div>
-    <div class="co-wrap"><table class="co-grid" id="grid"></table></div>
+    <div class="co-tiles" id="tiles"></div>
     <div class="co-pager" id="pager"></div>
   </div>
-  <p class="co-note mt-3"><span data-vi="Nhấp vào một chữ để mở trang GlyphWiki của nó. Danh sách là những gì quy trình dựng phông dùng: mỗi chữ lấy dạng đầu tiên theo thứ tự v, tudien, vv, t, tv, j, jv, g, gv, k, kv, h, hv, m, mv, nếu không có thì dạng mặc định.">Click a character to open its page on GlyphWiki. The list is what the font build uses: for every character the first form in the order v, tudien, vv, t, tv, j, jv, g, gv, k, kv, h, hv, m, mv, else the default glyph.</span> <a href="/chunom/fonts/"><span data-vi="Quay lại danh mục phông">Back to the fonts</span></a></p>
+  <p class="co-note mt-3"><span data-vi="Chọn một bộ thủ, rồi nhấp vào một chữ để mở trang GlyphWiki của nó. Danh sách là những gì quy trình dựng phông dùng: mỗi chữ lấy dạng đầu tiên theo thứ tự v, tudien, vv, t, tv, j, jv, g, gv, k, kv, h, hv, m, mv, nếu không có thì dạng mặc định.">Choose a radical, then click a character to open its page on GlyphWiki. The list is what the font build uses: for every character the first form in the order v, tudien, vv, t, tv, j, jv, g, gv, k, kv, h, hv, m, mv, else the default glyph.</span> <a href="/chunom/fonts/"><span data-vi="Quay lại danh mục phông">Back to the fonts</span></a></p>
 </main>
 
 <script>
 (function () {
   'use strict';
-  var PAGE = 1000, COLS = 10;
+  var PAGE = 600;
   var $ = function (id) { return document.getElementById(id); };
-  var D, font, source, page;
+  var D, font, source, rad, page, srcOf;      // source: a source id or '' (all); rad: 1..214, 0 = without radical
 
+  function hex(ch) { var h = ch.codePointAt(0).toString(16); while (h.length < 4) h = '0' + h; return h; }
   function glyphName(set, src, ch) {
     var nm = set.names && set.names[src] && set.names[src][ch];
     if (nm) return nm;
-    var h = ch.codePointAt(0).toString(16); while (h.length < 4) h = '0' + h;
-    return src === 'default' ? 'u' + h : 'u' + h + '-' + src;
+    return src === 'default' ? 'u' + hex(ch) : 'u' + hex(ch) + '-' + src;
   }
-  function hash() {
-    try { history.replaceState(null, '', '#' + font.id + '/' + source + (page ? '/' + (page + 1) : '')); } catch (e) {}
-  }
-  function chars(set, src) { return Array.from(set[src] || ''); }
+  function radChars(n) { return Array.from(n ? D.radicals[n - 1] : D.noradical); }
+  function inScope(ch) { return srcOf[ch] && (!source || srcOf[ch] === source); }
+  function hash() { try { history.replaceState(null, '', '#' + font.id + '/' + rad + '/' + (source || 'all') + (page ? '/' + (page + 1) : '')); } catch (e) {} }
 
+  function maps() {
+    var set = D.sets[font.set]; srcOf = {};
+    D.sources.forEach(function (s) { Array.from(set[s.id] || '').forEach(function (c) { srcOf[c] = s.id; }); });
+  }
   function drawSources() {
     var set = D.sets[font.set], box = $('src'); box.textContent = '';
-    D.sources.forEach(function (s) {
-      var n = chars(set, s.id).length;
-      if (!n) return;
-      var b = document.createElement('button');
-      b.type = 'button'; b.className = 'btn btn-quiet btn-pill btn-sm' + (s.id === source ? ' active' : ''); b.dataset.src = s.id; b.title = s.label;
-      var t = document.createElement('span'); t.textContent = s.id; b.appendChild(t);
-      var c = document.createElement('span'); c.className = 'n'; c.textContent = ' (' + n.toLocaleString('en') + ')'; b.appendChild(c);
-      box.appendChild(b);
-    });
+    var add = function (id, label, n) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'btn btn-quiet btn-pill btn-sm' + (id === source ? ' active' : ''); b.dataset.src = id; b.title = label;
+      var t = document.createElement('span'); t.textContent = id || 'all'; b.appendChild(t);
+      var c = document.createElement('span'); c.className = 'n'; c.textContent = ' (' + n.toLocaleString('en') + ')'; b.appendChild(c); box.appendChild(b);
+    };
+    add('', 'all sources', Object.keys(srcOf).length);
+    D.sources.forEach(function (s) { var n = Array.from(set[s.id] || '').length; if (n) add(s.id, s.label, n); });
   }
-  function drawGrid() {
-    var set = D.sets[font.set], list = chars(set, source), pages = Math.max(1, Math.ceil(list.length / PAGE));
-    if (page >= pages) page = pages - 1;
-    var from = page * PAGE, part = list.slice(from, from + PAGE), g = $('grid');
-    var lab = D.sources.filter(function (s) { return s.id === source; })[0];
-    $('note').textContent = (lab ? lab.label : source) + ' · ' + list.length.toLocaleString('en') + ' characters';
-    var h = '<thead><tr><th class="rh"></th>';
-    for (var c = 0; c < COLS; c++) h += '<th>' + c + '</th>';
-    h += '</tr></thead><tbody>';
-    var cells = [];
-    for (var i = 0; i < part.length; i += COLS) {
-      var rowNo = Math.floor((from + i) / COLS);
-      cells.push('<tr><th class="rh">' + rowNo + 'x</th>');
-      for (var j = 0; j < COLS; j++) {
-        var ch = part[i + j];
-        if (ch === undefined) cells.push('<td class="e"></td>');
-        else cells.push('<td data-c="' + ch + '" title="U+' + ch.codePointAt(0).toString(16).toUpperCase() + ' · ' + glyphName(set, source, ch) + '">' + ch + '</td>');
-      }
-      cells.push('</tr>');
+  function drawRadicals() {
+    var box = $('rad'); box.textContent = '';
+    for (var n = 0; n <= 214; n++) {
+      var cnt = radChars(n).filter(inScope).length;
+      var b = document.createElement('button'); b.type = 'button'; b.dataset.rad = n;
+      b.className = (n === rad ? 'active ' : '') + (cnt ? '' : 'zero');
+      b.title = n ? 'Kangxi radical ' + n : 'no radical';
+      b.innerHTML = '<span class="g">' + (n ? String.fromCodePoint(0x2F00 + n - 1) : '?') + '</span><span class="c">' + cnt + '</span>';
+      box.appendChild(b);
     }
-    g.innerHTML = h + cells.join('') + '</tbody>';
-    g.style.fontFamily = '"' + font.css + '", serif';
+    box.style.fontFamily = '"' + font.css + '", serif';
+  }
+  function drawTiles() {
+    var set = D.sets[font.set], list = radChars(rad).filter(inScope), pages = Math.max(1, Math.ceil(list.length / PAGE));
+    if (page >= pages) page = pages - 1;
+    var part = list.slice(page * PAGE, (page + 1) * PAGE), h = [];
+    part.forEach(function (ch) {
+      var src = srcOf[ch], name = glyphName(set, src, ch);
+      h.push('<div class="co-tile" data-c="' + ch + '" title="U+' + hex(ch).toUpperCase() + '"><span class="g">' + ch + '</span><span class="s">' + src + '</span><span class="n">' + name + '</span></div>');
+    });
+    var tl = $('tiles'); tl.innerHTML = h.join(''); tl.style.fontFamily = '"' + font.css + '", serif';
+    $('note').textContent = (rad ? 'Radical ' + rad + ' ' + String.fromCodePoint(0x2F00 + rad - 1) : 'Without radical') + ' · ' + list.length.toLocaleString('en') + ' characters' + (source ? ' · ' + source : '');
     var p = $('pager'); p.textContent = '';
     if (pages > 1) {
-      var mk = function (txt, to, dis) {
-        var b = document.createElement('button'); b.type = 'button'; b.className = 'btn btn-quiet btn-pill btn-sm'; b.textContent = txt; b.disabled = dis; b.dataset.page = to; p.appendChild(b);
-      };
+      var mk = function (txt, to, dis) { var b = document.createElement('button'); b.type = 'button'; b.className = 'btn btn-quiet btn-pill btn-sm'; b.textContent = txt; b.disabled = dis; b.dataset.page = to; p.appendChild(b); };
       mk('‹', page - 1, page === 0);
-      var s = document.createElement('select'); s.className = 'form-select form-select-sm'; s.style.width = 'auto'; s.id = 'pagesel';
-      for (var k = 0; k < pages; k++) {
-        var o = document.createElement('option'); o.value = k; o.selected = k === page;
-        o.textContent = (k * PAGE / COLS) + 'x … ' + (Math.ceil(Math.min(list.length, (k + 1) * PAGE) / COLS) - 1) + 'x';
-        s.appendChild(o);
-      }
-      p.appendChild(s);
+      var t = document.createElement('span'); t.textContent = (page + 1) + ' / ' + pages; p.appendChild(t);
       mk('›', page + 1, page === pages - 1);
     }
     hash();
   }
-  function setSource(s) { source = s; page = 0; drawSources(); drawGrid(); }
-  function setFont(id, keepSource) {
-    font = D.fonts.filter(function (f) { return f.id === id; })[0] || D.fonts[0];
-    $('font').value = font.id;
-    $('info').textContent = 'GlyphWiki dump ' + D.dump.date;
-    var set = D.sets[font.set];
-    if (!keepSource || !chars(set, source).length) source = D.sources.filter(function (s) { return chars(set, s.id).length; })[0].id;
-    page = keepSource ? page : 0;
-    drawSources(); drawGrid();
-  }
+  function drawAll() { maps(); drawSources(); drawRadicals(); drawTiles(); }
+  function setFont(id) { font = D.fonts.filter(function (f) { return f.id === id; })[0] || D.fonts[0]; $('font').value = font.id; $('info').textContent = 'GlyphWiki dump ' + D.dump.date; drawAll(); }
 
-  $('src').addEventListener('click', function (e) {
-    var b = e.target.closest('button[data-src]'); if (b) setSource(b.dataset.src);
-  });
-  $('pager').addEventListener('click', function (e) {
-    var b = e.target.closest('button[data-page]'); if (b && !b.disabled) { page = +b.dataset.page; drawGrid(); scrollTo(0, 0); }
-  });
-  $('pager').addEventListener('change', function (e) {
-    if (e.target.id === 'pagesel') { page = +e.target.value; drawGrid(); }
-  });
-  $('font').addEventListener('change', function () { setFont(this.value, true); });
-  $('grid').addEventListener('click', function (e) {
-    var td = e.target.closest('td[data-c]'); if (!td) return;
-    window.open('https://glyphwiki.org/wiki/' + encodeURIComponent(glyphName(D.sets[font.set], source, td.dataset.c)), '_blank', 'noopener');
+  $('src').addEventListener('click', function (e) { var b = e.target.closest('button[data-src]'); if (b) { source = b.dataset.src; page = 0; drawSources(); drawRadicals(); drawTiles(); } });
+  $('rad').addEventListener('click', function (e) { var b = e.target.closest('button[data-rad]'); if (b) { rad = +b.dataset.rad; page = 0; drawRadicals(); drawTiles(); } });
+  $('pager').addEventListener('click', function (e) { var b = e.target.closest('button[data-page]'); if (b && !b.disabled) { page = +b.dataset.page; drawTiles(); $('tiles').scrollIntoView(); } });
+  $('font').addEventListener('change', function () { setFont(this.value); });
+  $('tiles').addEventListener('click', function (e) {
+    var t = e.target.closest('.co-tile'); if (!t) return;
+    var c = t.dataset.c;
+    window.open('https://glyphwiki.org/wiki/' + encodeURIComponent(glyphName(D.sets[font.set], srcOf[c], c)), '_blank', 'noopener');
   });
 
   fetch('data.json').then(function (r) { return r.json(); }).then(function (d) {
     D = d;
-    var sel = $('font');
-    D.fonts.forEach(function (f) { var o = document.createElement('option'); o.value = f.id; o.textContent = f.name; sel.appendChild(o); });
+    D.fonts.forEach(function (f) { var o = document.createElement('option'); o.value = f.id; o.textContent = f.name; $('font').appendChild(o); });
     var m = location.hash.slice(1).split('/');
-    font = D.fonts.filter(function (f) { return f.id === m[0]; })[0] || D.fonts[0];
-    source = m[1]; page = m[2] ? Math.max(0, +m[2] - 1) : 0;
-    var set = D.sets[font.set];
-    if (!source || !chars(set, source).length) { source = null; }
-    setFont(font.id, !!source);
+    rad = m[1] !== undefined && +m[1] >= 0 && +m[1] <= 214 ? +m[1] : 9;
+    source = m[2] && m[2] !== 'all' ? m[2] : ''; page = m[3] ? Math.max(0, +m[3] - 1) : 0;
+    setFont(m[0]);
   });
 })();
 </script>
