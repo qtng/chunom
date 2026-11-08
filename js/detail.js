@@ -502,6 +502,18 @@ class ChunomDetail {
     return codes.slice(1);
   }
 
+  // The reading of a dictionary entry: the readings chosen for the whole site (Readings of navigation.js: PA, QATT, Quốc Ngữ, any of them, or none);
+  // only the entries of the list, not the head of the popup with the readings of the character itself. Drawn again when the choice changes.
+  reading(qn) {
+    const span = el('span', { className: 'text-secondary fw-bold fs-5 entry-reading', lang: 'vi', 'data-qn': qn });
+    if (window.Readings) Readings.fill(span, qn); else span.textContent = qn;
+    if (!this.readingsHooked && window.Readings) {
+      this.readingsHooked = true;
+      document.addEventListener('readingschange', () => this.modalBody?.querySelectorAll('.entry-reading').forEach(e => Readings.fill(e, e.dataset.qn)));
+    }
+    return span;
+  }
+
   // Nôm-Zeichen als Bild aus chunom-assets (Schrift als Ersatz), einzeln anklickbar
 
   nomChars(text, size) {
@@ -647,7 +659,7 @@ class ChunomDetail {
           el('div', { className: 'd-flex align-items-center justify-content-between mb-1' },
             el('div', { className: 'd-flex align-items-center flex-wrap' },
               el('span', { className: 'fs-3 me-2' }, this.nomChars(r[1])),
-              el('span', { className: 'text-secondary fw-bold fs-5 qn-text', lang: 'vi', textContent: r[0] }))),
+              this.reading(r[0]))),
           el('div', { className: 'd-flex justify-content-between align-items-center w-100' },
             el('div', { className: 'text-secondary small text-truncate flex-grow-1', textContent: r[2] || 'No description' }),
             r[5] && el('span', { className: 'badge badge-rank ms-2', textContent: `#${r[5]}` })));
