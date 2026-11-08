@@ -45,6 +45,11 @@
     @media (max-width: 520px) { .build { grid-template-columns: 1fr; text-align: center; } }
     .build .cell { display: flex; flex-direction: column; align-items: center; }
     .build .big { font-size: 7.5rem; line-height: 1; min-height: 8.3rem; display: flex; align-items: center; }
+    .build .big.wide { font-size: 4.6rem; }   /* two cells side by side */
+    .build .word { opacity: 0; transition: opacity .4s; }
+    .build .word.shown { opacity: 1; }   /* the word under the cell once it is complete */
+    .k.st { color: var(--cinnabar); }
+    .build li.last { border-top: 1px solid color-mix(in srgb, currentColor 12%, transparent); padding-top: .55rem; margin-top: .15rem; }
     .build .big.pop { animation: pop .45s cubic-bezier(.34, 1.56, .64, 1) both; }
     .build .word { font-family: Georgia, serif; font-size: 1.3rem; margin-top: .3rem; }
     .build .word .han { font-size: 1.5rem; margin-right: .4rem; }
@@ -135,16 +140,12 @@
 
     <section id="syllable">
       <h2><span class="no">2</span><span data-vi="Một âm tiết">A syllable</span></h2>
-      <p class="lead-text"><span data-vi="Xem một âm tiết được ghép từng phần. Phần trên là phụ âm đầu và nguyên âm, phần dưới là âm cuối và thanh.">Watch a syllable being put together. The top holds the initial and the vowel, the bottom the final and the tone.</span></p>
+      <p class="lead-text"><span data-vi="Xem một âm tiết được ghép từng phần: trước hết các phần đứng cạnh nhau, cuối cùng xếp chồng thành một ô vuông như chữ Nôm, phụ âm đầu và nguyên âm ở trên, âm cuối và thanh ở dưới.">Watch a syllable being put together: first the parts side by side, at the end stacked into one square like a Nôm character, the initial and the vowel on top, the final and the tone below.</span></p>
       <div class="card-box build">
         <div class="cell"><div class="pa big" id="buildCell"></div><div class="word" id="buildWord"></div></div>
         <ol id="buildSteps"></ol>
       </div>
       <div class="chooser" id="buildWords" role="group" aria-label="Example"></div>
-      <div class="chooser" role="group" aria-label="Layout">
-        <button type="button" class="btn btn-quiet btn-pill active" data-stack="1"><span data-vi="Xếp chồng">Stacked</span></button>
-        <button type="button" class="btn btn-quiet btn-pill" data-stack="0"><span data-vi="Cạnh nhau">Side by side</span></button>
-      </div>
       <ul class="rules">
         <li><span data-vi="Một âm, một chữ: c, k, q đều là 工; g, gh là 几; ng, ngh là 乂.">One sound, one sign: c, k, q are all 工; g, gh are 几; ng, ngh are 乂.</span></li>
         <li><span data-vi="Âm tiết không có phụ âm đầu (ăn, em) bắt đầu bằng 𠂎, nửa trái của chữ Nôm 𧘇 ấy.">A syllable without an initial (ăn, em) starts with 𠂎, the left half of the Nôm 𧘇 ấy.</span></li>
@@ -279,9 +280,9 @@
   // 2. a syllable is built part by part
   const EXAMPLES = [['𩵜', 'cá'], ['各', 'các'], ['版', 'bản'], ['𡗉', 'nhiều'], ['船', 'thuyền']];
   const TONE_NAMES = ['sắc', 'huyền', 'hỏi', 'ngã', 'nặng', 'ngang'];
-  let stacked = true, example = EXAMPLES.length - 1, stage = 0, buildTimer = null;
-  const partsOf = w => {   // the stages of a word: the cell so far, and the part added
-    const cps = Array.from(pa(w, stacked), c => c.codePointAt(0));
+  let example = EXAMPLES.length - 1, stage = 0, buildTimer = null, heard = false;   // heard: the visitor has clicked, so the last step may be read aloud
+  const partsOf = (w, han) => {   // the stages of a word: the parts side by side, one after the other, then the whole syllable stacked
+    const cps = Array.from(pa(w, false), c => c.codePointAt(0));
     const out = [], A = cps[0], N = cps[2];
     const on = ONSETS[A - A0], nu = NUCLEI[N - N0];
     out.push({ text: chr(A), k: ['on', 'Initial', 'Phụ âm đầu'], g: chr(A), v: on[0], han: on[1] + ' ' + on[2] });
@@ -293,20 +294,25 @@
       if (c >= C0 && c < T0) { const co = CODAS[c - C0]; out.push({ text: chr(...sofar), k: ['co', 'Final', 'Âm cuối'], g: chr(c), v: co[0], han: co[1] }); }
       else out.push({ text: chr(...sofar), k: ['to', 'Tone', 'Thanh'], g: chr(c), v: TONE_NAMES[c - T0] });
     }
+    out.forEach(p => { p.wide = Array.from(p.text).some(ch => ch.codePointAt(0) >= C0 && ch.codePointAt(0) < T0); });   // the stem and the final: two cells side by side
+    out.push({ text: pa(w), k: ['st', 'Stacked', 'Xếp chồng'], g: pa(w), v: w, han, last: true });
     return out;
   };
   const drawBuild = () => {
-    const [han, w] = EXAMPLES[example], parts = partsOf(w);
+    const [han, w] = EXAMPLES[example], parts = partsOf(w, han);
     const word = $('buildWord'); word.replaceChildren(hanSpan(han), document.createTextNode(w));
     $('buildSteps').replaceChildren(...parts.map((p, i) => {
-      const li = el('li', i <= stage ? 'on' + (i === stage ? ' now' : '') : '');
+      const li = el('li', (i <= stage ? 'on' + (i === stage ? ' now' : '') : '') + (p.last ? ' last' : ''));
       const k = vi(el('span', 'k ' + p.k[0], p.k[1]), p.k[2]);
       const v = el('span', 'v', p.v); if (p.han) v.append(hanSpan(p.han));
       li.append(el('span', 'pa g', p.g), k, v);
       return li;
     }));
-    const cell = $('buildCell'); cell.textContent = parts[Math.min(stage, parts.length - 1)].text;
+    const now = parts[Math.min(stage, parts.length - 1)], cell = $('buildCell');
+    cell.textContent = now.text; cell.classList.toggle('wide', !!now.wide);
     cell.classList.remove('pop'); void cell.offsetWidth; cell.classList.add('pop');
+    $('buildWord').classList.toggle('shown', !!now.last);
+    if (now.last && heard) say(w);
     return parts.length;
   };
   const runBuild = () => {
@@ -316,15 +322,10 @@
   };
   EXAMPLES.forEach(([h, w], i) => {
     const b = el('button', 'btn btn-quiet btn-pill', w); b.type = 'button'; b.lang = 'vi';
-    b.addEventListener('click', () => { example = i; stage = 0; runBuild(); say(w); });
+    b.addEventListener('click', () => { example = i; stage = 0; heard = true; runBuild(); });
     $('buildWords').append(b);
   });
   const markWord = () => [...$('buildWords').children].forEach((b, i) => b.classList.toggle('active', i === example));
-  document.querySelectorAll('[data-stack]').forEach(b => b.addEventListener('click', () => {
-    stacked = b.dataset.stack === '1';
-    document.querySelectorAll('[data-stack]').forEach(x => x.classList.toggle('active', x === b));
-    stage = 0; runBuild(); drawTry();
-  }));
   new MutationObserver(markWord).observe($('buildWord'), { childList: true });
   runBuild();
 
@@ -352,7 +353,7 @@
   // 7. try it: Quốc Ngữ to PA as it is typed, the parts of the last word below
   const drawTry = () => {
     const text = $('tryInput').value;
-    $('tryOut').textContent = PaText.convert(text, parser, { stacked });
+    $('tryOut').textContent = PaText.convert(text, parser, { stacked: true });
     const words = text.match(/[\p{L}\p{M}]+/gu) || [], last = words[words.length - 1];
     const p = last && parser.parse(last), split = $('trySplit');
     split.replaceChildren();
