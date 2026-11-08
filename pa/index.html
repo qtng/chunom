@@ -104,6 +104,7 @@
     .verse .w.open .qn { visibility: visible; opacity: 1; transform: none; }
     .verse .play { flex: none; }
     @media (max-width: 420px) { .verse .w .pa { font-size: 1.6rem; } .verse .w { padding: .1rem 0; } .verse .words { gap: .2rem .35rem; } .verse { padding: .6rem .5rem; gap: .3rem; } .verse .w .nom, .verse .w .qn { font-size: .75rem; } }   /* a line of eight words in one row on a phone */
+    .why { padding: .8rem 1rem; border-left: 3px solid var(--cinnabar); background: color-mix(in srgb, var(--cinnabar) 5%, transparent); }
     .desk { font-size: .9rem; color: var(--bs-secondary-color); }
     .next { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; margin: 1.2rem 0 0; }
   </style>
@@ -111,7 +112,7 @@
 <body>
 <header class="hero pt-5 pb-4">
   <div class="container text-center">
-    <div class="kicker mb-2"><span data-vi="Phiên âm tự">Phonetic annotation</span></div>
+    <div class="kicker mb-2">Phiên âm tự · PA</div>
     <h1 class="mb-3" data-vi="Học chữ PA trong một giờ">PA in one hour</h1>
     <p class="lead mx-auto mb-0"><span data-vi="Một lối viết ghi âm tiếng Việt, ghép từ những chữ Hán Nôm mà bạn đã biết.">A phonetic script for Vietnamese, built from Hán Nôm characters you already know.</span></p>
     <div class="sample" id="sample" aria-label="Trăm năm trong cõi người ta"></div>
@@ -131,6 +132,7 @@
         <div class="card-box"><div class="k co" data-vi="Âm cuối">Final</div><p><span data-vi="Cũng là chữ Hán, bên dưới">A Hán character too, below</span></p></div>
         <div class="card-box"><div class="k to" data-vi="Thanh điệu">Tone</div><p><span data-vi="Một dấu nhỏ, ở dưới cùng">A small mark, at the bottom</span></p></div>
       </div>
+          <p class="why mt-3"><span data-vi="Phiên âm tự (PA) được tạo ra để giúp học chữ Nôm. Nó chỉ dùng những gì người học Hán Nôm vốn phải học. Và nó để cách đọc đứng sang một bên: chữ Quốc Ngữ và IPA quá quen thuộc, mắt đọc chúng ngay lập tức, và cùng với âm thường là cả nghĩa, trước khi kịp nhìn vào chữ Nôm. PA thì chỉ được đọc khi bạn muốn: một gợi ý mà bạn có thể không nhìn tới.">Phiên âm tự (PA, phonetic annotation) was made to help with learning Nôm. It uses only what a learner of Hán Nôm learns anyway. And it keeps the pronunciation out of the way: Quốc Ngữ and IPA are so familiar that the eye reads them at once, and with the sound often the meaning, before one has looked at the character. PA is read only when you want to: a hint you can choose not to look at.</span></p>
     </section>
 
     <section id="syllable">
