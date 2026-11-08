@@ -40,7 +40,9 @@ main { max-width: 56rem; }
 .read ruby { ruby-position: over; margin-right: .08em; }
 .read rt, .work rt { font-family: var(--bs-body-font-family); font-size: .42em; line-height: 1.1; font-weight: 400; color: var(--muted); user-select: none; letter-spacing: 0; }
 .read[data-ruby="off"] rt { display: none; }
-.read[data-ruby="pa"] rt { font-family: "PA Pen", "PA", var(--bs-body-font-family); font-size: .5em; line-height: 1.15; color: var(--muted); }   /* Phiên âm tự: the PA font follows nothing, it is always PA Pen */
+.read rt .r-pa { font-family: "PA Pen", "PA", var(--bs-body-font-family); font-size: 1.2em; }   /* Phiên âm tự: always PA Pen */
+.read rt .r-qatt { font-family: "QATT Pen", var(--bs-body-font-family); font-size: 1.2em; }
+.read rt span + span { margin-left: .3em; }   /* PA, QATT, Quốc Ngữ in one line */
 .reading-mode { display: inline-flex; align-items: center; gap: .15rem; }
 .reading-mode .lbl { margin-right: .35rem; white-space: nowrap; }
 .reading-mode button { padding: .05rem .55rem; border: 1px solid var(--line); background: transparent; color: inherit; font-size: .85rem; line-height: 1.5; border-radius: 1rem; white-space: nowrap; }
