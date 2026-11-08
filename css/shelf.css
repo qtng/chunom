@@ -43,6 +43,15 @@ main { max-width: 56rem; }
 .read rt .r-pa { font-family: "PA Pen", "PA", var(--bs-body-font-family); font-size: 1.2em; }   /* Phiên âm tự: always PA Pen */
 .read rt .r-qatt { font-family: "QATT Pen", var(--bs-body-font-family); font-size: 1.2em; }
 .read rt span + span { margin-left: .3em; }   /* PA, QATT, Quốc Ngữ in one line */
+/* in the dark bars of the site (Nav.tools): no box, light colours */
+.shelf-tools.nav-tools { position: static; margin: 0; padding: 0; background: none; border: 0; border-radius: 0; gap: .5rem 1.2rem; }
+.nav-tools .reading-mode button { border-color: rgba(255, 255, 255, .3); color: rgba(255, 255, 255, .8); }
+.nav-tools .reading-mode button:hover { color: #fff; border-color: rgba(255, 255, 255, .6); }
+.nav-tools .reading-mode button.active { color: #fff; }
+.nav-tools .reading-mode .what { color: rgba(255, 255, 255, .6); border-color: rgba(255, 255, 255, .3); }
+.nav-tools .form-check-input:not(:checked) { background-color: transparent; border-color: rgba(255, 255, 255, .4); --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba(255,255,255,.6)'/%3e%3c/svg%3e"); }
+.nav-tools-side .shelf-tools .reading-mode { flex-wrap: wrap; row-gap: .35rem; }
+.nav-tools-side .shelf-tools .reading-mode .lbl { flex: 0 0 100%; }
 .reading-mode { display: inline-flex; align-items: center; gap: .15rem; }
 .reading-mode .lbl { margin-right: .35rem; white-space: nowrap; }
 .reading-mode button { padding: .05rem .55rem; border: 1px solid var(--line); background: transparent; color: inherit; font-size: .85rem; line-height: 1.5; border-radius: 1rem; white-space: nowrap; }
