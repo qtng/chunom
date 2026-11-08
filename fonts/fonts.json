@@ -81,6 +81,32 @@
           "mb": 36.6
         }
       ]
+    },
+    {
+      "id": "gothic",
+      "name": "QATT Gothic",
+      "family": "Qatt.org-Gothic",
+      "styles": [
+        {
+          "name": "Regular",
+          "css": "QATT Gothic",
+          "file": "gothic",
+          "mb": 15.4
+        }
+      ]
+    },
+    {
+      "id": "gothic-rounded",
+      "name": "QATT Gothic Rounded",
+      "family": "Qatt.org-Gothic Rounded",
+      "styles": [
+        {
+          "name": "Regular",
+          "css": "QATT Gothic Rounded",
+          "file": "qatt-gothic-rounded",
+          "mb": 36.0
+        }
+      ]
     }
   ],
   "external": [
