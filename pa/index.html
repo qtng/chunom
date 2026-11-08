@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PA script: learn it in an hour</title>
-  <meta name="description" content="PA (Phiên âm tự), a phonetic script for Vietnamese built from Hán Nôm characters: the idea, the building blocks in charts, a field to try it and a quiz.">
+  <meta name="description" content="PA (Phiên âm tự), a phonetic script for Vietnamese built from Hán Nôm characters: the idea, the building blocks in charts, a field to try it and a first reading.">
   <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://qatt.org/css/site.css">
   <link rel="stylesheet" href="https://qatt.org/css/learn.css">
@@ -92,7 +92,18 @@
     .chart-wrap td { font-family: var(--pa), serif; font-size: 1.7rem; line-height: 1.1; }
     .chart-wrap th .pa { font-size: 1.3rem; display: block; color: var(--ink); }
 
-    .quiz .ask.pa { font-family: var(--pa), serif; }
+    /* reading: four lines of Truyện Kiều, a word shows its reading when tapped */
+    .verses { display: grid; gap: .7rem; }
+    .verse { display: flex; align-items: center; gap: .6rem; padding: .8rem .9rem; color: var(--ink); }
+    .verse .words { flex: 1; display: flex; flex-wrap: wrap; gap: .2rem .5rem; }
+    .verse .w { display: flex; flex-direction: column; align-items: center; padding: .1rem .2rem; border: 0; border-radius: .6rem; background: none; color: inherit; cursor: pointer; transition: background-color .2s; }
+    .verse .w:hover { background: color-mix(in srgb, var(--cinnabar) 8%, transparent); }
+    .verse .w .nom { font-family: var(--font-cjk), serif; font-size: .95rem; line-height: 1.2; color: var(--bs-secondary-color); }
+    .verse .w .pa { font-size: 2.5rem; }
+    .verse .w .qn { font-family: Georgia, serif; font-size: .95rem; line-height: 1.3; color: var(--cinnabar); visibility: hidden; opacity: 0; transform: translateY(-.3rem); transition: opacity .3s, transform .3s; }
+    .verse .w.open .qn { visibility: visible; opacity: 1; transform: none; }
+    .verse .play { flex: none; }
+    @media (max-width: 420px) { .verse .w .pa { font-size: 1.6rem; } .verse .w { padding: .1rem 0; } .verse .words { gap: .2rem .35rem; } .verse { padding: .6rem .5rem; gap: .3rem; } .verse .w .nom, .verse .w .qn { font-size: .75rem; } }   /* a line of eight words in one row on a phone */
     .next { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; margin: 1.2rem 0 0; }
   </style>
 </head>
@@ -179,10 +190,10 @@
       </div>
     </section>
 
-    <section id="quiz">
-      <h2><span class="no">8</span><span data-vi="Câu đố">Quiz</span></h2>
-      <p class="lead-text"><span data-vi="Từ này là gì?">Which word is this?</span></p>
-      <div class="card-box quiz" id="quizBox"></div>
+    <section id="read">
+      <h2><span class="no">8</span><span data-vi="Đọc">Read</span></h2>
+      <p class="lead-text"><span data-vi="Bốn câu đầu của Truyện Kiều. Hãy tự đọc từng chữ, rồi nhấn vào để kiểm tra; nút loa đọc cả câu.">The first four lines of Truyện Kiều. Read each word yourself, then tap it to check; the speaker reads the whole line.</span></p>
+      <div class="verses" id="verses"></div>
     </section>
 
     <section id="chart">
@@ -244,7 +255,7 @@
 
   // the sticky bar of the sections, with the one in view marked
   const SECTIONS = [['idea', 'Idea', 'Ý tưởng'], ['syllable', 'Syllable', 'Âm tiết'], ['onsets', 'Initials', 'Phụ âm đầu'], ['vowels', 'Vowels', 'Nguyên âm'],
-    ['codas', 'Finals', 'Âm cuối'], ['tones', 'Tones', 'Thanh điệu'], ['try', 'Try it', 'Thử viết'], ['quiz', 'Quiz', 'Câu đố'], ['chart', 'Chart', 'Bảng']];
+    ['codas', 'Finals', 'Âm cuối'], ['tones', 'Tones', 'Thanh điệu'], ['try', 'Try it', 'Thử viết'], ['read', 'Read', 'Đọc'], ['chart', 'Chart', 'Bảng']];
   const ol = el('ol', 'steps');
   const items = SECTIONS.map(([id, en, v], i) => {
     const li = el('li'), a = el('a', 'step-nav'); a.href = '#' + id;
@@ -352,43 +363,28 @@
   $('tryInput').addEventListener('input', drawTry);
   drawTry();
 
-  // 8. quiz: six words, four answers each
-  const POOL = ['ba', 'cá', 'các', 'bản', 'nhiều', 'thuyền', 'nhà', 'nước', 'cơm', 'trời', 'mưa', 'sông', 'núi', 'hoa', 'trăng', 'người', 'sách', 'học',
-    'tiếng', 'việt', 'xuân', 'khỏe', 'chuyện', 'anh', 'em', 'mẹ', 'đẹp', 'tốt', 'uống', 'quê', 'gió', 'rồi']
-    .filter(w => pa(w) && PaText.read(pa(w), parser) === w);
-  const shuffle = list => list.map(x => [Math.random(), x]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
-  let quiz;
-  const newQuiz = () => { quiz = { items: shuffle(POOL).slice(0, 6), at: 0, marks: [] }; ask(); };
-  const ask = () => {
-    const box = $('quizBox'), { items, at, marks } = quiz;
-    const dots = el('div', 'dots');
-    items.forEach((_, i) => dots.append(el('span', i === at ? 'now' : marks[i] === true ? 'ok' : marks[i] === false ? 'no' : '')));
-    if (at >= items.length) {
-      const right = marks.filter(Boolean).length;
-      const again = el('button', 'btn btn-cinnabar btn-pill'); again.type = 'button';
-      again.append(el('i', 'bi bi-arrow-repeat'), document.createTextNode(' '), vi(el('span', '', 'Again'), 'Làm lại'));
-      again.addEventListener('click', newQuiz);
-      const text = right >= 5 ? vi(el('div', 'result-text', 'Well done: you can read PA.'), 'Giỏi lắm: bạn đã đọc được chữ PA.')
-        : vi(el('div', 'result-text', 'Look at the charts once more and try again.'), 'Xem lại các bảng rồi thử lại nhé.');
-      return box.replaceChildren(dots, el('div', 'result', `${right} / ${items.length}`), text, again);
-    }
-    const w = items[at];
-    const options = shuffle([w, ...shuffle(POOL.filter(x => x !== w)).slice(0, 3)]);
-    const count = el('div', 'count'); count.append(vi(el('span', '', 'Question'), 'Câu hỏi'), document.createTextNode(` ${at + 1} / ${items.length}`));
-    const grid = el('div', 'options');
-    const buttons = options.map(o => {
-      const b = el('button', 'btn btn-quiet btn-pill', o); b.type = 'button'; b.lang = 'vi';
-      b.addEventListener('click', () => {
-        buttons.forEach(x => { x.disabled = true; if (x.textContent === w) x.classList.add('right'); });
-        if (o !== w) b.classList.add('wrong');
-        quiz.marks[at] = o === w; say(w);
-        setTimeout(() => { quiz.at++; ask(); }, o === w ? 1300 : 2200);
-      });
-      grid.append(b); return b;
+  // 8. reading: the first four lines of Truyện Kiều (the Nôm of the common editions); a word shows its reading when tapped, the speaker reads the line
+  const KIEU = [
+    [['𤾓', 'trăm'], ['𢆥', 'năm'], ['𥪞', 'trong'], ['𡎝', 'cõi'], ['𠊛', 'người'], ['些', 'ta']],
+    [['𡨸', 'chữ'], ['才', 'tài'], ['𡨸', 'chữ'], ['命', 'mệnh'], ['窖', 'khéo'], ['羅', 'là'], ['恄', 'ghét'], ['饒', 'nhau']],
+    [['𣦆', 'trải'], ['戈', 'qua'], ['𠬠', 'một'], ['局', 'cuộc'], ['𣷭', 'bể'], ['橷', 'dâu']],
+    [['仍', 'những'], ['調', 'điều'], ['𥉫', 'trông'], ['𧡊', 'thấy'], ['𦓡', 'mà'], ['忉', 'đau'], ['疸', 'đớn'], ['𢚸', 'lòng']],
+  ];
+  $('verses').append(...KIEU.map(line => {
+    const box = el('div', 'card-box verse'), words = el('div', 'words');
+    const ws = line.map(([nom, w]) => {
+      const b = el('button', 'w'); b.type = 'button'; b.lang = 'vi';
+      b.append(el('span', 'nom', nom), el('span', 'pa', pa(w)), el('span', 'qn', w));
+      b.addEventListener('click', () => { b.classList.add('open'); say(w); });
+      words.append(b); return b;
     });
-    box.replaceChildren(count, dots, el('div', 'ask pa', pa(w)), grid);
-  };
-  newQuiz();
+    const play = el('button', 'btn btn-quiet round play'); play.type = 'button';
+    play.setAttribute('aria-label', 'Read the line'); play.dataset.viAriaLabel = 'Đọc cả câu';
+    play.append(el('i', 'bi bi-volume-up-fill'));
+    play.addEventListener('click', () => { ws.forEach(b => b.classList.add('open')); say(line.map(([, w]) => w).join(' ')); });
+    box.append(words, play);
+    return box;
+  }));
 
   // 9. the whole chart of stems, drawn when it is opened
   $('chartBox').addEventListener('toggle', () => {
