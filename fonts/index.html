@@ -15,6 +15,8 @@
     .band { position: relative; overflow: hidden; padding: 2.2rem 0 2.4rem; }
     .band .inner { position: relative; max-width: 52rem; margin: 0 auto; padding: 0 1.25rem; }
     .band .top { display: flex; align-items: baseline; gap: .8rem; }
+    .band .more { display: flex; align-items: baseline; gap: 1.2rem; }
+    .band .upd { font: .7rem system-ui, sans-serif; letter-spacing: .03em; opacity: .35; }   /* the date of the last change in the line of "See and download" (fonts.js, version.json), for the owner */
     .band .no { font: 700 .85rem system-ui, sans-serif; letter-spacing: .1em; color: var(--b-accent); }
     .band .name { font-size: 1.7rem; }
     .band .wm { position: absolute; right: -1.5rem; top: .2rem; font-size: clamp(9rem, 30vw, 17rem); line-height: 1; opacity: .13; pointer-events: none; user-select: none; }
@@ -27,7 +29,7 @@
     .band, .band .name, .band .latin, .band .poem { color: var(--b-ink) !important; }
     /* on the phone the link stands on the right and the whole band is the link (its ::after covers the band; the band clips it) */
     @media (max-width: 767.98px) {
-      .band .more { text-align: right; }
+      .band .more { flex-direction: row-reverse; justify-content: space-between; }   /* the link on the right, the date on the left */
       .band .wm { right: .4rem; top: -1.4rem; font-size: 7.5rem; }   /* on the phone smaller, higher and the whole character on the screen */
       .band .more a::after { content: ""; position: absolute; top: -3rem; bottom: -3rem; left: -50vw; right: -50vw; }
     }
@@ -37,6 +39,8 @@
     .b-migoi  { --b-bg: #e8f0e4; --b-ink: #24332a; --b-accent: #5d8a5a; }
     .b-cell   { --b-bg: #f6e9e4; --b-ink: #2a1a17; --b-accent: #b5473a; }
     .b-phong  { --b-bg: #eef0f3; --b-ink: #23262b; --b-accent: #4b6b9a; }
+    .b-goth   { --b-bg: #ecebe6; --b-ink: #1d1d1b; --b-accent: #6b6458; }
+    .b-round  { --b-bg: #f3ece0; --b-ink: #2b2620; --b-accent: #b07a2a; }
     .band { background: var(--b-bg); }
     .closing { max-width: 52rem; margin: 0 auto; padding: 2rem 1.25rem 3rem; }
     /* between the bands of the Pen and the others: the covers of Migoi and Celluloid, side by side in 21:9 (the middle of the picture: the names stay whole), with room around them */
@@ -124,6 +128,26 @@
     <div class="latin" style="font-family: 'PhongThao Latin', 'PhongThao'">Trăm năm trong cõi người ta,<br>chữ tài chữ mệnh khéo là ghét nhau.</div>
     <div class="desc">Pencil strokes, lightly tilted, with hooks</div>
     <div class="more"><a href="#phongthao"><span data-vi="Xem và tải về">See and download</span> <i class="bi bi-arrow-right" aria-hidden="true"></i></a></div>
+  </div></section>
+
+  <section class="band b-goth"><div class="inner">
+    <div class="wm" style="font-family: 'QATT Gothic ExtraLight'" aria-hidden="true">語</div>
+    <div class="top"><span class="no">07</span><span class="name" style="font-family: 'QATT Gothic ExtraLight Latin', 'QATT Gothic ExtraLight'">QATT Gothic ExtraLight</span></div>
+    <div class="poem" style="font-family: 'QATT Gothic ExtraLight'" lang="vi-Hani">𤾓𢆥𥪝𡎝𠊛些<br>𡨸才𡨸命窖𱺵恄憢</div>
+    <div class="qatt" style="font-family: 'QATT Gothic ExtraLight'">󰀜󰂚󰁂󰂢󰀀󰂚󰀾󰀿󰂚󰀽󰀿󰂚󰀡󰂡󰂌󰂚󰁧󰂣󰀸󰂚󰀉</div>
+    <div class="latin" style="font-family: 'QATT Gothic ExtraLight Latin', 'QATT Gothic ExtraLight'">Trăm năm trong cõi người ta,<br>chữ tài chữ mệnh khéo là ghét nhau.</div>
+    <div class="desc">Even strokes with square ends, as light as Noto Sans ExtraLight</div>
+    <div class="more"><a href="#gothic"><span data-vi="Xem và tải về">See and download</span> <i class="bi bi-arrow-right" aria-hidden="true"></i></a></div>
+  </div></section>
+
+  <section class="band b-round"><div class="inner">
+    <div class="wm" style="font-family: 'QATT Gothic Rounded ExtraLight'" aria-hidden="true">圓</div>
+    <div class="top"><span class="no">08</span><span class="name" style="font-family: 'QATT Gothic Rounded ExtraLight Latin', 'QATT Gothic Rounded ExtraLight'">QATT Gothic Rounded ExtraLight</span></div>
+    <div class="poem" style="font-family: 'QATT Gothic Rounded ExtraLight'" lang="vi-Hani">𤾓𢆥𥪝𡎝𠊛些<br>𡨸才𡨸命窖𱺵恄憢</div>
+    <div class="qatt" style="font-family: 'QATT Gothic Rounded ExtraLight'">󰀜󰂚󰁂󰂢󰀀󰂚󰀾󰀿󰂚󰀽󰀿󰂚󰀡󰂡󰂌󰂚󰁧󰂣󰀸󰂚󰀉</div>
+    <div class="latin" style="font-family: 'QATT Gothic Rounded ExtraLight Latin', 'QATT Gothic Rounded ExtraLight'">Trăm năm trong cõi người ta,<br>chữ tài chữ mệnh khéo là ghét nhau.</div>
+    <div class="desc">The Gothic ExtraLight with round ends and corners</div>
+    <div class="more"><a href="#gothic-rounded"><span data-vi="Xem và tải về">See and download</span> <i class="bi bi-arrow-right" aria-hidden="true"></i></a></div>
   </div></section>
 
   <div class="closing">

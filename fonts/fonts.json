@@ -81,6 +81,32 @@
           "mb": 36.6
         }
       ]
+    },
+    {
+      "id": "gothic",
+      "name": "QATT Gothic ExtraLight",
+      "family": "Qatt.org-Gothic",
+      "styles": [
+        {
+          "name": "ExtraLight",
+          "css": "QATT Gothic ExtraLight",
+          "file": "qatt-gothic-extralight",
+          "mb": 15.4
+        }
+      ]
+    },
+    {
+      "id": "gothic-rounded",
+      "name": "QATT Gothic Rounded ExtraLight",
+      "family": "Qatt.org-Gothic Rounded",
+      "styles": [
+        {
+          "name": "ExtraLight",
+          "css": "QATT Gothic Rounded ExtraLight",
+          "file": "qatt-gothic-rounded-extralight",
+          "mb": 36.0
+        }
+      ]
     }
   ],
   "external": [

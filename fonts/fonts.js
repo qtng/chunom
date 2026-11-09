@@ -30,7 +30,7 @@
     const no = el('div.fp-no'), wm = el('div.fp-wm', { 'aria-hidden': 'true' }), title = el('h2.fp-name#fp-name');
     const dl = el('div'), note = el('p.fp-note'), sizes = el('div.fp-lad'), qatt = el('div.fp-lad.fp-qatt');
     // for websites: the script qatt.org/cdn/v1/webfonts.js, Google-Fonts style: the font and the weights in its query
-    const WGHT = { Thin: 100, Light: 300, Regular: 400, Medium: 500 }, SRC = 'https://qatt.org/cdn/v1/webfonts.js';
+    const WGHT = { Thin: 100, ExtraLight: 200, Light: 300, Regular: 400, Medium: 500 }, SRC = 'https://qatt.org/cdn/v1/webfonts.js';
     const web = el('div.fp-web'), code = el('pre.fp-code'), codeCss = el('pre.fp-code');
     const copy = el('button.btn.btn-quiet.btn-pill.btn-sm', { type: 'button' }, el('i.bi.bi-clipboard'), ' ', { en: 'Copy', vi: 'Sao chép' });
     const sec = (h, ...kids) => el('section.fp-sec', {}, el('h3', {}, h), ...kids);
@@ -165,8 +165,21 @@
       el('ul', {}, data.external.map(x => el('li', {}, el('a', { href: x.url, target: '_blank', rel: 'noopener', text: x.name }), ' – ', { en: x.en, vi: x.vi }))));
   }
 
+  // the date of the last change of every band's font, small and muted at the bottom of the band (for the owner): fonts/version.json of the bucket ({ fonts: { <name of the TTF>: "YYYY-MM-DD HH:MM" (UTC) } }),
+  // the TTF of the band's font found by the family of its watermark (the css of a style in fonts.json)
+  function changed(data) {
+    fetch(data.assets + 'version.json?t=' + Date.now()).then(r => r.json()).then(v => {
+      for (const band of document.querySelectorAll('.band')) {
+        const css = ($('.wm', band) || {}).style?.fontFamily.replace(/["']/g, '').trim();
+        const style = data.fonts.flatMap(f => f.styles).find(s => s.css === css), at = style && (v.fonts || {})[style.file];
+        if (at && !$('.upd', band)) ($('.more', band) || $('.inner', band)).append(el('span.upd', { title: at + ' UTC' }, { en: 'updated ', vi: 'cập nhật ' }, at.slice(0, 10)));   // in the line of the link of the band
+      }
+    }).catch(() => {});   // without the list: no dates
+  }
+
   fetch(new URL('fonts.json', BASE)).then(r => r.json()).then(data => {
     $('#fonts').append(charset(data), licence(), otherFonts(data));
     popup(data);
+    changed(data);
   }).catch(e => { $('#fonts').append(el('p', { text: 'The font list could not be loaded.' })); console.error(e); });
 })();
