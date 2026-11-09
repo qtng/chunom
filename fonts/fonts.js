@@ -165,14 +165,14 @@
       el('ul', {}, data.external.map(x => el('li', {}, el('a', { href: x.url, target: '_blank', rel: 'noopener', text: x.name }), ' – ', { en: x.en, vi: x.vi }))));
   }
 
-  // the date of the last change of every band's font, small and muted (for the owner): fonts/version.json of the bucket ({ fonts: { <name of the TTF>: "YYYY-MM-DD HH:MM" (UTC) } }),
+  // the date of the last change of every band's font, small and muted at the bottom of the band (for the owner): fonts/version.json of the bucket ({ fonts: { <name of the TTF>: "YYYY-MM-DD HH:MM" (UTC) } }),
   // the TTF of the band's font found by the family of its watermark (the css of a style in fonts.json)
   function changed(data) {
     fetch(data.assets + 'version.json?t=' + Date.now()).then(r => r.json()).then(v => {
       for (const band of document.querySelectorAll('.band')) {
         const css = ($('.wm', band) || {}).style?.fontFamily.replace(/["']/g, '').trim();
         const style = data.fonts.flatMap(f => f.styles).find(s => s.css === css), at = style && (v.fonts || {})[style.file];
-        if (at && !$('.upd', band)) $('.top', band).append(el('span.upd', { title: at + ' UTC' }, { en: 'updated ', vi: 'cập nhật ' }, at.slice(0, 10)));
+        if (at && !$('.upd', band)) $('.inner', band).append(el('div.upd', { title: at + ' UTC' }, { en: 'updated ', vi: 'cập nhật ' }, at.slice(0, 10)));   // the last line of the band
       }
     }).catch(() => {});   // without the list: no dates
   }
