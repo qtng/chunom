@@ -172,7 +172,7 @@
       for (const band of document.querySelectorAll('.band')) {
         const css = ($('.wm', band) || {}).style?.fontFamily.replace(/["']/g, '').trim();
         const style = data.fonts.flatMap(f => f.styles).find(s => s.css === css), at = style && (v.fonts || {})[style.file];
-        if (at && !$('.upd', band)) $('.inner', band).append(el('div.upd', { title: at + ' UTC' }, { en: 'updated ', vi: 'cập nhật ' }, at.slice(0, 10)));   // the last line of the band
+        if (at && !$('.upd', band)) ($('.more', band) || $('.inner', band)).append(el('span.upd', { title: at + ' UTC' }, { en: 'updated ', vi: 'cập nhật ' }, at.slice(0, 10)));   // in the line of the link of the band
       }
     }).catch(() => {});   // without the list: no dates
   }

@@ -15,7 +15,8 @@
     .band { position: relative; overflow: hidden; padding: 2.2rem 0 2.4rem; }
     .band .inner { position: relative; max-width: 52rem; margin: 0 auto; padding: 0 1.25rem; }
     .band .top { display: flex; align-items: baseline; gap: .8rem; }
-    .band .upd { font: .7rem system-ui, sans-serif; letter-spacing: .03em; opacity: .35; margin-top: .9rem; }   /* the date of the last change at the very bottom of the band (fonts.js, version.json), for the owner */
+    .band .more { display: flex; align-items: baseline; gap: 1.2rem; }
+    .band .upd { font: .7rem system-ui, sans-serif; letter-spacing: .03em; opacity: .35; }   /* the date of the last change in the line of "See and download" (fonts.js, version.json), for the owner */
     .band .no { font: 700 .85rem system-ui, sans-serif; letter-spacing: .1em; color: var(--b-accent); }
     .band .name { font-size: 1.7rem; }
     .band .wm { position: absolute; right: -1.5rem; top: .2rem; font-size: clamp(9rem, 30vw, 17rem); line-height: 1; opacity: .13; pointer-events: none; user-select: none; }
@@ -28,7 +29,7 @@
     .band, .band .name, .band .latin, .band .poem { color: var(--b-ink) !important; }
     /* on the phone the link stands on the right and the whole band is the link (its ::after covers the band; the band clips it) */
     @media (max-width: 767.98px) {
-      .band .more { text-align: right; }
+      .band .more { flex-direction: row-reverse; justify-content: space-between; }   /* the link on the right, the date on the left */
       .band .wm { right: .4rem; top: -1.4rem; font-size: 7.5rem; }   /* on the phone smaller, higher and the whole character on the screen */
       .band .more a::after { content: ""; position: absolute; top: -3rem; bottom: -3rem; left: -50vw; right: -50vw; }
     }
