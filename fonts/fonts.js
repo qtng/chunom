@@ -30,7 +30,7 @@
     const no = el('div.fp-no'), wm = el('div.fp-wm', { 'aria-hidden': 'true' }), title = el('h2.fp-name#fp-name');
     const dl = el('div'), note = el('p.fp-note'), sizes = el('div.fp-lad'), qatt = el('div.fp-lad.fp-qatt');
     // for websites: the script qatt.org/cdn/v1/webfonts.js, Google-Fonts style: the font and the weights in its query
-    const WGHT = { Thin: 100, Light: 300, Regular: 400, Medium: 500 }, SRC = 'https://qatt.org/cdn/v1/webfonts.js';
+    const WGHT = { Thin: 100, ExtraLight: 200, Light: 300, Regular: 400, Medium: 500 }, SRC = 'https://qatt.org/cdn/v1/webfonts.js';
     const web = el('div.fp-web'), code = el('pre.fp-code'), codeCss = el('pre.fp-code');
     const copy = el('button.btn.btn-quiet.btn-pill.btn-sm', { type: 'button' }, el('i.bi.bi-clipboard'), ' ', { en: 'Copy', vi: 'Sao chép' });
     const sec = (h, ...kids) => el('section.fp-sec', {}, el('h3', {}, h), ...kids);

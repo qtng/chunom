@@ -84,26 +84,26 @@
     },
     {
       "id": "gothic",
-      "name": "QATT Gothic",
+      "name": "QATT Gothic ExtraLight",
       "family": "Qatt.org-Gothic",
       "styles": [
         {
-          "name": "Regular",
-          "css": "QATT Gothic",
-          "file": "gothic",
+          "name": "ExtraLight",
+          "css": "QATT Gothic ExtraLight",
+          "file": "qatt-gothic-extralight",
           "mb": 15.4
         }
       ]
     },
     {
       "id": "gothic-rounded",
-      "name": "QATT Gothic Rounded",
+      "name": "QATT Gothic Rounded ExtraLight",
       "family": "Qatt.org-Gothic Rounded",
       "styles": [
         {
-          "name": "Regular",
-          "css": "QATT Gothic Rounded",
-          "file": "qatt-gothic-rounded",
+          "name": "ExtraLight",
+          "css": "QATT Gothic Rounded ExtraLight",
+          "file": "qatt-gothic-rounded-extralight",
           "mb": 36.0
         }
       ]
