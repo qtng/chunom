@@ -32,6 +32,14 @@
     /* the steps as a sticky bar of section links */
     .toc-bar { position: sticky; top: 0; z-index: 5; padding: .5rem 0; background: color-mix(in srgb, var(--paper, var(--bs-body-bg)) 90%, transparent); backdrop-filter: blur(6px); }
     .toc-bar .steps { margin: 0; flex-wrap: wrap; }   /* nine sections: two rows on a phone rather than a page wider than the screen */
+    .toc-bar { display: flex; align-items: center; gap: .6rem; } .toc-bar .steps { flex: 1; }
+    /* the PA font (the fonts of PA_FONTS in js/fonts.js of qatt.org: only these have the PA characters): in the bar of the sections, on a phone fixed at the bottom left (the button "to the top" is on the right) */
+    .pa-font { flex: none; display: flex; align-items: center; gap: .35rem; margin: 0; font-size: .8rem; color: var(--bs-secondary-color); }
+    .pa-font select { width: auto; border-radius: 2rem; font-size: .85rem; padding-top: .2rem; padding-bottom: .2rem; }
+    @media (max-width: 767.98px) {
+      .pa-font { position: fixed; left: 1rem; bottom: calc(1rem + env(safe-area-inset-bottom)); z-index: 1020; padding: .3rem .35rem .3rem .7rem; border-radius: 2rem; background: var(--paper, var(--bs-body-bg)); box-shadow: 0 .2rem .7rem rgba(0, 0, 0, .3); }
+      body.has-bottom-bar:not(.bar-typing) .pa-font { bottom: calc(60px + 1rem + env(safe-area-inset-bottom)); }
+    }
 
     /* the idea: three parts */
     .parts { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: .7rem; margin-top: 1rem; }
@@ -268,6 +276,28 @@
     li.append(a); ol.append(li); return li;
   });
   $('toc').append(ol);
+
+  // the PA font: the families of PA_FONTS (js/fonts.js), the choice in localStorage.paFont, PA Pen by default; the plain PA behind it
+  (() => {
+    const fonts = (typeof PA_FONTS !== 'undefined' ? PA_FONTS : [{ family: 'PA Pen' }, { family: 'PA' }]).map(f => f.family);
+    let now = 'PA Pen'; try { now = localStorage.paFont || now; } catch (e) {}
+    if (!fonts.includes(now)) now = fonts.includes('PA Pen') ? 'PA Pen' : fonts[0];
+    const set = f => document.documentElement.style.setProperty('--pa', f === 'PA' ? '"PA"' : `"${f}", "PA"`);
+    const label = el('label', 'pa-font'), select = el('select', 'form-select form-select-sm');
+    label.append(vi(el('span', null, 'Font'), 'Phông chữ'), select);
+    select.setAttribute('aria-label', 'PA font'); select.dataset.viAriaLabel = 'Phông chữ PA';
+    for (const f of fonts) { const o = el('option', null, f === 'PA' ? 'PA (plain)' : f); o.value = f; if (f === 'PA') vi(o, 'PA (đơn giản)'); select.append(o); }
+    select.value = now; set(now);
+    select.addEventListener('change', () => { set(select.value); try { localStorage.paFont = select.value; } catch (e) {} });
+    // in the bar of the sections; on a phone in <body> (the backdrop-filter of the bar would make the bar the frame of position: fixed)
+    const phone = matchMedia('(max-width: 767.98px)'), place = () => (phone.matches ? document.body : $('toc')).append(label);
+    place(); phone.addEventListener('change', place);
+  })();
+  // the bar of the sections below the fixed menu bar (sticky at top 0 it went under it)
+  (() => {
+    const fit = () => { const h = document.querySelector('.nav-backdrop'); $('toc').style.top = (h ? h.getBoundingClientRect().height : 0) + 'px'; };
+    fit(); addEventListener('resize', fit); addEventListener('load', fit);
+  })();
   const mark = id => items.forEach((li, i) => li.classList.toggle('now', SECTIONS[i][0] === id));
   mark('idea');
   const seen = new Map();
