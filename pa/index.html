@@ -22,6 +22,13 @@
     .guide h2 .no { color: var(--cinnabar); font-size: 1.1rem; margin-right: .5rem; vertical-align: .3rem; }
     .guide .lead-text { color: var(--bs-secondary-color); }
 
+    /* the keyboard QATTKey (qatt.org): a picture of it with PA candidates, linked to its page */
+    .kb { display: grid; grid-template-columns: 17rem 1fr; gap: 1.2rem; align-items: center; padding: 1.2rem; color: var(--ink); }
+    .kb img { display: block; width: 100%; height: auto; border-radius: .7rem; }
+    .kb h3 { font-size: 1.15rem; margin: 0 0 .4rem; }
+    .kb p { margin: 0 0 .8rem; color: var(--bs-secondary-color); }
+    @media (max-width: 575.98px) { .kb { grid-template-columns: 1fr; } }
+
     /* the sample line of the hero: Nôm, PA, Quốc Ngữ */
     .sample { display: inline-grid; grid-template-columns: repeat(6, auto); gap: .1rem 1rem; margin-top: 1.2rem; justify-items: center; color: var(--ink); }
     .sample .nom { font-family: var(--font-cjk), serif; font-size: 2.2rem; line-height: 1.2; }
@@ -217,6 +224,17 @@
         <a class="btn btn-quiet btn-pill" href="/chunom/fonts/#pen"><i class="bi bi-download"></i> <span data-vi="Phông chữ">Fonts</span></a>
       </div>
       <p class="desk text-center mt-3"><span data-vi="Trên máy tính: các ký tự PA có trong phông chữ QATT Pen, tải về trong danh mục phông chữ.">On the desktop: the PA characters are in the font QATT Pen, to download from the font catalogue.</span></p>
+    </section>
+
+    <section id="keyboard">
+      <div class="card-box kb mt-5">
+        <a href="https://qatt.org/apps/keyboard.html" tabindex="-1" aria-hidden="true"><img src="https://qatt.org/apps/keyboard/keyboard-pa.jpg" width="800" height="207" loading="lazy" alt=""></a>
+        <div>
+          <h3 data-vi="PA trên điện thoại">PA on your phone</h3>
+          <p data-vi="QATTKey, bàn phím cho Android, viết PA, QATT và chữ Nôm trong mọi ứng dụng: gõ chữ Quốc Ngữ bằng Telex rồi chọn chữ PA trong các gợi ý.">QATTKey, a keyboard for Android, writes PA, QATT and Chữ Nôm in any app: type Quốc Ngữ with Telex and pick the PA character among the candidates.</p>
+          <a class="btn btn-cinnabar btn-pill" href="https://qatt.org/apps/keyboard.html"><i class="bi bi-phone"></i> <span data-vi="Tải bàn phím">Get the keyboard</span></a>
+        </div>
+      </div>
     </section>
   </div>
 </main>
