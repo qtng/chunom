@@ -574,8 +574,8 @@ class ChunomDetail {
       const pas = chars.map((ch, i) => NOM_CHAR.test(ch) ? Readings.text(syl[i], 'pa') : null);
       if (!pas.every((pa, i) => pa && pa !== syl[i])) return;
       span.style.fontFamily = 'var(--font-cjk, "QATT Pen"), serif';
-      span.style.fontSize = '40px';
-      span.style.lineHeight = '1.5';
+      span.style.fontSize = '60px';
+      span.style.lineHeight = '1.3';
       span.textContent = chars.map((ch, i) => ch + String.fromCodePoint(0xF00B0) + pas[i]).join('');
     }, () => {});
   }
