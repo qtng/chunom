@@ -28,6 +28,19 @@ function el(tag, attrs = {}, ...children) {
   return node;
 }
 
+// The stroke order (js/stroke-order.js) is loaded when a popup shows a single character: resolves to window.StrokeOrder, null when it cannot be loaded
+let strokeOrderScript = null;
+function loadStrokeOrder() {
+  if (window.StrokeOrder) return Promise.resolve(window.StrokeOrder);
+  strokeOrderScript ||= new Promise(resolve => {
+    const script = el('script', { src: new URL('stroke-order.js', BASE).href });
+    script.onload = () => resolve(window.StrokeOrder || null);
+    script.onerror = () => resolve(null);
+    document.head.append(script);
+  });
+  return strokeOrderScript;
+}
+
 const NOM_CHAR = /[一-鿿㐀-䶿\u{20000}-\u{323af}]/u;
 
 // The look of the popup: the colours come from the variables of the page (--ink, --cinnabar, … of qatt.org and its themes; the values after the comma are the
@@ -49,7 +62,13 @@ const STYLE = `
 #detailModal .list-group-item { background: transparent !important; border: 0 !important; border-bottom: 1px solid var(--dm-line) !important; border-radius: 0 !important; margin: 0 !important; color: var(--dm-ink); }
 #detailModal .list-group-item:last-child { border-bottom: 0 !important; }
 #detailModal .list-group-item-action:hover { background: color-mix(in srgb, var(--dm-paper) 60%, transparent) !important; }
-#detailModal .glyph-box { min-width: 120px; height: 160px; flex-shrink: 0; cursor: pointer; border-color: var(--dm-line) !important; }
+#detailModal .glyph-box { min-width: 120px; height: 160px; flex-shrink: 0; cursor: pointer; border-color: var(--dm-line) !important; position: relative; }
+#detailModal .so-play { position: absolute; right: .3rem; bottom: .3rem; width: 1.9rem; height: 1.9rem; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--dm-line); background: color-mix(in srgb, var(--dm-bg) 80%, transparent); color: var(--dm-muted); font-size: 1.15rem; line-height: 1; }
+#detailModal .so-play:hover { color: var(--dm-ink); }
+#detailModal .so-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; transition: opacity .5s; }
+#detailModal .so-overlay.so-out { opacity: 0; }
+#detailModal .so-overlay .so-svg { width: auto; height: 100%; aspect-ratio: 1; }
 #detailModal .badge-rank { font-weight: 400; border: 1px solid var(--dm-field); color: var(--dm-muted); font-size: .65rem; background: transparent; }
 #detailModal .clickable-meta { cursor: pointer; transition: opacity .2s; }
 #detailModal .clickable-meta:hover { opacity: 1 !important; text-decoration: underline; }
@@ -262,6 +281,7 @@ class ChunomDetail {
         this.showDetails(null, nomChar.dataset.char);
         return;
       }
+      if (e.target.closest('.so-play, .so-overlay')) return;   // the play button and the animation on the glyph are no clicks to copy it
       const copy = e.target.closest('[data-copy]');
       if (copy) this.copyText(copy.dataset.copy, copy);
     }, true);
@@ -543,6 +563,29 @@ class ChunomDetail {
     return img;
   }
 
+  // A play button on the big glyph (when there is a stroke order for it): the animation covers the glyph, after its end and 2 seconds it fades out and the glyph is back; a click on it starts it again.
+  async attachStrokeOrder(box, glyph, nom) {
+    const SO = await loadStrokeOrder();
+    const record = SO && await SO.load(nom);
+    if (!record || !box.isConnected) return;
+    const label = window.Lang ? Lang.t('Stroke order', 'Thứ tự nét') : 'Stroke order';
+    const button = el('button', { type: 'button', className: 'so-play', title: label, 'aria-label': label, 'data-vi-title': 'Thứ tự nét', 'data-vi-aria-label': 'Thứ tự nét' }, el('i', { className: 'bi bi-play-fill' }));
+    box.append(button);
+    button.addEventListener('click', event => {
+      event.stopPropagation();   // not a click to copy the glyph
+      const overlay = el('div', { className: 'so-overlay' });
+      box.append(overlay);
+      glyph.style.visibility = 'hidden';
+      button.hidden = true;
+      const done = () => {
+        overlay.classList.add('so-out');
+        setTimeout(() => { overlay.remove(); glyph.style.visibility = 'visible'; button.hidden = false; }, 500);
+      };
+      SO.play(overlay, record, { onEnd: done });
+      overlay.addEventListener('click', ev => ev.stopPropagation());
+    });
+  }
+
   async copyText(text, target) {
     try {
       await navigator.clipboard.writeText(text);
@@ -630,11 +673,13 @@ class ChunomDetail {
         hex && el('div', { className: 'small text-secondary font-monospace', textContent: `U+${hex}` })),
       img => Object.assign(img.style, { visibility: 'hidden', marginTop: '-32px', height: '160px' }));
     glyph.addEventListener('load', () => { glyph.style.visibility = 'visible'; });
+    const glyphBox = el('div', { className: 'd-flex align-items-center justify-content-center rounded border glyph-box px-2', title: 'Click to copy glyph', 'data-copy': mainNom }, glyph);
 
+    if (hex) this.attachStrokeOrder(glyphBox, glyph, mainNom);   // only for a single character, not for a compound
     this.modalBody.replaceChildren(
       el('div', { className: 'd-flex align-items-start gap-4 mb-4 p-2' },
         el('div', { className: 'd-flex flex-column align-items-center' },
-          el('div', { className: 'd-flex align-items-center justify-content-center rounded border glyph-box px-2', title: 'Click to copy glyph', 'data-copy': mainNom }, glyph),
+          glyphBox,
           this.relatedBox),
         el('div', { className: 'flex-grow-1' },
           // Kopfzeile nur Quốc Ngữ, QATT steht darunter
