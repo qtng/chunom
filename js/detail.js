@@ -527,12 +527,25 @@ class ChunomDetail {
   // only the entries of the list, not the head of the popup with the readings of the character itself. Drawn again when the choice changes.
   reading(qn) {
     const span = el('span', { className: 'text-secondary fw-bold fs-5 entry-reading', lang: 'vi', 'data-qn': qn });
-    if (window.Readings) Readings.fill(span, qn); else span.textContent = qn;
+    this.fillReading(span);
     if (!this.readingsHooked && window.Readings) {
       this.readingsHooked = true;
-      document.addEventListener('readingschange', () => this.modalBody?.querySelectorAll('.entry-reading').forEach(e => Readings.fill(e, e.dataset.qn)));
+      document.addEventListener('readingschange', () => this.modalBody?.querySelectorAll('.entry-reading').forEach(e => this.fillReading(e)));
     }
     return span;
+  }
+
+  // The reading next to an entry without PA: PA is already drawn as ruby over the Chữ Nôm (entryNom), so it is left out here
+  fillReading(span) {
+    const qn = span.dataset.qn;
+    if (!window.Readings) return span.textContent = qn;
+    const kinds = Readings.shown().filter(k => k !== 'pa');
+    if (!kinds.length) return span.replaceChildren();
+    if (!kinds.includes('qatt')) return span.replaceChildren(...[kinds.includes('qn') ? qn : null].filter(Boolean));
+    Readings.ready().then(() => {
+      if (span.dataset.qn !== qn) return;
+      span.replaceChildren(...kinds.map(k => { const s = document.createElement('span'); s.className = 'rd-' + k; s.textContent = Readings.text(qn, k); return s; }));
+    }, () => span.textContent = qn);
   }
 
   // The Chữ Nôm of a dictionary entry. With PA chosen in the readings, every character gets its PA syllable as ruby: the PA text directly behind the
@@ -560,7 +573,7 @@ class ChunomDetail {
       const parts = chars.map((ch, i) => {
         const pa = NOM_CHAR.test(ch) ? Readings.text(syl[i], 'pa') : null;
         if (!pa || pa === syl[i]) return null;
-        return el('span', { className: 'nom-char nom-ruby', 'data-char': ch, style: 'font-family: var(--font-cjk, "QATT Pen"), serif; font-size: 32px; line-height: 1.6' }, ch + String.fromCodePoint(0xF00B0) + pa);
+        return el('span', { className: 'nom-char nom-ruby', 'data-char': ch, style: 'font-family: var(--font-cjk, "QATT Pen"), serif; font-size: 40px; line-height: 1.5' }, ch + String.fromCodePoint(0xF00B0) + pa);
       });
       if (parts.every(Boolean)) span.replaceChildren(...parts);
     }, () => {});
