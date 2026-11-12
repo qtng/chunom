@@ -362,7 +362,7 @@
   const runBuild = () => {
     clearTimeout(buildTimer);
     const n = drawBuild();
-    buildTimer = setTimeout(() => { stage = stage < n - 1 ? stage + 1 : 0; if (stage === 0) example = (example + 1) % EXAMPLES.length; runBuild(); }, stage < n - 1 ? 1500 : 3200);
+    buildTimer = setTimeout(() => { stage = stage < n - 1 ? stage + 1 : 0; if (stage === 0) example = (example + 1) % EXAMPLES.length; runBuild(); }, stage < n - 1 ? 750 : 3200);   // the steps follow each other every 750 ms, the finished syllable stays 3.2 s
   };
   EXAMPLES.forEach(([h, w], i) => {
     const b = el('button', 'btn btn-quiet btn-pill', w); b.type = 'button'; b.lang = 'vi';

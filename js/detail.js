@@ -66,6 +66,7 @@ const STYLE = `
 #detailModal .so-play { position: absolute; right: .3rem; bottom: .3rem; width: 1.9rem; height: 1.9rem; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center;
   border: 1px solid var(--dm-line); background: color-mix(in srgb, var(--dm-bg) 80%, transparent); color: var(--dm-muted); font-size: 1.15rem; line-height: 1; }
 #detailModal .so-play:hover { color: var(--dm-ink); }
+#detailModal .glyph-box.so-playing > :not(.so-overlay) { visibility: hidden !important; }   /* whatever the box shows (the animated gif, an svg, the character as text) is hidden while the animation plays; !important: the image has an inline visibility of its own */
 #detailModal .so-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; transition: opacity .5s; }
 #detailModal .so-overlay.so-out { opacity: 0; }
 #detailModal .so-overlay .so-svg { width: auto; height: 100%; aspect-ratio: 1; }
@@ -564,7 +565,7 @@ class ChunomDetail {
   }
 
   // A play button on the big glyph (when there is a stroke order for it): the animation covers the glyph, after its end and 2 seconds it fades out and the glyph is back; a click on it starts it again.
-  async attachStrokeOrder(box, glyph, nom) {
+  async attachStrokeOrder(box, nom) {
     const SO = await loadStrokeOrder();
     const record = SO && await SO.load(nom);
     if (!record || !box.isConnected) return;
@@ -575,11 +576,12 @@ class ChunomDetail {
       event.stopPropagation();   // not a click to copy the glyph
       const overlay = el('div', { className: 'so-overlay' });
       box.append(overlay);
-      glyph.style.visibility = 'hidden';
+      box.classList.add('so-playing');
       button.hidden = true;
       const done = () => {
+        box.classList.remove('so-playing');   // the glyph is back under the overlay while that fades out
         overlay.classList.add('so-out');
-        setTimeout(() => { overlay.remove(); glyph.style.visibility = 'visible'; button.hidden = false; }, 500);
+        setTimeout(() => { overlay.remove(); button.hidden = false; }, 500);
       };
       SO.play(overlay, record, { onEnd: done });
       overlay.addEventListener('click', ev => ev.stopPropagation());
@@ -675,7 +677,7 @@ class ChunomDetail {
     glyph.addEventListener('load', () => { glyph.style.visibility = 'visible'; });
     const glyphBox = el('div', { className: 'd-flex align-items-center justify-content-center rounded border glyph-box px-2', title: 'Click to copy glyph', 'data-copy': mainNom }, glyph);
 
-    if (hex) this.attachStrokeOrder(glyphBox, glyph, mainNom);   // only for a single character, not for a compound
+    if (hex) this.attachStrokeOrder(glyphBox, mainNom);   // only for a single character, not for a compound
     this.modalBody.replaceChildren(
       el('div', { className: 'd-flex align-items-start gap-4 mb-4 p-2' },
         el('div', { className: 'd-flex flex-column align-items-center' },

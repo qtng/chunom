@@ -29,8 +29,8 @@ function addCss() {
   const style = document.createElement('style');
   style.id = 'stroke-order-css';
   style.textContent = `
-.so-svg { display: block; width: 100%; height: 100%; --so-fade-to: 0; }
-.so-svg .so-ghost { fill: var(--so-ghost, #8a8a8a); fill-opacity: .42; }
+.so-svg { display: block; width: 100%; height: 100%; --so-fade-to: 0; stroke: none; stroke-width: 0; }   /* no outline: a page may give every svg one, which showed as dark edges on the glyph */
+.so-svg .so-ghost { fill: var(--so-ghost, #8a8a8a); fill-opacity: .42; stroke: none; stroke-width: 0; }
 .so-svg .so-s { fill: none; stroke: var(--so-ink, var(--cinnabar, #a8362a)); stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 1; stroke-dashoffset: 1;
   animation: so-draw var(--t) ease-in-out var(--b) forwards, so-fade var(--fd) linear var(--e) forwards; }
 .so-svg .so-s.so-last { animation: so-draw var(--t) ease-in-out var(--b) forwards; }
