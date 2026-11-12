@@ -117,6 +117,7 @@
     .verse .w .pa { font-size: 2.5rem; }
     .verse .w .qn { font-family: Georgia, serif; font-size: .95rem; line-height: 1.3; color: var(--cinnabar); visibility: hidden; opacity: 0; transform: translateY(-.3rem); transition: opacity .3s, transform .3s; }
     .verse .w.open .qn { visibility: visible; opacity: 1; transform: none; }
+    .verse .w .rb { font-family: var(--font-cjk), serif; font-size: 2.2rem; line-height: 2.3; padding-top: .3rem; }   /* room over the character for the PA annotation of the font */
     .verse .play { flex: none; }
     @media (max-width: 420px) { .verse .w .pa { font-size: 1.6rem; } .verse .w { padding: .1rem 0; } .verse .words { gap: .2rem .35rem; } .verse { padding: .6rem .5rem; gap: .3rem; } .verse .w .nom, .verse .w .qn { font-size: .75rem; } }   /* a line of eight words in one row on a phone */
     .why { padding: .8rem 1rem; border-left: 3px solid var(--cinnabar); background: color-mix(in srgb, var(--cinnabar) 5%, transparent); }
@@ -212,6 +213,8 @@
       <h2><span class="no">8</span><span data-vi="Đọc">Read</span></h2>
       <p class="lead-text"><span data-vi="Bốn câu đầu của Truyện Kiều. Hãy tự đọc từng chữ, rồi nhấn vào để kiểm tra; nút loa đọc cả câu.">The first four lines of Truyện Kiều. Read each word yourself, then tap it to check; the speaker reads the whole line.</span></p>
       <div class="verses" id="verses"></div>
+      <p class="lead-text mt-4"><span data-vi="Bốn câu đầu của bản dịch Nôm bài Nam quốc sơn hà. Ở đây PA là chú âm: âm tiết nhỏ nằm trên chữ Nôm (chữ Nôm, rồi một ký tự điều khiển, rồi âm tiết PA). Nhấn vào chữ để xem Quốc Ngữ.">The first four lines of a Nôm translation of Nam quốc sơn hà. Here PA is the annotation: a small syllable stands over the Nôm character (the character, then a control character, then the PA syllable). Tap a character to see the Quốc Ngữ.</span></p>
+      <div class="verses" id="verses2"></div>
     </section>
 
     <section id="chart">
@@ -435,6 +438,32 @@
     play.setAttribute('aria-label', 'Read the line'); play.dataset.viAriaLabel = 'Đọc cả câu';
     play.append(el('i', 'bi bi-volume-up-fill'));
     play.addEventListener('click', () => { ws.forEach(b => b.classList.add('open')); say(line.map(([, w]) => w).join(' ')); });
+    box.append(words, play);
+    return box;
+  }));
+
+  // 8b. Nam quốc sơn hà: Chữ Nôm with PA as ruby annotation (character, U+F00B0, PA syllable: the font puts the syllable over the character); the Quốc Ngữ is read from the annotation
+  const NAM = [
+    '瀧\u{F00B0}\u{F00E3}\u{F00D0}\u{F00F1}\u{F00D1}\u{F0103}𡶀\u{F00B0}\u{F00DF}\u{F00D0}\u{F00F3}\u{F00D1}\u{F0100}\u{F0109}渃\u{F00B0}\u{F00DF}\u{F00D0}\u{F00F6}\u{F00D1}\u{F0107}\u{F0109}南\u{F00B0}\u{F00DF}\u{F00D0}\u{F00E9}\u{F00D1}\u{F0101}君\u{F00B0}\u{F00E7}\u{F00D0}\u{F00F4}渃\u{F00B0}\u{F00DF}\u{F00D0}\u{F00F6}\u{F00D1}\u{F0107}\u{F0109}南\u{F00B0}\u{F00DF}\u{F00D0}\u{F00E9}\u{F00D1}\u{F0101}於\u{F00B0}\u{F00D2}\u{F00D0}\u{F00EA}\u{F00D1}\u{F010B}。',
+    '分\u{F00B0}\u{F00D8}\u{F00D0}\u{F00EC}\u{F00D1}\u{F0102}位\u{F00B0}\u{F00E7}\u{F00D0}\u{F00EF}\u{F00D1}\u{F010D}瀝\u{F00B0}\u{F00E2}\u{F00D0}\u{F00E9}\u{F00D1}\u{F0108}\u{F010D}耒\u{F00B0}\u{F00E2}\u{F00D0}\u{F00F1}\u{F00D1}\u{F0100}\u{F010A}㐌\u{F00B0}\u{F00D6}\u{F00D0}\u{F00E9}\u{F00D1}\u{F010C}記\u{F00B0}\u{F00D9}\u{F00D0}\u{F00EF}𥪝\u{F00B0}\u{F00E6}\u{F00D0}\u{F00F2}\u{F00D1}\u{F0103}冊\u{F00B0}\u{F00E3}\u{F00D0}\u{F00E9}\u{F00D1}\u{F0108}\u{F0109}𡗶\u{F00B0}\u{F00E6}\u{F00D0}\u{F00EA}\u{F00D1}\u{F0100}\u{F010A}。',
+    '故\u{F00B0}\u{F00D4}\u{F00D0}\u{F00EA}\u{F00D1}\u{F0109}𣋀\u{F00B0}\u{F00E3}\u{F00D0}\u{F00E9}\u{F00D1}\u{F00FF}婁\u{F00B0}\u{F00DD}\u{F00D0}\u{F00F3}\u{F00D1}\u{F010C}賊\u{F00B0}\u{F00DA}\u{F00D0}\u{F00EB}\u{F00D1}\u{F0107}\u{F010D}暴\u{F00B0}\u{F00D3}\u{F00D0}\u{F00E9}\u{F00D1}\u{F00FF}\u{F010D}虐\u{F00B0}\u{F00E0}\u{F00D0}\u{F00F6}\u{F00D1}\u{F0107}\u{F010D}𦤾\u{F00B0}\u{F00D6}\u{F00D0}\u{F00ED}\u{F00D1}\u{F0102}\u{F0109}侵\u{F00B0}\u{F00E8}\u{F00D0}\u{F00EC}\u{F00D1}\u{F0101}犯\u{F00B0}\u{F00D8}\u{F00D0}\u{F00E9}\u{F00D1}\u{F0101}\u{F010D}。',
+    '眾\u{F00B0}\u{F00D5}\u{F00D0}\u{F00F3}\u{F00D1}\u{F0103}\u{F0109}悲\u{F00B0}\u{F00D3}\u{F00D0}\u{F00EB}\u{F00D1}\u{F0100}耒\u{F00B0}\u{F00E2}\u{F00D0}\u{F00F1}\u{F00D1}\u{F0100}\u{F010A}䀡\u{F00B0}\u{F00E8}\u{F00D0}\u{F00EE}\u{F00D1}\u{F0101}𠱊\u{F00B0}\u{F00E3}\u{F00D0}\u{F00EE}\u{F00D1}\u{F010C}酌\u{F00B0}\u{F00D5}\u{F00D0}\u{F00F4}\u{F00D1}\u{F0107}\u{F0109}𥙩\u{F00B0}\u{F00DD}\u{F00D0}\u{F00EC}\u{F00D1}\u{F0100}\u{F0109}失\u{F00B0}\u{F00E5}\u{F00D0}\u{F00EC}\u{F00D1}\u{F0106}\u{F0109}在\u{F00B0}\u{F00E4}\u{F00D0}\u{F00E9}\u{F00D1}\u{F0100}\u{F010D}散\u{F00B0}\u{F00E4}\u{F00D0}\u{F00E9}\u{F00D1}\u{F0102}𫠽\u{F00B0}\u{F00E4}\u{F00D0}\u{F00E9}\u{F00D1}\u{F0104}\u{F010A}。',
+  ];
+  const UNIT = /([^\u{F00B0}-\u{F010E}。])(\u{F00B0}[\u{F00D0}-\u{F010E}]*)?|。/gu;
+  $('verses2').append(...NAM.map(text => {
+    const box = el('div', 'card-box verse'), words = el('div', 'words'), ws = [], qns = [];
+    for (const m of text.matchAll(UNIT)) {
+      if (!m[1]) { words.append(el('span', 'nom', '。')); continue; }
+      const qn = m[2] ? PaText.read(m[2].slice(2), parser).trim() : '';
+      const b = el('button', 'w'); b.type = 'button'; b.lang = 'vi';
+      b.append(el('span', 'rb', m[1] + (m[2] || '')), el('span', 'qn', qn));
+      b.addEventListener('click', () => { b.classList.add('open'); if (qn) say(qn); });
+      words.append(b); ws.push(b); if (qn) qns.push(qn);
+    }
+    const play = el('button', 'btn btn-quiet round play'); play.type = 'button';
+    play.setAttribute('aria-label', 'Read the line'); play.dataset.viAriaLabel = 'Đọc cả câu';
+    play.append(el('i', 'bi bi-volume-up-fill'));
+    play.addEventListener('click', () => { ws.forEach(b => b.classList.add('open')); say(qns.join(' ')); });
     box.append(words, play);
     return box;
   }));
