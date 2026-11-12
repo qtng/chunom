@@ -563,7 +563,7 @@ class ChunomDetail {
 
   fillNom(span) {
     const nom = span.dataset.nom, qn = span.dataset.qn || '';
-    const plain = () => { span.removeAttribute('style'); span.replaceChildren(...this.nomChars(nom)); };
+    const plain = () => { span.removeAttribute('style'); span.classList.add('fs-3'); span.replaceChildren(...this.nomChars(nom)); };
     if (!window.Readings || !Readings.state.pa) return plain();
     const chars = [...nom], syl = qn.trim().split(/\s+/);
     if (chars.length !== syl.length) return plain();
@@ -573,8 +573,9 @@ class ChunomDetail {
       // no tag between a character, U+F00B0 and its PA syllable: one text, the font sets the ruby
       const pas = chars.map((ch, i) => NOM_CHAR.test(ch) ? Readings.text(syl[i], 'pa') : null);
       if (!pas.every((pa, i) => pa && pa !== syl[i])) return;
+      span.classList.remove('fs-3');   // fs-3 sets the size with !important, an inline size would not count
       span.style.fontFamily = 'var(--font-cjk, "QATT Pen"), serif';
-      span.style.fontSize = '60px';
+      span.style.fontSize = '44px';
       span.style.lineHeight = '1.3';
       span.textContent = chars.map((ch, i) => ch + String.fromCodePoint(0xF00B0) + pas[i]).join('');
     }, () => {});
