@@ -535,6 +535,37 @@ class ChunomDetail {
     return span;
   }
 
+  // The Chữ Nôm of a dictionary entry. With PA chosen in the readings, every character gets its PA syllable as ruby: the PA text directly behind the
+  // character with U+F00B0 between them, no tag in between (the font puts the PA over the character). Without PA, or if the syllables do not match
+  // the characters, the usual images. Drawn again when the choice changes.
+  entryNom(nom, qn) {
+    const span = el('span', { className: 'fs-3 me-2 entry-nom', 'data-nom': nom, 'data-qn': qn });
+    this.fillNom(span);
+    if (!this.nomHooked && window.Readings) {
+      this.nomHooked = true;
+      document.addEventListener('readingschange', () => this.modalBody?.querySelectorAll('.entry-nom').forEach(e => this.fillNom(e)));
+    }
+    return span;
+  }
+
+  fillNom(span) {
+    const nom = span.dataset.nom, qn = span.dataset.qn || '';
+    const plain = () => span.replaceChildren(...this.nomChars(nom));
+    if (!window.Readings || !Readings.state.pa) return plain();
+    const chars = [...nom], syl = qn.trim().split(/\s+/);
+    if (chars.length !== syl.length) return plain();
+    plain();
+    Readings.ready().then(() => {
+      if (!Readings.state.pa || span.dataset.nom !== nom) return;
+      const parts = chars.map((ch, i) => {
+        const pa = NOM_CHAR.test(ch) ? Readings.text(syl[i], 'pa') : null;
+        if (!pa || pa === syl[i]) return null;
+        return el('span', { className: 'nom-char nom-ruby', 'data-char': ch, style: 'font-family: var(--font-cjk, "QATT Pen"), serif; font-size: 32px; line-height: 1.6' }, ch + String.fromCodePoint(0xF00B0) + pa);
+      });
+      if (parts.every(Boolean)) span.replaceChildren(...parts);
+    }, () => {});
+  }
+
   // Nôm-Zeichen als Bild aus chunom-assets (Schrift als Ersatz), einzeln anklickbar
 
   nomChars(text, size) {
@@ -705,7 +736,7 @@ class ChunomDetail {
         const item = el('div', { className: `list-group-item ${r[1] !== mainNom ? 'list-group-item-action' : ''} py-3 px-0` },
           el('div', { className: 'd-flex align-items-center justify-content-between mb-1' },
             el('div', { className: 'd-flex align-items-center flex-wrap' },
-              el('span', { className: 'fs-3 me-2' }, this.nomChars(r[1])),
+              this.entryNom(r[1], r[0]),
               this.reading(r[0]))),
           el('div', { className: 'd-flex justify-content-between align-items-center w-100' },
             el('div', { className: 'text-secondary small text-truncate flex-grow-1', textContent: r[2] || 'No description' }),
