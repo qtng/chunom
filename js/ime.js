@@ -16,6 +16,11 @@
 		showDefinitions [true]
 		timeout [0]            milliseconds without typing or key presses after which the list closes itself; 0: never
 
+	Rich text editors (contenteditable): pass an adapter object instead of a field. It has value, selectionStart, selectionEnd, setSelectionRange()
+	(the text of the current block and the selection in it), get/set/removeAttribute, style, getBoundingClientRect() (the caret), and:
+		imeTarget              the element that has the focus and fires the events (beforeinput, input, keydown, click, blur, composition…)
+		replaceRange(text, from, to)  replaces value[from, to) with text (instead of execCommand on a field)
+
 	Keys: 1–9, 0 select a candidate, ↑/↓ move, Enter selects the marked one, PageUp/PageDown page, Esc closes.
 	Every change to the field fires a regular input event and can be undone.
 
@@ -361,6 +366,7 @@
 
 		constructor(input, options = {}) {
 			this.input = input;
+			this.target = input.imeTarget || input;   // a field, or the editable element of an adapter
 			this.options = { telex: true, candidates: true, defer: false, dictionaries: DICTIONARIES, fontList: [],
 				returnSelect: false, spaceSelect: false, showDefinitions: true, timeout: 0, ...options };
 			this.dict = dictionaryFor(this.options.dictionaries);
@@ -382,15 +388,16 @@
 			this.list.hidden = true;
 			document.body.append(this.list);
 
-			input.addEventListener('beforeinput', e => this.onBeforeInput(e));
-			input.addEventListener('input', () => this.refresh());
-			input.addEventListener('compositionstart', () => this.composing = true);
-			input.addEventListener('compositionend', e => this.onCompositionEnd(e));
-			input.addEventListener('keydown', e => this.onKeyDown(e));
-			input.addEventListener('click', () => this.refresh());
-			input.addEventListener('blur', () => this.hide());
+			const target = this.target;
+			target.addEventListener('beforeinput', e => this.onBeforeInput(e));
+			target.addEventListener('input', () => this.refresh());
+			target.addEventListener('compositionstart', () => this.composing = true);
+			target.addEventListener('compositionend', e => this.onCompositionEnd(e));
+			target.addEventListener('keydown', e => this.onKeyDown(e));
+			target.addEventListener('click', () => this.refresh());
+			target.addEventListener('blur', () => this.hide());
 			// a touch or click anywhere outside the list and the field closes it, e.g. to scroll the page
-			document.addEventListener('pointerdown', e => { if (!this.list.hidden && e.target != this.input && !this.list.contains(e.target)) this.hide(); }, true);
+			document.addEventListener('pointerdown', e => { if (!this.list.hidden && !this.target.contains(e.target) && !this.list.contains(e.target)) this.hide(); }, true);
 			this.update();
 		}
 
@@ -410,7 +417,7 @@
 				input.setAttribute('aria-controls', this.list.id);
 				input.setAttribute('aria-expanded', 'false');
 				if (!defer) this.load();
-				else if (!this.dict.ready) input.addEventListener('focus', () => this.load(), { once: true });
+				else if (!this.dict.ready) this.target.addEventListener('focus', () => this.load(), { once: true });
 			} else {
 				for (const a of ['role', 'aria-autocomplete', 'aria-controls', 'aria-expanded', 'aria-activedescendant']) input.removeAttribute(a);
 				this.hide();
@@ -485,6 +492,7 @@
 			while (p < old.length && p < text.length && old[p] == text[p]) p++;
 			if (p && /[\uD800-\uDBFF]/.test(old[p - 1])) p--;
 			const insert = text.slice(p);
+			if (this.input.replaceRange) return this.input.replaceRange(insert, from + p, to);   // an adapter of a rich text editor
 			this.busy = true;
 			this.input.setSelectionRange(from + p, to);
 			if (!document.execCommand(insert ? 'insertText' : 'delete', false, insert)) {
@@ -509,7 +517,7 @@
 		}
 
 		refresh() {
-			if (!this.options.candidates || document.activeElement != this.input) return this.hide();
+			if (!this.options.candidates || document.activeElement != this.target) return this.hide();
 			const current = this.currentWord();
 			// while a mobile keyboard composes, the word is still raw Telex
 			const word = current && (this.composing && this.options.telex ? telexWord(current.word, this.mode) : current.word);
