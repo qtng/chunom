@@ -27,7 +27,7 @@
 		imeTarget              the element that has the focus and fires the events (beforeinput, input, keydown, click, blur, composition…)
 		replaceRange(text, from, to)  replaces value[from, to) with text (instead of execCommand on a field)
 
-	Keys: 1–9, 0 select a candidate, ↑/↓ move, Enter selects the marked one, PageUp/PageDown page, Esc closes.
+	Keys: 1–9, 0 select a candidate, ↑/↓ move, Enter selects the marked one, PageUp/PageDown or + / - page, Esc closes.
 	Every change to the field fires a regular input event and can be undone.
 
 	Methods:
@@ -429,13 +429,13 @@
 		'letterSpacing', 'wordSpacing', 'lineHeight', 'textTransform', 'textIndent', 'tabSize', 'direction'];
 
 	const STYLE = `
-.vietime { position: absolute; z-index: 1070; min-width: 14em; max-width: 28em; box-sizing: border-box; padding: .3em; font-family: system-ui, -apple-system, sans-serif;
+.vietime { position: absolute; z-index: 1070; min-width: 14em; max-width: 28em; box-sizing: border-box; padding: .2em; font-family: system-ui, -apple-system, sans-serif;
 	background: var(--vietime-bg, Canvas); color: var(--vietime-color, color-mix(in srgb, CanvasText 87%, Canvas)); border: var(--vietime-border, 1px solid color-mix(in srgb, CanvasText 20%, Canvas));
 	border-radius: .8em; box-shadow: 0 .4em 1.2em rgba(0, 0, 0, .2) }
 .vietime[hidden] { display: none }
-.vietime:not([hidden]) { display: grid; grid-template-columns: minmax(0, 1fr); gap: .1em }
+.vietime:not([hidden]) { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 }
 .vietime-option { display: grid; grid-template-columns: auto auto minmax(0, 1fr); grid-template-areas: "number glyph reading" "number glyph definition";
-	align-items: center; column-gap: .45em; min-height: 2.7em; padding: .15em .5em .15em 1em; line-height: 1.2; border-radius: .6em; overflow: hidden; cursor: pointer }
+	align-items: center; column-gap: .45em; min-height: 2.2em; padding: .05em .5em .05em 1em; line-height: 1.15; border-radius: .6em; overflow: hidden; cursor: pointer }
 .vietime-option:hover, .vietime-option[aria-selected="true"] { background: var(--vietime-active, rgba(10, 120, 255, .14)) }
 .vietime-option[aria-selected="true"] { box-shadow: inset 0 0 0 1.5px var(--vietime-ring, rgba(10, 120, 255, .45)) }
 .vietime-number { grid-area: number; width: 1.3em; text-align: right; font-size: .75em; opacity: .6; font-variant-numeric: tabular-nums }
@@ -444,8 +444,8 @@
 .vietime-reading:last-child { grid-row: 1 / span 2; align-self: center }
 .vietime-remainder { font-weight: bold; color: var(--vietime-remainder, #0d6efd) }
 .vietime-hyphen { opacity: .5 }
-.vietime-pager { grid-column: 1 / -1; display: flex; justify-content: center; align-items: center; gap: .8em; font-size: .8em; opacity: .75; user-select: none }
-.vietime-turn { cursor: pointer; padding: 0 .6em; font-size: 1.3em; line-height: 1 }
+.vietime-pager { grid-column: 1 / -1; display: flex; justify-content: center; align-items: center; gap: .8em; font-size: .8em; line-height: 1.2; opacity: .75; user-select: none }
+.vietime-turn { cursor: pointer; padding: 0 .6em; font-size: 1.2em; line-height: 1 }
 .vietime-turn:hover { opacity: .6 }
 .vietime-definition { grid-area: definition; align-self: start; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .75em; opacity: .75 }
 @media (max-width: 575.98px) {
@@ -545,6 +545,10 @@
 			if (this.visible && /[0-9]/.test(e.data)) {
 				e.preventDefault();
 				return this.select(10 * this.page + (+e.data + 9) % 10);
+			}
+			if (this.visible && (e.data == '+' || e.data == '-') && this.items.length > 10) {   // turn the pages (also on a phone)
+				e.preventDefault();
+				return this.showPage(this.page + (e.data == '+' ? 1 : -1));
 			}
 			if (this.visible && e.data == ' ' && this.options.spaceSelect) {
 				e.preventDefault();
