@@ -253,12 +253,15 @@
 		return { fold, letters, syl, tones, toneAt, sort: fold + '\0' + marks + '\0' + tones.join('') };
 	}
 
+	const tick = () => new Promise(resolve => { const c = new MessageChannel(); c.port1.onmessage = () => resolve(); c.port2.postMessage(0); });   // give the page a turn
+
 	class Dictionary {
 		constructor(urls) {
 			this.urls = urls;
 			this.byFold = new Map();  // letters without marks → [[reading, glyph, number in the order of the data], …]
 			this.info = new Map();    // reading → searchKey(reading)
-			this.byChar = new Map();  // character → [[reading, glyph], …]
+			this.all = [];            // every entry [reading, glyph, number] in the order of the data (for byChar)
+			this.byChar = null;       // character → [[reading, glyph], …]; built on demand (only lookupGlyph needs it)
 			this.defs = new Map();    // reading + glyph → definition
 			this.pairs = new Set();
 			this.keys = null;         // the sorted keys of byFold, built on demand
@@ -270,19 +273,40 @@
 			return this.ready ??= Promise.all(this.urls.map(url => fetch(url)
 				.then(r => r.ok ? r.json() : Promise.reject(new Error(`${r.status} ${url}`)))
 				.catch(e => console.warn('VietIme: dictionary not loaded', e))))
-				.then(data => {
+				.then(async data => {
+					// {order: [key, …], sources: {key: {items, defs?}}}: the sources in their order (the order of the candidates); else the old {dict, defs}
+					const jobs = [];
 					for (const d of data) {
 						if (!d) continue;
-						// {order: [key, …], sources: {key: {items, defs?}}}: the sources in their order (the order of the candidates); else the old {dict, defs}
-						if (d.sources) for (const key of d.order || Object.keys(d.sources)) { const s = d.sources[key]; if (s) this.add(s.items || '', s.defs); }
-						else this.add(d.dict || '', d.defs);
+						if (d.sources) for (const key of d.order || Object.keys(d.sources)) { const s = d.sources[key]; if (s) jobs.push([s.items || '', s.defs]); }
+						else jobs.push([d.dict || '', d.defs]);
+					}
+					// Building the index takes 80 ms (a phone: half a second or more): in slices of about 8 ms, so that the page stays responsive;
+					// the sources come in the order of their rank, so what is there while it runs is the best part
+					for (const [items, defs] of jobs) {
+						const entries = items.replace(/[\r\n]/g, '').split('|');
+						for (let i = 0; i < entries.length;) {
+							const stop = performance.now() + 8;
+							do i = this.addEntries(entries, i, 256); while (i < entries.length && performance.now() < stop);
+							if (i < entries.length || performance.now() >= stop) await tick();
+						}
+						this.addDefs(defs);
 					}
 					return this;
 				});
 		}
 
 		add(dict, defs = {}) {
-			for (const entry of dict.replace(/[\r\n]/g, '').split('|')) {
+			const entries = dict.replace(/[\r\n]/g, '').split('|');
+			this.addEntries(entries, 0, entries.length);
+			this.addDefs(defs);
+		}
+
+		// Adds up to `count` entries from `from`; returns the index of the next one
+		addEntries(entries, from, count) {
+			const end = Math.min(entries.length, from + count);
+			for (let i = from; i < end; i++) {
+				const entry = entries[i];
 				const sep = entry.indexOf(':', 1);
 				if (sep < 0) continue;
 				const key = entry.slice(0, sep).normalize('NFC');
@@ -292,15 +316,30 @@
 					if (!glyph || this.pairs.has(key + ':' + glyph)) continue;
 					this.pairs.add(key + ':' + glyph);
 					if (!this.byFold.has(info.fold)) this.byFold.set(info.fold, []);
-					this.byFold.get(info.fold).push([key, glyph, this.pairs.size]);
-					for (const ch of new Set(glyph)) {
-						if (!this.byChar.has(ch)) this.byChar.set(ch, []);
-						this.byChar.get(ch).push([key, glyph]);
-					}
+					const e = [key, glyph, this.pairs.size];
+					this.byFold.get(info.fold).push(e);
+					this.all.push(e);
 				}
 			}
-			for (const [k, v] of Object.entries(defs)) this.defs.set(k, v);
 			this.keys = null;
+			this.byChar = null;
+			return end;
+		}
+
+		addDefs(defs) {
+			for (const [k, v] of Object.entries(defs || {})) this.defs.set(k, v);
+		}
+
+		// character → [[reading, glyph], …] in the order of the data, built at the first use
+		chars() {
+			if (!this.byChar) {
+				this.byChar = new Map();
+				for (const [key, glyph] of this.all) for (const ch of new Set(glyph)) {
+					if (!this.byChar.has(ch)) this.byChar.set(ch, []);
+					this.byChar.get(ch).push([key, glyph]);
+				}
+			}
+			return this.byChar;
 		}
 
 		// The entries that match the typed prefix (see searchKey): first those written exactly as typed so far, then short remainders,
@@ -345,7 +384,7 @@
 
 		lookupGlyph(text) {
 			if (!text) return [];
-			return (this.byChar.get(String.fromCodePoint(text.codePointAt(0))) || [])
+			return (this.chars().get(String.fromCodePoint(text.codePointAt(0))) || [])
 				// skip symbol entries such as "-_ideographicHyphen"
 				.filter(([key, glyph]) => glyph.includes(text) && isLetter(key[0]))
 				.map(([key, glyph]) => ({ glyph, reading: readingOf(key), definition: (this.defs.get(key + glyph) || '').trim() }));
