@@ -464,6 +464,7 @@
 			this.dict = dictionaryFor(this.options.dictionaries);
 			this.items = [];
 			this.shown = [];
+			this.chain = [];
 			this.next = 0;
 			this.page = 0;
 			this.active = -1;
@@ -617,12 +618,44 @@
 			// while a mobile keyboard composes, the word is still raw Telex
 			const word = current && (this.composing && this.options.telex ? telexWord(current.word, this.mode) : current.word);
 			let items = word ? this.dict.candidates(word.toLowerCase()) : [];
+			if (word && this.chain.length) items = this.joined(word.toLowerCase(), current).concat(items);
 			if (candidateHook) items = candidateHook(items, word || '') || [];
 			this.hide();
 			this.items = items;
 			this.listed = !!(typeof candidates == 'function' ? candidates() : candidates);
 			if (this.listed) this.showPage(0);
 			else this.render(Infinity);
+		}
+
+		// The words chosen just before the typed word, as long as they are still in the text right before it (at most 3):
+		// [{ from, to, key, glyph }, …], so that two or more syllables typed one after the other (đầu, then tư) find the word of
+		// several syllables (đầuTư: 投資) and replace the characters chosen before.
+		recent(current) {
+			const value = this.input.value, out = [];
+			let end = current.start;
+			for (let i = this.chain.length - 1; i >= 0 && out.length < 3; i--) {
+				const c = this.chain[i];
+				if (c.to != end || value.slice(c.from, c.to) != c.glyph) break;
+				out.unshift(c);
+				end = c.from;
+			}
+			this.chain = out;
+			return out;
+		}
+
+		// The candidates that write the typed word together with the words chosen before it, the longest first; only those typed to
+		// the end (a prefix of a longer word is not offered here). An item carries `from`: where its replacement starts.
+		joined(word, current) {
+			const before = this.recent(current), list = [], seen = new Set();
+			for (let l = before.length; l >= 1; l--) {
+				const tail = before.slice(-l);
+				for (const c of this.dict.candidates(tail.map(t => t.key).join('') + word)) {
+					if (c.rest || seen.has(c.glyph)) continue;
+					seen.add(c.glyph);
+					list.push({ ...c, from: tail[0].from });
+				}
+			}
+			return list;
 		}
 
 		// renders candidates until n are shown (renderItem may leave some out)
@@ -732,7 +765,11 @@
 			if (!item || !current) return;
 			this.hide();
 			countUsage(item.glyph);
-			this.replace(current.start, current.end, item.glyph);
+			const from = item.from ?? current.start;
+			this.replace(from, current.end, item.glyph);
+			this.chain = this.chain.filter(c => c.to <= from);
+			this.chain.push({ from, to: from + item.glyph.length, key: item.key, glyph: item.glyph });
+			if (this.chain.length > 6) this.chain.shift();
 		}
 
 		// with the option timeout the list closes itself after that time without typing or key presses
