@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qatt.org - Deck</title>
+    
+    <!-- Bootstrap 5.3 -->
+    <link href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://qatt.org/css/site.css">
+    <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+    
+    <!-- Nom Fonts -->
+
+    <script src="https://qatt.org/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://qatt.org/vendor/supabase/supabase.min.js"></script>
+    <script src="https://qatt.org/js/navigation.js"></script>
+    <script src="https://qatt.org/js/supabase.js"></script>
+    <script src="deck-cover.js"></script>
+    <script src="https://qatt.org/js/login.js"></script>
+    <script src="https://qatt.org/js/qatt.js"></script>
+    <script src="https://qatt.org/js/parser.js"></script>
+    <script src="../js/detail.js"></script>
+
+    <style>
+        :root { --ink: #2b2118; --cinnabar: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
+        body { min-height: 100vh; color: var(--ink); background: #fffdf8; }
+        /* the header of the pages of qatt.org and the Chunom site (.hero): the look of the theme "classic"; other themes override it */
+        .hero {
+            background:
+                radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%),
+                linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%);
+            border-bottom: 1px solid #e8dcc0;
+            color: var(--ink);
+        }
+        .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; letter-spacing: .01em; }
+        .card-box { background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .14); }
+
+        .accent { color: var(--cinnabar) !important; }
+        .text-secondary { color: var(--muted) !important; }
+
+        /* quiet text link back to the decks */
+        /* in the header: the colour of the header (a theme may draw it dark), only lighter */
+        .btn-subtle { display: inline-flex; align-items: center; gap: .4rem; padding: .25rem .6rem .25rem 0; color: inherit; opacity: .7; font-size: .925rem; font-weight: 500; text-decoration: none; }
+        .btn-subtle:hover { color: inherit; opacity: 1; }
+        .deck-meta { opacity: .7; }
+        .btn-subtle:focus-visible { outline: 2px solid var(--cinnabar); outline-offset: 2px; }
+
+        /* like a profile picture: a rounded square next to the title */
+        .deck-head { display: flex; align-items: center; gap: 1rem; text-align: left; }
+        .deck-cover-slot { flex: none; }
+        .deck-cover { display: block; width: 5rem; height: 5rem; object-fit: cover; border-radius: 1.1rem; }
+        .deck-head-text { flex: 1; min-width: 0; }
+        .deck-head-text h1 { font-size: clamp(1.6rem, 6vw, 2.4rem); overflow-wrap: anywhere; }
+        @media (min-width: 768px) { .deck-head { gap: 1.5rem; } .deck-cover { width: 6.5rem; height: 6.5rem; border-radius: 1.4rem; } }
+        .cover-preview { width: 5rem; height: 5rem; object-fit: cover; border-radius: 1.1rem; margin-bottom: .5rem; }
+
+        /* deck menu (edit, delete): a round icon button */
+        .deck-menu-btn { width: 2rem; height: 2rem; padding: 0; display: inline-flex; align-items: center; justify-content: center; }
+        .dropdown-menu { border-color: var(--line); border-radius: .8rem; }
+
+        /* the characters of the deck page: a grid, one column on the phone */
+        #deck-words { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); gap: .6rem; }
+        .deck-item { display: flex; align-items: center; gap: .8rem; padding: .5rem .9rem; box-shadow: none; color: inherit; text-decoration: none; transition: border-color .15s, box-shadow .15s; }
+        .deck-item:hover, .deck-item:focus-visible { border-color: var(--cinnabar); box-shadow: 0 .2rem .6rem rgba(60, 40, 20, .12); color: inherit; }
+        #deck-words .deck-item { color: var(--ink); }   /* a link, but not in the link colour of a theme (the id beats its rule) */
+        .deck-item .glyph, .entry-row .glyph { min-width: 4.2rem; text-align: left; white-space: nowrap; font-family: var(--font-cjk), 'pa', serif; font-size: 1.6rem; }
+        .empty-box { background: color-mix(in srgb, currentColor 4%, transparent); border: 1px dashed var(--field); }
+
+        /* edit dialog: entries of a deck */
+        .entry-row { display: flex; align-items: center; gap: .8rem; padding: .4rem .2rem; border-bottom: 1px solid var(--line); }
+        .entry-row .btn-remove { color: var(--muted); border: 0; background: none; padding: .2rem .5rem; border-radius: 2rem; }
+        .entry-row .btn-remove:hover, .entry-row .btn-remove:focus-visible { color: var(--cinnabar); background: color-mix(in srgb, var(--cinnabar) 10%, transparent); }
+
+        .entry-row .entry-text { flex: 1; min-width: 0; }
+        .entry-row .btn-edit { color: var(--muted); border: 0; background: none; padding: .2rem .5rem; border-radius: 2rem; }
+        .entry-row .btn-edit:hover, .entry-row .btn-edit:focus-visible { color: var(--cinnabar); background: color-mix(in srgb, var(--cinnabar) 10%, transparent); }
+        .item-meaning { display: block; font-size: .8rem; color: var(--muted); overflow-wrap: anywhere; }
+        /* the form to add or change an item */
+        #itemForm { border: 1px solid var(--line); border-radius: .8rem; padding: .9rem; margin-bottom: 1rem; background: color-mix(in srgb, currentColor 3%, transparent); }
+        #itemNom { font-family: var(--font-cjk), 'pa', serif; font-size: 1.4rem; }
+        .reading-row { display: flex; align-items: center; gap: .4rem; margin-bottom: .35rem; }
+        .reading-row .han { font-family: var(--font-cjk), 'pa', serif; font-size: 1.3rem; min-width: 1.8rem; }
+        .reading-row .form-select, .reading-row .form-control { flex: 1; min-width: 0; }
+
+        .account-footer { margin-top: 3rem; text-align: center; font-size: .85rem; color: var(--muted); }
+        .account-footer a { color: var(--cinnabar); text-decoration: none; }
+        .account-footer a:hover { text-decoration: underline; }
+
+        /* modal */
+        .modal-content { background: #fffdf8; color: var(--ink); border-radius: 1rem; }
+        .modal-content .form-control { border-color: var(--field); background-color: #fff; color: var(--ink); }
+        .modal-content .form-control:focus { border-color: var(--cinnabar); box-shadow: 0 0 0 .2rem rgba(168, 54, 42, .15) !important; }
+    </style>
+</head>
+<body>
+
+    <header class="hero pt-4 pb-4 mb-4">
+        <div class="container" style="max-width: 62rem">
+            <a href="index.html" class="btn-subtle"><i class="bi bi-arrow-left"></i> <span data-vi="Luyện tập / Bộ thẻ">Practice / decks</span></a>
+            <div class="deck-head mt-2 mb-3">
+                <div id="deck-cover-slot" class="deck-cover-slot"></div>
+                <div class="deck-head-text">
+                    <h1 class="mb-1" id="deck-title">Deck</h1>
+                    <p class="deck-meta mb-0" id="deck-meta"></p>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap justify-content-start gap-2" id="deck-actions"></div>
+        </div>
+    </header>
+    <main class="container pb-5" style="max-width: 62rem">
+        <div class="mb-5">
+            <div id="deck-words">
+                <div class="text-center p-5 text-secondary">
+                    <div class="spinner-border spinner-border-sm accent mb-2" role="status"></div>
+                </div>
+            </div>
+        </div>
+        <footer id="account" class="account-footer"></footer>
+    </main>
+
+    <!-- Edit Deck Modal -->
+    <div class="modal fade" id="editDeckModal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Edit Deck</h5>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body border-0">
+                    <div class="mb-4">
+                        <label for="editTitleInput" class="form-label text-secondary small text-uppercase">Deck Title</label>
+                        <input type="text" class="form-control shadow-none" id="editTitleInput" maxlength="80">
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label text-secondary small text-uppercase">Cover image</label>
+                        <img id="coverPreview" class="cover-preview d-none" alt="">
+                        <div class="d-flex flex-wrap gap-2 align-items-center">
+                            <input type="file" id="coverInput" accept="image/*" class="d-none">
+                            <label for="coverInput" class="btn btn-sm btn-quiet px-3 mb-0"><i class="bi bi-image me-1"></i> Choose image</label>
+                            <button type="button" class="btn btn-sm btn-link text-secondary d-none" id="coverRemove">Remove</button>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="publicInput">
+                            <label class="form-check-label" for="publicInput">Publish in the catalog</label>
+                        </div>
+                        <div class="form-text" id="publicHint">Everybody can find the deck, learn it and see your user name. You can take it back at any time.</div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span id="editCount" class="text-secondary small ms-auto"></span>
+                    </div>
+                    <div class="mb-2">
+                        <button type="button" class="btn btn-sm btn-quiet px-3" id="addItemBtn"><i class="bi bi-plus-lg me-1"></i> <span data-vi="Thêm chữ">Add item</span></button>
+                    </div>
+                    <div id="itemForm" hidden>
+                        <label for="itemNom" class="form-label text-secondary small text-uppercase" data-vi="Chữ Nôm">Chữ Nôm</label>
+                        <input type="text" class="form-control shadow-none mb-2" id="itemNom" autocomplete="off" spellcheck="false" maxlength="40" placeholder="e.g. troi (Telex) or paste">
+                        <label class="form-label text-secondary small text-uppercase" data-vi="Cách đọc">Reading</label>
+                        <div id="itemReadings" class="mb-2"></div>
+                        <button type="button" class="btn btn-sm btn-link px-0" id="itemMeaningBtn" aria-expanded="false" aria-controls="itemMeaning"><i class="bi bi-chevron-right me-1"></i><span data-vi="Nghĩa (không bắt buộc)">Meaning (optional)</span> <span class="text-secondary" id="itemMeaningHint"></span></button>
+                        <div id="itemMeaning" hidden>
+                            <label for="itemEn" class="form-label text-secondary small text-uppercase">English</label>
+                            <textarea class="form-control shadow-none mb-2" id="itemEn" rows="2" maxlength="300" placeholder="e.g. to tell homonyms apart" data-vi-placeholder="vd. để phân biệt chữ đồng âm"></textarea>
+                            <label for="itemVi" class="form-label text-secondary small text-uppercase">Tiếng Việt</label>
+                            <textarea class="form-control shadow-none mb-2" id="itemVi" rows="2" maxlength="300" lang="vi" placeholder="vd. để phân biệt chữ đồng âm" data-vi-placeholder="vd. để phân biệt chữ đồng âm"></textarea>
+                        </div>
+                        <div class="text-danger small mb-2" id="itemError" hidden></div>
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-sm btn-quiet" id="itemCancel" data-vi="Hủy">Cancel</button>
+                            <button type="button" class="btn btn-sm btn-cinnabar px-3" id="itemOk" data-vi="Xong">Done</button>
+                        </div>
+                    </div>
+                    <div id="editWords"></div>
+                    <p class="text-secondary small mt-3 mb-0">You can also add characters in the dictionary: open a character and tap “Add to deck”.</p>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-quiet" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-cinnabar px-4 fw-bold" id="saveEditBtn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const MIN_PUBLIC_ITEMS = 4;
+
+        class DeckPage {
+            constructor() {
+                this.sp = new SupabaseService();
+                this.id = new URLSearchParams(location.search).get('id');
+                this.deck = null;
+            }
+
+            async init() {
+                try {
+                    await this.sp.init();
+                    this.renderAccount();
+                    document.getElementById('saveEditBtn').addEventListener('click', () => this.saveEdit());
+                    document.getElementById('coverInput').addEventListener('change', e => this.pickCover(e.target.files[0]));
+                    document.getElementById('coverRemove').addEventListener('click', () => this.setCover(null));
+                    this.initItemForm();
+                    // a character was added to or removed from this deck in the popup: show the new list
+                    document.addEventListener('chunom:deckchange', e => { if (e.detail.deckId === this.id) this.load(); });
+                    await this.load();
+                } catch (e) {
+                    console.error("Deck Init Error:", e);
+                }
+            }
+
+            // footer: who is signed in, with a sign-out link (nothing when not signed in)
+            renderAccount() {
+                const box = document.getElementById('account');
+                box.replaceChildren();
+                if (!this.signedIn()) return;
+                // the words are tags of their own with data-vi, so they follow the language
+                const label = document.createElement('span');
+                label.setAttribute('data-vi', 'Đã đăng nhập:');
+                label.textContent = 'Signed in as';
+                const out = document.createElement('a');
+                out.href = '#';
+                const outText = document.createElement('span');
+                outText.setAttribute('data-vi', 'Đăng xuất');
+                outText.textContent = 'Sign out';
+                out.append(outText);
+                out.addEventListener('click', async e => { e.preventDefault(); await this.sp.signOut(); location.reload(); });
+                box.append(label, ` ${this.sp.user.email || 'you'} · `, out);
+            }
+
+            signedIn() {
+                return !!this.sp.user && !this.sp.isAnonymous;
+            }
+
+            get isOwner() {
+                return !!this.deck?.id && this.deck.user_id === this.sp.user?.id;
+            }
+
+            // a public deck of somebody else can be taken over into "My decks" (private ones are only viewable by link)
+            get canTake() {
+                return !!this.deck?.id && !!this.deck.is_public && !this.isOwner;
+            }
+
+            // "12 items · by name" / "· chunom.org" for the decks of the site; the owner sees whether it is published and how many use it
+            async renderMeta(count) {
+                const meta = document.getElementById('deck-meta'), deck = this.deck;
+                meta.textContent = '';
+                const num = document.createElement('span');
+                num.dataset.vi = `${count} chữ`;
+                num.textContent = `${count} items`;
+                meta.append(num);
+                const add = node => meta.append(' · ', node);
+                const text = t => document.createTextNode(t);
+                if (deck.is_official) {
+                    const badge = document.createElement('span');
+                    badge.className = 'badge text-bg-warning align-text-bottom';
+                    badge.textContent = 'chunom.org';
+                    add(badge);
+                }
+                if (this.isOwner) {
+                    if (!deck.is_official) add(text(deck.is_public ? 'Published' : 'Private'));
+                    if (deck.is_public) {
+                        const users = await this.sp.getDeckSaveCount?.(deck.id) || 0;
+                        if (this.deck === deck) add(text(`${users} ${users === 1 ? 'user' : 'users'}`));
+                    }
+                } else if (!deck.is_official) {
+                    const names = await this.sp.getUsernames?.([deck.user_id]) || {};
+                    if (this.deck === deck) add(text(`by ${names[deck.user_id] || 'a user'}`));
+                }
+            }
+
+            async load() {
+                this.deck = this.id ? await this.sp.getDeck(this.id) : {};
+                if (!this.deck?.id) {
+                    document.getElementById('deck-cover-slot').replaceChildren();
+                    document.getElementById('deck-title').textContent = 'Deck not found';
+                    document.getElementById('deck-actions').replaceChildren(this.link('index.html', 'bi-arrow-left', 'All decks', 'btn btn-sm btn-quiet px-3'));
+                    document.getElementById('deck-words').replaceChildren();
+                    return;
+                }
+                this.saved = this.canTake && this.signedIn() ? await this.sp.isDeckSaved?.(this.deck.id).catch(() => false) || false : false;
+                const words = this.words();
+                document.title = `${this.deck.title} | Qatt.org`;
+                document.getElementById('deck-title').textContent = this.deck.title;
+                this.renderMeta(words.length);
+                document.getElementById('deck-cover-slot').replaceChildren(DeckCover.element(this.deck, this.sp.deckImageUrl(this.deck.image_path), 'deck-cover'));
+                this.renderActions();
+                this.renderWords(words);
+            }
+
+            words() {
+                return (this.deck.words || []).filter(w => w.n !== '.config');
+            }
+
+            link(href, icon, text, cls) {
+                const a = document.createElement('a');
+                a.href = href;
+                a.className = cls;
+                a.innerHTML = `<i class="bi ${icon} me-1"></i> `;
+                a.append(text);
+                return a;
+            }
+
+            button(icon, text, cls, onclick) {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = cls;
+                b.innerHTML = `<i class="bi ${icon} me-1"></i> `;
+                b.append(text);
+                b.addEventListener('click', onclick);
+                return b;
+            }
+
+            // a public deck of somebody else: learning needs "Add to my decks" first
+            async toggleSaved(add) {
+                if (!this.signedIn()) return QattLogin.open(this.sp, (window.Lang ? Lang.t('Sign in to add this deck to My decks.', 'Đăng nhập để thêm bộ thẻ này vào "Bộ thẻ của tôi".') : 'Sign in to add this deck to My decks.'));
+                if (!add && !confirm(`Remove "${this.deck.title}" from My decks? Your progress is kept.`)) return;
+                const { error } = add ? await this.sp.saveDeckLink(this.deck) : await this.sp.removeSavedDeck(this.deck.id);
+                if (error) return alert('Could not change your decks, please try again.');
+                this.saved = add;
+                this.renderActions();
+            }
+
+            renderActions() {
+                const locked = this.canTake && !this.saved;
+                const learn = (href, icon, text, cls) => {
+                    if (!locked) return this.link(href, icon, text, cls);
+                    const a = this.link(href, icon, text, `${cls} disabled`);
+                    a.removeAttribute('href');
+                    a.setAttribute('aria-disabled', 'true');
+                    a.title = 'Add the deck to My decks first';
+                    return a;
+                };
+                const actions = [];
+                if (locked) actions.push(this.button('bi-plus-lg', 'Add to my decks', 'btn btn-sm btn-cinnabar px-3', () => this.toggleSaved(true)));
+                actions.push(
+                    learn(`immersive.html?id=${this.deck.id}`, 'bi-headphones', 'Superlearn', locked ? 'btn btn-sm btn-quiet px-3' : 'btn btn-sm btn-cinnabar px-3'),
+                    learn(`practice.html?id=${this.deck.id}`, 'bi-lightning-charge-fill', 'Practice', 'btn btn-sm btn-quiet px-3')
+                );
+                // editing and deleting: in a menu behind an icon button
+                const items = [];
+                if (this.isOwner) {
+                    items.push(['edit', 'bi-pencil', '<span data-vi="Sửa bộ thẻ hoặc chữ">Edit deck or items</span>', '', () => this.openEdit()],
+                        ['delete', 'bi-trash', 'Delete the whole deck', ' text-danger', () => this.deleteDeck()]);
+                } else if (this.canTake && this.saved) {
+                    items.push(['remove', 'bi-x-circle', 'Remove from my decks', '', () => this.toggleSaved(false)]);
+                }
+                if (items.length) {
+                    const menu = document.createElement('div');
+                    menu.className = 'dropdown';
+                    menu.innerHTML = `
+                        <button type="button" class="btn btn-sm btn-quiet deck-menu-btn" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Deck options" title="Deck options"><i class="bi bi-three-dots"></i></button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">${items.map(([act, icon, label, cls]) =>
+                            `<li><button type="button" class="dropdown-item${cls}" data-act="${act}"><i class="bi ${icon} me-2"></i>${label}</button></li>`).join('')}
+                        </ul>`;
+                    items.forEach(([act, , , , fn]) => menu.querySelector(`[data-act=${act}]`).addEventListener('click', fn));
+                    actions.push(menu);
+                }
+                document.getElementById('deck-actions').replaceChildren(...actions);
+            }
+
+            renderWords(words) {
+                const rows = words.map(word => {
+                    const qn = document.createElement('span');
+                    qn.className = 'flex-grow-1';
+                    qn.lang = 'vi';
+                    qn.textContent = word.qn || '';
+                    this.appendMeaning(qn, word);
+                    const row = document.createElement('a');
+                    row.className = 'card-box deck-item';
+                    row.href = `../index.html?detail=${encodeURIComponent(word.n || '')}`; // opens the character in the dictionary
+                    row.title = 'Show in the dictionary';
+                    row.addEventListener('click', e => { // the popup of the character; the link above is the fallback (middle click, no script)
+                        if (e.ctrlKey || e.metaKey || e.shiftKey || e.button) return;
+                        e.preventDefault();
+                        ChunomDetail.open(word.n || '');
+                    });
+                    row.append(this.glyph(word.n || ''), qn);
+                    if (word.qn) row.append(ChunomDetail.speakButton(word.qn));
+                    return row;
+                });
+                if (!rows.length) {
+                    const empty = document.createElement('div');
+                    empty.className = 'p-4 text-center text-secondary small empty-box rounded-3';
+                    empty.style.gridColumn = '1 / -1';
+                    empty.textContent = 'This deck is empty.';
+                    rows.push(empty);
+                }
+                document.getElementById('deck-words').replaceChildren(...rows);
+            }
+
+            // the meaning of an item (m: { en, vi }, both optional) under its reading: in the language of the page, else the other one
+            appendMeaning(box, word) {
+                const m = word.m || {};
+                const text = (window.Lang && Lang.current === 'vi' ? m.vi || m.en : m.en || m.vi) || '';
+                if (!text) return;
+                const small = document.createElement('small');
+                small.className = 'item-meaning';
+                small.textContent = text;
+                box.append(small);
+            }
+
+            // an item as images (one per character) with the font as fallback, like in the dictionary
+            glyph(nom) {
+                const box = document.createElement('span');
+                box.className = 'glyph';
+                for (const ch of Array.from(nom)) {
+                    if (!/^[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{323af}]$/u.test(ch)) {
+                        box.append(ch);
+                        continue;
+                    }
+                    if (!window.ChunomDetail?.nomImages()) { box.append(ch); continue; } // the font (the .glyph class sets it); the images by switch
+                    const img = new Image(32, 32);
+                    img.alt = ch;
+                    img.style.verticalAlign = 'middle';
+                    const hex = ch.codePointAt(0).toString(16).toUpperCase();
+                    img.addEventListener('error', () => img.replaceWith(ch));
+                    img.src = `/chunom-assets/generated/32/${hex}.webp`;
+                    box.append(img);
+                }
+                return box;
+            }
+
+            async openEdit() {
+                const deck = this.deck;
+                if (!this.isOwner) return;
+                this.editing = { id: deck.id, words: deck.words || [], removed: new Set(), cover: undefined }; // cover: undefined = unchanged, null = remove, Blob = new
+                document.getElementById('coverInput').value = '';
+                this.showCover(this.sp.deckImageUrl(deck.image_path));
+                document.getElementById('editTitleInput').value = deck.title || '';
+                document.getElementById('publicInput').checked = !!deck.is_public;
+                this.closeItem();
+                this.renderEditWords();
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('editDeckModal')).show();
+            }
+
+            showCover(url) {
+                const img = document.getElementById('coverPreview');
+                img.classList.toggle('d-none', !url);
+                if (url) img.src = url;
+                document.getElementById('coverRemove').classList.toggle('d-none', !url);
+            }
+
+            // cuts the middle square out of the chosen photo and scales it to at most 512 x 512 px as WebP (about 20 KB), or as JPEG when the browser cannot write WebP
+            async pickCover(file) {
+                if (!file) return;
+                try {
+                    const bmp = await createImageBitmap(file);
+                    const side = Math.min(bmp.width, bmp.height);
+                    const canvas = document.createElement('canvas');
+                    canvas.width = canvas.height = Math.min(512, side);
+                    canvas.getContext('2d').drawImage(bmp, (bmp.width - side) / 2, (bmp.height - side) / 2, side, side, 0, 0, canvas.width, canvas.height);
+                    let blob = await new Promise(res => canvas.toBlob(res, 'image/webp', 0.8));
+                    // browsers that cannot write WebP hand back a PNG, which is much larger: use JPEG then
+                    if (!blob || blob.type !== 'image/webp') blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', 0.85));
+                    if (!blob) throw new Error('empty');
+                    this.setCover(blob);
+                } catch (e) {
+                    alert('This image could not be read. Please choose a JPEG, PNG or WebP file.');
+                }
+            }
+
+            setCover(blob) {
+                this.editing.cover = blob;
+                this.showCover(blob ? URL.createObjectURL(blob) : null);
+            }
+
+            // publishing needs a signed-in account and at least MIN_PUBLIC items (a deck that is public already can always be taken back)
+            updatePublish(count) {
+                const pub = document.getElementById('publicInput'), was = !!this.deck.is_public;
+                const anonymous = this.sp.isAnonymous, few = count < MIN_PUBLIC_ITEMS;
+                if (few && !was) pub.checked = false;
+                pub.disabled = !was && (anonymous || few);
+                document.getElementById('publicHint').textContent = anonymous && !was ? (window.Lang ? Lang.t('Sign in to publish a deck.', 'Đăng nhập để công khai bộ thẻ.') : 'Sign in to publish a deck.')
+                    : few && !was ? `A deck needs at least ${MIN_PUBLIC_ITEMS} items to be published.`
+                    : 'Everybody can find the deck, learn it and see your user name. You can take it back at any time.';
+            }
+
+            // ---- add or change an item: the Chữ Nôm (js/ime.js: Telex and candidates), the readings and meaning of dict.csv as suggestions
+            initItemForm() {
+                const $ = id => document.getElementById(id);
+                $('addItemBtn').addEventListener('click', () => this.openItem(null));
+                $('itemCancel').addEventListener('click', () => this.closeItem());
+                $('itemOk').addEventListener('click', () => this.commitItem());
+                $('itemNom').addEventListener('input', () => this.suggest());
+                $('itemMeaningBtn').addEventListener('click', () => this.showMeaning(!$('itemMeaning').hidden ? false : true));
+                for (const id of ['itemEn', 'itemVi']) $(id).addEventListener('input', () => { this.item.touched[id] = true; this.meaningHint(); });
+                $('itemForm').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.tagName === 'INPUT' && !e.defaultPrevented) { e.preventDefault(); this.commitItem(); } });
+                // dict.csv: reading, characters, meaning
+                this.csv = fetch('/chunom/dict.csv').then(r => r.text()).then(text => {
+                    const map = new Map();
+                    for (const line of text.split('\n')) {
+                        const m = /^"((?:[^"]|"")*)","((?:[^"]|"")*)"(?:,"((?:[^"]|"")*)")?(.*)$/.exec(line);
+                        if (!m) continue;
+                        const han = m[2].replace(/""/g, '"');
+                        if (!map.has(han)) map.set(han, []);
+                        map.get(han).push({ q: m[1].replace(/""/g, '"').normalize('NFC').toLowerCase().trim(), m: (m[3] || '').replace(/""/g, '"'), standard: /"standard"\s*$/.test(m[4]) });
+                    }
+                    return map;
+                }).catch(() => new Map());
+            }
+
+            showMeaning(on) {
+                document.getElementById('itemMeaning').hidden = !on;
+                const btn = document.getElementById('itemMeaningBtn');
+                btn.setAttribute('aria-expanded', on);
+                btn.querySelector('i').className = `bi ${on ? 'bi-chevron-down' : 'bi-chevron-right'} me-1`;
+                this.meaningHint();
+            }
+
+            // behind the closed button: what the meaning is now (so a suggestion taken over from the dictionary is not hidden)
+            meaningHint() {
+                const $ = id => document.getElementById(id);
+                const text = $('itemEn').value.trim() || $('itemVi').value.trim();
+                $('itemMeaningHint').textContent = !$('itemMeaning').hidden || !text ? '' : '· ' + (text.length > 40 ? text.slice(0, 40) + '…' : text);
+            }
+
+            openItem(word) {
+                const $ = id => document.getElementById(id);
+                this.item = { word, touched: {}, rows: [], sig: null, qn: word?.qn || '' };
+                if (!this.ime && window.VietIme) this.ime = new VietIme($('itemNom'), { candidates: true, defer: true, returnSelect: true });
+                else if (!window.VietIme) ChunomDetail.loadIme().then(() => { if (!this.ime && window.VietIme) this.ime = new VietIme($('itemNom'), { candidates: true, defer: true, returnSelect: true }); });
+                $('itemNom').value = word?.n || '';
+                $('itemEn').value = word?.m?.en || '';
+                $('itemVi').value = word?.m?.vi || '';
+                if (word) this.item.touched = { itemEn: true, itemVi: true };
+                $('itemError').hidden = true;
+                $('itemReadings').replaceChildren();
+                $('itemForm').hidden = false;
+                this.showMeaning(!!(word?.m?.en || word?.m?.vi));
+                this.suggest();
+                $('itemForm').scrollIntoView({ block: 'nearest' });
+                $('itemNom').focus();
+            }
+
+            closeItem() {
+                this.item = null;
+                document.getElementById('itemForm').hidden = true;
+            }
+
+            // the readings of exactly these characters: dict.csv first (the usual one first), then the input method; [{ q, m }]
+            readingsOf(han, csv) {
+                const out = new Map();
+                for (const e of [...(csv.get(han) || [])].sort((a, b) => b.standard - a.standard)) if (!out.has(e.q)) out.set(e.q, { q: e.q, m: e.m });
+                if (window.VietIme) {
+                    for (const e of VietIme.lookupGlyph(han)) {
+                        if (e.glyph !== han) continue;
+                        const q = e.reading.normalize('NFC').toLowerCase().trim(), prev = out.get(q);
+                        if (prev) { if (!prev.m) prev.m = e.definition; } else out.set(q, { q, m: e.definition });
+                    }
+                }
+                const n = [...han].length;
+                return [...out.values()].filter(o => o.q.split(/\s+/).length === n);
+            }
+
+            // the readings of the typed Chữ Nôm as a drop-down per row (of the whole word if the dictionaries know it, else one row per character);
+            // "Own entry" turns it into an input, and without any option there is the input only
+            async suggest() {
+                const item = this.item;
+                if (!item) return;
+                const han = Array.from(document.getElementById('itemNom').value.trim()).filter(c => /\p{Script=Han}/u.test(c));
+                const csv = await this.csv;
+                if (this.item !== item) return;
+                const sig = han.join('');
+                if (sig === item.sig) return;   // the same characters: keep what was chosen or typed
+                const known = item.rows.length ? null : item.qn;   // the reading of the item being changed
+                item.sig = sig;
+                const whole = han.length ? this.readingsOf(sig, csv) : [];
+                let groups = whole.length || han.length < 2 ? [{ han: sig, options: whole }] : han.map(ch => ({ han: ch, options: this.readingsOf(ch, csv) }));
+                let parts = known ? [known] : [];
+                if (known && groups.length > 1) { const w = known.split(/\s+/); if (w.length === groups.length) parts = w; else groups = [{ han: sig, options: [] }]; }
+                item.rows = groups.map((g, i) => {
+                    const at = parts[i] === undefined ? (g.options.length ? 0 : -1) : g.options.findIndex(o => o.q === parts[i]);
+                    return { ...g, pick: at, text: at < 0 ? parts[i] || '' : '', custom: at < 0 && (parts[i] !== undefined || !g.options.length) };
+                });
+                item.qn = '';
+                this.renderReadings();
+                this.applyPicks();
+            }
+
+            renderReadings() {
+                const rows = this.item.rows.map((row, i) => {
+                    const box = document.createElement('div');
+                    box.className = 'reading-row';
+                    if (this.item.rows.length > 1) { const h = document.createElement('span'); h.className = 'han'; h.textContent = row.han; box.append(h); }
+                    const input = document.createElement('input');
+                    input.type = 'text'; input.className = 'form-control shadow-none'; input.lang = 'vi'; input.maxLength = 80; input.autocomplete = 'off';
+                    input.value = row.text;
+                    input.setAttribute('aria-label', 'Reading');
+                    input.addEventListener('input', () => { row.text = input.value; });
+                    if (!row.options.length) return box.append(input), box;
+                    const sel = document.createElement('select');
+                    sel.className = 'form-select shadow-none';
+                    sel.setAttribute('aria-label', 'Reading');
+                    row.options.forEach((o, oi) => sel.add(new Option(o.q + (o.m ? ' — ' + (o.m.length > 30 ? o.m.slice(0, 30) + '…' : o.m) : ''), oi)));
+                    const own = new Option(window.Lang ? Lang.t('Own entry…', 'Nhập cách đọc khác…') : 'Own entry…', 'own');
+                    own.dataset.vi = 'Nhập cách đọc khác…';
+                    sel.add(own);
+                    sel.value = row.custom ? 'own' : row.pick;
+                    sel.addEventListener('change', () => {
+                        row.custom = sel.value === 'own';
+                        if (!row.custom) { row.pick = +sel.value; this.item.touched.itemEn = false; }
+                        this.renderReadings();
+                        this.applyPicks();
+                        if (row.custom) this.item.focus = i;
+                    });
+                    if (row.custom) {
+                        const back = document.createElement('button');
+                        back.type = 'button'; back.className = 'btn btn-sm btn-quiet'; back.title = 'Choose from the list'; back.setAttribute('aria-label', 'Choose from the list');
+                        back.innerHTML = '<i class="bi bi-list"></i>';
+                        back.addEventListener('click', () => { row.custom = false; row.pick = Math.max(row.pick, 0); this.renderReadings(); this.applyPicks(); });
+                        box.append(input, back);
+                        if (this.item.focus === i) setTimeout(() => input.focus());
+                    } else box.append(sel);
+                    return box;
+                });
+                this.item.focus = null;
+                document.getElementById('itemReadings').replaceChildren(...rows);
+            }
+
+            // a chosen option fills the English meaning, as long as the user has not typed there
+            applyPicks() {
+                const $ = id => document.getElementById(id), { rows, touched } = this.item;
+                const one = rows.length === 1 && !rows[0].custom && rows[0].options[rows[0].pick];
+                if (!touched.itemEn) $('itemEn').value = one ? one.m || '' : '';
+                this.meaningHint();
+            }
+
+            readingValue() {
+                return this.item.rows.map(r => (r.custom || !r.options.length ? r.text : r.options[r.pick]?.q) || '').join(' ').trim().replace(/\s+/g, ' ');
+            }
+
+            commitItem() {
+                const $ = id => document.getElementById(id), item = this.item;
+                const n = $('itemNom').value.trim(), qn = this.readingValue();
+                const en = $('itemEn').value.trim(), vi = $('itemVi').value.trim();
+                $('itemError').hidden = true;
+                const fail = (msg, vi) => { const e = $('itemError'); e.textContent = window.Lang ? Lang.t(msg, vi) : msg; e.hidden = false; };
+                if (!n) return fail('Please enter the Chữ Nôm.', 'Hãy nhập chữ Nôm.');
+                if (!qn) return fail('Please enter the reading.', 'Hãy nhập cách đọc.');
+                const { words, removed } = this.editing;
+                if (words.some(w => w !== item.word && !removed.has(w) && w.n === n && (w.qn || '') === qn)) return fail('This item is in the deck already.', 'Chữ này đã có trong bộ thẻ.');
+                const entry = { ...(item.word || {}), n, qn };
+                delete entry.m;
+                if (en || vi) entry.m = { ...(en && { en }), ...(vi && { vi }) };
+                const at = item.word ? words.indexOf(item.word) : -1;
+                if (at >= 0) words[at] = entry; else words.push(entry);
+                this.closeItem();
+                this.renderEditWords();
+            }
+
+            renderEditWords() {
+                const { words, removed } = this.editing;
+                const shown = words.filter(w => w.n !== '.config' && !removed.has(w));
+                const editCount = document.getElementById('editCount');
+                editCount.dataset.vi = `${shown.length} chữ`;
+                editCount.textContent = `${shown.length} items`;
+                this.updatePublish(shown.length);
+                const rows = shown.map(word => {
+                    const qn = document.createElement('span');
+                    qn.className = 'entry-text';
+                    qn.lang = 'vi';
+                    qn.textContent = word.qn || '';
+                    this.appendMeaning(qn, word);
+                    const edit = document.createElement('button');
+                    edit.type = 'button';
+                    edit.className = 'btn-edit';
+                    edit.title = 'Edit';
+                    edit.setAttribute('aria-label', 'Edit');
+                    edit.innerHTML = '<i class="bi bi-pencil"></i>';
+                    edit.addEventListener('click', () => this.openItem(word));
+                    const remove = document.createElement('button');
+                    remove.type = 'button';
+                    remove.className = 'btn-remove';
+                    remove.title = 'Remove';
+                    remove.setAttribute('aria-label', 'Remove');
+                    remove.innerHTML = '<i class="bi bi-trash"></i>';
+                    remove.addEventListener('click', () => { removed.add(word); this.renderEditWords(); });
+                    const row = document.createElement('div');
+                    row.className = 'entry-row';
+                    row.append(this.glyph(word.n || ''), qn, edit, remove);
+                    return row;
+                });
+                if (!rows.length) {
+                    const empty = document.createElement('div');
+                    empty.className = 'p-4 text-center text-secondary small empty-box rounded-3';
+                    empty.style.gridColumn = '1 / -1';
+                    empty.textContent = 'This deck is empty.';
+                    rows.push(empty);
+                }
+                document.getElementById('editWords').replaceChildren(...rows);
+            }
+
+            async saveEdit() {
+                const { id, words, removed, cover } = this.editing;
+                const btn = document.getElementById('saveEditBtn');
+                btn.disabled = true;
+                const title = document.getElementById('editTitleInput').value.trim() || 'Untitled Deck';
+                const { error } = await this.sp.saveDeck({ id, title, words: words.filter(w => !removed.has(w)) });
+                const pub = document.getElementById('publicInput');
+                let pubError = null;
+                if (!error && !pub.disabled && pub.checked !== !!this.deck.is_public) pubError = (await this.sp.setDeckPublic(id, pub.checked)).error;
+                let imgError = null;
+                if (!error && cover !== undefined) {
+                    imgError = (cover ? await this.sp.setDeckImage(id, cover) : await this.sp.removeDeckImage(id)).error;
+                }
+                btn.disabled = false;
+                if (pubError && /at most 10/.test(pubError.message || '')) return alert('You can publish at most 10 decks within 180 days. Take one back first or try again later.');
+                if (error || imgError || pubError) return alert('Could not save the deck, please try again.');
+                bootstrap.Modal.getInstance(document.getElementById('editDeckModal')).hide();
+                await this.load();
+            }
+
+            async deleteDeck() {
+                const deck = this.deck;
+                if (!this.isOwner || !confirm(`Delete the deck "${deck.title}"? This cannot be undone.`)) return;
+                const { error } = await this.sp.deleteDeck(deck.id);
+                if (error) return alert('Could not delete the deck, please try again.');
+                location.href = 'index.html';
+            }
+        }
+
+        const page = new DeckPage();
+        window.onload = () => page.init();
+    </script>
+</body>
+</html>

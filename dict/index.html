@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dictionaries – Génibrel 1898, Bonet 1899 | Chunom.org</title>
+  <meta name="description" content="Scanned Annamite-French dictionaries with Chữ Nôm: Génibrel 1898 and Bonet 1899, page by page, with headword search and an index of the characters of Bonet.">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://qatt.org/css/site.css">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <script src="https://qatt.org/js/navigation.js"></script>
+  <script defer src="/chunom/js/ime.js"></script>
+  <script defer src="/chunom/js/detail.js"></script>
+  <style>
+    :root { --ink: #2b2118; --accent: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
+    body { margin: 0; background: var(--paper); color: var(--ink); }
+    /* the header of the pages of qatt.org and the Chunom site (.hero): the look of the theme "classic"; other themes override it */
+    .hero {
+      background:
+        radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%),
+        linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%);
+      border-bottom: 1px solid #e8dcc0;
+      color: var(--ink);
+    }
+    .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: .01em; }
+    .hero .han { color: var(--accent); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; }
+    .hero .lead { max-width: 38rem; color: #4a3d30; }
+    @media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
+    main { max-width: 44rem; margin: 0 auto; padding: 0 1rem 2rem; }
+    .card-box { margin: 0 0 1.2rem; padding: 1rem 1.1rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .14); }
+    .dict-card { display: grid; grid-template-columns: auto 1fr; gap: .2rem 1rem; align-items: start; }
+    .dict-card .seal { grid-row: span 2; font-family: var(--font-cjk), serif; font-size: 2.6rem; line-height: 1; color: var(--accent); }
+    .dict-card h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.5rem; margin: 0; }
+    .dict-card .sub { color: var(--muted); font-size: .95rem; }
+    .dict-card .body { grid-column: 1 / -1; }
+    .numbers { display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; margin: .6rem 0; }
+    .numbers b { font-size: 1.3rem; font-weight: 600; display: block; line-height: 1.1; }
+    .numbers span { color: var(--muted); font-size: .85rem; }
+    /* the character search of Bonet: one row per character typed, its pages as links that open the scan with the glyph framed */
+    .find input { font-family: var(--font-cjk), system-ui, sans-serif; font-size: 1.15rem; }
+    .hits { margin-top: .6rem; }
+    .hit { display: flex; align-items: center; gap: .8rem; padding: .35rem 0; border-top: 1px solid var(--line); }
+    .hit:first-child { border-top: 0; }
+    .hit .ch { font-family: var(--font-cjk), serif; font-size: 2rem; line-height: 1; min-width: 2.2rem; text-align: center; cursor: pointer; border: 0; background: none; color: inherit; padding: 0; }
+    .hit .ch:hover { color: var(--accent); }
+    .hit .pages a { margin-right: .7rem; white-space: nowrap; }
+    .hit .pages .rd { display: inline-block; color: var(--muted); font-style: italic; margin-left: .3em; }
+    .hit .pages .rd.read { font-style: normal; }
+    .hit .none { color: var(--muted); font-size: .9rem; }
+    /* the readings of Bonet that the IME does not have: two compact tables, side by side when there is room */
+    #bonet-readings h2 small { font-family: system-ui, sans-serif; font-size: .8rem; color: var(--muted); margin-left: .5rem; }
+    .bonet-new .scroll { max-height: min(60vh, 32rem); overflow-y: auto; border-top: 1px solid var(--line); } /* about 15 rows; the rest scrolls inside */
+    .bonet-new table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    .bonet-new th { position: sticky; top: 0; background: var(--paper); font-weight: 600; font-size: .78rem; color: var(--muted); text-align: left; padding: .25rem .35rem; }
+    .bonet-new td { padding: .1rem .35rem; border-bottom: 1px solid var(--line); vertical-align: baseline; }
+    .bonet-new .ch { font-family: var(--font-cjk), serif; font-size: 1.35rem; line-height: 1.2; border: 0; background: none; color: inherit; padding: 0; cursor: pointer; }
+    .bonet-new .ch:hover { color: var(--accent); }
+    .bonet-new .bn { font-weight: 600; white-space: nowrap; }
+    .bonet-new .kn { color: var(--muted); }
+    .bonet-new td:last-child { white-space: nowrap; text-align: right; }
+  </style>
+</head>
+<body>
+<header class="hero pt-4 pt-sm-5 pb-4 mb-4">
+  <div class="container text-center">
+    <div class="han mb-2">字典</div>
+    <h1 class="mb-3" data-vi="Từ điển">Dictionaries</h1>
+    <p class="lead mx-auto mb-0" data-vi="Từ điển An Nam–Pháp có chữ Nôm, quét từng trang.">Scanned Annamite-French dictionaries with Chữ Nôm, page by page.</p>
+  </div>
+</header>
+<main>
+
+  <section class="card-box dict-card" id="genibrel">
+    <div class="seal" aria-hidden="true">南</div>
+    <h2>Génibrel 1898</h2>
+    <div class="sub" lang="fr">Dictionnaire Annamite-Français</div>
+    <div class="body">
+      <p class="mt-2 mb-3">J.F.M. Génibrel, Saigon 1898. <span id="genibrel-pages"></span> The headwords in Quốc Ngữ are in alphabetical order; the search opens the page of a word.</p>
+      <a class="btn btn-cinnabar btn-pill mb-3" href="/chunom/dict/genibrel.html"><i class="bi bi-book me-1"></i><span data-vi="Mở từ điển">Open the dictionary</span></a>
+      <form class="find" role="search" data-dict="genibrel">
+        <label class="form-label small text-secondary" for="find-genibrel" data-vi="Một từ Quốc Ngữ (Enter mở trang của từ) hoặc một chữ Nôm (gõ âm đọc rồi chọn chữ)">A word in Quốc Ngữ (Enter opens its page) or a Chữ Nôm character (type its reading, then choose the character)</label>
+        <input class="form-control" id="find-genibrel" type="search" autocomplete="off" enterkeyhint="search" placeholder="an, nước, 安 …">
+        <div class="hits" aria-live="polite"></div>
+      </form>
+    </div>
+  </section>
+
+  <section class="card-box dict-card" id="bonet">
+    <div class="seal" aria-hidden="true">字</div>
+    <h2>Bonet 1899</h2>
+    <div class="sub" lang="fr">Dictionnaire Annamite-Français · Langue officielle et langue vulgaire</div>
+    <div class="body">
+      <p class="mt-2 mb-2">Jean Bonet, Paris 1899–1900. <span id="bonet-pages"></span> Besides the search by headword, the characters printed in it are indexed: find a character and the scan opens on its page with the character framed.</p>
+      <div class="numbers" id="bonet-numbers" hidden>
+        <div><b id="n-chars"></b><span data-vi="chữ khác nhau">different characters</span></div>
+        <div><b id="n-places"></b><span data-vi="vị trí trong sách">places in the book</span></div>
+        <div><b id="n-pages"></b><span data-vi="trang có chữ">pages with characters</span></div>
+      </div>
+      <div class="d-flex flex-wrap gap-2 mb-3">
+        <a class="btn btn-cinnabar btn-pill" href="/chunom/dict/bonet.html"><i class="bi bi-book me-1"></i><span data-vi="Mở từ điển">Open the dictionary</span></a>
+        <a class="btn btn-quiet btn-pill" href="/chunom/dict/bonet/"><i class="bi bi-journal-richtext me-1"></i><span data-vi="Câu chuyện chỉ mục">How it was indexed</span></a>
+      </div>
+      <form class="find" role="search" data-dict="bonet">
+        <label class="form-label small text-secondary" for="find-bonet" data-vi="Một từ Quốc Ngữ (Enter mở trang của từ) hoặc một chữ Nôm (gõ âm đọc rồi chọn chữ)">A word in Quốc Ngữ (Enter opens its page) or a Chữ Nôm character (type its reading, then choose the character)</label>
+        <input class="form-control" id="find-bonet" type="search" autocomplete="off" enterkeyhint="search" placeholder="an, nước, 安 …">
+        <div class="hits" aria-live="polite"></div>
+      </form>
+      <p class="small text-secondary mt-3 mb-0" data-vi="Chỉ mục đang được làm: một số chữ chưa có.">The index is a work in progress: some characters are still missing.</p>
+    </div>
+  </section>
+
+  <section class="card-box" id="bonet-readings">
+    <h2 class="h4 mb-1" style="font-family: Georgia, 'Times New Roman', serif; font-weight: 400"><span data-vi="Bonet đọc khác">How Bonet reads differently</span><small id="n-bonet-new"></small></h2>
+    <p class="small text-secondary mb-3">Readings read from the scan of Bonet that the input method of chunom.org does not have for the character, next to the readings known so far. Some are old spellings or readings that are no longer used; a few may be a character that the index matched wrongly: the page link shows the place.</p>
+    <div class="bonet-new">
+      <div class="scroll" id="t-bonet-new"></div>
+    </div>
+  </section>
+
+</main>
+<script type="module">
+  import { DICTIONARIES } from './dictionaries.js';
+
+  // the number of pages of the dictionary itself (from page 1 to the part after it in the contents, else to the last image), from the definitions of the viewer
+  const pages = d => (d.toc.find(([page]) => page > 1)?.[0] ?? d.lastImage - d.offset + 1) - 1;
+  const setPages = (id, d) => {
+    const span = document.getElementById(id);
+    span.textContent = `${pages(d)} pages.`;
+    span.dataset.vi = `${pages(d)} trang.`;
+  };
+  setPages('genibrel-pages', DICTIONARIES.genibrel);
+  setPages('bonet-pages', DICTIONARIES.bonet);
+
+  // the index of the characters of Bonet: { char: [[page, x0, y0, x1, y1], …] }, and the readings of a character on a page, read from the scan or derived
+  // from the headwords of the page { read: { char: [[page, reading, …], …] }, derived: { the same } }
+  const [index, readings] = await Promise.all(['bonet-chars', 'bonet-readings'].map(name =>
+    fetch(`/chunom/dict/data/${name}.json`).then(r => r.ok ? r.json() : {}).catch(() => ({}))));
+  const derivedTitle = () => Lang.t('Derived from the headwords of the page', 'Suy ra từ các mục từ của trang');
+  const readTitle = () => Lang.t('Read from the scan', 'Đọc từ bản quét');
+  const at = (kind, ch, page) => (readings[kind]?.[ch] || []).find(p => p[0] === page)?.slice(1) || [];
+  const readingsAt = (ch, page) => { const r = at('read', ch, page); return r.length ? { read: true, list: r } : { read: false, list: at('derived', ch, page) }; };
+  const chars = Object.keys(index);
+  if (chars.length) {
+    const places = Object.values(index).flat();
+    const fmt = n => n.toLocaleString(Lang?.current === 'vi' ? 'vi' : 'en');
+    document.getElementById('n-chars').textContent = fmt(chars.length);
+    document.getElementById('n-places').textContent = fmt(places.length);
+    document.getElementById('n-pages').textContent = fmt(new Set(places.map(p => p[0])).size);
+    document.getElementById('bonet-numbers').hidden = false;
+  }
+
+  const isHan = ch => /[\p{Script=Han}\u{F0000}-\u{FFFFD}]/u.test(ch);
+  const el = (tag, props = {}, ...children) => {
+    const node = Object.assign(document.createElement(tag), props);
+    node.append(...children);
+    return node;
+  };
+  const viewer = id => `/chunom/dict/${id}.html`;
+
+  // the readings of a character (of the IME, which has every character of dict.csv); loaded once, only when a character is asked for
+  let imeLoad = null;
+  function readingsOf(ch) {
+    if (window.VietIme && !imeLoad) imeLoad = VietIme.load().then(() => finds.forEach(f => f.show()));
+    return [...new Set((window.VietIme?.lookupGlyph(ch) || []).filter(e => e.glyph === ch).map(e => e.reading.toLowerCase()))];
+  }
+  // its readings as links to the page of that headword, to look for the character there
+  function byReading(id, ch, prefix) {
+    const readings = readingsOf(ch);
+    const box = el('div', { className: 'none' }, prefix);
+    if (readings.length) box.append(Lang.t('Look it up by its reading: ', 'Tra theo âm đọc: '), ...readings.flatMap((r, i) => [i ? ' · ' : '',
+      el('a', { href: `${viewer(id)}?q=${encodeURIComponent(r)}`, textContent: r })]).filter(Boolean));
+    else box.append(Lang.t('No reading known. ', 'Chưa biết âm đọc. '), el('a', { href: viewer(id), textContent: Lang.t('Open the dictionary', 'Mở từ điển') }));
+    return box;
+  }
+
+  // the search field of a dictionary: a word in Quốc Ngữ opens its page in the viewer (Enter), every character gets a row:
+  // Bonet: its pages of the index (the scan opens with the glyph framed), else its readings; Génibrel: its readings
+  const finds = [...document.querySelectorAll('form[data-dict]')].map(form => {
+    const id = form.dataset.dict;
+    const input = form.querySelector('input');
+    const hits = form.querySelector('.hits');
+    const row = ch => {
+      const button = el('button', { type: 'button', className: 'ch', textContent: ch, title: Lang.t('Details', 'Chi tiết') });
+      button.addEventListener('click', () => window.ChunomDetail?.open(ch));
+      let list;
+      if (id === 'bonet') {
+        const seen = new Set();
+        const own = (index[ch] || []).filter(p => !seen.has(p[0]) && seen.add(p[0]));
+        list = own.length
+          ? el('div', { className: 'pages' }, ...own.map(([page, ...box]) => {
+              const link = el('a', { href: `${viewer(id)}#${page}@${box.join(',')}`, textContent: `${Lang.t('p.', 'tr.')} ${page}` });
+              const r = readingsAt(ch, page);
+              if (r.list.length) link.append(el('span', { className: 'rd' + (r.read ? ' read' : ''), textContent: r.list.join(' / '), title: r.read ? readTitle() : derivedTitle() }));
+              return link;
+            }))
+          : byReading(id, ch, Lang.t('Not found in the scan automatically yet. ', 'Chưa tự động tìm thấy trong bản quét. '));
+      } else list = byReading(id, ch, '');
+      return el('div', { className: 'hit' }, button, list);
+    };
+    const show = () => hits.replaceChildren(...[...new Set(Array.from(input.value).filter(isHan))].map(row));
+    input.addEventListener('input', show);
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const word = input.value.trim();
+      if (word && !Array.from(word).some(isHan)) location.href = `${viewer(id)}?q=${encodeURIComponent(word)}`;
+      else show();
+    });
+    // Telex and the Chữ Nôm candidates of chunom.org: a reading becomes a character (a click or its number); Enter keeps the word
+    const attach = () => { if (window.VietIme && !input.ime) input.ime = new VietIme(input, { defer: true }); };
+    if (window.VietIme) attach(); else window.addEventListener('load', attach);
+    return { show };
+  });
+  document.addEventListener('langchange', () => finds.forEach(f => f.show()));
+
+  // the readings of Bonet that the IME does not have (dict/data/bonet-new.json: { readings: [{ char, reading, known, syllable, places }] }, written by the
+  // private repository from the readings read from the scan): one table in the order of Bonet
+  fetch('/chunom/dict/data/bonet-new.json').then(r => r.ok ? r.json() : null).catch(() => null).then(data => {
+    if (!data) { document.getElementById('bonet-readings').hidden = true; return; }
+    const KNOWN_MAX = 6;   // the known readings shown; the rest in the title
+    const table = list => {
+      const head = () => el('tr', {}, ...[['Char', 'Chữ'], ['Bonet', 'Bonet'], ['Known', 'Đã biết'], ['Page', 'Trang']].map(([en, vi]) => el('th', {}, (s => (s.dataset.vi = vi, s))(el('span', { textContent: en })))));
+      return el('table', {}, el('thead', {}, head()), el('tbody', {}, ...list.map(r => {
+        const ch = el('button', { type: 'button', className: 'ch', textContent: r.char, title: Lang.t('Details', 'Chi tiết') });
+        ch.addEventListener('click', () => window.ChunomDetail?.open(r.char));
+        const known = r.known.length > KNOWN_MAX ? r.known.slice(0, KNOWN_MAX).join(', ') + ', …' : r.known.join(', ');
+        return el('tr', {}, el('td', {}, ch), el('td', { className: 'bn', textContent: r.reading }), el('td', { className: 'kn', textContent: known || '–', title: r.known.join(', ') }),
+          el('td', {}, ...r.places.flatMap((p, i) => [i ? ' ' : '', el('a', { href: `${viewer('bonet')}#${p[0]}@${p.slice(1).join(',')}`, textContent: p[0] })])));
+      })));
+    };
+    document.getElementById('n-bonet-new').textContent = data.readings.length;
+    document.getElementById('t-bonet-new').replaceChildren(table(data.readings));
+  });
+</script>
+</body>
+</html>

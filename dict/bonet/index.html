@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Reading Bonet – how a dictionary of 1899 became searchable | Chunom.org</title>
+  <meta name="description" content="951 scanned pages, 7,090 headwords, 4,035 Chữ Nôm characters: how the characters of Bonet's Annamite-French dictionary of 1899 were found, read and indexed.">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://qatt.org/css/site.css">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <script src="https://qatt.org/js/navigation.js"></script>
+  <script defer src="/chunom/js/detail.js"></script>
+  <style>
+    :root { --ink: #2b2118; --accent: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
+    body { margin: 0; background: var(--paper); color: var(--ink); }
+    .hero {
+      background:
+        radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%),
+        linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%);
+      border-bottom: 1px solid #e8dcc0;
+      color: var(--ink);
+    }
+    .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: .01em; }
+    .hero .han { color: var(--accent); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; }
+    .hero .lead { max-width: 38rem; color: #4a3d30; }
+    @media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
+    main { max-width: 46rem; margin: 0 auto; padding: 0 1rem 3rem; }
+    .card-box { margin: 0 0 1.4rem; padding: 1.1rem 1.2rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .14); }
+    h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.55rem; margin: 0 0 .5rem; }
+    h2 .no { color: var(--accent); font-size: 1rem; margin-right: .5rem; vertical-align: .15em; }
+    .muted { color: var(--muted); }
+    .han-font { font-family: var(--font-cjk), serif; }
+
+    /* big numbers */
+    .big { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: .8rem; margin: 1.6rem auto 0; max-width: 36rem; }
+    .big div { text-align: center; }
+    .big b { display: block; font-family: Georgia, serif; font-weight: 400; font-size: clamp(2rem, 6vw, 2.8rem); line-height: 1; color: var(--accent); }
+    .big span { font-size: .9rem; color: var(--muted); }
+
+    /* a crop of a scanned page (img/*.webp, written by the private repository) */
+    .crop { position: relative; overflow: hidden; background: #fff; border-radius: .3rem; flex: none; }
+    .crop img { display: block; width: 100%; height: 100%; }
+    .scan-frame { border: 1px solid var(--line); border-radius: .4rem; padding: .3rem; background: #fff; }
+    /* the anatomy of an entry: labelled boxes over the crop */
+    .anatomy { position: relative; width: 100%; }
+    .anatomy .crop { width: 100%; }
+    .anatomy .ann { position: absolute; border: 2px solid var(--accent); border-radius: .25rem; }
+    .anatomy .ann.alt { border-style: dashed; }
+    .anatomy .tag.below { transform: none; border-radius: 0 .2rem .2rem .2rem; }
+    .anatomy .tag { position: absolute; transform: translateY(-100%); background: var(--accent); color: #fff; font-size: .72rem; padding: .05rem .35rem; border-radius: .2rem .2rem .2rem 0; white-space: nowrap; }
+    .legend-list { display: grid; gap: .35rem; margin: .8rem 0 0; padding: 0; list-style: none; font-size: .95rem; }
+    .legend-list b { color: var(--accent); }
+
+    /* the quiz */
+    .quiz { display: grid; gap: .8rem; justify-items: center; text-align: center; }
+    .quiz .crop { border: 1px solid var(--line); }
+    .quiz .cands { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; }
+    .quiz .cand { font-family: var(--font-cjk), serif; font-size: 2rem; line-height: 1; width: 3.4rem; height: 3.4rem; border-radius: .5rem; border: 1px solid var(--line); background: color-mix(in srgb, currentColor 3%, transparent); color: inherit; }
+    .quiz .cand:hover:not(:disabled) { border-color: var(--accent); }
+    .quiz .cand.right { border: 2px solid #2e7d32; background: color-mix(in srgb, #2e7d32 14%, transparent); }
+    .quiz .cand.wrong { border: 2px solid var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); opacity: .8; }
+    .quiz .cand.machine { position: relative; }
+    .quiz .cand.machine::after { content: "\F4D6"; font-family: bootstrap-icons; position: absolute; top: -.55rem; right: -.45rem; font-size: .8rem; color: var(--muted); }
+    .quiz .verdict { min-height: 3rem; font-size: .95rem; }
+    .quiz .score { font-size: .85rem; color: var(--muted); }
+
+    /* the steps */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: .8rem; counter-reset: step; }
+    .step { border: 1px solid var(--line); border-radius: .6rem; padding: .8rem .9rem; background: color-mix(in srgb, currentColor 2%, transparent); }
+    .step h3 { font-size: 1rem; font-weight: 600; margin: 0 0 .35rem; display: flex; gap: .5rem; align-items: center; }
+    .step h3 i { color: var(--accent); font-size: 1.2rem; }
+    .step p { margin: 0; font-size: .92rem; }
+    .step .fig { display: flex; align-items: center; gap: .5rem; margin-top: .6rem; flex-wrap: wrap; }
+    .step .fig .c { font-family: var(--font-cjk), serif; font-size: 1.6rem; line-height: 1; }
+    .step .fig .c.on { color: var(--accent); }
+    .step .stat { font-family: Georgia, serif; font-size: 1.4rem; color: var(--accent); }
+
+    /* a whole page with the characters found */
+    .pagefig { margin: 0 auto 1rem; max-width: 30rem; text-align: center; }
+    .pf-img { position: relative; display: block; border: 1px solid var(--line); border-radius: .4rem; overflow: hidden; background: #fff; }
+    .pf-img .crop { width: 100%; border-radius: 0; }
+    .pf-img > span { position: absolute; opacity: 0; transition: opacity .35s, transform .35s; }
+    .pf-img > span.on { opacity: 1; transform: none; }
+    .pf-img .rule { width: 3px; margin-left: -1px; background: #2e9d48; transform: scaleY(0); transform-origin: top; }
+    .pf-img .margin { width: 3px; background: #2e9d48; }
+    .pf-img .hit { border: 2px solid #d32f2f; border-radius: 2px; transform: scale(1.8); }
+    .pf-img .hit.unsure { border: 2px dashed #e0a000; }
+    @media (prefers-reduced-motion: reduce) { .pf-img > span { transition: none; transform: none; } }
+    /* the funnel and the stacked bar */
+    .funnel { display: grid; gap: .35rem; margin: .6rem 0 1rem; }
+    .funnel .frow { display: grid; grid-template-columns: 1fr; }
+    .funnel .fbar { height: 1.9rem; background: var(--accent); border-radius: .3rem; display: flex; align-items: center; padding: 0 .6rem; color: #fff; font-weight: 600; white-space: nowrap; min-width: max-content; }
+    .funnel .frow:nth-child(2) .fbar { opacity: .85; } .funnel .frow:nth-child(3) .fbar { opacity: .72; } .funnel .frow:nth-child(4) .fbar { opacity: .6; }
+    .funnel .lbl { font-size: .85rem; color: var(--muted); margin: .1rem 0 .2rem; }
+    .stack { display: flex; height: 1.4rem; border-radius: .3rem; overflow: hidden; margin: .4rem 0; }
+    .stack span { display: block; height: 100%; }
+    .keys { display: flex; flex-wrap: wrap; gap: .3rem 1rem; font-size: .85rem; }
+    .keys i { display: inline-block; width: .8rem; height: .8rem; border-radius: .15rem; margin-right: .3rem; vertical-align: -.05rem; }
+    .k-sure { background: var(--accent); } .k-seen { background: color-mix(in srgb, var(--accent) 55%, #d9a441); }
+    .k-check { background: #d9a441; } .k-badcrop { background: color-mix(in srgb, var(--muted) 55%, transparent); } .k-noglyph { background: var(--line); }
+
+    /* the map of the pages */
+    .pagemap { display: grid; gap: .25rem; margin-top: .6rem; }
+    .pagemap .lt { display: grid; grid-template-columns: 1.4rem 1fr; gap: .4rem; align-items: start; }
+    .pagemap .lt b { font-family: Georgia, serif; font-weight: 400; color: var(--accent); line-height: .9rem; }
+    .pagemap .cells { display: flex; flex-wrap: wrap; gap: 2px; }
+    .pagemap a { width: .78rem; height: .9rem; border-radius: 2px; display: block; background: color-mix(in srgb, var(--accent) calc(var(--p) * 100%), var(--line)); }
+    .pagemap a:hover { outline: 2px solid var(--ink); outline-offset: 1px; }
+    .pagemap a.skip { background: transparent; border: 1px dashed var(--line); }
+    .scale { display: flex; align-items: center; gap: .4rem; font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+    .scale span.g { width: 6rem; height: .6rem; border-radius: 2px; background: linear-gradient(90deg, var(--line), var(--accent)); }
+    #map-info { min-height: 1.4rem; font-size: .9rem; }
+
+    /* 100 dots */
+    .dots { display: grid; grid-template-columns: repeat(20, 1fr); gap: 4px; max-width: 22rem; margin: .6rem 0; }
+    .dots i { aspect-ratio: 1; border-radius: 50%; background: #2e7d32; opacity: .75; }
+    .dots i.w { background: var(--accent); opacity: 1; } .dots i.pw { background: var(--accent); opacity: .5; } .dots i.u { background: var(--line); opacity: 1; }
+
+    /* Bonet's spellings */
+    .spell { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); gap: .7rem; }
+    .spell .card { border: 1px solid var(--line); border-radius: .6rem; padding: .6rem; background: color-mix(in srgb, currentColor 2%, transparent); display: grid; gap: .4rem; justify-items: start; }
+    .spell .then { font-weight: 600; font-size: 1.1rem; }
+    .spell .now { color: var(--muted); font-size: .88rem; }
+
+    /* the table of the new readings, folded */
+    /* folded: a teaser of the first rows, fading out; open: the whole table in a scroll box */
+    .bonet-new .scroll { position: relative; max-height: 11rem; overflow: hidden; border-top: 1px solid var(--line); }
+    .bonet-new .scroll { -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent); }
+    .bonet-new.open .scroll { max-height: min(60vh, 32rem); overflow-y: auto; -webkit-mask-image: none; mask-image: none; }
+    .bonet-new.open #bonet-new-toggle i { transform: rotate(180deg); }
+    .bonet-new table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    .bonet-new th { position: sticky; top: 0; background: var(--paper); font-weight: 600; font-size: .78rem; color: var(--muted); text-align: left; padding: .25rem .35rem; }
+    .bonet-new td { padding: .1rem .35rem; border-bottom: 1px solid var(--line); vertical-align: baseline; }
+    .bonet-new .ch { font-family: var(--font-cjk), serif; font-size: 1.35rem; line-height: 1.2; border: 0; background: none; color: inherit; padding: 0; cursor: pointer; }
+    .bonet-new .ch:hover { color: var(--accent); }
+    .bonet-new .bn { font-weight: 600; white-space: nowrap; }
+    .bonet-new .kn { color: var(--muted); }
+    .bonet-new td:last-child { white-space: nowrap; text-align: right; }
+
+    /* who did what */
+    .who { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: .8rem; }
+    .who div { border-left: 3px solid var(--accent); padding: .2rem 0 .2rem .7rem; }
+    .who i { color: var(--accent); font-size: 1.3rem; }
+    .who b { display: block; font-family: Georgia, serif; font-weight: 400; font-size: 1.8rem; line-height: 1.1; }
+    .who span { font-size: .9rem; }
+    .open-list { margin: .4rem 0 0; padding-left: 1.2rem; }
+  </style>
+</head>
+<body>
+
+<header class="hero pt-4 pt-sm-5 pb-4 mb-4">
+  <div class="container text-center">
+    <div class="han mb-2">讀字典</div>
+    <h1 class="mb-3"><span data-vi="Đọc Bonet">Reading Bonet</span></h1>
+    <p class="lead mx-auto mb-0">How a dictionary printed in 1899 became searchable, one character at a time.</p>
+    <div class="big" id="big">
+      <div><b data-n="pages">951</b><span data-vi="trang được quét">scanned pages</span></div>
+      <div><b data-n="headwords">7,090</b><span data-vi="mục từ">headwords</span></div>
+      <div><b data-n="chars">4,035</b><span data-vi="chữ Nôm tìm thấy">characters found</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="card-box" id="book">
+    <h2><span class="no">1</span><span data-vi="Cuốn sách">The book</span></h2>
+    <p>In 1899 Jean Bonet published in Paris his <i lang="fr">Dictionnaire annamite-français</i>: two volumes, 951 pages, every word of Vietnamese in the Latin script, with its character in Chữ Nôm and its meaning in French. It shows how Vietnamese was written and read at the end of the 19th century, when Chữ Nôm was still in use beside Quốc Ngữ.</p>
+    <div class="scan-frame">
+      <div class="anatomy" id="anatomy"></div>
+    </div>
+    <ul class="legend-list">
+      <li><b>A</b> — the headword in Quốc Ngữ. The book is in its alphabetical order.</li>
+      <li><b class="han-font">阿</b> — the character in Chữ Nôm, printed beside it.</li>
+      <li><b lang="fr">Rempart…</b> — the meaning in French.</li>
+      <li><b>○</b> — in the compounds below, the circle stands for the headword.</li>
+    </ul>
+    <p class="mt-3 mb-0">On a page, a reader sees all this at once. A computer sees only an image: <b>it does not know which character is printed where</b>. Searching the book for a character was impossible.</p>
+  </section>
+
+  <section class="card-box" id="challenge">
+    <h2><span class="no">2</span><span data-vi="Thử thách">The challenge: which one is it?</span></h2>
+    <p>This is what the computer had to decide for every headword. The crop shows the headword and its character; below are the five characters that are most alike. <b>Which one is printed?</b></p>
+    <div class="quiz" id="quiz">
+      <div class="crop-slot"></div>
+      <div class="cands"></div>
+      <div class="verdict" aria-live="polite"></div>
+      <div class="d-flex gap-2 align-items-center">
+        <button type="button" class="btn btn-quiet btn-pill" id="quiz-next"><span data-vi="Câu tiếp">Next one</span> <i class="bi bi-arrow-right"></i></button>
+        <span class="score" id="quiz-score"></span>
+      </div>
+    </div>
+    <p class="small muted mt-3 mb-0">All twelve are places where the program's first guess (<i class="bi bi-cpu"></i>) was wrong and the right character was among its five; they were settled by reading the scan. Old print, look-alike characters, and characters missing from today's sets made thousands of places like these.</p>
+  </section>
+
+  <section class="card-box" id="way">
+    <h2><span class="no">3</span><span data-vi="Cách làm">The way</span></h2>
+    <figure class="pagefig" id="pagefig">
+      <a class="pf-img" href="/chunom/dict/bonet.html#520" aria-label="Page 520"></a>
+      <figcaption class="small muted mt-2"><span data-vi="Trang 520 qua mắt máy">Page 520 as the program sees it</span>: <span id="pf-txt"></span></figcaption>
+    </figure>
+    <div class="steps">
+      <div class="step">
+        <h3><i class="bi bi-scissors"></i><span data-vi="Cắt trang">Cut the pages</span></h3>
+        <p>Every page is split into its two columns; a line that starts at the margin is a headword, the dark shape beside it its character.</p>
+        <div class="fig"><span class="stat" data-n="headwords">7,090</span><span class="muted small">headwords found on 951 pages</span></div>
+      </div>
+      <div class="step">
+        <h3><i class="bi bi-sort-alpha-down"></i><span data-vi="Dùng thứ tự chữ cái">Use the alphabet</span></h3>
+        <p>The book is alphabetical, so a character on a page must have a reading between the first and the last headword of that page<span id="fig-range"></span>. Of tens of thousands of characters only a handful remain.</p>
+        <p class="small muted">Bonet does not sort as dictionaries do today: <i>a, ă, â</i> are one letter, as are <i>o, ô, ơ</i> and <i>u, ư</i>; <i>y</i> stands with <i>i</i>, and <i>đ</i> comes before <i>d</i>. So <i>ăn</i> comes between <i>ầm</i> and <i>anh</i>. The program sorts the way the book does.</p>
+        <div class="fig" id="fig-cands"></div>
+      </div>
+      <div class="step">
+        <h3><i class="bi bi-intersect"></i><span data-vi="So sánh hình">Compare the shapes</span></h3>
+        <p>The crop is compared with a drawing of every candidate, stroke direction by stroke direction, and checked once more against more than 35,000 known characters: is another one even closer?</p>
+        <div class="fig"><span class="stat" data-n="sure">2,949</span><span class="muted small">placed for sure by the program</span></div>
+      </div>
+      <div class="step">
+        <h3><i class="bi bi-eye"></i><span data-vi="Đọc lại bằng mắt">Read the rest</span></h3>
+        <p>Where the program was not sure, the crop was read: with the candidates beside it, and wider, with the headword, when the character was rare.</p>
+        <div class="fig"><span class="stat" data-n="seen">3,030</span><span class="muted small">read from the crop</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card-box" id="result">
+    <h2><span class="no">4</span><span data-vi="Kết quả">The result</span></h2>
+    <div class="funnel" id="funnel"></div>
+    <div class="stack" id="stack"></div>
+    <div class="keys" id="keys"></div>
+
+    <h3 class="h6 mt-4 mb-1" data-vi="Bản đồ các trang">Every page of the book</h3>
+    <p class="small muted mb-1">One square per page, the darker the more of its characters are found. Click a page to open it.</p>
+    <div id="map-info" class="muted"></div>
+    <div class="pagemap" id="pagemap"></div>
+    <div class="scale"><span>0 %</span><span class="g"></span><span>100 %</span></div>
+
+    <h3 class="h6 mt-4 mb-1" data-vi="Độ chính xác">How reliable?</h3>
+    <p class="small mb-1">100 places that the program had marked as sure, picked at random and checked by eye:</p>
+    <div class="dots" id="dots"></div>
+    <div class="keys"><span><i style="background:#2e7d32;opacity:.75"></i>right <span id="v-right"></span></span><span><i class="k-sure"></i>wrong <span id="v-wrong"></span></span><span><i class="k-sure" style="opacity:.5"></i>probably wrong <span id="v-pw"></span></span><span><i class="k-noglyph"></i>unclear <span id="v-u"></span></span></div>
+  </section>
+
+  <section class="card-box" id="spelling">
+    <h2><span class="no">5</span><span data-vi="Bonet viết khác">What Bonet writes differently</span></h2>
+    <p>Next to each character the reading was taken from the book itself: <b><span data-n="owner">1,506</span> places</b> where several readings were possible were decided by hand on the scan. <b><span data-n="newReadings">123</span> readings</b> are not in the input method of chunom.org for that character; <b><span data-n="newSyllables">29</span></b> of them are syllables that no character there has. Some are old spellings, some readings that are no longer used:</p>
+    <div class="spell" id="spell"></div>
+    <div class="bonet-new mt-4" id="bonet-new">
+      <h3 class="h5 mb-1" style="font-family: Georgia, 'Times New Roman', serif; font-weight: 400"><span data-vi="Tất cả các âm đọc mới">All the new readings</span> (<span data-n="newReadings">123</span>)</h3>
+      <p class="small muted mb-2">The reading in Bonet, the readings known so far, and the page; a few may be a character that the index matched wrongly: the page link shows the place.</p>
+      <div class="scroll" id="t-bonet-new"></div>
+      <div class="text-center mt-3"><button type="button" class="btn btn-cinnabar btn-pill btn-lg px-4" id="bonet-new-toggle" aria-expanded="false"><i class="bi bi-chevron-down me-1"></i><span data-vi="Xem tất cả 123">Show all 123</span></button></div>
+    </div>
+  </section>
+
+  <section class="card-box" id="who">
+    <h2><span class="no">6</span><span data-vi="Người và máy">People and machines</span></h2>
+    <p>Neither alone would have got this far. The program did the bulk and knew where it was unsure; an AI read the doubtful crops; a person decided the readings and checked what looked wrong.</p>
+    <div class="who">
+      <div><i class="bi bi-cpu"></i><b data-n="auto">2,949</b><span>characters placed by the program, with a cross-check</span></div>
+      <div><i class="bi bi-stars"></i><b data-n="ai">3,030</b><span>characters read from the crop by an AI (a large language model)</span></div>
+      <div><i class="bi bi-eye"></i><b data-n="owner">1,506</b><span>readings decided by hand on the scan</span></div>
+    </div>
+  </section>
+
+  <section class="card-box" id="next">
+    <h2><span class="no">7</span><span data-vi="Còn lại">What is still open</span></h2>
+    <ul class="open-list">
+      <li><b data-n="check">425</b> characters are still unsure, mostly rare ones that no list of candidates has.</li>
+      <li><b data-n="badcrop">205</b> crops missed the character, <b data-n="noglyph">481</b> headwords have no character found (many have none in the book).</li>
+      <li>Entries with two characters.</li>
+    </ul>
+    <div class="d-flex flex-wrap gap-2 mt-3">
+      <a class="btn btn-cinnabar btn-pill" href="/chunom/dict/bonet.html"><i class="bi bi-book me-1"></i><span data-vi="Mở từ điển">Open the dictionary</span></a>
+      <a class="btn btn-quiet btn-pill" href="/chunom/dict/bonet/chars.html"><i class="bi bi-grid-3x3-gap me-1"></i><span data-vi="Tất cả các chữ">All characters</span></a>
+    </div>
+  </section>
+
+</main>
+
+<script type="module">
+  const el = (tag, props = {}, ...children) => { const n = Object.assign(document.createElement(tag), props); n.append(...children); return n; };
+  const fmt = n => n.toLocaleString(window.Lang?.current === 'vi' ? 'vi' : 'en');
+  const viewer = (page, box) => `/chunom/dict/bonet.html#${page}${box ? '@' + box.join(',') : ''}`;
+
+  /** a picture of story.json ({ img, crop: [x0, y0, x1, y1] of its page }), `height` px high (or `width` px wide) */
+  function crop({ img, crop: [x0, y0, x1, y1] }, { height, width } = {}) {
+    const s = width ? width / (x1 - x0) : height / (y1 - y0);
+    const box = el('div', { className: 'crop' });
+    box.style.width = `${(x1 - x0) * s}px`; box.style.height = `${(y1 - y0) * s}px`;
+    box.append(el('img', { src: '/chunom/dict/bonet/' + img, alt: '', loading: 'lazy', decoding: 'async' }));
+    return box;
+  }
+
+  const story = await fetch('/chunom/dict/bonet/story.json').then(r => r.json());
+  const c = story.counts;
+  const N = { pages: story.pages.length, headwords: story.headwords, chars: story.chars, ...c, ...story.people,
+    newReadings: story.new.readings, newSyllables: story.new.syllables };
+  document.querySelectorAll('[data-n]').forEach(e => { if (N[e.dataset.n] != null) e.textContent = fmt(N[e.dataset.n]); });
+
+  // 1. the anatomy of an entry: page 1, the entry 阿, its labels in % of the crop
+  {
+    const R = story.anatomy.crop, W = R[2] - R[0], H = R[3] - R[1];
+    const host = document.getElementById('anatomy');
+    const draw = () => {
+      host.replaceChildren();
+      const w = host.clientWidth, box = crop(story.anatomy, { width: w });
+      host.append(box);
+      const mark = ([x0, y0, x1, y1], label, alt, below) => {
+        const m = el('div', { className: 'ann' + (alt ? ' alt' : '') });
+        Object.assign(m.style, { left: `${(x0 - R[0]) / W * 100}%`, top: `${(y0 - R[1]) / H * 100}%`, width: `${(x1 - x0) / W * 100}%`, height: `${(y1 - y0) / H * 100}%` });
+        const t = el('span', { className: 'tag' + (below ? ' below' : ''), textContent: label });
+        Object.assign(t.style, { left: m.style.left, top: below ? `${(y1 - R[1]) / H * 100}%` : m.style.top });
+        host.append(m, t);
+      };
+      mark([33, 1347, 78, 1398], Lang.t('headword', 'mục từ'), false, true);
+      mark([96, 1331, 160, 1392], Lang.t('character', 'chữ'));
+      mark([168, 1336, 692, 1560], Lang.t('meaning', 'nghĩa'), false, true);
+      mark([96, 1580, 365, 1630], Lang.t('compound', 'từ ghép'), true);
+    };
+    draw();
+    new ResizeObserver(draw).observe(host);
+    document.addEventListener('langchange', draw);
+  }
+
+  // 2. the quiz
+  {
+    const host = document.getElementById('quiz'), slot = host.querySelector('.crop-slot'), cands = host.querySelector('.cands'), verdict = host.querySelector('.verdict');
+    const scoreEl = document.getElementById('quiz-score');
+    let i = 0, score = 0, played = 0;
+    const show = () => {
+      const q = story.quiz[i];
+      slot.replaceChildren(crop(q, { height: Math.min(110, innerWidth / 3.4) }));
+      verdict.textContent = '';
+      cands.replaceChildren(...[...q.cands].map((ch, k) => {
+        const b = el('button', { type: 'button', className: 'cand', textContent: ch });
+        b.onclick = () => {
+          played++; if (ch === q.char) score++;
+          cands.querySelectorAll('.cand').forEach((x, j) => {
+            x.disabled = true;
+            if (x.textContent === q.char) x.classList.add('right'); else if (x === b) x.classList.add('wrong');
+            if (j === 0) x.classList.add('machine');
+          });
+          verdict.replaceChildren(
+            el('b', { textContent: ch === q.char ? Lang.t('Right! ', 'Đúng! ') : Lang.t('Not quite. ', 'Chưa đúng. ') }),
+            Lang.t(`It is ${q.char}, read “${q.reading}” here. The program had guessed ${q.cands[0]}. `, `Đó là ${q.char}, đọc “${q.reading}”. Máy đã đoán ${q.cands[0]}. `),
+            el('a', { href: viewer(q.page, q.box), textContent: Lang.t(`Page ${q.page}`, `Trang ${q.page}`) }));
+          scoreEl.textContent = Lang.t(`${score} of ${played}`, `${score} / ${played}`);
+        };
+        return b;
+      }));
+    };
+    document.getElementById('quiz-next').onclick = () => { i = (i + 1) % story.quiz.length; show(); };
+    show();
+
+    // the figure of step 2: the candidates of the second example, the right one marked, and the range of its page (dict/data/bonet.json: the first headword of every page)
+    const q = story.quiz[1];
+    fetch('/chunom/dict/data/bonet.json').then(r => r.json()).then(first => {
+      const range = document.getElementById('fig-range');
+      range.append(Lang.t(` (page ${q.page}: `, ` (trang ${q.page}: `), el('i', { textContent: first[q.page - 1] }), ' … ', el('i', { textContent: first[q.page] }), ')');
+    }).catch(() => {});
+    document.getElementById('fig-cands').append(crop(q, { height: 34 }), el('i', { className: 'bi bi-arrow-right muted' }),
+      ...[...q.cands].map(ch => el('span', { className: 'c' + (ch === q.char ? ' on' : ''), textContent: ch })));
+  }
+
+  // 3. one whole page as the cutter sees it (story.figure): the rule between the columns, the margin of every headword line, the characters
+  // found (red; amber dashed: still unsure), drawn one after the other when the page comes into view
+  {
+    const f = story.figure, host = document.querySelector('#pagefig .pf-img');
+    const R = f.crop, W = R[2] - R[0], H = R[3] - R[1]; // the text area of the page
+    const pct = (x, y) => ({ left: `${(x - R[0]) / W * 100}%`, top: `${(y - R[1]) / H * 100}%` });
+    const shape = (cls, style, title) => { const e = el('span', { className: cls, title: title || '' }); Object.assign(e.style, style); return e; };
+    let shapes = [];
+    const draw = () => {
+      host.replaceChildren(crop(f, { width: host.clientWidth }));
+      const top = Math.min(f.rule[1], ...f.lines.map(l => l[1])), bottom = Math.max(f.rule[2], ...f.lines.map(l => l[2]));
+      shapes = [
+        shape('rule', { ...pct(f.rule[0], top), height: `${(bottom - top) / H * 100}%` }, Lang.t('the rule between the columns', 'đường kẻ giữa hai cột')),
+        ...f.lines.map(([x, y0, y1]) => shape('margin', { ...pct(x - 10, y0), height: `${(y1 - y0) / H * 100}%` }, Lang.t('a headword', 'một mục từ'))),
+        ...f.boxes.map(([x0, y0, x1, y1, ch, st]) => shape('hit' + (st === 'check' ? ' unsure' : ''), { ...pct(x0, y0), width: `${(x1 - x0) / W * 100}%`, height: `${(y1 - y0) / H * 100}%` }, ch)),
+      ];
+      host.append(...shapes);
+      if (shown) shapes.forEach(e => e.classList.add('on'));
+    };
+    let shown = false;
+    draw();
+    new ResizeObserver(() => draw()).observe(host);
+    new IntersectionObserver((es, o) => {
+      if (!es.some(e => e.isIntersecting)) return;
+      o.disconnect(); shown = true;
+      shapes.forEach((e, i) => setTimeout(() => e.classList.add('on'), 300 + i * 260));
+    }, { threshold: .35 }).observe(host);
+    const n = f.boxes.filter(b => b[5] !== 'check').length;
+    const setTxt = () => document.getElementById('pf-txt').textContent = Lang.t(
+      `the rule between the columns (green), the margin of each of the ${f.lines.length} headwords (green), ${n} characters found (red), one still unsure (amber).`,
+      `đường kẻ giữa hai cột (xanh), lề của ${f.lines.length} mục từ (xanh), ${n} chữ đã tìm (đỏ), một chữ chưa chắc (vàng).`);
+    setTxt(); document.addEventListener('langchange', setTxt);
+  }
+
+  // 4. the funnel, the status bar, the map of the pages, the dots
+  {
+    const total = story.headwords, withGlyph = total - c.noglyph, placed = c.sure + c.seen;
+    const rows = [[total, 'headwords in the book', 'mục từ trong sách'], [withGlyph, 'with a character beside them', 'có chữ Nôm đi kèm'],
+      [placed, 'characters found and placed', 'chữ đã tìm và định vị'], [story.chars, 'different characters', 'chữ khác nhau']];
+    document.getElementById('funnel').replaceChildren(...rows.map(([n, en, vi]) => el('div', { className: 'frow' },
+      (b => (b.style.width = `${n / total * 100}%`, b))(el('div', { className: 'fbar', textContent: fmt(n) })),
+      (s => (s.dataset.vi = vi, s))(el('div', { className: 'lbl', textContent: en })))));
+
+    const kinds = [['sure', 'sure (program)', 'chắc chắn (máy)'], ['seen', 'read from the crop', 'đọc từ ảnh cắt'], ['check', 'still unsure', 'chưa chắc'],
+      ['badcrop', 'crop missed it', 'cắt hụt'], ['noglyph', 'no character found', 'không có chữ']];
+    document.getElementById('stack').replaceChildren(...kinds.map(([k]) => (s => (s.style.width = `${c[k] / total * 100}%`, s.title = fmt(c[k]), s))(el('span', { className: 'k-' + k }))));
+    document.getElementById('keys').replaceChildren(...kinds.map(([k, en, vi]) => el('span', {}, el('i', { className: 'k-' + k }),
+      (s => (s.dataset.vi = vi, s))(el('span', { textContent: en })), ' ' + fmt(c[k]))));
+
+    const map = document.getElementById('pagemap'), info = document.getElementById('map-info');
+    const L = story.letters;
+    map.replaceChildren(...L.map(([letter, from], li) => {
+      const to = (L[li + 1]?.[1] ?? story.pages.length + 1) - 1, cells = el('div', { className: 'cells' });
+      for (let p = from; p <= to; p++) {
+        const [hw, ok] = story.pages[p - 1];
+        const a = el('a', { href: viewer(p), className: hw ? '' : 'skip' });
+        a.style.setProperty('--p', hw ? ok / hw : 0);
+        a.setAttribute('aria-label', `${p}`);
+        a.onmouseenter = a.onfocus = () => info.textContent = hw
+          ? Lang.t(`Page ${p}: ${ok} of ${hw} characters found`, `Trang ${p}: tìm được ${ok} / ${hw} chữ`)
+          : Lang.t(`Page ${p}: front matter, no headwords`, `Trang ${p}: phần đầu sách, không có mục từ`);
+        cells.append(a);
+      }
+      return el('div', { className: 'lt' }, el('b', { textContent: letter }), cells);
+    }));
+
+    const v = story.validation;
+    document.getElementById('dots').replaceChildren(...[[v.right, ''], [v.wrong, 'w'], [v.probably_wrong, 'pw'], [v.unclear, 'u']]
+      .flatMap(([n, k]) => Array.from({ length: n }, () => el('i', { className: k }))));
+    document.getElementById('v-right').textContent = v.right; document.getElementById('v-wrong').textContent = v.wrong;
+    document.getElementById('v-pw').textContent = v.probably_wrong; document.getElementById('v-u').textContent = v.unclear;
+  }
+
+  // 5. Bonet's spellings: a few examples with their place, and the table of all readings that the IME does not have (in the order of Bonet)
+  {
+    document.getElementById('spell').replaceChildren(...story.spell.map(r => el('div', { className: 'card' },
+      el('a', { href: viewer(r.page, r.box), title: Lang.t(`Page ${r.page}`, `Trang ${r.page}`) }, crop(r, { height: 46 })),
+      el('div', { className: 'then' }, el('span', { className: 'han-font me-2', textContent: r.char }), r.reading),
+      el('div', { className: 'now', textContent: Lang.t('known so far: ', 'đã biết: ') + r.known.join(', ') }))));
+
+    const box = document.getElementById('bonet-new'), toggle = document.getElementById('bonet-new-toggle');
+    toggle.onclick = () => {
+      const open = box.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open);
+      const t = toggle.querySelector('span'), n = story.new.readings;
+      t.dataset.vi = open ? 'Thu gọn' : `Xem tất cả ${n}`; t.textContent = open ? 'Show fewer' : `Show all ${n}`;
+      document.getElementById('t-bonet-new').scrollTop = 0;
+    };
+    const KNOWN_MAX = 6;   // the known readings shown; the rest in the title
+    const head = el('tr', {}, ...[['Char', 'Chữ'], ['Bonet', 'Bonet'], ['Known', 'Đã biết'], ['Page', 'Trang']].map(([en, vi]) => el('th', {}, (s => (s.dataset.vi = vi, s))(el('span', { textContent: en })))));
+    document.getElementById('t-bonet-new').replaceChildren(el('table', {}, el('thead', {}, head), el('tbody', {}, ...story.new.list.map(r => {
+      const ch = el('button', { type: 'button', className: 'ch', textContent: r.char, title: Lang.t('Details', 'Chi tiết') });
+      ch.addEventListener('click', () => window.ChunomDetail?.open(r.char));
+      const known = r.known.length > KNOWN_MAX ? r.known.slice(0, KNOWN_MAX).join(', ') + ', …' : r.known.join(', ');
+      return el('tr', {}, el('td', {}, ch), el('td', { className: 'bn', textContent: r.reading }), el('td', { className: 'kn', textContent: known || '–', title: r.known.join(', ') }),
+        el('td', {}, ...r.places.flatMap((p, i) => [i ? ' ' : '', el('a', { href: viewer(p[0], p.slice(1)), textContent: p[0] })])));
+    }))));
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What's new</title>
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://qatt.org/css/site.css">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <script src="https://qatt.org/js/navigation.js"></script>
+  <style>
+    :root { --ink: #2b2118; --accent: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --muted: #7b6c58; }
+    body { margin: 0; background: var(--paper); color: var(--ink); }
+    /* the header of the pages of qatt.org and the Chunom site (.hero): the look of the theme "classic"; other themes override it */
+    .hero {
+      background:
+        radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%),
+        linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%);
+      border-bottom: 1px solid #e8dcc0;
+      color: var(--ink);
+    }
+    .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: .01em; }
+    .hero .lead { max-width: 38rem; color: #4a3d30; }
+    main { max-width: 44rem; margin: 0 auto; padding: 0 1rem 2rem; }
+    .card-box { margin: 0 0 1rem; padding: 1rem 1.2rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .14); }
+    .card-box .date { color: var(--muted); font-size: .9rem; }
+    .card-box h2 { font-size: 1.3rem; margin: .1rem 0 .6rem; }
+    .card-box ul { margin: 0; padding-left: 1.2rem; }
+    .card-box li + li { margin-top: .4rem; }
+    .card-box .links { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .8rem; }
+    .card-box .shot { display: block; width: 100%; height: auto; margin: .8rem 0 0; border-radius: 8px; box-shadow: 0 .25rem .7rem rgba(60, 40, 20, .18); }
+    .card-box .covers { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-top: .8rem; }
+    .card-box .covers a { display: block; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 8px; box-shadow: 0 .25rem .7rem rgba(60, 40, 20, .18); }
+    .card-box .covers img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+    .card-box .covers a:hover img { transform: scale(1.03); }
+  </style>
+</head>
+<body>
+<header class="hero pt-4 pt-sm-5 pb-4 mb-4">
+  <div class="container text-center">
+    <h1 class="mb-3" data-vi="Có gì mới">What's new</h1>
+    <p class="lead mx-auto mb-0" data-vi="Những thay đổi của Chunom.org.">Changes to Chunom.org.</p>
+  </div>
+</header>
+<main>
+  <article class="card-box">
+    <div class="date" data-vi="17 tháng 11, 2026">17 November 2026</div>
+    <h2 data-vi="Nôm Notes: ứng dụng mới để viết chữ Nôm">Nôm Notes: a new app for writing Chữ Nôm</h2>
+    <ul>
+      <li data-vi="Viết ghi chú và tài liệu bằng chữ Nôm, theo hàng ngang hoặc theo cột dọc, như các văn bản châu Á xưa.">Write notes and documents in Chữ Nôm, horizontally or vertically in columns, like old Asian texts.</li>
+      <li data-vi="Gõ Quốc Ngữ bằng Telex rồi chọn chữ Nôm trong danh sách gợi ý, hoặc viết thẳng bằng QATT và PA.">Type Quốc Ngữ with Telex and pick the Chữ Nôm from the suggestions, or write QATT and PA directly.</li>
+      <li data-vi="Dùng tiêu đề, đoạn hai cột và phần đọc đặt bên cạnh chữ.">Use headings, two-column passages and readings that sit beside the characters.</li>
+      <li data-vi="Chọn phông chữ, cỡ chữ và kiểu giấy cho từng ghi chú.">Choose a font, a text size and a paper style for every note.</li>
+      <li data-vi="Chia sẻ ghi chú bằng liên kết, xuất và nhập ghi chú.">Share a note with a link, and export or import your notes.</li>
+      <li data-vi="Đăng nhập để đồng bộ ghi chú trên mọi thiết bị; ứng dụng chạy được khi không có mạng và có thể cài lên điện thoại hoặc máy tính.">Sign in to keep your notes in sync on all your devices; the app works offline and can be installed on your phone or computer.</li>
+      <li data-vi="Nút hình con mắt cạnh nút dấu cộng hiển thị nội dung bộ nhớ tạm bằng phông chữ bạn chọn và cho phép lưu thành ghi chú mới. Khi bạn mở hoặc quay lại ứng dụng mà bộ nhớ tạm có chữ Hán, chữ Nôm, QATT hoặc PA, một gợi ý ngắn sẽ đề nghị hiển thị, mỗi văn bản một lần.">The eye button next to the plus button shows what is on your clipboard, in the font of your choice, and lets you save it as a new note. When you open the app or come back to it and the clipboard holds Chinese characters, Chữ Nôm, QATT or PA, a short hint offers to show it, once per text.</li>
+    </ul>
+    <img class="shot" src="/chunom-assets/changelog/nom-notes.webp" width="1080" height="746" alt="Nôm Notes: Chữ Nôm in vertical columns with readings beside the characters" loading="lazy">
+    <div class="links">
+      <a class="btn btn-quiet btn-pill" href="/apps/"><i class="bi bi-journal-text"></i> <span data-vi="Nôm Notes">Nôm Notes</span></a>
+    </div>
+  </article>
+  <article class="card-box">
+    <div class="date" data-vi="15 tháng 11, 2026">15 November 2026</div>
+    <h2 data-vi="Gợi ý chữ Nôm tốt hơn khi gõ">Better Chữ Nôm suggestions while you type</h2>
+    <ul>
+      <li data-vi="Không cần gõ dấu nữa. Gõ nuoc là thấy ngay 渃 nước; gõ nam hiện cùng lúc nam, năm, nằm, nấm…">You no longer have to type the marks. Type nuoc and 渃 nước appears at once; nam shows nam, năm, nằm, nấm … together.</li>
+      <li data-vi="d cũng tìm ra đ: gõ duong hiện cả dương và đường.">d also finds đ: duong shows dương and đường.</li>
+      <li data-vi="Gõ dấu đến đâu, danh sách thu hẹp đến đó: nươc chỉ còn nước, nắm chỉ còn nắm. Dấu thanh đặt ở đâu cũng được: hoà và hòa cho cùng kết quả.">Every mark you type narrows the list: nươc keeps only nước, nắm only nắm. The tone can be written anywhere in the word: hoà and hòa give the same suggestions.</li>
+      <li data-vi="Thứ tự: từ viết đúng như đã gõ lên đầu, từ ngắn trước từ dài, rồi những chữ bạn hay chọn hoặc có giải nghĩa, sau đó theo bảng chữ cái.">Order: words written exactly as you typed come first, then shorter before longer, then characters you choose often or that have a meaning, then alphabetical.</li>
+      <li data-vi="Áp dụng ở mọi nơi bạn gõ chữ Nôm.">Works wherever you type Chữ Nôm.</li>
+    </ul>
+    <div class="links">
+      <a class="btn btn-quiet btn-pill" href="/chunom/writer.html"><i class="bi bi-pencil-square"></i> <span data-vi="Gõ chữ Nôm">Write Chữ Nôm</span></a>
+    </div>
+  </article>
+  <article class="card-box">
+    <div class="date" data-vi="12 tháng 11, 2026">12 November 2026</div>
+    <h2 data-vi="Hoạt ảnh thứ tự nét cho hầu hết các chữ">Stroke order animations for almost every character</h2>
+    <ul>
+      <li data-vi="Hơn 95% các chữ giờ đã có hoạt ảnh thứ tự nét. Mở một chữ ra, chữ lớn sẽ cho thấy cách viết từng nét một.">More than 95% of all characters now have an animated stroke order. Open a character and the big character shows how it is written, stroke by stroke.</li>
+    </ul>
+  </article>
+  <article class="card-box">
+    <div class="date" data-vi="8 tháng 11, 2026">8 November 2026</div>
+    <h2 data-vi="PA đã trở lại, tốt hơn bao giờ hết">PA is back, better than ever</h2>
+    <ul>
+      <li data-vi="PA (phiên âm tự) đã trở lại trên trang web. Trước đây đã thông báo sẽ bỏ nó, nhưng nhiều người dùng đã đề nghị giữ lại nên nó đã quay trở lại.">PA (phonetic annotation) is back on the website. It had been announced that it would be removed, but many users asked for it, so it is here again.</li>
+      <li data-vi="Tốt hơn bao giờ hết: phông chữ giờ hỗ trợ các chữ xếp chồng.">It is better than ever: the font now supports stacked characters.</li>
+      <li data-vi="Dùng được ở mọi nơi bạn gõ chữ Nôm.">Available wherever you can type Chữ Nôm.</li>
+    </ul>
+    <div class="links">
+      <a class="btn btn-quiet btn-pill" href="/chunom/pa/"><i class="bi bi-type"></i> <span data-vi="Học chữ PA trong một giờ">PA in one hour</span></a>
+    </div>
+  </article>
+  <article class="card-box">
+    <div class="date" data-vi="3 tháng 11, 2026">3 November 2026</div>
+    <h2 data-vi="Phông chữ mới phủ trọn bộ chữ Nôm">New fonts with complete Chữ Nôm coverage</h2>
+    <ul>
+      <li data-vi="Chunom.org giới thiệu bốn phông chữ hiện đại phủ trọn bộ chữ Nôm: QATT Pen, Migoi, Celluloid và Phong Thảo.">Chunom.org presents four modern typefaces with complete Chữ Nôm coverage: QATT Pen, Migoi, Celluloid and Phong Thảo.</li>
+      <li data-vi="Cả bốn phông chữ đều được Chunom.org thiết kế riêng, và dành cho Chunom.org.">All four fonts were designed especially by and for Chunom.org.</li>
+      <li data-vi="Dùng phông chữ của chúng tôi trên trang web của bạn qua CDN.">Use our fonts on your own website via CDN.</li>
+      <li data-vi="Các phông chữ của chúng tôi phủ trọn bộ chữ Nôm, PA và khối Quốc Âm Tân Tự tạm thời.">Our fonts have complete coverage for Chữ Nôm, PA and the preliminary Quốc Âm Tân Tự block.</li>
+      <li data-vi="Được hỗ trợ bởi ứng dụng Nom Notes mới, bàn phím và trình soạn thảo web của chúng tôi.">Supported by our new Nom Notes app, keyboard and web editor.</li>
+      <li data-vi="Xem và tải các phông chữ trong danh mục phông chữ.">Look at the fonts and download them in the font catalogue.</li>
+    </ul>
+    <div class="covers">
+      <a href="/chunom/fonts/#pen"><img src="/chunom/fonts/pen/cover.webp" width="800" height="446" alt="QATT Pen" loading="lazy"></a>
+      <a href="/chunom/fonts/#migoi"><img src="/chunom/fonts/migoi/cover.webp" width="800" height="446" alt="Migoi" loading="lazy"></a>
+      <a href="/chunom/fonts/#celluloid"><img src="/chunom/fonts/celluloid/cover.webp" width="800" height="446" alt="Celluloid" loading="lazy"></a>
+      <a href="/chunom/fonts/#phongthao"><img src="/chunom/fonts/phongthao/cover.webp" width="800" height="446" alt="Phong Thảo" loading="lazy"></a>
+    </div>
+    <div class="links">
+      <a class="btn btn-quiet btn-pill" href="/chunom/fonts/"><i class="bi bi-fonts"></i> <span data-vi="Phông chữ">Fonts</span></a>
+    </div>
+  </article>
+  <article class="card-box">
+    <div class="date" data-vi="24 tháng 10, 2026">24 October 2026</div>
+    <h2 data-vi="Tủ sách: những tác phẩm đáng đọc, kèm bản dịch tiếng Việt hiện đại">The Bookshelf: titles worth reading, with modern Vietnamese</h2>
+    <ul>
+      <li data-vi="Tủ sách giờ là tuyển chọn những tác phẩm đáng đọc, mỗi tác phẩm kèm bản dịch sang tiếng Việt hiện đại.">The Bookshelf is now a selection of titles worth reading, each with a translation into modern Vietnamese.</li>
+      <li data-vi="Trên trang web cũ, đây chỉ là một kho văn bản.">On the old site it was only a collection of texts.</li>
+    </ul>
+    <div class="links">
+      <a class="btn btn-quiet btn-pill" href="/chunom/shelf/"><i class="bi bi-bookshelf"></i> <span data-vi="Tủ sách">Bookshelf</span></a>
+    </div>
+  </article>
+  <article class="card-box">
+    <div class="date" data-vi="15 tháng 10, 2026">15 October 2026</div>
+    <h2 data-vi="Dịch Quốc Ngữ sang chữ Nôm bằng AI">AI translation from Quốc Ngữ to Chữ Nôm</h2>
+    <ul>
+      <li data-vi="Công cụ dịch AI mới thay thế bản dịch máy cũ dựa trên Moses. Kết quả chính xác hơn nhiều.">A new AI translator replaces the earlier machine translation based on Moses. The results are much more accurate.</li>
+      <li data-vi="Bạn có thể tự chỉnh kết quả: chọn chữ khác cho một từ hoặc tự gõ chữ.">You can adjust the result yourself: choose another character for a word or type your own.</li>
+    </ul>
+    <div class="links">
+      <a class="btn btn-quiet btn-pill" href="/chunom/translate.html"><i class="bi bi-translate"></i> <span data-vi="Dịch">Translate</span></a>
+    </div>
+  </article>
+</main>
+</body>
+</html>

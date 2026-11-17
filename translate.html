@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Translate Chữ Nôm: Quốc Ngữ → Chữ Nôm</title>
+  <meta name="description" content="Transcribe Vietnamese (Quốc Ngữ) into Chữ Nôm: the characters are chosen from the dictionaries in the context of the sentence.">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://qatt.org/css/site.css">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <script src="https://qatt.org/js/navigation.js"></script>
+  <script defer src="https://qatt.org/vendor/supabase/supabase.min.js"></script>
+  <script defer src="https://qatt.org/js/supabase.js"></script>
+  <script defer src="https://qatt.org/js/login.js"></script>
+  <script defer src="/chunom/js/detail.js"></script>
+  <style>
+    :root { --ink: #2b2118; --accent: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
+    body { margin: 0; background: var(--paper); color: var(--ink); }
+    /* the header of the pages of qatt.org and the Chunom site (.hero): the look of the theme "classic"; other themes override it */
+    .hero {
+      background:
+        radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%),
+        linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%);
+      border-bottom: 1px solid #e8dcc0;
+      color: var(--ink);
+    }
+    .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: .01em; }
+    .hero .han { color: var(--accent); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; }
+    .hero .lead { max-width: 38rem; color: #4a3d30; }
+    @media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
+    main { max-width: 44rem; margin: 0 auto; padding: 0 1rem 2rem; }
+    /* loading animation (the answer can take up to a minute): the four characters of "Quốc ngữ chữ Nôm" (國語𡨸喃) light up in a wave, a bar creeps forward and never stops
+       at the end, the message changes every few seconds and says how long it has been, so nobody thinks that something is broken */
+    .loading { display: flex; flex-direction: column; align-items: center; gap: .6rem; padding: 1.1rem 0 .3rem; }
+    .loading[hidden] { display: none; }
+    .loading .chars { display: flex; gap: 1rem; }
+    .loading .ch { font-family: var(--font-cjk), serif; font-size: 2.6rem; line-height: 1; color: var(--accent); opacity: .15; animation: ink 2s ease-in-out infinite; }
+    .loading .ch:nth-child(2) { animation-delay: .25s; } .loading .ch:nth-child(3) { animation-delay: .5s; } .loading .ch:nth-child(4) { animation-delay: .75s; }
+    @keyframes ink { 0%, 100% { opacity: .15; transform: translateY(0); } 35% { opacity: 1; transform: translateY(-.45rem); } 70% { opacity: .4; transform: translateY(0); } }
+    .loading .bar { width: min(18rem, 80%); height: .4rem; border-radius: .2rem; background: var(--line); overflow: hidden; }
+    .loading .bar i { display: block; height: 100%; width: 3%; border-radius: .2rem; transition: width .5s linear;
+      background: repeating-linear-gradient(-45deg, var(--accent) 0 .6rem, #c4574a .6rem 1.2rem); background-size: 200% 100%; animation: stripes 1s linear infinite; }
+    @keyframes stripes { to { background-position: 1.7rem 0; } }
+    .loading .msg { color: var(--muted); font-size: .95rem; text-align: center; min-height: 1.5em; }
+    @media (prefers-reduced-motion: reduce) { .loading .ch { animation: none; opacity: .7; } .loading .bar i { animation: none; } }
+    .card-box { margin: 0 0 .4rem; padding: .8rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .14); }
+    textarea { width: 100%; min-height: 11.1rem; resize: vertical; border: 1px solid var(--field); border-radius: .5rem; padding: .5rem .7rem; font-size: 1.1rem; background: #fff; }
+    textarea:focus { outline: 2px solid rgba(168, 54, 42, .35); }
+    .count { font-size: .8rem; color: var(--muted); }
+    #status { min-height: 1.6rem; margin-top: .6rem; color: var(--accent); font-weight: 600; }
+    #status.error { color: #842029; }
+    #result { margin-top: 1rem; }
+    .flag { color: #842029; }
+    .font-serif { font-family: var(--font-cjk), serif; }
+    /* the result as text in the Nôm font (selectable, copyable), every character with its Quốc Ngữ as ruby text above it */
+    .nom { font-family: var(--font-cjk), serif; font-size: 2rem; line-height: 1.5; }
+    .nom ruby { ruby-position: over; }
+    .nom rt { font: .75rem/1.2 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--muted); user-select: none; }   /* not copied with the text */
+    .nom.no-rt rt { display: none; }
+    .nom .ch { cursor: pointer; border-radius: .25rem; transition: background-color .15s; }
+    .nom .ch:hover { background-color: color-mix(in srgb, #2fa4d6 25%, transparent); }
+    .nom .txt { font-size: 1.3rem; }
+    /* characters as images (as on the dictionary page), each one opens the popup of the character */
+    .nom-char { cursor: pointer; }
+    .nom-char, .nom-char img { border-radius: .25rem; transition: background-color .15s, box-shadow .15s; }
+    .nom-char:hover img, .nom-char:not(:has(img)):hover { background-color: color-mix(in srgb, #2fa4d6 25%, transparent); box-shadow: 0 0 0 .2rem color-mix(in srgb, #2fa4d6 25%, transparent); }
+    /* how sure a word is: green = sure, orange dashed = differs from the dictionary, red = uncertain, dotted yellow = not checked */
+    .unit { display: inline-block; white-space: nowrap; margin: 0 .08em; padding-bottom: .05em; border-bottom: .22rem solid transparent; }   /* a word (a compound too) is never split over two lines */
+    .unit.sure { border-bottom-color: #3f8a4f; }
+    .unit.differs { border-bottom-color: #d9822b; border-bottom-style: dashed; }
+    .unit.uncertain { border-bottom-color: #c0392b; }
+    .unit.unchecked { border-bottom-color: #c9a227; border-bottom-style: dotted; }
+    .state { white-space: nowrap; font-weight: 600; }
+    .state.sure { color: #2f6f3e; }
+    .state.differs { color: #a35a12; }
+    .state.uncertain { color: #842029; }
+    .state.unchecked { color: #8a6d0b; }
+    .legend { font-size: .8rem; }
+    .legend .unit { margin-right: .6em; }
+    table.units { font-size: .85rem; }
+    table.units th { border-bottom: 1px solid var(--line); }
+    table.units td, table.units th { vertical-align: top; }
+    table.units tbody td { border-top: 1px solid var(--line); }
+    table.units tbody tr:first-child td { border-top: 0; }
+    table.units td.chars-cell { white-space: nowrap; }
+    .def { color: var(--muted); }
+    /* alternative candidates: in the last column under the definition, muted, with a small title over the first one */
+    .alts { margin-top: .4rem; color: var(--muted); font-size: .8rem; }
+    .alts .alts-title { font-size: .75rem; }
+    .alts .alt { display: flex; align-items: center; gap: .5rem; margin-top: .15rem; }
+    .alts .alt .alt-chars { white-space: nowrap; flex-shrink: 0; }
+    /* characters without an image are shown as font text, as big as the images (32 px in the table, 24 px for alternatives) */
+    td.chars-cell .nom-char { font-size: 32px; line-height: 1; }
+    .alts .alt-chars .nom-char { font-size: 24px; line-height: 1; }
+    .alts .alt img { opacity: .8; }
+    /* a word with other options: a click on it opens the list to choose from (#pick) */
+    .nom .unit.has-alts { cursor: pointer; }
+    #pick { position: absolute; z-index: 1055; background: Canvas; color: CanvasText; border: 1px solid var(--field); border-radius: .5rem; box-shadow: 0 .4rem 1rem rgba(0, 0, 0, .15); padding: .35rem; min-width: 12rem; max-width: min(22rem, calc(100vw - 16px)); max-height: 60vh; overflow: auto; }
+    #pick .pick-title { font-size: .75rem; color: var(--muted); padding: .1rem .4rem .3rem; }
+    #pick .pick-item { display: flex; align-items: center; gap: .6rem; width: 100%; text-align: left; background: none; border: 0; border-radius: .35rem; padding: .15rem .4rem; color: inherit; }
+    #pick .pick-item:hover:not(:disabled) { background: color-mix(in srgb, #2fa4d6 22%, transparent); }
+    #pick .pick-item:disabled { background: color-mix(in srgb, CanvasText 8%, transparent); }
+    #pick .pc { font-family: var(--font-cjk), serif; font-size: 1.7rem; line-height: 1.25; flex-shrink: 0; }
+    #pick .pm { font-size: .8rem; color: var(--muted); }
+    #pick .pick-hint { font-size: .8rem; color: var(--muted); padding: 0 .4rem .3rem; }
+    #pick .pick-type { display: flex; gap: .4rem; align-items: center; padding: .15rem .4rem .3rem; }
+    #pick .pick-type input { min-width: 0; font-size: 1.4rem; }
+    #pick .pick-msg { font-size: .8rem; color: #842029; padding: 0 .4rem .3rem; }
+    #pick .pick-more { border-top: 1px solid var(--line); margin-top: .25rem; padding-top: .25rem; }
+    #pick .pick-more .pick-item { font-size: .8rem; color: var(--muted); }
+    .account { font-size: .85rem; color: var(--muted); margin-top: 1.2rem; text-align: center; }
+  </style>
+</head>
+<body>
+<header class="hero pt-4 pt-sm-5 pb-4 mb-4">
+  <div class="container text-center">
+    <div class="han mb-2">國語𡨸喃</div>
+    <h1 class="mb-3" data-vi="Dịch chữ Nôm">Translate Chữ Nôm</h1>
+    <p class="lead mx-auto mb-0"><span class="d-block" data-vi="Tự động chuyển chữ Quốc Ngữ sang chữ Nôm.">Automatic Quốc Ngữ to Nôm transliteration.</span><span class="d-block" data-vi="Đây là bản dịch máy và có thể không chính xác.">This is a machine translation that might be inaccurate.</span></p>
+  </div>
+</header>
+<main>
+
+  <div class="card-box">
+    <div class="d-flex justify-content-between align-items-baseline"><label for="text" class="form-label fw-semibold">Quốc Ngữ → Chữ Nôm</label><span class="count"><span id="count">0</span> / 400</span></div>
+    <textarea id="text" lang="vi" maxlength="400" spellcheck="false" placeholder="Tôi là người Việt Nam." data-vi-placeholder="Gõ hoặc dán Quốc Ngữ…"></textarea>
+    <div class="count text-center mt-1" id="quota" hidden></div>
+    <div class="d-flex justify-content-center align-items-center flex-wrap gap-2 mt-2">
+      <select id="lang" class="form-select w-auto" aria-label="Output">
+        <option value="">Chữ Nôm</option><option value="en">Chữ Nôm + English</option><option value="de">Chữ Nôm + Deutsch</option><option value="fr">Chữ Nôm + Français</option><option value="es">Chữ Nôm + Español</option><option value="it">Chữ Nôm + Italiano</option><option value="pt">Chữ Nôm + Português</option><option value="ru">Chữ Nôm + Русский</option><option value="zh">Chữ Nôm + 中文</option><option value="ja">Chữ Nôm + 日本語</option><option value="ko">Chữ Nôm + 한국어</option>
+      </select>
+      <button type="button" class="btn btn-cinnabar btn-pill" id="go" data-vi="Dịch">Translate</button>
+    </div>
+    <div class="d-flex justify-content-center mt-2">
+      <div class="form-check form-switch mb-0"><input class="form-check-input" type="checkbox" role="switch" id="improve" checked><label class="form-check-label small" for="improve" data-vi="Giúp cải thiện mô hình" title="Words for which the dictionary has no character are stored with the words around them, to improve the dictionary and the model. Off: only one word on each side, on: five." data-vi-title="Những từ mà từ điển chưa có chữ được lưu cùng các từ xung quanh để cải thiện từ điển và mô hình. Tắt: chỉ một từ mỗi bên, bật: năm từ.">Help improve the model</label></div>
+    </div>
+    <div class="loading" id="loading" role="status" aria-live="polite" hidden>
+      <div class="chars"><span class="ch" aria-hidden="true">國</span><span class="ch" aria-hidden="true">語</span><span class="ch" aria-hidden="true">𡨸</span><span class="ch" aria-hidden="true">喃</span></div>
+      <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+      <div class="msg" id="msg"></div>
+    </div>
+
+    <div id="status" role="status" aria-live="polite"></div>
+  </div>
+
+  <section id="result" hidden>
+    <div class="card-box">
+      <div class="d-flex align-items-center flex-wrap gap-3 mb-2">
+        <button type="button" class="btn btn-quiet btn-sm" id="copy"><i class="bi bi-clipboard"></i> <span data-vi="Sao chép">Copy</span></button>
+        <div class="form-check form-switch mb-0"><input class="form-check-input" type="checkbox" role="switch" id="rt-toggle" checked><label class="form-check-label small" for="rt-toggle" data-vi="Hiện Quốc Ngữ phía trên chữ">Show Quốc Ngữ above the characters</label></div>
+      </div>
+      <div class="nom" id="nom" lang="vi-Hani"></div>
+      <p class="mt-2 mb-0" id="translation" hidden></p>
+      <div class="alert alert-warning py-2 px-3 mt-3 mb-0">
+        <div class="legend"><span class="unit sure" data-vi="từ danh sách">from the list</span><span class="unit differs" data-vi="mô hình tự chọn">model's own</span><span class="unit uncertain" data-vi="chưa chắc">uncertain</span></div>
+        <div class="small mt-1" id="warn" hidden></div>
+      </div>
+    </div>
+    <h2 class="h6 fw-semibold mt-3 mb-0" data-vi="Chi tiết">Details</h2>
+    <div class="table-responsive mt-2">
+      <table class="table table-sm table-borderless units"><thead><tr><th>#</th><th>Quốc Ngữ</th><th data-vi="Chữ Nôm">Chữ Nôm</th><th data-vi="Trạng thái / Định nghĩa">Status / Definition</th></tr></thead><tbody id="units"></tbody></table>
+    </div>
+    <div class="count mt-3" id="version"></div>
+    <details class="mt-2 small" id="lists-box">
+      <summary class="fw-semibold" data-vi="Danh sách gửi cho mô hình">Lists sent to the model</summary>
+      <pre class="mt-2 p-2 bg-white border rounded" id="lists" style="white-space: pre-wrap; font-family: var(--font-cjk), serif;"></pre>
+    </details>
+  </section>
+
+  <p class="account" id="account"></p>
+  <p class="count text-center mt-1" data-vi="Văn bản của bạn được xử lý bằng dịch vụ AI của Google để tạo kết quả.">Your text is processed by a Google AI service to produce the result.</p>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const $ = id => document.getElementById(id);
+  const t = (en, vi) => (typeof Lang !== 'undefined' ? Lang.t(en, vi) : en);
+  const norm = x => String(x || '').normalize('NFC').toLowerCase().trim();
+  const text = $('text'), go = $('go'), status = $('status');
+  text.addEventListener('input', () => { $('count').textContent = text.value.length; });
+
+  // the supabase scripts are deferred: wait until they are there
+  const ready = async () => {
+    for (let i = 0; i < 100 && !(typeof SupabaseService !== 'undefined' && typeof QattLogin !== 'undefined'); i++) await new Promise(r => setTimeout(r, 50));
+    const sp = new SupabaseService();
+    await sp.init();
+    return sp;
+  };
+
+  // ---- the dictionaries of the page: dict.csv (readings, characters, meanings, "standard") and the input method of js/ime.js
+  const csvReady = fetch('/chunom/dict.csv').then(r => r.text()).then(csv => {
+    const map = new Map();
+    for (const line of csv.split('\n')) {
+      const m = /^"((?:[^"]|"")*)","((?:[^"]|"")*)"(?:,"((?:[^"]|"")*)")?(.*)$/.exec(line);
+      if (!m) continue;
+      const key = norm(m[1].replace(/""/g, '"'));
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push({ han: m[2].replace(/""/g, '"'), gloss: (m[3] || '').replace(/""/g, '"'), standard: /"standard"\s*$/.test(m[4]) });
+    }
+    return map;
+  }).catch(e => { console.warn('dict.csv not loaded', e); return new Map(); });
+  const imeReady = typeof ChunomDetail !== 'undefined' ? ChunomDetail.loadIme() : Promise.resolve();
+  const sp = await ready();
+  QattLogin.status(sp, $('account'), '[Sign in] to use the translator.', '[Đăng nhập] để dùng công cụ dịch.');
+
+  // the options for a reading ("có thể"): characters of dict.csv (standard first, with meaning), then the others of the dictionaries of the
+  // input method, those with a definition first; at most 15
+  const MAX_OPTIONS = 15, MAX_SENT = 15;   // the model gets the characters only (no meanings): its own knowledge decides, the list only limits the choice
+  // how many words on each side of a gap of the dictionary (a word for which the model had to use a character of its own) the function stores for the improvement of the
+  // dictionary and the model (1 to 2; see tools/db/translate_log.sql of qtng/chunom-private): CONTEXT_ON with the switch "Help improve the model" (on at every visit, not remembered), else CONTEXT_OFF.
+  const CONTEXT_ON = 2, CONTEXT_OFF = 1;
+  const optionCache = new Map();
+  const optionsFor = (key, csv) => {
+    if (optionCache.has(key)) return optionCache.get(key);
+    const out = new Map();
+    for (const e of csv.get(key) || []) out.set(e.han, { c: e.han, m: e.gloss, score: e.standard ? 30 : 20 });
+    if (window.VietIme && window.VietIme.lookup) {
+      for (const e of window.VietIme.lookup(key.replace(/ /g, ''))) {
+        if (norm(e.reading) !== key) continue;
+        const prev = out.get(e.glyph);
+        if (prev) { if (!prev.m) prev.m = e.definition; }
+        else out.set(e.glyph, { c: e.glyph, m: e.definition, score: e.definition ? 10 : 1 });
+      }
+    }
+    const list = [...out.values()].sort((a, b) => b.score - a.score).slice(0, MAX_OPTIONS).map(({ c, m, score }) => ({ c, m, s: score >= 30 ? 1 : 0 }));   // s: the usual character according to dict.csv ("standard")
+    optionCache.set(key, list);
+    return list;
+  };
+  // all spans of 1 to 4 syllables that have options
+  const buildSpans = (value, csv) => {
+    const syl = (value.match(/[\p{L}\p{M}]+/gu) || []).map(norm);
+    const spans = [], full = new Map();   // spans: what is sent; full: all options of a span for the alternatives
+    for (let at = 0; at < syl.length; at++) {
+      for (let len = 1; len <= 4 && at + len <= syl.length; len++) {
+        const options = optionsFor(syl.slice(at, at + len).join(' '), csv);
+        if (!options.length) continue;
+        full.set(at + '+' + len, options);
+        spans.push({ at, len, options: options.slice(0, MAX_SENT).map(o => ({ c: o.c, s: o.s })) });
+      }
+    }
+    return { syl, spans, full };
+  };
+
+  const say = (msg, error) => { status.textContent = msg; status.className = error ? 'error' : ''; };
+  const ERRORS = {
+    sign_in: t('Please sign in first.', 'Vui lòng đăng nhập trước.'),
+    too_long: t('The text is too long (up to 400 characters).', 'Văn bản quá dài (tối đa 400 ký tự).'),
+    limit: t('Daily limit reached. Please try again tomorrow.', 'Đã hết lượt trong ngày. Vui lòng thử lại ngày mai.'),
+    busy: t('The service is busy. Please try again in a minute.', 'Dịch vụ đang bận. Vui lòng thử lại sau ít phút.'),
+    bad_request: t('The lists were not accepted. Try a shorter text.', 'Danh sách không được chấp nhận. Hãy thử văn bản ngắn hơn.'),
+    empty: t('Please type some text.', 'Vui lòng nhập văn bản.'),
+  };
+  // requests left today: the function reports it with every result; the page keeps it for the day (UTC, like the counter of the server)
+  // and shows it approximately. After the error "limit" it is 0; on a new day it is unknown again and not shown.
+  const today = () => new Date().toISOString().slice(0, 10);
+  const quotaShow = () => {
+    let q = null;
+    try { q = JSON.parse(localStorage.getItem('translate_left')); } catch { /* no storage */ }
+    const box = $('quota');
+    if (!q || q.day !== today() || typeof q.left !== 'number') { box.hidden = true; return; }
+    box.textContent = q.left > 0 ? t(`${q.left} requests left today`, `Hôm nay còn ${q.left} lượt`) : t('No requests left today', 'Hôm nay đã hết lượt');
+    box.className = 'count text-center mt-1 ' + (q.left <= 5 ? 'text-warning' : 'text-success');
+    box.hidden = false;
+  };
+  const quotaSet = left => { try { localStorage.setItem('translate_left', JSON.stringify({ day: today(), left })); } catch { /* no storage */ } quotaShow(); };
+  document.addEventListener('langchange', quotaShow);
+  quotaShow();
+  const GENERIC = t('Something went wrong. Please try again.', 'Đã xảy ra lỗi. Vui lòng thử lại.');
+
+  // characters as images in the table (js/detail.js, as on the dictionary page); plain text if that script is not there
+  const SIZE = 32;
+  const chars = (str, size) => (typeof ChunomDetail !== 'undefined' ? ChunomDetail.get().nomChars(str, size) : [str]);
+
+  // ---- the check of the reading of a character of the model's own (the dictionaries of js/ime.js, a compound character by character)
+  const readingCache = new Map();
+  const readingsOf = ch => {
+    if (!readingCache.has(ch)) {
+      const set = new Set();
+      for (const e of window.VietIme.lookupGlyph(ch)) {
+        const s = norm(e.reading).split(' '), cs = [...e.glyph];
+        if (s.length === cs.length) cs.forEach((c, i) => { if (c === ch) set.add(s[i]); });
+      }
+      readingCache.set(ch, set);
+    }
+    return readingCache.get(ch);
+  };
+  const verify = (qn, glyphs) => {   // {ok: true}, {ok: false, read} or {ok: undefined}
+    if (!(window.VietIme && window.VietIme.lookupGlyph)) return { ok: undefined };
+    const cs = [...glyphs], syl = qn.split(' ');
+    if (window.VietIme.lookupGlyph(cs[0]).some(e => e.glyph === glyphs && norm(e.reading) === qn)) return { ok: true };
+    if (cs.length !== syl.length) return { ok: undefined };
+    const bad = []; let unknown = false;
+    cs.forEach((c, i) => { const set = readingsOf(c); if (!set.size) unknown = true; else if (!set.has(syl[i])) bad.push([...set].slice(0, 3).join(', ')); });
+    if (bad.length) return { ok: false, read: bad.join(' / ') };
+    return { ok: unknown ? undefined : true };
+  };
+
+  // state of a word: sure (chosen from the list: the reading is right), own (the model's own character, reading found or not confirmed),
+  // uncertain (no character, or the reading of the own character is wrong)
+  const STATES = {
+    sure: { cls: 'sure', icon: 'bi-check-circle-fill', label: () => t('from the list', 'từ danh sách') },
+    own: { cls: 'differs', icon: 'bi-question-circle-fill', label: () => t("model's own", 'mô hình tự chọn') },
+    uncertain: { cls: 'uncertain', icon: 'bi-exclamation-triangle-fill', label: () => t('uncertain', 'chưa chắc') },
+    typed: { cls: 'differs', icon: 'bi-pencil-fill', label: () => t('typed by you', 'do bạn nhập') },
+  };
+  const rate = w => {
+    if (w.chosen === '?') return { state: 'uncertain', why: t('no character found', 'không tìm được chữ') };
+    if (w.typed) {   // typed in the dialog of #pick: the reading is checked like the one of the model's own character
+      const v = verify(w.qn, w.chosen);
+      if (v.ok === false) return { state: 'uncertain', why: t('typed by you; the dictionaries read it as “', 'do bạn nhập; từ điển đọc là “') + v.read + '”' };
+      return { state: 'typed', why: v.ok ? t('reading found in the dictionaries', 'cách đọc có trong từ điển') : t('reading not confirmed', 'chưa xác nhận cách đọc') };
+    }
+    if (w.manual) return { state: 'sure', why: t('chosen by you', 'do bạn chọn') };   // picked in the list of #pick
+    if (!w.own) return { state: 'sure', why: w.options.length > 1 ? t(`chosen from ${Math.min(w.options.length, MAX_SENT)} options`, `chọn trong ${Math.min(w.options.length, MAX_SENT)} lựa chọn`) : t('the only option', 'lựa chọn duy nhất') };
+    const v = verify(w.qn, w.chosen);
+    if (v.ok === false) return { state: 'uncertain', why: t('the dictionaries read it as “', 'từ điển đọc là “') + v.read + '”' };
+    return { state: 'own', why: v.ok ? t('reading found in the dictionaries', 'cách đọc có trong từ điển') : t('reading not confirmed', 'chưa xác nhận cách đọc') };
+  };
+
+  // the result as text: every character is a <ruby> with its syllable (one per character if the numbers agree, else the whole reading over
+  // the group); a word is underlined by its state. The Quốc Ngữ is not selected when the text is copied.
+  const ruby = (nodes, reading) => { const r = document.createElement('ruby'); r.append(...nodes); const rt = document.createElement('rt'); rt.textContent = reading; r.append(rt); return r; };
+  const ch = c => { const s = document.createElement('span'); s.className = 'ch'; s.dataset.char = c; s.textContent = c; return s; };
+  const wordNodes = w => {
+    if (w.chosen === '?') { const x = document.createElement('span'); x.className = 'txt'; x.textContent = `[${w.qn}]`; return [x]; }
+    const cs = [...w.chosen], syl = w.qn.split(' ');
+    return cs.length === syl.length ? cs.map((c, i) => ruby([ch(c)], syl[i])) : [ruby(cs.map(ch), w.qn)];
+  };
+  const shown = w => (w.chosen === '?' ? `[${w.qn}]` : w.chosen);
+
+  // a click on the word opens the list: it has other options, or it has no sure character (then a character can be typed)
+  const pickable = w => w.options.some(o => o.char !== w.chosen) || (!!window.VietIme && (w.chosen === '?' || w.state !== 'sure'));
+  let lastNom = '', current = null;   // current: {r, full} of the result on the page, shown again after a choice
+  const show = (r, full) => {
+    current = { r, full }; closePick();
+    const byId = new Map(r.words.map(w => [w.id, w]));
+    for (const w of r.words) { w.options = (full.get(w.at + '+' + w.len) || []).map(o => ({ char: o.c, meaning: o.m })); Object.assign(w, rate(w)); }
+    lastNom = r.parts.map(p => (p.word ? shown(byId.get(p.word)) : p.text)).join('');
+    const box = $('nom'); box.replaceChildren();
+    for (const p of r.parts) {
+      if (!p.word) { box.append(p.text); continue; }
+      const w = byId.get(p.word), st = STATES[w.state];
+      const span = document.createElement('span');
+      const canPick = pickable(w);
+      span.className = 'unit ' + st.cls + (canPick ? ' has-alts' : '');
+      span.dataset.w = w.id;
+      span.title = `${w.qn} · ${st.label()}` + (canPick ? ' · ' + t('click to choose another character', 'bấm để chọn chữ khác') : '');
+      span.append(...wordNodes(w));
+      box.append(span);
+    }
+    const unsure = r.words.filter(w => w.state !== 'sure');
+    const warn = $('warn'), notes = [];
+    if (unsure.length) notes.push(t('Check: ', 'Kiểm tra: ') + unsure.map(w => w.qn).join(', '));
+    if (r.fallback) notes.push(t('The model did not manage the segmentation: single syllables, the first option each.', 'Mô hình không tách được từ: từng âm tiết, lựa chọn đầu tiên.'));
+    warn.hidden = !notes.length; warn.textContent = notes.join(' ');
+
+    // the table: a line per word; the other options of its span in the last column under the definition
+    const el = (tag, cls, ...kids) => { const n = document.createElement(tag); if (cls) n.className = cls; n.append(...kids.flat()); return n; };
+    const rows = r.words.map(w => {
+      const st = STATES[w.state];
+      const mine = w.options.find(o => o.char === w.chosen) || {};
+      const others = w.options.filter(o => o.char !== w.chosen);
+      const best = (w.alt || []).map(c => others.find(o => o.char === c)).filter(Boolean);
+      const alts = best;
+      const altLine = a => el('div', 'alt', el('span', 'alt-chars', ...chars(a.char, 24)), el('span', '', a.meaning || ''));
+      const status = el('td', '', el('div', '', el('span', 'state ' + st.cls, el('i', 'bi ' + st.icon), ' ', st.label()), ' ', el('span', 'def', '· ' + w.why)),
+        mine.meaning ? el('div', 'def', mine.meaning) : '',
+        alts.length ? el('div', 'alts', el('div', 'alts-title', t('Alternatives', 'Lựa chọn khác')), alts.map(altLine)) : '');
+      return el('tr', '', el('td', '', String(w.id)), el('td', '', w.qn), el('td', 'chars-cell', ...(w.chosen === '?' ? ['?'] : chars(w.chosen, SIZE))), status);
+    });
+    $('units').replaceChildren(...rows);
+    $('translation').textContent = r.translation || ''; $('translation').hidden = !r.translation;
+    $('version').textContent = r.version ? t('Prompt version: ', 'Phiên bản prompt: ') + r.version : '';
+    $('result').hidden = false;
+  };
+
+  // the list to choose another character for a word from (its other options; the model's next best ones first)
+  const pick = document.createElement('div');
+  pick.id = 'pick'; pick.hidden = true; document.body.append(pick);
+  const mk = (tag, cls, ...kids) => { const n = document.createElement(tag); if (cls) n.className = cls; n.append(...kids); return n; };
+  function closePick() { pick.hidden = true; delete pick.dataset.w; }
+  const choose = (w, c) => {   // the character becomes the choice, the one it replaces stays as an alternative (if it is an option)
+    const prev = w.chosen, fromList = w.options.some(o => o.char === c);
+    w.alt = [prev, ...(w.alt || []).filter(x => x !== c && x !== prev)].filter(x => x !== '?').slice(0, 2);
+    w.chosen = c; w.own = !fromList; w.manual = fromList; w.typed = !fromList;
+    show(current.r, current.full);
+  };
+  // the field to type a character: Telex and the candidates of js/ime.js (one field for the whole page, moved into the list when it opens)
+  const typeInput = document.createElement('input');
+  typeInput.type = 'text'; typeInput.className = 'form-control form-control-sm'; typeInput.lang = 'vi';
+  typeInput.setAttribute('aria-label', t('Quốc Ngữ, then choose the character', 'Gõ Quốc Ngữ rồi chọn chữ'));
+  let imeWasOpen = false;   // was the candidate list open when the key was pressed (Esc and Enter then belong to it)
+  typeInput.addEventListener('keydown', () => { imeWasOpen = !!ime && !ime.list.hidden; });
+  let ime = null;   // made when it is first needed: js/ime.js is loaded by js/detail.js, not at the start of the page
+  const typeRow = w => {
+    if (!ime) ime = new VietIme(typeInput, { candidates: true, defer: true, returnSelect: true });
+    const msg = mk('div', 'pick-msg'); msg.hidden = true;
+    const use = mk('button', 'btn btn-sm btn-cinnabar', t('Use', 'Dùng')); use.type = 'button';
+    const apply = () => {
+      const text = [...typeInput.value].filter(c => /\p{Script=Han}/u.test(c)).join('');
+      if (!text || [...text].length > 16) { msg.textContent = t('Type the reading, then choose a character from the list.', 'Gõ cách đọc rồi chọn một chữ trong danh sách.'); msg.hidden = false; return; }
+      choose(w, text);
+    };
+    use.addEventListener('click', apply);
+    typeInput.onkeydown = e => { if (e.key === 'Enter' && !e.defaultPrevented && !imeWasOpen && !e.isComposing) { e.preventDefault(); apply(); } };
+    typeInput.value = w.qn;
+    setTimeout(() => { pick.scrollIntoView({ block: 'center' }); typeInput.focus(); typeInput.setSelectionRange(typeInput.value.length, typeInput.value.length); ime.load(); }, 0);
+    return [mk('div', 'pick-type', typeInput, use), msg];
+  };
+  const openPick = (w, unit) => {
+    const rank = c => { const i = (w.alt || []).indexOf(c); return i < 0 ? 99 : i; };
+    const others = w.options.filter(o => o.char !== w.chosen).sort((a, b) => rank(a.char) - rank(b.char));
+    const item = (o, cur) => { const b = mk('button', 'pick-item', mk('span', 'pc', o.char), mk('span', 'pm', (cur ? '✓ ' : '') + (o.meaning || ''))); b.type = 'button'; b.disabled = cur; if (!cur) b.addEventListener('click', () => choose(w, o.char)); return b; };
+    const none = w.chosen === '?', mine = w.options.find(o => o.char === w.chosen);
+    const kids = [mk('div', 'pick-title', (none ? t('No character found', 'Không tìm được chữ') : t('Choose another character', 'Chọn chữ khác')) + ' · ' + w.qn)];
+    if (none && window.VietIme) { kids.push(mk('div', 'pick-hint', t('Type it yourself:', 'Tự gõ:')), ...typeRow(w)); if (others.length) kids.push(mk('div', 'pick-title', t('Or choose from the list', 'Hoặc chọn trong danh sách'))); }
+    if (!none) kids.push(item(mine || { char: w.chosen, meaning: w.typed ? t('typed by you', 'do bạn nhập') : '' }, true));
+    kids.push(...others.map(o => item(o, false)));
+    if (!none && window.VietIme) {   // below the list: type a character yourself
+      const row = mk('div', 'pick-more'), b = mk('button', 'pick-item', '✎ ' + t('Type another character…', 'Nhập chữ khác…')); b.type = 'button';
+      b.addEventListener('click', () => { row.replaceChildren(...typeRow(w)); });
+      row.append(b); kids.push(row);
+    }
+    if (!none && typeof ChunomDetail !== 'undefined') {
+      const b = mk('button', 'pick-item', t('Details of ', 'Chi tiết của ') + w.chosen); b.type = 'button';
+      b.addEventListener('click', () => { closePick(); ChunomDetail.get().open([...w.chosen][0]).catch(err => console.error('Popup failed', err)); });
+      kids.push(mk('div', 'pick-more', b));
+    }
+    pick.replaceChildren(...kids);
+    pick.dataset.w = w.id; pick.hidden = false;
+    const r = unit.getBoundingClientRect();
+    pick.style.top = (r.bottom + window.scrollY + 4) + 'px';
+    pick.style.left = Math.max(8, Math.min(r.left + window.scrollX, window.scrollX + document.documentElement.clientWidth - pick.offsetWidth - 8)) + 'px';
+  };
+  document.addEventListener('click', e => { if (!pick.hidden && e.target.isConnected && !pick.contains(e.target) && !e.target.closest('#nom .unit, .vietime')) closePick(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { if (imeWasOpen && e.target === typeInput) imeWasOpen = false; else closePick(); } });   // the first Esc in the field closes its candidate list only
+  let pickWidth = window.innerWidth;
+  window.addEventListener('resize', () => { if (window.innerWidth !== pickWidth) { pickWidth = window.innerWidth; closePick(); } });   // not for the keyboard of a phone (the height changes)
+
+  // a click on a word with other options opens the list to choose from; else (and in the table) on a character its popup (js/detail.js); not while text is selected
+  $('result').addEventListener('click', e => {
+    if (String(window.getSelection()).length) return;
+    const unit = e.target.closest('#nom .unit');
+    if (unit && current) {
+      const w = current.r.words.find(x => x.id === Number(unit.dataset.w));
+      if (w && pickable(w)) { if (pick.dataset.w === String(w.id) && !pick.hidden) closePick(); else openPick(w, unit); return; }
+    }
+    const c = e.target.closest('.nom-char, .ch');
+    if (!c || typeof ChunomDetail === 'undefined') return;
+    ChunomDetail.get().open(c.dataset.char).catch(err => console.error('Popup failed', err));
+  });
+  // copying selected text of the result: only the characters, without the Quốc Ngữ of the ruby text
+  $('nom').addEventListener('copy', e => {
+    const sel = window.getSelection();
+    if (!sel.rangeCount || sel.isCollapsed) return;
+    const tmp = document.createElement('div');
+    for (let i = 0; i < sel.rangeCount; i++) tmp.append(sel.getRangeAt(i).cloneContents());
+    tmp.querySelectorAll('rt').forEach(n => n.remove());
+    e.clipboardData.setData('text/plain', tmp.textContent);
+    e.preventDefault();
+  });
+  // the Quốc Ngữ above the characters can be hidden (remembered in this browser)
+  const rtBox = $('rt-toggle'), rtSet = on => { $('nom').classList.toggle('no-rt', !on); rtBox.checked = on; };
+  const langBox = $('lang');
+  try { const saved = localStorage.getItem('translate_target'); langBox.value = saved !== null ? saved : 'en'; if (langBox.value !== saved && saved !== null) langBox.value = 'en'; } catch { langBox.value = 'en'; }
+  langBox.addEventListener('change', () => { try { localStorage.setItem('translate_target', langBox.value); } catch { /* no storage */ } });
+  const improveBox = $('improve');   // on at every visit, the choice is not remembered: switching it off has to stay the exception
+  try { rtSet(localStorage.getItem('translate_rt') !== '0'); } catch { /* no storage */ }
+  rtBox.addEventListener('change', () => { rtSet(rtBox.checked); try { localStorage.setItem('translate_rt', rtBox.checked ? '1' : '0'); } catch { /* no storage */ } });
+
+  // waiting for the answer: bar and messages by elapsed time (the function sends no real progress; it can take up to a minute)
+  const WAIT = [
+    [0, 'Looking up the characters…', 'Đang tra các chữ…'],
+    [6, 'Reading the sentence…', 'Đang đọc câu…'],
+    [14, 'Choosing the characters in context…', 'Đang chọn chữ theo ngữ cảnh…'],
+    [28, 'Still working: this can take up to a minute.', 'Vẫn đang xử lý: có thể mất đến một phút.'],
+    [55, 'The service is busy, thank you for waiting.', 'Dịch vụ đang bận, cảm ơn bạn đã chờ.'],
+  ];
+  let waitTimer = null;
+  const waitStart = () => {
+    const t0 = Date.now(), bar = $('bar'), msg = $('msg');
+    const tick = () => {
+      const sec = (Date.now() - t0) / 1000;
+      bar.style.width = (3 + 90 * (1 - Math.exp(-sec / 25))).toFixed(1) + '%';   // fast at first, ever slower, never at the end
+      const w = WAIT.filter(x => sec >= x[0]).pop();
+      msg.textContent = t(w[1], w[2]) + (sec >= 6 ? '  ' + Math.floor(sec) + ' s' : '');
+    };
+    tick(); clearInterval(waitTimer); waitTimer = setInterval(tick, 500);
+  };
+  const waitStop = () => { clearInterval(waitTimer); waitTimer = null; };
+
+  go.addEventListener('click', async () => {
+    const value = text.value.trim();
+    if (!value) return say(ERRORS.empty, true);
+    if (!(await QattLogin.require(sp, t('Sign in to use the translator.', 'Đăng nhập để dùng công cụ dịch.')))) return;
+    go.disabled = true; $('result').hidden = true;
+    say(''); $('loading').hidden = false; waitStart();
+    try {
+      const [csv] = await Promise.all([csvReady, imeReady]);
+      const { spans, full } = buildSpans(value, csv);
+      $('lists').textContent = spans.map(s => `${s.at}+${s.len}  ${s.options.map(o => o.c + (o.s ? '*' : '')).join(' ')}`).join('\n');
+      const session = (await sp.client.auth.getSession()).data.session;
+      const res = await fetch(`${sp.url}/functions/v1/translate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: sp.key, Authorization: 'Bearer ' + session.access_token },
+        body: JSON.stringify({ text: value, spans, lang: $('lang').value, context: improveBox.checked ? CONTEXT_ON : CONTEXT_OFF }),
+      });
+      if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error || 'failed'); }
+      const reader = res.body.getReader(), dec = new TextDecoder();
+      let buf = '', done = false;
+      while (true) {
+        const { value: chunk, done: end } = await reader.read();
+        if (chunk) buf += dec.decode(chunk, { stream: true });
+        const lines = buf.split('\n'); buf = lines.pop();
+        if (end && buf.trim()) lines.push(buf);
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          const m = JSON.parse(line);
+          if (m.error) throw new Error(m.error);
+          if (m.result) { show(m.result, full); if (typeof m.result.left === 'number') quotaSet(m.result.left); say(''); done = true; }
+        }
+        if (end) break;
+      }
+      if (!done) throw new Error('failed');
+    } catch (e) {
+      if (e.message === 'limit') quotaSet(0);
+      say(ERRORS[e.message] || GENERIC, true);
+    } finally {
+      go.disabled = false; $('loading').hidden = true; waitStop();
+    }
+  });
+
+  $('copy').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(lastNom); say(t('Copied.', 'Đã sao chép.')); setTimeout(() => say(''), 1500); } catch { /* no clipboard permission */ }
+  });
+});
+</script>
+</body>
+</html>

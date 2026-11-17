@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free CJKV fonts for Chữ Nôm</title>
+  <meta name="description" content="Free CJKV Fonts for Chữ Nôm / Hán Nôm and Quốc Âm Tân Tự: QATT Pen, Migoi, Celluloid, Phong Thảo.">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://qatt.org/css/site.css">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/chunom/fonts/fonts.css">
+  <script src="https://qatt.org/js/navigation.js"></script>
+  <style>
+    /* one band per font, each in colours of its own (the same in every theme: they belong to the specimen); the fonts are those of js/fonts.js of qatt.org */
+    .band { position: relative; overflow: hidden; padding: 2.2rem 0 2.4rem; }
+    .band .inner { position: relative; max-width: 52rem; margin: 0 auto; padding: 0 1.25rem; }
+    .band .top { display: flex; align-items: baseline; gap: .8rem; }
+    .band .more { display: flex; align-items: baseline; gap: 1.2rem; }
+    .band .upd { font: .7rem system-ui, sans-serif; letter-spacing: .03em; opacity: .35; }   /* the date of the last change in the line of "See and download" (fonts.js, version.json), for the owner */
+    .band .no { font: 700 .85rem system-ui, sans-serif; letter-spacing: .1em; color: var(--b-accent); }
+    .band .name { font-size: 1.7rem; }
+    .band .wm { position: absolute; right: -1.5rem; top: .2rem; font-size: clamp(9rem, 30vw, 17rem); line-height: 1; opacity: .13; pointer-events: none; user-select: none; }
+    .band .poem { font-size: clamp(2.1rem, 7.5vw, 3.6rem); line-height: 1.3; margin: 1.1rem 0 .6rem; }
+    .band .qatt { font-size: clamp(1.6rem, 5.5vw, 2.4rem); letter-spacing: .06em; color: var(--b-accent); margin-bottom: .7rem; }
+    .band .latin { font-size: clamp(1.05rem, 3.4vw, 1.35rem); line-height: 1.45; opacity: .85; }
+    .band .desc { font: .8rem system-ui, sans-serif; letter-spacing: .05em; text-transform: uppercase; opacity: .65; margin-top: 1rem; }
+    .band .more { font: .9rem system-ui, sans-serif; margin-top: 1rem; }
+    .band .more a, .band .more a:hover { color: var(--b-accent) !important; }   /* the colours of the band, also in a theme that colours links */
+    .band, .band .name, .band .latin, .band .poem { color: var(--b-ink) !important; }
+    /* on the phone the link stands on the right and the whole band is the link (its ::after covers the band; the band clips it) */
+    @media (max-width: 767.98px) {
+      .band .more { flex-direction: row-reverse; justify-content: space-between; }   /* the link on the right, the date on the left */
+      .band .wm { right: .4rem; top: -1.4rem; font-size: 7.5rem; }   /* on the phone smaller, higher and the whole character on the screen */
+      .band .more a::after { content: ""; position: absolute; top: -3rem; bottom: -3rem; left: -50vw; right: -50vw; }
+    }
+    .b-pen    { --b-bg: #fdf8ee; --b-ink: #2b2118; --b-accent: #a8362a; }
+    .b-light  { --b-bg: #f3efe6; --b-ink: #2b2118; --b-accent: #6b7a8f; }
+    .b-medium { --b-bg: #f1e6cf; --b-ink: #2b2118; --b-accent: #9a6b1f; }
+    .b-migoi  { --b-bg: #e8f0e4; --b-ink: #24332a; --b-accent: #5d8a5a; }
+    .b-cell   { --b-bg: #f6e9e4; --b-ink: #2a1a17; --b-accent: #b5473a; }
+    .b-phong  { --b-bg: #eef0f3; --b-ink: #23262b; --b-accent: #4b6b9a; }
+    .b-goth   { --b-bg: #ecebe6; --b-ink: #1d1d1b; --b-accent: #6b6458; }
+    .b-round  { --b-bg: #f3ece0; --b-ink: #2b2620; --b-accent: #b07a2a; }
+    .band { background: var(--b-bg); }
+    .closing { max-width: 52rem; margin: 0 auto; padding: 2rem 1.25rem 3rem; }
+    /* between the bands of the Pen and the others: the covers of Pen, Migoi, Celluloid and Phong Thảo in a grid of 2 × 2, whole (16:9, 800 px wide WebP), with room around them */
+    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; max-width: 60rem; margin: 0 auto; padding: 2rem 1.25rem; }
+    .pair a { display: block; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,.15); }
+    .pair img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform .4s; }
+    .pair a:hover img { transform: scale(1.03); }
+    @media (max-width: 575.98px) { .pair { gap: .75rem; padding: 1.25rem 1rem; } .pair a { border-radius: 8px; } }
+    .os { display: flex; justify-content: center; align-items: center; gap: 1.5rem; font-size: 1.6rem; color: var(--muted, #777); }
+    .os .cdn { width: 2.4rem; height: 1.56rem; overflow: visible; }   /* the CDN mark in the row of the icons: a box in the colour of the row with the letters cut out (SVG mask), so the background shows through */
+  </style>
+</head>
+<body>
+<header class="hero pt-4 pt-sm-5 pb-4">
+  <div class="container text-center">
+    <div class="han mb-2">𡨸喃</div>
+    <h1 class="mb-3" data-vi="Phông chữ CJK của chúng tôi">Our CJKV fonts</h1>
+    <p class="slogan mb-3">Quốc Ngữ • Chữ Nôm • <a href="https://qatt.org/">Quốc Âm Tân Tự</a></p>
+    <div class="os" aria-hidden="true"><i class="bi bi-windows"></i><i class="bi bi-apple"></i><i class="bi bi-android2"></i><svg class="cdn" viewBox="0 0 46 30" fill="currentColor"><mask id="cdn-cut"><rect width="46" height="30" fill="#fff"/><text x="23" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="800" font-size="14" letter-spacing="1" fill="#000">CDN</text></mask><rect width="46" height="30" rx="6" mask="url(#cdn-cut)"/></svg></div>
+    <div class="mt-3"><a class="btn btn-quiet btn-pill btn-sm" href="/chunom/fonts/glyphs/"><i class="bi bi-chat-dots me-1"></i><span data-vi="Cộng tác">Collaborate</span></a> <a class="btn btn-quiet btn-pill btn-sm" href="/chunom/fonts/chars/"><i class="bi bi-grid-3x3 me-1"></i><span data-vi="Tổng quan chữ">Character overview</span></a></div>
+  </div>
+</header>
+
+<main class="p-0" style="max-width:none">   <!-- the catalogue of the fonts: one band per font with a specimen; a link to #<id> opens the popup of the font (fonts.js, from fonts.json) -->
+  <section class="band b-pen"><div class="inner">
+    <div class="wm" style="font-family: 'QATT Pen'" aria-hidden="true">國</div>
+    <div class="top"><span class="no">01</span><span class="name" style="font-family: 'QATT Pen Latin', 'QATT Pen'">QATT Pen</span></div>
+    <div class="poem" style="font-family: 'QATT Pen'" lang="vi-Hani">𤾓𢆥𥪝𡎝𠊛些<br>𡨸才𡨸命窖𱺵恄憢</div>
+    <div class="qatt" style="font-family: 'QATT Pen'">󰀜󰂚󰁂󰂢󰀀󰂚󰀾󰀿󰂚󰀽󰀿󰂚󰀡󰂡󰂌󰂚󰁧󰂣󰀸󰂚󰀉</div>
+    <div class="latin" style="font-family: 'QATT Pen Latin', 'QATT Pen'">Trăm năm trong cõi người ta,<br>chữ tài chữ mệnh khéo là ghét nhau.</div>
+    <div class="desc">Soft felt-tip strokes with a hint of clerical script · the font of this site</div>
+    <div class="more"><a href="#pen"><span data-vi="Xem và tải về">See and download</span> <i class="bi bi-arrow-right" aria-hidden="true"></i></a></div>
+  </div></section>
+
+  <section class="band b-light"><div class="inner">
+    <div class="wm" style="font-family: 'QATT Pen Light'" aria-hidden="true">喃</div>
+    <div class="top"><span class="no">02</span><span class="name" style="font-family: 'QATT Pen Light Latin', 'QATT Pen Light'">QATT Pen Light</span></div>
+    <div class="poem" style="font-family: 'QATT Pen Light'" lang="vi-Hani">𤾓𢆥𥪝𡎝𠊛些<br>𡨸才𡨸命窖𱺵恄憢</div>
+    <div class="qatt" style="font-family: 'QATT Pen Light'">󰀜󰂚󰁂󰂢󰀀󰂚󰀾󰀿󰂚󰀽󰀿󰂚󰀡󰂡󰂌󰂚󰁧󰂣󰀸󰂚󰀉</div>
+    <div class="latin" style="font-family: 'QATT Pen Light Latin', 'QATT Pen Light'">Trăm năm trong cõi người ta,<br>chữ tài chữ mệnh khéo là ghét nhau.</div>
+    <div class="desc">The same pen, a lighter stroke</div>
+    <div class="more"><a href="#pen"><span data-vi="Xem và tải về">See and download</span> <i class="bi bi-arrow-right" aria-hidden="true"></i></a></div>
+  </div></section>
+
+  <section class="band b-medium"><div class="inner">
+    <div class="wm" style="font-family: 'QATT Pen Medium'" aria-hidden="true">字</div>
+    <div class="top"><span class="no">03</span><span class="name" style="font-family: 'QATT Pen Medium Latin', 'QATT Pen Medium'">QATT Pen Medium</span></div>
+    <div class="poem" style="font-family: 'QATT Pen Medium'" lang="vi-Hani">𤾓𢆥𥪝𡎝𠊛些<br>𡨸才𡨸命窖𱺵恄憢</div>
+    <div class="qatt" style="font-family: 'QATT Pen Medium'">󰀜󰂚󰁂󰂢󰀀󰂚󰀾󰀿󰂚󰀽󰀿󰂚󰀡󰂡󰂌󰂚󰁧󰂣󰀸󰂚󰀉</div>
+    <div class="latin" style="font-family: 'QATT Pen Medium Latin', 'QATT Pen Medium'">Trăm năm trong cõi người ta,<br>chữ tài chữ mệnh khéo là ghét nhau.</div>
+    <div class="desc">The same pen, bold for headings</div>
+    <div class="more"><a href="#pen"><span data-vi="Xem và tải về">See and download</span> <i class="bi bi-arrow-right" aria-hidden="true"></i></a></div>
+  </div></section>
+
+  <div class="pair">
+    <a href="#pen"><img src="/chunom/fonts/pen/cover.webp" width="800" height="446" alt="QATT Pen" loading="lazy"></a>
+    <a href="#migoi"><img src="/chunom/fonts/migoi/cover.webp" width="800" height="446" alt="Migoi" loading="lazy"></a>
+    <a href="#celluloid"><img src="/chunom/fonts/celluloid/cover.webp" width="800" height="446" alt="Celluloid" loading="lazy"></a>
+    <a href="#phongthao"><img src="/chunom/fonts/phongthao/cover.webp" width="800" height="446" alt="Phong Thảo" loading="lazy"></a>
+  </div>
+
+  <section class="band b-migoi"><div class="inner">
+    <div class="wm" style="font-family: 'Migoi'" aria-hidden="true">越</div>
+    <div class="top"><span class="no">04</span><span class="name" style="font-family: 'Migoi Latin', 'Migoi'">Migoi</span></div>
+    <div class="poem" style="font-family: 'Migoi'" lang="vi-Hani">𤾓𢆥𥪝𡎝𠊛些<br>𡨸才𡨸命窖𱺵恄憢</div>
+    <div class="qatt" style="font-family: 'Migoi'">󰀜󰂚󰁂󰂢󰀀󰂚󰀾󰀿󰂚󰀽󰀿󰂚󰀡󰂡󰂌󰂚󰁧󰂣󰀸󰂚󰀉</div>
+    <div class="latin" style="font-family: 'Migoi Latin', 'Migoi'">Trăm năm trong cõi người ta,<br>chữ tài chữ mệnh khéo là ghét nhau.</div>
+    <div class="desc">Soft, rounded boxes and round corners</div>
+    <div class="more"><a href="#migoi"><span data-vi="Xem và tải về">See and download</span> <i class="bi bi-arrow-right" aria-hidden="true"></i></a></div>
+  </div></section>
+
+  <section class="band b-cell"><div class="inner">
+    <div class="wm" style="font-family: 'Celluloid'" aria-hidden="true">音</div>
+    <div class="top"><span class="no">05</span><span class="name" style="font-family: 'Celluloid Latin', 'Celluloid'">Celluloid</span></div>
+    <div class="poem" style="font-family: 'Celluloid'" lang="vi-Hani">𤾓𢆥𥪝𡎝𠊛些<br>𡨸才𡨸命窖𱺵恄憢</div>
+    <div class="qatt" style="font-family: 'Celluloid'">󰀜󰂚󰁂󰂢󰀀󰂚󰀾󰀿󰂚󰀽󰀿󰂚󰀡󰂡󰂌󰂚󰁧󰂣󰀸󰂚󰀉</div>
+    <div class="latin" style="font-family: 'Celluloid Latin', 'Celluloid'">Trăm năm trong cõi người ta,<br>chữ tài chữ mệnh khéo là ghét nhau.</div>
+    <div class="desc">The pen with Mincho contrast</div>
+    <div class="more"><a href="#celluloid"><span data-vi="Xem và tải về">See and download</span> <i class="bi bi-arrow-right" aria-hidden="true"></i></a></div>
+  </div></section>
+
+  <section class="band b-phong"><div class="inner">
+    <div class="wm" style="font-family: 'PhongThao'" aria-hidden="true">新</div>
+    <div class="top"><span class="no">06</span><span class="name" style="font-family: 'PhongThao Latin', 'PhongThao'">Phong Thảo</span></div>
+    <div class="poem" style="font-family: 'PhongThao'" lang="vi-Hani">𤾓𢆥𥪝𡎝𠊛些<br>𡨸才𡨸命窖𱺵恄憢</div>
+    <div class="qatt" style="font-family: 'PhongThao'">󰀜󰂚󰁂󰂢󰀀󰂚󰀾󰀿󰂚󰀽󰀿󰂚󰀡󰂡󰂌󰂚󰁧󰂣󰀸󰂚󰀉</div>
+    <div class="latin" style="font-family: 'PhongThao Latin', 'PhongThao'">Trăm năm trong cõi người ta,<br>chữ tài chữ mệnh khéo là ghét nhau.</div>
+    <div class="desc">Pencil strokes, lightly tilted, with hooks</div>
+    <div class="more"><a href="#phongthao"><span data-vi="Xem và tải về">See and download</span> <i class="bi bi-arrow-right" aria-hidden="true"></i></a></div>
+  </div></section>
+
+  <section class="band b-goth"><div class="inner">
+    <div class="wm" style="font-family: 'QATT Gothic ExtraLight'" aria-hidden="true">語</div>
+    <div class="top"><span class="no">07</span><span class="name" style="font-family: 'QATT Gothic ExtraLight Latin', 'QATT Gothic ExtraLight'">QATT Gothic ExtraLight</span></div>
+    <div class="poem" style="font-family: 'QATT Gothic ExtraLight'" lang="vi-Hani">𤾓𢆥𥪝𡎝𠊛些<br>𡨸才𡨸命窖𱺵恄憢</div>
+    <div class="qatt" style="font-family: 'QATT Gothic ExtraLight'">󰀜󰂚󰁂󰂢󰀀󰂚󰀾󰀿󰂚󰀽󰀿󰂚󰀡󰂡󰂌󰂚󰁧󰂣󰀸󰂚󰀉</div>
+    <div class="latin" style="font-family: 'QATT Gothic ExtraLight Latin', 'QATT Gothic ExtraLight'">Trăm năm trong cõi người ta,<br>chữ tài chữ mệnh khéo là ghét nhau.</div>
+    <div class="desc">Even strokes with square ends, as light as Noto Sans ExtraLight</div>
+    <div class="more"><a href="#gothic"><span data-vi="Xem và tải về">See and download</span> <i class="bi bi-arrow-right" aria-hidden="true"></i></a></div>
+  </div></section>
+
+  <section class="band b-round"><div class="inner">
+    <div class="wm" style="font-family: 'QATT Gothic Rounded ExtraLight'" aria-hidden="true">圓</div>
+    <div class="top"><span class="no">08</span><span class="name" style="font-family: 'QATT Gothic Rounded ExtraLight Latin', 'QATT Gothic Rounded ExtraLight'">QATT Gothic Rounded ExtraLight</span></div>
+    <div class="poem" style="font-family: 'QATT Gothic Rounded ExtraLight'" lang="vi-Hani">𤾓𢆥𥪝𡎝𠊛些<br>𡨸才𡨸命窖𱺵恄憢</div>
+    <div class="qatt" style="font-family: 'QATT Gothic Rounded ExtraLight'">󰀜󰂚󰁂󰂢󰀀󰂚󰀾󰀿󰂚󰀽󰀿󰂚󰀡󰂡󰂌󰂚󰁧󰂣󰀸󰂚󰀉</div>
+    <div class="latin" style="font-family: 'QATT Gothic Rounded ExtraLight Latin', 'QATT Gothic Rounded ExtraLight'">Trăm năm trong cõi người ta,<br>chữ tài chữ mệnh khéo là ghét nhau.</div>
+    <div class="desc">The Gothic ExtraLight with round ends and corners</div>
+    <div class="more"><a href="#gothic-rounded"><span data-vi="Xem và tải về">See and download</span> <i class="bi bi-arrow-right" aria-hidden="true"></i></a></div>
+  </div></section>
+
+  <div class="closing">
+    <div id="fonts" data-page="catalog"></div>   <!-- fonts.js: the characters, the licence, the other Chữ Nôm fonts -->
+  </div>
+</main>
+
+<script defer src="/chunom/js/ime.js"></script>   <!-- Telex and the Chữ Nôm candidates of the field of the popup -->
+<script src="/chunom/fonts/fonts.js"></script>
+</body>
+</html>

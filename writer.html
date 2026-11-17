@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write Chữ Nôm | Chunom.org</title>
+    <link href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://qatt.org/css/site.css">
+    <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+    <script defer src="js/ime.js"></script>
+    <script defer src="https://qatt.org/js/parser.js"></script>
+    <script defer src="https://qatt.org/js/qatt-text.js"></script>
+    <script defer src="https://qatt.org/js/qatt-writer.js"></script>   <!-- the editor: field, bar, switches, QATT cells (shared with qatt.org/editor.html) -->
+    <script src="https://qatt.org/js/navigation.js"></script>
+
+    <style>
+        :root { --ink: #2b2118; --accent: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
+
+        body { margin: 0; background: var(--paper); color: var(--ink); font-family: system-ui, -apple-system, sans-serif; }
+
+        /* the header of the pages of qatt.org and the Chunom site (.hero): the look of the theme "classic"; other themes override it */
+        .hero {
+            background:
+                radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%),
+                linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%);
+            border-bottom: 1px solid #e8dcc0;
+            color: var(--ink);
+        }
+        .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: .01em; }
+        .hero .han { color: var(--accent); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; }
+        .hero .lead { max-width: 38rem; color: #4a3d30; }
+        @media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
+
+        /* the writing card (.card-box: the panel of the theme); the parts inside are in https://qatt.org/js/qatt-writer.js */
+        .card-box { background: #fff; border: 1px solid var(--line); border-radius: 1rem; box-shadow: 0 .5rem 1.5rem rgba(60, 40, 20, .08); }
+
+        /* info box under the writing card */
+        .info { margin-top: 1rem; padding: .8rem 1rem; border: 1px solid var(--line); border-radius: .8rem; background: color-mix(in srgb, currentColor 4%, transparent); color: var(--muted); font-size: .92rem; }
+        .info b { color: var(--ink); font-weight: 600; }
+        .info .ex { font-size: 1.15rem; white-space: nowrap; }
+        .info ol { margin: 0; padding-left: 1.2rem; }
+        .info li + li { margin-top: .2rem; }
+
+        /* phones: compact top so the list under the field stays above the keyboard */
+        @media (max-width: 575.98px) {
+            .hero { padding-top: 1.2rem !important; padding-bottom: .8rem !important; margin-bottom: .8rem !important; }
+            .hero .lead, .hero .btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="hero pt-4 pt-sm-5 pb-4 mb-4">
+    <div class="container text-center">
+        <div class="han mb-2">𡨸喃</div>
+        <h1 class="mb-3" data-vi="Gõ chữ Nôm">Write Chữ Nôm</h1>
+        <p class="lead mx-auto mb-0" data-vi="Gõ tiếng Việt, rồi chọn chữ Nôm phù hợp.">Type Vietnamese, then pick the Nôm character that fits.</p>
+        <a class="btn btn-quiet btn-pill mt-3" href="/chunom/fonts/"><i class="bi bi-download"></i> <span data-vi="Tải phông chữ">Download fonts</span></a>
+    </div>
+</header>
+
+<div class="container pb-5" style="max-width: 62rem">
+
+    <div id="writer" class="card-box writer"></div>
+
+    <div class="info mt-4">
+        <ol>
+            <li>Type a syllable with Telex, for example <b>viet</b> → <span class="ex">việt</span>.</li>
+            <li>A list of Nôm characters appears below the text field: tap one, or press <kbd>1</kbd>–<kbd>0</kbd>.
+                <span class="d-none d-lg-inline">With <kbd>↑</kbd><kbd>↓</kbd> you move through the list, <kbd>Esc</kbd> closes it.</span></li>
+            <li class="qatt-only">The PA button next to <b>Convert PA</b> shows the word before the cursor as PA, the phonetic script (<a href="/chunom/pa/">what is PA?</a>); a click puts it in the text. With <b>Phonetic annotation</b> on, a syllable you do not pick a Nôm character for stays in Quốc Ngữ until you press <kbd>Space</kbd>: then it turns into PA. <kbd>Enter</kbd> picks the first Nôm character. The address <code>writer.html?pa=1</code> has it on from the start.</li>
+        </ol>
+    </div>
+
+</div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => QattWriter.mount(document.getElementById('writer'), { switch: 'qatt', storage: 'chunom_writer_' }));
+</script>
+
+</body>
+</html>

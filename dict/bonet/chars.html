@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bonet 1899 – the characters | Chunom.org</title>
+  <meta name="description" content="All Chinese characters and Chữ Nôm printed in the Annamite-French dictionary of Jean Bonet (1899), in the order of the book, each with a link to its page of the scan.">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://qatt.org/css/site.css">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <script src="https://qatt.org/js/navigation.js"></script>
+  <script defer src="/chunom/js/detail.js"></script>
+  <style>
+    :root { --ink: #2b2118; --accent: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
+    body { margin: 0; background: var(--paper); color: var(--ink); }
+    /* the header of the pages of qatt.org and the Chunom site (.hero): the look of the theme "classic"; other themes override it */
+    .hero {
+      background:
+        radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%),
+        linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%);
+      border-bottom: 1px solid #e8dcc0;
+      color: var(--ink);
+    }
+    .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2rem, 6vw, 3rem); letter-spacing: .01em; }
+    .hero .han { color: var(--accent); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; }
+    .hero .lead { max-width: 38rem; color: #4a3d30; }
+    @media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
+    main { max-width: 60rem; margin: 0 auto; padding: 0 1rem 2rem; }
+    .card-box { margin: 0 0 1rem; padding: .8rem 1rem 1rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .14); }
+    /* the letters as a row of jump links, sticky below the menu bar */
+    .letters { position: sticky; top: var(--nav-h, 60px); z-index: 10; display: flex; flex-wrap: wrap; gap: .25rem; justify-content: center; padding: .5rem 0; margin-bottom: .8rem;
+      background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(8px); }
+    .letters a { min-width: 2rem; text-align: center; padding: .1rem .35rem; border-radius: .4rem; text-decoration: none; color: inherit; border: 1px solid var(--line); }
+    .letters a:hover { border-color: var(--accent); color: var(--accent); }
+    .group h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.5rem; margin: 0 0 .4rem; scroll-margin-top: calc(var(--nav-h, 60px) + 3.5rem); }
+    .group h2 small { font-family: system-ui, sans-serif; font-size: .85rem; color: var(--muted); margin-left: .5rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(2.6rem, 1fr)); gap: .15rem; }
+    .grid a { display: flex; align-items: center; justify-content: center; text-decoration: none; font-family: var(--font-cjk), serif; font-size: 1.7rem; line-height: 1; aspect-ratio: 1; border: 0; border-radius: .35rem; background: none; color: inherit; padding: 0; cursor: pointer; }
+    .grid a:hover, .grid a:focus-visible { background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); }
+    /* the pages of a character that is on more than one */
+    .place-menu { position: absolute; z-index: 1050; display: flex; flex-direction: column; min-width: 7rem; padding: .3rem; background: Canvas; color: CanvasText; border: 1px solid var(--line); border-radius: .5rem; box-shadow: 0 .4rem 1rem rgba(0, 0, 0, .18); }
+    .place-menu[hidden] { display: none; }
+    .place-menu a, .place-menu button { padding: .3rem .6rem; border-radius: .3rem; text-align: left; border: 0; background: none; color: inherit; font: inherit; }
+    .place-menu a:hover, .place-menu button:hover, .place-menu a:focus-visible { background: color-mix(in srgb, currentColor 10%, transparent); }
+    .place-menu .rd { display: inline-block; color: var(--muted); font-style: italic; margin-left: .4em; }
+    .place-menu .rd.read { font-style: normal; }
+    .place-menu button { border-top: 1px solid var(--line); border-radius: 0 0 .3rem .3rem; margin-top: .2rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+<header class="hero pt-4 pt-sm-5 pb-4 mb-3">
+  <div class="container text-center">
+    <div class="han mb-2">字典</div>
+    <h1 class="mb-3"><span>Bonet 1899</span> · <span data-vi="Các chữ">The characters</span></h1>
+    <p class="lead mx-auto mb-3" data-vi="Mọi chữ in trong từ điển, theo thứ tự của sách. Bấm vào một chữ để xem chữ ấy trong bản quét.">Every character printed in the dictionary, in the order of the book. Click a character to see it in the scan.</p>
+    <div class="d-flex flex-wrap gap-2 justify-content-center">
+      <a class="btn btn-cinnabar btn-pill" href="/chunom/dict/bonet.html"><i class="bi bi-book me-1"></i><span data-vi="Mở từ điển">Open the dictionary</span></a>
+      <a class="btn btn-quiet btn-pill" href="/chunom/dict/"><i class="bi bi-journal-bookmark me-1"></i><span data-vi="Từ điển">Dictionaries</span></a>
+    </div>
+  </div>
+</header>
+<main>
+  <nav class="letters" id="letters" aria-label="Letters"></nav>
+  <div id="groups"><p class="text-center text-secondary" data-vi="Đang tải…">Loading…</p></div>
+  <p class="small text-secondary text-center mt-3" data-vi="Chỉ mục đang được làm: một số chữ chưa có.">The index is a work in progress: some characters are still missing.</p>
+  <p class="small text-secondary text-center" data-vi="Âm đọc bên cạnh số trang: chữ đứng là đọc từ bản quét, chữ nghiêng là suy ra từ các mục từ của trang ấy.">The readings next to the page numbers: upright ones were read from the scan, italic ones are derived from the headwords of the page.</p>
+</main>
+<script type="module">
+  // the index { char: [[page, x0, y0, x1, y1], …] }, the last headword of every page (displayed page 1 = item 0) and the readings derived
+  // from the headwords of a page { char: [[page, reading, …], …] } (the readings of the character that lie in the range of its page)
+  const [index, heads, derived] = await Promise.all(['bonet-chars', 'bonet', 'bonet-readings'].map(name =>
+    fetch(`/chunom/dict/data/${name}.json`).then(r => r.ok ? r.json() : null).catch(() => null)));
+  const groupsBox = document.getElementById('groups');
+  if (!index || !heads) {
+    groupsBox.replaceChildren(Object.assign(document.createElement('p'), { className: 'text-center text-danger', textContent: Lang.t('The index could not be loaded.', 'Không tải được chỉ mục.') }));
+    throw new Error('bonet index');
+  }
+
+  // the letter of a page: the first letter of its last headword without marks (đ is a letter of its own);
+  // a page where a new letter begins counts to the new one (good enough for jumping)
+  const letterOf = page => {
+    const word = heads[page - 1] || '';
+    const first = word.normalize('NFD')[0] || '?';
+    return word[0] === 'đ' ? 'Đ' : first.toUpperCase();
+  };
+
+  // every character once, at its first place in the book: page, column (two per page), line
+  const first = Object.entries(index).map(([ch, places]) => {
+    const [page, x0, y0] = places.reduce((a, b) => (a[0] - b[0] || a[1] - b[1] || a[2] - b[2]) <= 0 ? a : b);
+    const seen = new Set(); // one place per page (the first), in the order of the pages
+    const own = [...places].sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2]).filter(p => !seen.has(p[0]) && seen.add(p[0]));
+    return { ch, page, key: page * 1e7 + (x0 >= 500 ? 5e6 : 0) + y0, places: own };
+  }).sort((a, b) => a.key - b.key);
+
+  const groups = new Map();
+  for (const item of first) {
+    const letter = letterOf(item.page);
+    if (!groups.has(letter)) groups.set(letter, []);
+    groups.get(letter).push(item);
+  }
+
+  const el = (tag, props = {}, ...children) => {
+    const node = Object.assign(document.createElement(tag), props);
+    node.append(...children);
+    return node;
+  };
+  const pageWord = () => Lang.t('p.', 'tr.');
+  const at = (kind, ch, page) => (derived?.[kind]?.[ch] || []).find(p => p[0] === page)?.slice(1) || [];
+  const readingsAt = (ch, page) => { const r = at('read', ch, page); return r.length ? { read: true, list: r } : { read: false, list: at('derived', ch, page) }; };
+  const placeText = (ch, page) => [`${pageWord()} ${page}`, readingsAt(ch, page).list.join(' / ')].filter(Boolean).join(' ');
+  const scan = ([page, ...box]) => `/chunom/dict/bonet.html#${page}@${box.join(',')}`; // the viewer frames the glyph
+  document.getElementById('letters').replaceChildren(...[...groups.keys()].map(letter =>
+    el('a', { href: `#l-${letter}`, textContent: letter })));
+  groupsBox.replaceChildren(...[...groups].map(([letter, items]) => el('section', { className: 'card-box group' },
+    el('h2', { id: `l-${letter}` }, letter, el('small', { textContent: items.length.toLocaleString() })),
+    el('div', { className: 'grid' }, ...items.map(item => {
+      const link = el('a', { href: scan(item.places[0]), textContent: item.ch, title: item.places.map(p => placeText(item.ch, p[0])).join(', ') });
+      link.dataset.ch = item.ch;
+      return link;
+    })))));
+
+  // a click opens the scan on the page of the character with the glyph framed; a character on several pages first shows them in a small
+  // menu (with its details, the popup of js/detail.js)
+  const byChar = new Map(first.map(item => [item.ch, item]));
+  const menu = el('div', { className: 'place-menu', hidden: true });
+  document.body.append(menu);
+  const closeMenu = () => { menu.hidden = true; };
+  groupsBox.addEventListener('click', e => {
+    const link = e.target.closest('a[data-ch]');
+    if (!link || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    const item = byChar.get(link.dataset.ch);
+    if (item.places.length < 2) return;
+    e.preventDefault();
+    const details = el('button', { type: 'button', textContent: Lang.t('Details', 'Chi tiết') });
+    details.addEventListener('click', () => { closeMenu(); window.ChunomDetail?.open(item.ch); });
+    menu.replaceChildren(...item.places.map(place => {
+      const r = readingsAt(item.ch, place[0]);
+      return el('a', { href: scan(place) }, `${pageWord()} ${place[0]}`, ...(r.list.length ? [el('span', { className: 'rd' + (r.read ? ' read' : ''), textContent: r.list.join(' / ') })] : []));
+    }), details);
+    const r = link.getBoundingClientRect();
+    menu.hidden = false;
+    menu.style.left = `${Math.max(8, Math.min(scrollX + r.left, scrollX + innerWidth - menu.offsetWidth - 8))}px`;
+    const bottomBar = document.querySelector('.bottom-bar')?.offsetHeight || 0;
+    const below = r.bottom + 4 + menu.offsetHeight <= innerHeight - bottomBar - 8; // else above the character (the bottom bar of the phone)
+    menu.style.top = `${scrollY + (below ? r.bottom + 4 : r.top - 4 - menu.offsetHeight)}px`;
+    menu.querySelector('a').focus({ preventScroll: true });
+  });
+  document.addEventListener('click', e => { if (!menu.hidden && !menu.contains(e.target) && !e.target.closest('a[data-ch]')) closeMenu(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+{
+  "assets": "https://cdn.qatt.org/fonts/",
+  "characters": 39074,
+  "sizes": [
+    64,
+    40,
+    24,
+    16
+  ],
+  "sample": {
+    "line": "𤾓𢆥𥪝𡎝𠊛些𡨸才𡨸命窖𱺵恄憢",
+    "qatt": "󰀜󰂚󰁂󰂢󰀀󰂚󰀾󰀿󰂚󰀽󰀿󰂚󰀡󰂡󰂌󰂚󰁧󰂣󰀸󰂚󰀉"
+  },
+  "fonts": [
+    {
+      "id": "pen",
+      "name": "QATT Pen",
+      "family": "Pen",
+      "styles": [
+        {
+          "name": "Thin",
+          "css": "QATT Pen Thin",
+          "file": "qatt-pen-thin",
+          "mb": 27.6
+        },
+        {
+          "name": "Light",
+          "css": "QATT Pen Light",
+          "file": "qatt-pen-light",
+          "mb": 28.3
+        },
+        {
+          "name": "Regular",
+          "css": "QATT Pen",
+          "file": "qatt-pen",
+          "mb": 27.5
+        },
+        {
+          "name": "Medium",
+          "css": "QATT Pen Medium",
+          "file": "qatt-pen-medium",
+          "mb": 26.6
+        }
+      ]
+    },
+    {
+      "id": "migoi",
+      "name": "Migoi",
+      "family": "Migoi",
+      "styles": [
+        {
+          "name": "Regular",
+          "css": "Migoi",
+          "file": "migoi",
+          "mb": 37.9
+        }
+      ]
+    },
+    {
+      "id": "celluloid",
+      "name": "Celluloid",
+      "family": "Celluloid",
+      "styles": [
+        {
+          "name": "Regular",
+          "css": "Celluloid",
+          "file": "celluloid",
+          "mb": 24.3
+        }
+      ]
+    },
+    {
+      "id": "phongthao",
+      "name": "Phong Thảo",
+      "family": "PhongThao",
+      "styles": [
+        {
+          "name": "Regular",
+          "css": "PhongThao",
+          "file": "phongthao",
+          "mb": 36.6
+        }
+      ]
+    },
+    {
+      "id": "gothic",
+      "name": "QATT Gothic ExtraLight",
+      "family": "Qatt.org-Gothic",
+      "styles": [
+        {
+          "name": "ExtraLight",
+          "css": "QATT Gothic ExtraLight",
+          "file": "qatt-gothic-extralight",
+          "mb": 15.4
+        }
+      ]
+    },
+    {
+      "id": "gothic-rounded",
+      "name": "QATT Gothic Rounded ExtraLight",
+      "family": "Qatt.org-Gothic Rounded",
+      "styles": [
+        {
+          "name": "ExtraLight",
+          "css": "QATT Gothic Rounded ExtraLight",
+          "file": "qatt-gothic-rounded-extralight",
+          "mb": 36.0
+        }
+      ]
+    }
+  ],
+  "external": [
+    {
+      "name": "Nom Na Tong",
+      "url": "https://github.com/nomfoundation/font",
+      "en": "Song style font by the Vietnamese Nôm Preservation Foundation",
+      "vi": "phông kiểu Tống của Hội Bảo tồn chữ Nôm Việt Nam"
+    },
+    {
+      "name": "Han Nom Gothic",
+      "url": "https://github.com/TKYKmori/Gothic-Nguyen",
+      "en": "A sans-serif font by Han-Nom RCV",
+      "vi": "phông không chân của Han-Nom RCV"
+    }
+  ],
+  "charset": [
+    [
+      "Latin (ASCII, Latin-1, Quốc Ngữ)",
+      "Basic Latin, Latin-1 Supplement, Latin Extended-A/B, Latin Extended Additional",
+      "U+0020–024F, U+1E00–1EFF",
+      293
+    ],
+    [
+      "Punctuation",
+      "General Punctuation (dashes, curly quotes, ellipsis)",
+      "U+2013–2026",
+      7
+    ],
+    [
+      "Han radicals",
+      "CJK Radicals Supplement, Kangxi Radicals, Ideographic Description Characters",
+      "U+2E80–2FFF",
+      345
+    ],
+    [
+      "CJK punctuation",
+      "CJK Symbols and Punctuation",
+      "U+3000–303F",
+      64
+    ],
+    [
+      "Han characters and Chữ Nôm",
+      "CJK Unified Ideographs, Extension A",
+      "U+3400–4DBF, U+4E00–9FFF",
+      27583
+    ],
+    [
+      "Han characters and Chữ Nôm (more)",
+      "Extensions B, C, D, E, F, G, H, J, Compatibility Ideographs and Supplement",
+      "U+F900–FAFF, U+20000–2EBEF, U+2F800–2FA1F, U+30000–3347F",
+      10405
+    ],
+    [
+      "Fullwidth forms",
+      "Fullwidth Forms",
+      "U+FF00–FF60, U+FFE0–FFEE",
+      112
+    ],
+    [
+      "Kanbun and CJK strokes",
+      "Kanbun, CJK Strokes",
+      "U+3190–319F, U+31C0–31EF",
+      37
+    ],
+    [
+      "Vietnamese reading marks",
+      "Ideographic Symbols and Punctuation",
+      "U+16FF0–16FF1",
+      2
+    ],
+    [
+      "Sans-serif letters and digits",
+      "Mathematical Alphanumeric Symbols",
+      "U+1D5A0–1D5D3, U+1D7E2–1D7EB",
+      62
+    ],
+    [
+      "QATT letters",
+      "Private use (the QATT script)",
+      "U+F0000–F00A3",
+      164
+    ]
+  ]
+}

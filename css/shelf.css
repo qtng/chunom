@@ -1,0 +1,97 @@
+/* The pages of the Bookshelf (shelf/): layout only; colours come from the variables of the page and of Bootstrap, so the themes of qatt.org and the dark ones work.
+   The classic look of the header (.hero) and of the panels (.card-box) as on the other pages of the Chunom site; a theme overrides it. */
+:root { --bs-body-font-family: var(--bs-font-sans-serif), var(--font-cjk), serif; --ink: #2b2118; --cinnabar: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
+body { min-height: 100vh; color: var(--ink); background: #fffdf8; }
+.hero { background: radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%), linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%); border-bottom: 1px solid #e8dcc0; color: var(--ink); }
+.hero h1 { font-family: Georgia, "Times New Roman", var(--font-cjk), serif; font-weight: 400; font-size: clamp(2rem, 6vw, 3.2rem); letter-spacing: .01em; }
+.crumbs { font-size: .9rem; color: var(--muted); }
+.crumbs a { color: var(--cinnabar); text-decoration: none; }
+.crumbs a.back { display: inline-block; padding: 0 .3rem; margin-left: -.3rem; }
+.crumbs a:hover { text-decoration: underline; }
+.hero .qn { color: var(--cinnabar); font-size: 1.1rem; letter-spacing: .02em; }
+.hero .han { color: var(--cinnabar); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; font-family: var(--font-cjk), serif; }
+@media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
+.hero h1[lang] { font-family: var(--font-cjk), serif !important; font-style: normal !important; font-weight: 400 !important; font-size: clamp(2.4rem, 9vw, 4rem); line-height: 1.25; letter-spacing: 0; }   /* the CJK title in the CJK font, also in a theme that gives headings a font of its own (boho: an italic serif) */
+.hero rt { display: none; }   /* the reading of the title is the small line above it */
+.hero .lead { max-width: 40rem; color: #4a3d30; }
+.card-box { padding: 1rem; margin-bottom: .6rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .06); }
+.text-secondary { color: var(--muted) !important; }
+main { max-width: 56rem; }
+
+/* the table of contents */
+
+/* a work */
+.meta { font-size: .92rem; }
+.meta dt { font-weight: 500; color: var(--muted); }
+.meta dd { overflow-wrap: anywhere; }
+@media (max-width: 575.98px) { .meta dt { margin-top: .5rem; } .read .line .no { width: 1.6rem; } .read .line { gap: .5rem; } }
+.meta .notes, .shelf-page .notes { white-space: pre-line; color: var(--muted); font-size: .9rem; overflow-wrap: anywhere; }
+.jump ol { columns: 2 16rem; padding-left: 1.6rem; }
+.jump a { text-decoration: none; }
+.shelf-tools { position: sticky; top: var(--nav-h, 60px); z-index: 5; display: flex; flex-wrap: wrap; gap: .2rem 1.5rem; padding: .45rem .9rem; margin: 1rem 0; background: var(--bs-body-bg, #fffdf8); border: 1px solid var(--line); border-radius: .7rem; }
+.shelf-tools .form-check { margin: 0; }
+.shelf-tools .form-check-label { white-space: nowrap; }
+/* the QATT characters of the source texts (private use, no reading) are in the CJK font of the site too (QATT Pen, fonts.js) */
+.read { font-family: var(--font-cjk), serif; }
+.read .line { display: flex; align-items: baseline; gap: .8rem; margin: 0 0 .75rem; }
+.read .line .no { flex: none; width: 2.2rem; text-align: right; font: .75rem/1 system-ui, sans-serif; color: var(--muted); text-decoration: none; }
+.read .line .t { flex: 1 1 0; min-width: 0; font-size: 1.9rem; line-height: 2.1; overflow-wrap: anywhere; }
+.read .line .no { align-self: flex-start; margin-top: .9rem; }
+.read ruby { ruby-position: over; margin-right: .08em; }
+.read rt, .work rt { font-family: var(--bs-body-font-family); font-size: .42em; line-height: 1.1; font-weight: 400; color: var(--muted); user-select: none; letter-spacing: 0; }
+.read[data-ruby="off"] rt { display: none; }
+.reading-mode { display: inline-flex; align-items: center; gap: .15rem; }
+.reading-mode .lbl { margin-right: .35rem; white-space: nowrap; }
+.reading-mode button { padding: .05rem .55rem; border: 1px solid var(--line); background: transparent; color: inherit; font-size: .85rem; line-height: 1.5; border-radius: 1rem; white-space: nowrap; }
+.reading-mode button.active { background: var(--cinnabar); border-color: var(--cinnabar); color: #fff; }
+.reading-mode .what { margin-left: .2rem; font-size: .8rem; color: var(--muted); text-decoration: none; border: 1px solid var(--line); border-radius: 50%; width: 1.25rem; height: 1.25rem; display: inline-flex; align-items: center; justify-content: center; }
+.read .p { font-size: 1em; margin-right: .1em; }
+.read .note { flex: 1 1 100%; font: .85rem/1.4 var(--bs-body-font-family); color: var(--muted); padding-left: 3rem; }
+.shelf-no-notes .read .note { display: none; }
+/* a translated passage: below its last line, indented like the note; both languages are in the HTML, data-only (site.css of qatt.org) shows one */
+.read .tr { margin: -.2rem 0 1.1rem 3rem; padding: .45rem .9rem; font: .95rem/1.5 var(--bs-body-font-family); border-left: 3px solid var(--accent, var(--cinnabar)); border-radius: 0 .5rem .5rem 0; background: color-mix(in srgb, currentColor 4%, transparent); }
+.read .tr p { margin: 0; }
+.tr-ok { color: var(--accent, var(--cinnabar)); }
+@media (max-width: 575.98px) { .read .tr { margin-left: 2.1rem; } }
+.shelf-no-trans .tr { display: none; }
+.cjk { cursor: pointer; border-radius: .15em; }
+.cjk:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
+.summary-vi h3 { color: var(--muted); }
+.summary-toggle { display: block; width: 100%; margin: .35rem 0 -.2rem; padding: .1rem 0; border: 0; background: none; color: var(--muted); font-size: .9rem; line-height: 1; cursor: pointer; }
+@media (max-width: 991.98px) { .summary:has(.summary-toggle) { cursor: pointer; } }
+.summary-toggle:hover, .summary-toggle:focus-visible { color: var(--accent, var(--cinnabar)); }
+.read .line { flex-wrap: wrap; }
+.shelf-page h2 { font-family: Georgia, "Times New Roman", var(--font-cjk), serif; font-weight: 400; font-size: 1.35rem; margin: 2.2rem 0 .2rem; padding-bottom: .3rem; border-bottom: 1px solid var(--line); }
+.shelf-page h2 .no { display: inline-block; min-width: 1.8rem; color: var(--cinnabar); }
+.shelf-page h2 [lang] { font-family: var(--font-cjk), serif; font-style: normal; font-size: 1.5rem; }
+.shelf-page h2 rt { font-size: .4em; }
+.shelf-page .en { margin: 0 0 .4rem; color: var(--muted); }
+
+/* IDS sequences: the ones that are not in Unicode are the interesting ones (rare forms, maybe for Unicode): highlighted */
+.ids.open { background: var(--bs-warning-bg-subtle, #fff1c2); outline: 1px dashed var(--bs-warning-border-subtle, var(--cinnabar)); border-radius: .2em; padding: 0 .1em; color: var(--bs-warning-text-emphasis, inherit); }
+.ids.open:not(.drawn) { font-size: .6em; }   /* the Nôm font of the text, so the parts of the sequence are not tofu */
+.ids.drawn { line-height: 1; }
+.ids.enc.missing { font-family: system-ui, sans-serif; font-size: .8em; }
+.ids.drawn svg, .ids.drawn svg * { fill: currentColor; stroke: none; }
+.ids.drawn svg { display: inline-block; height: 1.1em; width: 1.1em; vertical-align: -.15em; }
+.ids.enc { background: var(--bs-info-bg-subtle, #dff1ff); border-radius: .2em; padding: 0 .1em; color: var(--bs-info-text-emphasis, inherit); }
+.unk.drawn svg { fill: currentColor; vertical-align: -.25em; }
+.unk { background: color-mix(in srgb, currentColor 12%, transparent); border-radius: .2em; }
+.legend .ids { font-size: 1rem !important; }
+
+.summary h2 .fst-italic { font-size: .8em; }
+
+/* a work with a cover: the title on the picture, the summary and the line on a light panel */
+
+/* the cover of a work: right in the header on wide screens, large above the content on phones */
+.hero .has-cover { display: flex; gap: 3rem; align-items: center; justify-content: center; }
+.hero-text { flex: 0 1 auto; min-width: 0; }
+.cover { position: relative; overflow: hidden; border-radius: 1rem; border: 1px solid var(--line); box-shadow: 0 .5rem 1.2rem rgba(60, 40, 20, .2); }
+.cover > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.cover-side { flex: none; width: 16rem; height: 16rem; }
+.cover-top { display: none; width: 100%; max-width: 26rem; aspect-ratio: 1; margin: 0 auto 1rem; }
+@media (max-width: 767.98px) { .cover-side { display: none; } .cover-top { display: block; } }
+
+/* the footnote of a card: lines and transcriber, then author and date, dimmed so the summary stands out */
+.hero small.d-block { opacity: .6; }
+.meta > summary { cursor: pointer; font-weight: 600; } .meta[open] > summary { margin-bottom: .5rem; }

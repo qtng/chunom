@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qatt.org - Superlearning Immersive</title>
+    
+    <!-- External Dependencies -->
+    <link href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://qatt.org/css/site.css">
+    <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+    <script src="https://qatt.org/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://qatt.org/vendor/supabase/supabase.min.js"></script>
+    <script src="https://qatt.org/js/navigation.js"></script>
+    <script src="https://qatt.org/js/parser.js"></script>
+    <script src="https://qatt.org/js/qatt-text.js"></script>
+    <script src="https://qatt.org/js/supabase.js"></script>
+    <script src="./audiomanager.js"></script>
+    
+    <style>
+        :root {
+            --ui-color: white;
+            --ui-bg-alpha: rgba(255, 255, 255, 0.1);
+            --ui-border: rgba(255, 255, 255, 0.15);
+            --ui-shadow: rgba(0, 0, 0, 0.3); 
+            --glyph-filter: invert(1); /* the glyph images are black on transparent: white on dark backgrounds */
+            --accent-start: #FF69B4; 
+            --danger-color: #dc3545; 
+        }
+
+        /* Responsive UI themes */
+        .ui-theme-dark-bg { --glyph-filter: invert(1); --ui-color: white; --ui-bg-alpha: rgba(255, 255, 255, 0.1); --ui-border: rgba(255, 255, 255, 0.15); --ui-shadow: rgba(0, 0, 0, 0.3); }
+        .ui-theme-light-bg { --glyph-filter: none; --ui-color: black; --ui-bg-alpha: rgba(0, 0, 0, 0.05); --ui-border: rgba(0, 0, 0, 0.1); --ui-shadow: transparent; }
+
+ /* the page is dark in every theme: the theme gives the fonts and the start button, the colours of the texts stay light (the ids beat the rules of a theme) */
+        :root { color-scheme: dark; }
+        body { 
+            background-color: #000; 
+            color: #f8f9fa; 
+            min-height: 100vh; 
+            font-family: 'Inter', system-ui, sans-serif; 
+            margin: 0;
+            overflow-x: hidden;
+            touch-action: pan-y;
+        }
+
+        /* Navigation hiding mechanism */
+        .navbar {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease !important;
+            transform: translateY(0);
+            opacity: 1;
+            z-index: 2000 !important;
+        }
+        .navbar.nav-hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Layout Elements */
+        #loading-overlay #deck-title { color: #fff; text-shadow: none; }
+        #loading-overlay .text-secondary { color: rgba(255, 255, 255, .6) !important; }
+        #loading-overlay { 
+            color: #f8f9fa;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            z-index: 1000; 
+            transition: opacity 1s ease; 
+        }
+
+        .video-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: var(--accent-start); overflow: hidden; }
+        
+        #bg-video { 
+            min-width: 100%; min-height: 100%; width: auto; height: auto; 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            object-fit: cover; filter: brightness(0.5) saturate(0.8); 
+            transition: opacity 2s ease; opacity: 0; 
+        }
+        #bg-video.playing { opacity: 1; }
+        #bg-video.inverted { filter: invert(1) brightness(0.7) saturate(0.5); }
+        
+        #color-overlay { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            z-index: -1; 
+            opacity: 0.7; 
+            mix-blend-mode: overlay; 
+            transition: background-color 8s ease-in-out, opacity 0.5s ease; pointer-events: none; 
+            background-color: var(--accent-start); 
+        }
+        #color-overlay.full-chroma { opacity: 1; mix-blend-mode: normal; }
+
+        .stage { 
+            position: relative; 
+            width: 100%; 
+            height: 60vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 10; 
+            margin-top: -50px; 
+        }
+
+        /* Layer animations */
+        .layer { 
+            position: absolute; 
+            width: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            transition: all 1s ease-in-out; 
+            color: var(--ui-color); 
+            text-shadow: 0 4px 15px var(--ui-shadow); 
+            opacity: 0; 
+            pointer-events: none; 
+        }
+        .layer-show { opacity: 1 !important; transform: scale(1.4); transition: all 4s ease-in-out; }
+
+        .nom-display-large { font-family: var(--font-cjk); font-size: 9rem; line-height: 1; }
+        @media (min-width: 992px) { .nom-display-large { font-size: 12rem; } }
+        .nom-display-mini { font-family: var(--font-cjk); font-size: 4.5rem; margin-bottom: 1.5rem; opacity: 0.6; }
+        /* the characters as images; the width of the screen is shared between them */
+        .nom-display-large, .nom-display-mini { display: flex; justify-content: center; align-items: center; }
+        .nom-display-large img, .nom-display-mini img { width: auto; max-width: none; filter: var(--glyph-filter) drop-shadow(0 4px 15px var(--ui-shadow)); }
+        .nom-display-large img { height: min(9rem, calc(88vw / var(--n, 1))); }
+        @media (min-width: 992px) { .nom-display-large img { height: min(12rem, calc(88vw / var(--n, 1))); } }
+        .nom-display-mini img { height: min(4.5rem, calc(88vw / var(--n, 1))); }
+        .qatt-container { display: flex; gap: 0.5rem; justify-content: center; align-items: center; }
+        /* QATT glyphs: text in the QATT font (QattText) */
+        .qatt-glyph { font-family: "QATT Pen", sans-serif; line-height: 1; }
+        .qatt-container { color: var(--ui-color); }
+        .qatt-container .qatt-glyph { font-size: 2.5rem; filter: drop-shadow(0 4px 15px var(--ui-shadow)); }
+        
+        .quocngu-text { 
+            font-size: 1.6em; 
+            font-weight: 300; 
+            background: var(--ui-bg-alpha); 
+            backdrop-filter: blur(8px); 
+            border: 1px solid var(--ui-border); 
+            border-radius: 100px; 
+            padding: 4px 25px; 
+            box-shadow: 0 10px 30px var(--ui-shadow); 
+        }
+
+        /* Controls */
+        .control-bar { position: absolute; bottom: 1.5rem; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; z-index: 1500; cursor: default; }
+        .controls-pill { background: var(--ui-bg-alpha); backdrop-filter: blur(15px); padding: 0.35rem 0.8rem; border-radius: 100px; display: flex; align-items: center; gap: 0.25rem; box-shadow: 0 8px 24px rgba(0,0,0,0.4); border: 1px solid var(--ui-border); }
+        .btn-minimal { background: none; border: none; color: var(--ui-color); padding: 0.4rem; font-size: 1.1rem; opacity: 0.4; transition: opacity 0.3s ease, transform 0.3s ease; cursor: pointer; border-radius: 50%; outline: none !important; box-shadow: none !important; }
+        .btn-minimal.active { opacity: 1 !important; color: var(--ui-color) !important; transform: scale(1.15); }
+
+        #settings-menu.dropdown-menu-custom { width: auto; min-width: 260px; padding: 0.5rem 0; background: rgba(33, 37, 41, 0.98) !important; backdrop-filter: blur(20px); border: 1px solid var(--ui-border); z-index: 1600; }
+        #settings-menu .dropdown-divider { margin: 0.25rem 0 !important; opacity: 0.1; }
+        #settings-menu .dropdown-item { padding: 0.25rem 1rem 0.25rem 2.5rem; font-size: 0.88rem; color: rgba(255,255,255,0.8); transition: background 0.2s; }
+        #settings-menu .dropdown-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+        /* Audio feedback */
+        .credits-container { height: 1.4em; display: flex; align-items: center; justify-content: center; margin-top: 0.5rem; cursor: pointer; }
+        .audio-credits { font-size: 0.82rem; color: var(--ui-color); opacity: 0.6; display: flex; align-items: center; gap: 12px; transition: opacity 0.2s; }
+
+        #learning-view {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
+            z-index: 900; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 1.5s ease; background-color: var(--accent-start);
+            cursor: pointer;
+            outline: none !important;
+        }
+        #learning-view.active { opacity: 1; }
+
+        /* the start button is a btn-cinnabar: its look is the one of the theme */
+        #start-button { display: none; margin-bottom: 1.5rem; padding-left: 2.5rem; padding-right: 2.5rem; text-transform: uppercase; letter-spacing: 2px; }
+        .btn-start-icon { font-size: 2.2rem; vertical-align: middle; }
+
+        .sl-info { display: none; max-width: 30rem; margin: 0 auto 1.25rem; padding: 0 1.25rem; text-align: center; }
+        #loading-overlay .sl-info h2 { font: 600 1.2rem 'Inter', system-ui, sans-serif; letter-spacing: .04em; text-transform: none; color: #fff; text-shadow: none; background: none; border: 0; padding: 0; margin: 0 0 .4rem; }   /* the ids beat the h2 rules of a theme */
+        .sl-info h2 .bi { color: var(--accent-start); margin-right: .2rem; }
+        .sl-info p { font-size: 1.1rem; line-height: 1.5; margin: 0; color: rgba(255,255,255,.75); }
+        .sl-info .sl-phones { font-size: 1rem; margin-top: .6rem; color: rgba(255,255,255,.7); }
+        .sl-info .sl-why { font-size: .85rem; line-height: 1.45; margin-top: .25rem; color: rgba(255,255,255,.55); }
+        .deck-index-card { background: rgba(20, 20, 20, 0.7) !important; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.15) !important; max-height: 45vh; overflow-y: auto; border-radius: 16px !important; }
+        .index-item { border-color: rgba(255,255,255,0.08) !important; background: transparent !important; color: white !important; padding: 0.75rem 1.25rem !important; gap: 1rem; }
+        .index-nom-cell { font-family: var(--font-cjk); font-size: 1.4rem; line-height: 1; min-width: 2.5rem; display: flex; align-items: center; gap: 2px; }
+        .index-nom-cell img { width: 1.9rem; height: 1.9rem; filter: invert(1); } /* the glyph images are black on transparent */
+        .index-qn-cell { color: rgba(255,255,255,0.6); font-size: 0.95rem; font-weight: 300; flex: 1; text-align: right; }
+        .index-qatt-cell { display: flex; align-items: center; justify-content: center; gap: .25rem; min-width: 3.5rem; color: rgba(255,255,255,0.85); }
+        .index-qatt-cell .qatt-glyph { font-size: 1.8rem; }
+    </style>
+</head>
+<body>
+    <div id="loading-overlay">
+        <div id="loading-spinner" class="spinner-border text-light mb-4" style="width: 3rem; height: 3rem;" role="status"></div>
+        <div id="deck-info" class="text-center">
+            <h1 id="deck-title" class="mt-3"></h1>
+            <div id="deck-meta" class="text-secondary small text-uppercase mb-4"></div>
+        </div>
+        <button id="start-button" type="button" class="btn btn-cinnabar btn-pill btn-lg" onclick="app.engage()">
+            <i class="bi bi-play-fill me-1 btn-start-icon"></i><span data-vi="Bắt đầu">Start session</span>
+        </button>
+        <div class="sl-info">
+            <h2><i class="bi bi-moon-stars"></i> <span data-vi="Superlearning là gì?">What is superlearning?</span></h2>
+            <p data-vi="Cách học trong trạng thái thư giãn, do Georgi Lozanov phát triển từ những năm 1970. Hít thở chậm, để nhạc chơi, xem các chữ lần lượt hiện ra.">A relaxed way to learn, developed by Georgi Lozanov in the 1970s. Breathe slowly, let the music play, watch the characters pass by.</p>
+            <p class="sl-phones"><i class="bi bi-headphones"></i> <span data-vi="Nhịp binaural cần dùng tai nghe.">Binaural beats need headphones.</span></p>
+            <p class="sl-why" data-vi="Âm thanh tinh tế giúp bạn thư giãn và tập trung.">Subtle sounds that help you stay relaxed and focused.</p>
+        </div>
+        <div id="index-toggle-wrapper" class="d-none text-center">
+            <a class="text-secondary small text-decoration-none" data-bs-toggle="collapse" href="#deck-index-collapse">
+                Show all characters <i class="bi bi-chevron-down"></i>
+            </a>
+            <div class="collapse mt-3" id="deck-index-collapse">
+                <div class="card deck-index-card shadow-lg">
+                    <ul class="list-group list-group-flush text-start" id="deck-index-list"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="learning-view">
+        <div class="video-container">
+            <video id="bg-video" loop muted autoplay playsinline></video>
+        </div>
+        <div id="color-overlay"></div>
+        
+        <div class="stage" onclick="app.toggleNavbar()">
+            <div id="nom-layer" class="layer"><div id="nom-display" class="nom-display-large"></div></div>
+            <div id="details-layer" class="layer">
+                <div id="nom-mini" class="nom-display-mini"></div>
+                <div id="qatt-display" class="qatt-container"></div>
+                <div id="quocngu-display" class="quocngu-text mt-3"></div>
+            </div>
+        </div>
+
+        <div class="control-bar" onclick="event.stopPropagation()">
+            <div class="controls-pill">
+                <button class="btn-minimal" onclick="location.href='index.html'"><i class="bi bi-x-lg"></i></button>
+                <div class="vr mx-2 opacity-25" style="height:20px;"></div>
+                <button id="speak-toggle" class="btn-minimal" onclick="app.audio.toggleSpeech()"><i class="bi bi-volume-up"></i></button>
+                <button id="binaural-toggle" class="btn-minimal" onclick="app.audio.toggleBinaural()"><i class="bi bi-headphones"></i></button>
+                <div class="vr mx-2 opacity-25" style="height:20px;"></div>
+                <button class="btn-minimal" onclick="app.audio.prevTrack()"><i class="bi bi-chevron-left"></i></button>
+                <button id="music-toggle" class="btn-minimal" onclick="app.audio.toggleMusic()"><i class="bi bi-play-fill"></i></button>
+                <button class="btn-minimal" onclick="app.audio.nextTrack()"><i class="bi bi-chevron-right"></i></button>
+                <div class="vr mx-2 opacity-25" style="height:20px;"></div>
+                <div class="dropdown dropup">
+                    <button class="btn-minimal" data-bs-toggle="dropdown"><i class="bi bi-gear"></i></button>
+                    <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow dropdown-menu-custom" id="settings-menu"></div>
+                </div>
+            </div>
+            <div class="credits-container" onclick="app.audio.nextTrack()"><div id="audio-credits" class="audio-credits"></div></div>
+        </div>
+    </div>
+
+    <audio id="bg-audio"></audio>
+
+    <script>
+        /**
+         * VIDEO_VARIANTS: Source configurations for themes
+         */
+        const VIDEO_VARIANTS = {
+            v1: { src: '/chunom/225845_tiny.mp4', theme: 'light', inv: true }, // Luminous
+            v2: { src: '/chunom/36028-408417039_tiny.mp4', theme: 'dark', inv: false }, // Triangles
+            v3: { src: '/chunom/225845_tiny.mp4', theme: 'dark', inv: false } // Cosmic
+        };
+
+        const APP_CONFIG = {
+            visuals: {
+                auto: {   // all videos one after the other, two minutes each (the default)
+                    label: 'Auto',
+                    interval: 120000,
+                    sequence: [VIDEO_VARIANTS.v1, VIDEO_VARIANTS.v2, VIDEO_VARIANTS.v3]
+                },
+                luminous_spirit: { 
+                    label: 'Luminous Spirit', 
+                    interval: 60000, 
+                    sequence: [VIDEO_VARIANTS.v1]
+                },
+                triangles: { 
+                    label: 'Triangles', 
+                    interval: 60000, 
+                    sequence: [VIDEO_VARIANTS.v2]
+                },
+                cosmic_breath: { 
+                    label: 'Cosmic Breath', 
+                    interval: 60000, 
+                    sequence: [VIDEO_VARIANTS.v3]
+                },
+                none: { label: 'Chroma', interval: null, sequence: [] }
+            },
+            binaural: { 
+                alpha: { freq: 10, label: '10Hz Alpha (memorize words)' }, 
+                gamma: { freq: 6, label: '6Hz Theta (passive learning)' }, 
+                none: { freq: 0, label: 'No binaural beats' } 
+            },
+            colors: ['#FF69B4', '#9B59B6', '#3498DB', '#1ABC9C', '#E67E22', '#E91E63'],
+            playlist: [1, 4, 5, 6, 7, 12, 13, 14, 15, 16, 17],
+            intervals: { cardSwitch: 4500, colorPulse: 5000, navHide: 5000, preloadDelay: 4000 }
+        };
+
+        /**
+         * VisualManager: Handles video playback, sequences, and background coloring
+         */
+        class VisualManager {
+            constructor(videoEl, overlayEl, viewEl) {
+                this.video = videoEl; this.overlay = overlayEl; this.view = viewEl;
+                this.colorIdx = 0;
+                this.currentThemeKey = null;
+                this.sequenceIdx = 0;
+                this.sequenceTimer = null;
+                this.preloadTimer = null;
+                this.preloaderElements = [];
+            }
+
+            setSource(key) {
+                this.currentThemeKey = key;
+                this.sequenceIdx = 0;
+                localStorage.setItem('videoKey', key);
+                
+                const theme = APP_CONFIG.visuals[key];
+                
+                if (this.sequenceTimer) clearInterval(this.sequenceTimer);
+                if (this.preloadTimer) clearTimeout(this.preloadTimer);
+                this.clearPreloaders();
+                
+                if (!theme.sequence || theme.sequence.length === 0) {
+                    this.video.pause();
+                    this.overlay.classList.add('full-chroma');
+                    this.view.className = `active ui-theme-light-bg`;
+                } else {
+                    this.overlay.classList.remove('full-chroma');
+                    this.playSequenceStep(); 
+                    
+                    if (theme.sequence.length > 1) {
+                        this.preloadTimer = setTimeout(() => {
+                            this.preloadThemeSequence(theme);
+                        }, APP_CONFIG.intervals.preloadDelay);
+
+                        if (theme.interval) {
+                            this.sequenceTimer = setInterval(() => {
+                                this.sequenceIdx = (this.sequenceIdx + 1) % theme.sequence.length;
+                                this.playSequenceStep();
+                            }, theme.interval);
+                        }
+                    }
+                }
+                
+                if(window.app) window.app.renderSettings();
+            }
+
+            preloadThemeSequence(theme) {
+                this.clearPreloaders();
+                theme.sequence.forEach((config, idx) => {
+                    if (idx === this.sequenceIdx) return;
+                    const p = document.createElement('video');
+                    p.preload = 'auto';
+                    p.src = config.src;
+                    this.preloaderElements.push(p);
+                });
+            }
+
+            clearPreloaders() {
+                this.preloaderElements.forEach(p => {
+                    p.src = "";
+                    p.load();
+                });
+                this.preloaderElements = [];
+            }
+
+            playSequenceStep() {
+                const theme = APP_CONFIG.visuals[this.currentThemeKey];
+                if (!theme || !theme.sequence[this.sequenceIdx]) return;
+                const config = theme.sequence[this.sequenceIdx];
+                
+                this.video.classList.remove('playing');
+                this.video.src = config.src;
+                this.video.classList.toggle('inverted', !!config.inv);
+                this.video.load();
+                
+                // Update UI class for contrast based on current variant config
+                const themeClass = config.theme === 'dark' ? 'ui-theme-dark-bg' : 'ui-theme-light-bg';
+                this.view.className = `active ${themeClass}`;
+                
+                this.video.oncanplay = () => {
+                    this.video.play().catch(() => {});
+                    this.video.classList.add('playing');
+                };
+            }
+
+            startCycle() {
+                setInterval(() => {
+                    const next = APP_CONFIG.colors[this.colorIdx];
+                    this.overlay.style.backgroundColor = next;
+                    this.view.style.backgroundColor = next;
+                    this.colorIdx = (this.colorIdx + 1) % APP_CONFIG.colors.length;
+                }, APP_CONFIG.intervals.colorPulse);
+            }
+        }
+
+        /**
+         * SuperlearningApp: Main Logic
+         */
+        class SuperlearningApp {
+            constructor() {
+                this.sp = new SupabaseService(); 
+                this.parser = new VietnameseParser(); 
+                // Audio configuration
+                this.audio = new AudioManager(document.getElementById('bg-audio'), { 
+                    playlist: APP_CONFIG.playlist, 
+                    binaural: APP_CONFIG.binaural,
+                    musicVolume: 0.4,   // the songs are quieter than the speech (about -8 dB)
+                    crossfadeAfter: 120,   // seconds: then the next song is faded in
+                    crossfadeDuration: 5   // seconds the crossfade lasts
+                }, {
+                    isMusicOn: localStorage.getItem('musicOn') !== 'false',
+                    isSpeechOn: localStorage.getItem('speechOn') !== 'false',
+                    isBinauralOn: localStorage.getItem('binauralOn') !== 'false',
+                    binauralType: localStorage.getItem('binauralType') || 'alpha',
+                    currentTrackIdx: Math.floor(Math.random() * APP_CONFIG.playlist.length) // a random song to start with
+                });
+
+                this.visual = new VisualManager(
+                    document.getElementById('bg-video'), 
+                    document.getElementById('color-overlay'), 
+                    document.getElementById('learning-view')
+                );
+
+                this.idx = 0; 
+                this.isFlipped = false;
+                this.navTimer = null; 
+                this.sessionActive = false;
+            }
+
+            async init() {
+                await this.sp.init();
+                const urlParams = new URLSearchParams(window.location.search);
+                const deck = await this.sp.getDeck(urlParams.get('id') || "9222f66f-6d0e-4b2d-bfdd-f31ebea71337");
+                
+                if (deck) {
+                    this.sp.saveDeckLink?.(deck); // learning a public deck of somebody else takes it over into "My decks"
+                    this.deck = { ...deck, words: deck.words.filter(w => w.n !== ".config") };
+                    document.getElementById('deck-title').textContent = this.deck.title;
+                    document.getElementById('deck-meta').textContent = `${this.deck.words.length} items`;
+                    
+                    const indexList = document.getElementById('deck-index-list');
+                    indexList.replaceChildren(...this.deck.words.map(w => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item index-item d-flex justify-content-between align-items-center';
+                        const nom = document.createElement('span'), qatt = document.createElement('span'), qn = document.createElement('span');
+                        nom.className = 'index-nom-cell';
+                        nom.append(...this.nomChars(w.n));
+                        qatt.className = 'index-qatt-cell';
+                        qatt.append(...this.qattCodes(w.qn));
+                        qn.className = 'index-qn-cell';
+                        qn.textContent = w.qn;
+                        li.append(nom, qatt, qn);
+                        return li;
+                    }));
+
+                    document.getElementById('loading-spinner').style.display = 'none';
+                    document.getElementById('deck-info').style.display = 'block';
+                    document.getElementById('start-button').style.display = 'block';
+                    document.querySelector('.sl-info').style.display = 'block';   // with the start button: the page does not jump while it loads
+                    document.getElementById('index-toggle-wrapper').classList.remove('d-none');
+                }
+                
+                // Sync UI when AudioManager state changes
+                this.audio.on('update', () => { 
+                    this.syncAudioUI(); 
+                    this.renderSettings(); 
+                    this.updateCredits(); 
+                });
+            }
+
+            toggleNavbar() {
+                const nav = document.querySelector('.navbar');
+                if (!nav) return;
+                nav.classList.contains('nav-hidden') ? this.showNavbar() : this.hideNavbar();
+            }
+
+            showNavbar() {
+                const nav = document.querySelector('.navbar');
+                if (!nav) return;
+                nav.classList.remove('nav-hidden');
+                clearTimeout(this.navTimer);
+                if (this.sessionActive) this.navTimer = setTimeout(() => this.hideNavbar(), APP_CONFIG.intervals.navHide);
+            }
+
+            hideNavbar() {
+                const nav = document.querySelector('.navbar');
+                if (nav && this.sessionActive) nav.classList.add('nav-hidden');
+            }
+
+            syncAudioUI() {
+                const state = this.audio.state;
+    
+    // Save to localStorage whenever UI syncs
+    localStorage.setItem('musicOn', state.isMusicOn);
+    localStorage.setItem('speechOn', state.isSpeechOn);
+    localStorage.setItem('binauralOn', state.isBinauralOn);
+    localStorage.setItem('binauralType', state.binauralType);
+
+                
+                const musicBtn = document.getElementById('music-toggle');
+                musicBtn.innerHTML = state.isMusicOn ? '<i class="bi bi-pause-fill"></i>' : '<i class="bi bi-play-fill"></i>';
+                musicBtn.classList.toggle('active', state.isMusicOn);
+                document.getElementById('speak-toggle').classList.toggle('active', state.isSpeechOn);
+                document.getElementById('binaural-toggle').classList.toggle('active', state.isBinauralOn);
+            }
+
+            updateCredits() {
+                const el = document.getElementById('audio-credits');
+                const state = this.audio.state;
+                let parts = [];
+                
+                if (state.isSpeechOn) {
+                    if (!state.hasSpeechVoice) {
+                        parts.push('<span class="badge bg-danger px-2">⚠️ No voice installed</span>');
+                    } else {
+                        parts.push('<i class="bi bi-chat-left-text me-1"></i> Voice');
+                    }
+                }
+                if (state.isBinauralOn && state.binauralType !== 'none') {
+                    parts.push(`<span class="badge bg-dark px-2">${APP_CONFIG.binaural[state.binauralType].label}</span>`);
+                }
+                if (state.isMusicOn) {
+                    parts.push(`<i class="bi bi-shuffle me-1"></i> Track ${APP_CONFIG.playlist[state.currentTrackIdx]}`);
+                }
+                
+                el.innerHTML = parts.join(' ');
+                el.classList.toggle('visible', parts.length > 0);
+            }
+
+            engage() {
+                this.sessionActive = true;
+                document.getElementById('loading-overlay').style.opacity = 0;
+                setTimeout(() => document.getElementById('loading-overlay').remove(), 1000);
+                document.getElementById('learning-view').classList.add('active');
+                
+                this.audio.initMusicEngine(); 
+                this.visual.startCycle();
+                this.visual.setSource(APP_CONFIG.visuals[localStorage.getItem('videoKey')] ? localStorage.getItem('videoKey') : 'auto');
+                
+                this.updateCard();
+                this.showNavbar();
+                setInterval(() => this.isFlipped ? this.next() : this.flip(), 4500);
+            }
+
+            // Nôm characters as chunom-assets images (the font as fallback)
+            nomChars(text, size = 32) {
+                return [...(text || '')].map(ch => {
+                    if (!/[一-鿿㐀-䶿\u{20000}-\u{323af}]/u.test(ch)) return document.createTextNode(ch);
+                    // the index list: always the font; the characters of the play mode (160) are images, the font only as the fallback below
+                    if (size < 100) return document.createTextNode(ch);
+                    const img = document.createElement('img');
+                    img.alt = ch;
+                    img.loading = 'lazy';
+                    const hex = ch.codePointAt(0).toString(16).toUpperCase();
+                    img.addEventListener('error', () => img.replaceWith(document.createTextNode(ch)));
+                    img.src = `/chunom-assets/generated/${size}/${hex}.webp`;
+                    return img;
+                });
+            }
+
+            // the big characters of the card: images (160px) with the font as fallback
+            showNom(target, text) {
+                const chars = this.nomChars(text, 160);
+                target.style.setProperty('--n', Math.max(1, chars.length));
+                target.replaceChildren(...chars);
+            }
+
+            // one span per syllable with the QATT characters of the font
+            qattCodes(quocNgu) {
+                const codes = [];
+                for (const word of (quocNgu || '').split(/\s+/)) {
+                    const parsed = word && this.parser.parse(word);
+                    if (parsed?.qatt) { // the glyph after the rhyme table of the decoding
+                        const glyph = QattText.syllable(parsed.qatt);
+                        if (!glyph) continue;
+                        const code = document.createElement('span');
+                        code.className = 'qatt-glyph';
+                        code.title = word;
+                        code.textContent = glyph;
+                        codes.push(code);
+                    } // a syllable without a glyph is left out
+                }
+                return codes;
+            }
+
+            updateCard() {
+                const w = this.deck.words[this.idx]; 
+                this.isFlipped = false;
+                this.showNom(document.getElementById('nom-display'), w.n);
+                document.getElementById('nom-layer').classList.add('layer-show');
+                document.getElementById('details-layer').classList.remove('layer-show');
+            }
+
+            flip() {
+                const w = this.deck.words[this.idx]; 
+                this.isFlipped = true;
+                this.showNom(document.getElementById('nom-mini'), w.n);
+                document.getElementById('quocngu-display').textContent = w.qn;
+                
+                document.getElementById('qatt-display').replaceChildren(...this.qattCodes(w.qn));
+                
+                document.getElementById('nom-layer').classList.remove('layer-show');
+                document.getElementById('details-layer').classList.add('layer-show');
+                this.audio.speak(w.qn, location.search.indexOf("cloud") > - 1 ? "cloud" : "auto");
+            }
+
+            next() { 
+                this.idx = (this.idx + 1) % this.deck.words.length; 
+                this.updateCard(); 
+            }
+
+            renderSettings() {
+                const menu = document.getElementById('settings-menu'); 
+                if (!menu) return;
+                const state = this.audio.state;
+                const item = (label, active, action) => `
+                    <button class="dropdown-item ${active ? 'fw-bold' : ''}" onclick="${action}">
+                        ${active ? '✓ ' : ''}${label}
+                    </button>`;
+                
+                const vKey = this.visual.currentThemeKey || 'auto';
+                
+                menu.innerHTML = `
+                    <div class="px-3 py-2 text-secondary small text-uppercase">Backgrounds</div>
+                    ${Object.entries(APP_CONFIG.visuals).map(([k, v]) => item(v.label, vKey === k, `app.visual.setSource('${k}')`)).join('')}
+                    
+                    <div class="dropdown-divider"></div>
+                    <div class="px-3 py-2 text-secondary small text-uppercase">Binaural Beats</div>
+                    ${Object.entries(APP_CONFIG.binaural).map(([k, v]) => {
+                        const isActive = (k === 'none') ? !state.isBinauralOn : (state.isBinauralOn && state.binauralType === k);
+                        return item(v.label, isActive, `app.audio.setBinaural('${k}')`);
+                    }).join('')}
+                    
+                    <div class="dropdown-divider"></div>
+                    <div class="px-3 py-2 text-secondary small text-uppercase">Speech</div>
+                    ${item('enabled', state.isSpeechOn, "if(!app.audio.state.isSpeechOn) app.audio.toggleSpeech()")}
+                    ${item('disabled', !state.isSpeechOn, "if(app.audio.state.isSpeechOn) app.audio.toggleSpeech()")}
+                    
+                `;
+            }
+
+        }
+
+        // Bootstrapping
+        const app = new SuperlearningApp();
+        window.app = app;
+        document.addEventListener('DOMContentLoaded', () => app.init());
+    </script>
+</body>
+</html>

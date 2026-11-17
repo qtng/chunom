@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google" content="notranslate"> <!-- the page mixes French / Vietnamese text and English labels; stop the browser offering a translation -->
+    <title>Bonet 1899 – Dictionnaire Annamite-Français | Qatt.org</title>
+    <meta name="description" content="Scanned Annamite-French dictionary by Jean Bonet (1899) with headword search.">
+    <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://qatt.org/css/site.css">
+    <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+    <!--
+        Cache busting: GitHub Pages lets browsers keep files for hours. The version number after v= (same in all lines
+        below and in the three dict pages; bump it with dict/bump-version.sh whenever a file in dict/ or js/ime.js
+        changes) makes browsers fetch the new files at once. The import map adds it to the module imports.
+    -->
+    <script type="importmap">
+    { "imports": {
+        "./viewer.js": "./viewer.js",
+        "./collate.js": "./collate.js",
+        "./dictionaries.js": "./dictionaries.js"
+    } }
+    </script>
+    <link rel="stylesheet" href="dict.css">
+    <script defer src="https://qatt.org/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script defer src="../js/ime.js"></script>
+    <script defer src="../js/detail.js"></script>
+    <script src="https://qatt.org/js/navigation.js"></script>
+</head>
+<body>
+<main id="app">
+    <noscript><p class="container pt-4">This dictionary viewer needs JavaScript.</p></noscript>
+</main>
+<script type="module">
+    import { DICTIONARIES } from './dictionaries.js';
+    import { DictionaryViewer } from './viewer.js';
+    new DictionaryViewer(DICTIONARIES.bonet, document.getElementById('app'));
+</script>
+</body>
+</html>

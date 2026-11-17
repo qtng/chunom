@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PA script: learn it in an hour</title>
+  <meta name="description" content="PA (Phiên âm tự), a phonetic script for Vietnamese built from Hán Nôm characters: the idea, the building blocks in charts, a field to try it and a first reading.">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://qatt.org/css/site.css">
+  <link rel="stylesheet" href="https://qatt.org/css/learn.css">
+  <script src="https://qatt.org/js/navigation.js"></script>
+  <script src="https://qatt.org/js/parser.js"></script>
+  <script src="https://qatt.org/js/pa-text.js"></script>
+  <style>
+    :root { --pa: "PA Pen", "PA"; --c-on: var(--ink); --c-vo: var(--bs-primary); --c-co: var(--bs-success); --c-to: var(--bs-danger); }
+    .pa { font-family: var(--pa), serif; font-weight: 400; line-height: 1.1; }
+    .han { font-family: var(--font-cjk), serif; }
+    .guide { max-width: 46rem; }
+    .guide p, .guide li { font-family: var(--bs-body-font-family), var(--font-cjk); }   /* rare Nôm characters in the text (𠂎, 𧘇) from the CJK font */
+    .guide section { scroll-margin-top: 7rem; }
+    .guide h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.9rem; margin: 3rem 0 .6rem; color: var(--ink); }
+    .guide h2 .no { color: var(--cinnabar); font-size: 1.1rem; margin-right: .5rem; vertical-align: .3rem; }
+    .guide .lead-text { color: var(--bs-secondary-color); }
+
+    /* the keyboard QATTKey (qatt.org): a picture of it with PA candidates, linked to its page */
+    .kb { display: grid; grid-template-columns: 17rem 1fr; gap: 1.2rem; align-items: center; padding: 1.2rem; color: var(--ink); }
+    .kb img { display: block; width: 100%; height: auto; border-radius: .7rem; }
+    .kb h3 { font-size: 1.15rem; margin: 0 0 .4rem; }
+    .kb p { margin: 0 0 .8rem; color: var(--bs-secondary-color); }
+    @media (max-width: 575.98px) { .kb { grid-template-columns: 1fr; } }
+
+    /* the sample line of the hero: Nôm, PA, Quốc Ngữ */
+    .sample { display: inline-grid; grid-template-columns: repeat(6, auto); gap: .1rem 1rem; margin-top: 1.2rem; justify-items: center; color: var(--ink); }
+    .sample .nom { font-family: var(--font-cjk), serif; font-size: 2.2rem; line-height: 1.2; }
+    .sample .pa { font-size: 2.4rem; color: var(--cinnabar); }
+    .sample .qn { font-family: Georgia, serif; font-size: .95rem; color: var(--bs-secondary-color); }
+    @media (max-width: 420px) { .sample { gap: .1rem .5rem; } .sample .nom { font-size: 1.7rem; } .sample .pa { font-size: 1.9rem; } }
+
+    /* the steps as a sticky bar of section links */
+    .toc-bar { position: sticky; top: 0; z-index: 5; padding: .5rem 0; background: color-mix(in srgb, var(--paper, var(--bs-body-bg)) 90%, transparent); backdrop-filter: blur(6px); }
+    .toc-bar .steps { margin: 0; flex-wrap: wrap; }   /* nine sections: two rows on a phone rather than a page wider than the screen */
+    .toc-bar { display: flex; align-items: center; gap: .6rem; } .toc-bar .steps { flex: 1; }
+    /* the PA font (the fonts of PA_FONTS in js/fonts.js of qatt.org: only these have the PA characters): in the bar of the sections, on a phone fixed at the bottom left (the button "to the top" is on the right) */
+    .pa-font { flex: none; display: flex; align-items: center; gap: .35rem; margin: 0; font-size: .8rem; color: var(--bs-secondary-color); }
+    .pa-font select { width: auto; border-radius: 2rem; font-size: .85rem; padding-top: .2rem; padding-bottom: .2rem; }
+    @media (max-width: 767.98px) {
+      .pa-font { position: fixed; left: 1rem; bottom: calc(1rem + env(safe-area-inset-bottom)); z-index: 1020; padding: .3rem .35rem .3rem .7rem; border-radius: 2rem; background: var(--paper, var(--bs-body-bg)); box-shadow: 0 .2rem .7rem rgba(0, 0, 0, .3); }
+      body.has-bottom-bar:not(.bar-typing) .pa-font { bottom: calc(60px + 1rem + env(safe-area-inset-bottom)); }
+    }
+
+    /* the idea: three parts */
+    .parts { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: .7rem; margin-top: 1rem; }
+    .parts .card-box { padding: .8rem .9rem; color: var(--ink); }
+    .parts .k { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; }
+    .parts p { margin: .2rem 0 0; font-size: .9rem; color: var(--bs-secondary-color); }
+    .k.on { color: var(--c-on); } .k.vo { color: var(--c-vo); } .k.co { color: var(--c-co); } .k.to { color: var(--c-to); }
+
+    /* a syllable is built: the cell on the left, the steps on the right */
+    .build { display: grid; grid-template-columns: 11rem 1fr; gap: 1.2rem; align-items: center; padding: 1.2rem; color: var(--ink); }
+    @media (max-width: 520px) { .build { grid-template-columns: 1fr; text-align: center; } }
+    .build .cell { display: flex; flex-direction: column; align-items: center; }
+    .build .big { font-size: 7.5rem; line-height: 1; min-height: 8.3rem; display: flex; align-items: center; }
+    .build .big.pop { animation: pop .45s cubic-bezier(.34, 1.56, .64, 1) both; }
+    .build .word { font-family: Georgia, serif; font-size: 1.3rem; margin-top: .3rem; }
+    .build .word .han { font-size: 1.5rem; margin-right: .4rem; }
+    .build ol { list-style: none; margin: 0; padding: 0; display: grid; gap: .35rem; }
+    .build li { display: flex; align-items: center; gap: .6rem; padding: .35rem .6rem; border-radius: .7rem; opacity: .35; transition: opacity .4s, background-color .4s; }
+    .build li.on { opacity: 1; }
+    .build li.now { background: color-mix(in srgb, var(--cinnabar) 10%, transparent); }
+    .build li .g { font-size: 1.8rem; width: 2.4rem; text-align: center; }
+    .build li .k { width: 6.2rem; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; }
+    .build li .v { font-family: Georgia, serif; font-size: 1.05rem; }
+    .build li .v .han { font-size: 1.15rem; margin-left: .3rem; }
+    .chooser { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem; margin: .9rem 0 0; }
+    .chooser .btn { font-size: .85rem; padding: .2rem .8rem; }
+    .chooser .btn.active { --bs-btn-bg: var(--cinnabar); --bs-btn-color: #fff; --bs-btn-border-color: var(--cinnabar); --bs-btn-active-bg: var(--cinnabar); --bs-btn-active-color: #fff; background: var(--cinnabar); color: #fff; border-color: var(--cinnabar); }
+    .rules { margin: 1.2rem 0 0; padding-left: 1.2rem; }
+    .rules li { margin-bottom: .35rem; }
+
+    /* the charts */
+    .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(5.6rem, 1fr)); gap: .5rem; margin-top: 1rem; }
+    .tile { display: flex; flex-direction: column; align-items: center; gap: .1rem; padding: .6rem .3rem .5rem; border: 0; color: var(--ink); cursor: pointer; transition: transform .15s; }
+    .tile:hover { transform: translateY(-2px); }
+    .tile:active { transform: translateY(1px); }
+    .tile .pa { font-size: 2.6rem; }
+    .tile .qn { font-family: Georgia, serif; font-size: 1.05rem; font-weight: 600; }
+    .tile .src { font-size: .8rem; color: var(--bs-secondary-color); white-space: nowrap; }
+    .tile .src .han { font-size: 1.05rem; color: var(--ink); margin-right: .15rem; }
+    .tile .ex { font-size: .75rem; color: var(--bs-secondary-color); }
+    .tile.playing { outline: 2px solid var(--cinnabar); }
+    .sub { font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; color: var(--bs-secondary-color); margin: 1.4rem 0 0; }
+
+    /* try it */
+    .try { padding: 1.1rem; color: var(--ink); }
+    .try input { font-size: 1.15rem; }
+    .try .out { font-size: 3rem; min-height: 4rem; margin-top: .8rem; text-align: center; overflow-wrap: anywhere; }
+    .try .split { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem; min-height: 2rem; }
+    .try .split span { padding: .1rem .55rem; border-radius: 1rem; font-size: .85rem; background: color-mix(in srgb, currentColor 6%, transparent); }
+
+    /* the whole chart of stems */
+    details.chart { margin-top: 1rem; }
+    details.chart summary { cursor: pointer; font-weight: 600; color: var(--cinnabar); }
+    .chart-wrap { overflow-x: auto; margin-top: .8rem; }
+    .chart-wrap table { border-collapse: collapse; color: var(--ink); }
+    .chart-wrap th, .chart-wrap td { text-align: center; padding: .15rem .25rem; border: 1px solid color-mix(in srgb, currentColor 10%, transparent); }
+    .chart-wrap th { font-family: Georgia, serif; font-weight: 400; font-size: .75rem; color: var(--bs-secondary-color); }
+    .chart-wrap td { font-family: var(--pa), serif; font-size: 1.7rem; line-height: 1.1; }
+    .chart-wrap th .pa { font-size: 1.3rem; display: block; color: var(--ink); }
+
+    /* reading: four lines of Truyện Kiều, a word shows its reading when tapped */
+    .verses { display: grid; gap: .7rem; }
+    .verse { display: flex; align-items: center; gap: .6rem; padding: .8rem .9rem; color: var(--ink); }
+    .verse .words { flex: 1; display: flex; flex-wrap: wrap; gap: .2rem .5rem; }
+    .verse .w { display: flex; flex-direction: column; align-items: center; padding: .1rem .2rem; border: 0; border-radius: .6rem; background: none; color: inherit; cursor: pointer; transition: background-color .2s; }
+    .verse .w:hover { background: color-mix(in srgb, var(--cinnabar) 8%, transparent); }
+    .verse .w .nom { font-family: var(--font-cjk), serif; font-size: .95rem; line-height: 1.2; color: var(--bs-secondary-color); }
+    .verse .w .pa { font-size: 2.5rem; }
+    .verse .w .qn { font-family: Georgia, serif; font-size: .95rem; line-height: 1.3; color: var(--cinnabar); visibility: hidden; opacity: 0; transform: translateY(-.3rem); transition: opacity .3s, transform .3s; }
+    .verse .w.open .qn { visibility: visible; opacity: 1; transform: none; }
+    .verse .w .rb { font-family: var(--font-cjk), serif; font-size: 2.2rem; line-height: 2.3; padding-top: .3rem; }   /* room over the character for the PA annotation of the font */
+    .verse .play { flex: none; }
+    @media (max-width: 420px) { .verse .w .pa { font-size: 1.6rem; } .verse .w { padding: .1rem 0; } .verse .words { gap: .2rem .35rem; } .verse { padding: .6rem .5rem; gap: .3rem; } .verse .w .nom, .verse .w .qn { font-size: .75rem; } }   /* a line of eight words in one row on a phone */
+    .why { padding: .8rem 1rem; border-left: 3px solid var(--cinnabar); background: color-mix(in srgb, var(--cinnabar) 5%, transparent); }
+    .desk { font-size: .9rem; color: var(--bs-secondary-color); }
+    .next { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; margin: 1.2rem 0 0; }
+  </style>
+</head>
+<body>
+<header class="hero pt-5 pb-4">
+  <div class="container text-center">
+    <div class="kicker mb-2">Phiên âm tự · PA</div>
+    <h1 class="mb-3" data-vi="Học PA trong vòng 1 tiếng">PA in one hour</h1>
+    <p class="lead mx-auto mb-0"><span data-vi="Một lối viết ghi âm tiếng Việt, ghép từ những chữ Hán Nôm mà bạn đã biết.">A phonetic script for Vietnamese, built from Hán Nôm characters you already know.</span></p>
+    <div class="sample" id="sample" aria-label="Trăm năm trong cõi người ta"></div>
+  </div>
+</header>
+
+<main class="container py-3" id="content">
+  <div class="guide mx-auto">
+    <nav class="toc-bar" id="toc" aria-label="Sections"></nav>
+
+    <section id="idea">
+      <h2><span class="no">1</span><span data-vi="Ý tưởng">The idea</span></h2>
+      <p><span data-vi="Mỗi âm tiết tiếng Việt được viết thành một ô vuông, giống một chữ Nôm. Phụ âm đầu và âm cuối là những chữ Hán quen thuộc, được đọc theo âm đầu của chúng: 巴 ba là b, 木 mộc là m. Nguyên âm là một nét nhỏ bên phải, thanh điệu là một dấu nhỏ. Ai biết Hán Nôm thì chỉ cần học các nét nguyên âm và năm dấu thanh.">Every Vietnamese syllable is written as one square, like a Nôm character. Its initial and its final consonant are familiar Hán characters, read by the first sound of their reading: 巴 ba is b, 木 mộc is m. The vowel is a small stroke on the right, the tone a small mark. If you know Hán Nôm, you only learn the vowel strokes and five tone marks.</span></p>
+      <div class="parts">
+        <div class="card-box"><div class="k on" data-vi="Phụ âm đầu">Initial</div><p><span data-vi="Một chữ Hán, bên trái">A Hán character, on the left</span></p></div>
+        <div class="card-box"><div class="k vo" data-vi="Nguyên âm">Vowel</div><p><span data-vi="Một nét, bên phải">A stroke, on the right</span></p></div>
+        <div class="card-box"><div class="k co" data-vi="Âm cuối">Final</div><p><span data-vi="Cũng là chữ Hán, bên dưới">A Hán character too, below</span></p></div>
+        <div class="card-box"><div class="k to" data-vi="Thanh điệu">Tone</div><p><span data-vi="Một dấu nhỏ, ở dưới cùng">A small mark, at the bottom</span></p></div>
+      </div>
+          <p class="why mt-3"><span data-vi="Phiên âm tự (PA) được tạo ra để giúp học chữ Nôm. Nó chỉ dùng những gì người học Hán Nôm vốn phải học. Và nó để cách đọc đứng sang một bên: chữ Quốc Ngữ và IPA quá quen thuộc, mắt đọc chúng ngay lập tức, và cùng với âm thường là cả nghĩa, trước khi kịp nhìn vào chữ Nôm. PA thì chỉ được đọc khi bạn muốn: một gợi ý mà bạn có thể không nhìn tới.">Phiên âm tự (PA, phonetic annotation) was made to help with learning Nôm. It uses only what a learner of Hán Nôm learns anyway. And it keeps the pronunciation out of the way: Quốc Ngữ and IPA are so familiar that the eye reads them at once, and with the sound often the meaning, before one has looked at the character. PA is read only when you want to: a hint you can choose not to look at.</span></p>
+    </section>
+
+    <section id="syllable">
+      <h2><span class="no">2</span><span data-vi="Một âm tiết">A syllable</span></h2>
+      <p class="lead-text"><span data-vi="Xem một âm tiết được ghép từng phần. Phần trên là phụ âm đầu và nguyên âm, phần dưới là âm cuối và thanh.">Watch a syllable being put together. The top holds the initial and the vowel, the bottom the final and the tone.</span></p>
+      <div class="card-box build">
+        <div class="cell"><div class="pa big" id="buildCell"></div><div class="word" id="buildWord"></div></div>
+        <ol id="buildSteps"></ol>
+      </div>
+      <div class="chooser" id="buildWords" role="group" aria-label="Example"></div>
+      <div class="chooser" role="group" aria-label="Layout">
+        <button type="button" class="btn btn-quiet btn-pill active" data-stack="1"><span data-vi="Xếp chồng">Stacked</span></button>
+        <button type="button" class="btn btn-quiet btn-pill" data-stack="0"><span data-vi="Cạnh nhau">Side by side</span></button>
+      </div>
+      <ul class="rules">
+        <li><span data-vi="Một âm, một chữ: c, k, q đều là 工; g, gh là 几; ng, ngh là 乂.">One sound, one sign: c, k, q are all 工; g, gh are 几; ng, ngh are 乂.</span></li>
+        <li><span data-vi="Âm tiết không có phụ âm đầu (ăn, em) bắt đầu bằng 𠂎, nửa trái của chữ Nôm 𧘇 ấy.">A syllable without an initial (ăn, em) starts with 𠂎, the left half of the Nôm 𧘇 ấy.</span></li>
+        <li><span data-vi="qu là 工 với âm đệm: âm đệm là một gạch ngang thêm vào nét nguyên âm.">qu is 工 with a glide: the glide is an extra horizontal bar on the vowel stroke.</span></li>
+        <li><span data-vi="Âm cuối -u, -o và -i, -y được viết bằng nét nguyên âm ô và i.">The finals -u, -o and -i, -y are written with the vowel strokes ô and i.</span></li>
+        <li><span data-vi="Không có dấu là thanh ngang.">No mark is the level tone (ngang).</span></li>
+      </ul>
+    </section>
+
+    <section id="onsets">
+      <h2><span class="no">3</span><span data-vi="Phụ âm đầu">Initials</span></h2>
+      <p class="lead-text"><span data-vi="23 chữ Hán. Dưới mỗi chữ là cách đọc cho ra âm đầu; vài chữ lấy âm Nôm, vì hầu như không có chữ Hán Việt nào bắt đầu bằng r hay gh. Nhấn để nghe.">23 Hán characters. Under each is the reading that gives the sound; a few take their Nôm reading, as hardly any Sino-Vietnamese word starts with r or gh. Tap to hear it.</span></p>
+      <div class="tiles" id="tilesOnsets"></div>
+    </section>
+
+    <section id="vowels">
+      <h2><span class="no">4</span><span data-vi="Nguyên âm">Vowels</span></h2>
+      <p class="lead-text"><span data-vi="14 nét nguyên âm. Đây là phần duy nhất cần học thuộc. Nhấn để nghe một ví dụ.">14 vowel strokes. This is the only part to learn by heart. Tap for an example.</span></p>
+      <div class="tiles" id="tilesVowels"></div>
+      <p class="sub"><span data-vi="Với âm đệm (oa, uy, quê …): thêm một gạch ngang">With a glide (oa, uy, quê …): one more horizontal bar</span></p>
+      <div class="tiles" id="tilesGlides"></div>
+    </section>
+
+    <section id="codas">
+      <h2><span class="no">5</span><span data-vi="Âm cuối">Finals</span></h2>
+      <p class="lead-text"><span data-vi="Cũng là những chữ của phụ âm đầu: -p là 巴 như b. Chỉ -nh dùng 儿, một biến thể của 人, để không lẫn với dấu sắc. -u và -i là nét nguyên âm ô và i.">The same characters as the initials: -p is 巴 like b. Only -nh takes 儿, a variant of 人, so that it is not mistaken for the sắc mark. -u and -i are the vowel strokes ô and i.</span></p>
+      <div class="tiles" id="tilesCodas"></div>
+    </section>
+
+    <section id="tones">
+      <h2><span class="no">6</span><span data-vi="Thanh điệu">Tones</span></h2>
+      <p class="lead-text"><span data-vi="Năm dấu. Không có âm cuối thì dấu đứng dưới âm tiết; có âm cuối thì dấu nằm trong ô của âm cuối.">Five marks. Without a final the mark stands below the syllable; with a final it sits in the final's block.</span></p>
+      <div class="tiles" id="tilesTones"></div>
+      <p class="sub"><span data-vi="Cùng các dấu với âm cuối -m">The same marks with the final -m</span></p>
+      <div class="tiles" id="tilesToneCodas"></div>
+    </section>
+
+    <section id="try">
+      <h2><span class="no">7</span><span data-vi="Thử viết">Try it</span></h2>
+      <div class="card-box try">
+        <input type="text" class="form-control" id="tryInput" value="thuyền nhiều cá" lang="vi" autocomplete="off" aria-label="Quốc Ngữ" placeholder="Type Quốc Ngữ" data-vi-placeholder="Gõ chữ Quốc Ngữ">
+        <div class="pa out" id="tryOut" lang="vi"></div>
+        <div class="split" id="trySplit"></div>
+      </div>
+    </section>
+
+    <section id="read">
+      <h2><span class="no">8</span><span data-vi="Đọc">Read</span></h2>
+      <p class="lead-text"><span data-vi="Bốn câu đầu của Truyện Kiều. Hãy tự đọc từng chữ, rồi nhấn vào để kiểm tra; nút loa đọc cả câu.">The first four lines of Truyện Kiều. Read each word yourself, then tap it to check; the speaker reads the whole line.</span></p>
+      <div class="verses" id="verses"></div>
+      <p class="lead-text mt-4"><span data-vi="Bốn câu đầu của bản dịch Nôm bài Nam quốc sơn hà. Ở đây PA là chú âm: âm tiết nhỏ nằm trên chữ Nôm (chữ Nôm, rồi một ký tự điều khiển, rồi âm tiết PA). Nhấn vào chữ để xem Quốc Ngữ.">The first four lines of a Nôm translation of Nam quốc sơn hà. Here PA is the annotation: a small syllable stands over the Nôm character (the character, then a control character, then the PA syllable). Tap a character to see the Quốc Ngữ.</span></p>
+      <div class="verses" id="verses2"></div>
+    </section>
+
+    <section id="chart">
+      <h2><span class="no">9</span><span data-vi="Bảng đầy đủ">The full chart</span></h2>
+      <p class="lead-text"><span data-vi="Mọi cách ghép phụ âm đầu với nguyên âm (không phải cách nào cũng có trong tiếng Việt).">Every initial with every vowel (not all of them occur in Vietnamese).</span></p>
+      <details class="chart" id="chartBox"><summary><span data-vi="Mở bảng">Open the chart</span></summary><div class="chart-wrap" id="chartWrap"></div></details>
+      <div class="next">
+        <a class="btn btn-cinnabar btn-pill" href="/chunom/writer.html?pa=1"><i class="bi bi-pencil-square"></i> <span data-vi="Viết PA">Write PA</span></a>
+        <a class="btn btn-quiet btn-pill" href="/chunom/pa/spec.html"><span data-vi="Đặc tả">Specification</span></a>
+        <a class="btn btn-quiet btn-pill" href="/chunom/fonts/#pen"><i class="bi bi-download"></i> <span data-vi="Phông chữ">Fonts</span></a>
+      </div>
+      <p class="desk text-center mt-3"><span data-vi="Trên máy tính: các ký tự PA có trong phông chữ QATT Pen, tải về trong danh mục phông chữ.">On the desktop: the PA characters are in the font QATT Pen, to download from the font catalogue.</span></p>
+    </section>
+
+    <section id="keyboard">
+      <div class="card-box kb mt-5">
+        <a href="https://qatt.org/apps/keyboard.html" tabindex="-1" aria-hidden="true"><img src="https://qatt.org/apps/keyboard/keyboard-pa.jpg" width="800" height="207" loading="lazy" alt=""></a>
+        <div>
+          <h3 data-vi="PA trên điện thoại">PA on your phone</h3>
+          <p data-vi="QATTKey, bàn phím cho Android, viết PA, QATT và chữ Nôm trong mọi ứng dụng: gõ chữ Quốc Ngữ bằng Telex rồi chọn chữ PA trong các gợi ý.">QATTKey, a keyboard for Android, writes PA, QATT and Chữ Nôm in any app: type Quốc Ngữ with Telex and pick the PA character among the candidates.</p>
+          <a class="btn btn-cinnabar btn-pill" href="https://qatt.org/apps/keyboard.html"><i class="bi bi-phone"></i> <span data-vi="Tải bàn phím">Get the keyboard</span></a>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const vi = (e, text) => { e.dataset.vi = text; return e; };
+  const hanSpan = h => el('span', 'han', h);
+  const parser = new VietnameseParser('qatt');
+  const J = 0xF00D0, K = 0xF00D1, A0 = 0xF00D2, N0 = 0xF00E9, C0 = 0xF00FF, T0 = 0xF0109;
+  const chr = (...c) => String.fromCodePoint(...c);
+
+  // the initials in the order of the code points (PA ONSET ZERO … X): the Hán character and the reading that gives the sound
+  const ONSETS = [
+    ['ʔ', '𠂎', 'ấy', 'nôm'], ['b', '巴', 'ba'], ['c, k, q', '工', 'công'], ['ch', '匕', 'chủy'], ['đ', '大', 'đại'], ['d', '廴', 'dẫn'],
+    ['ph', '夫', 'phu'], ['g, gh', '几', 'ghế', 'nôm'], ['gi', '之', 'gì', 'nôm'], ['h', '又', 'hựu'], ['kh', '厶', 'khứ', 'in 去'], ['l', '立', 'lập'],
+    ['m', '木', 'mộc'], ['n', '乃', 'nãi'], ['ng, ngh', '乂', 'nghệ'], ['nh', '人', 'nhân'], ['r', '耒', 'rồi', 'nôm'], ['s', '彡', 'sam'],
+    ['t', '夕', 'tịch'], ['th', '扌', 'thủ'], ['tr', '夂', 'truy'], ['v', '王', 'vương'], ['x', '彳', 'xích'],
+  ];
+  // the vowels (PA VOWEL A … UYEE): spelling and an example word
+  const NUCLEI = [
+    ['a', 'ba'], ['ơ', 'bơ'], ['ă', 'ăn'], ['â', 'ân'], ['ê', 'bê'], ['e', 'xe'], ['i', 'đi'], ['iê, ia', 'tiền'], ['ô', 'cô'], ['o', 'có'],
+    ['u', 'mù'], ['uô, ua', 'muốn'], ['ư', 'như'], ['ươ, ưa', 'nước'],
+    ['oa', 'hoa'], ['uơ', 'thuở'], ['oă', 'hoặc'], ['uâ', 'xuân'], ['uê', 'huế'], ['oe', 'khỏe'], ['uy', 'suy'], ['uyê', 'chuyện'],
+  ];
+  // the finals (PA CODA U … CH): spelling, source and an example
+  const CODAS = [
+    ['-u, -o', '', 'kêu'], ['-i, -y', '', 'tôi'], ['-m', '木', 'cơm'], ['-n', '乃', 'con'], ['-ng', '乂', 'sông'], ['-nh', '儿', 'anh'],
+    ['-p', '巴', 'đẹp'], ['-t', '夕', 'tốt'], ['-c', '工', 'các'], ['-ch', '匕', 'sách'],
+  ];
+  const TONES = [['sắc', 'má'], ['huyền', 'mà'], ['hỏi', 'mả'], ['ngã', 'mã'], ['nặng', 'mạ']];
+  const TONE_CODA = ['tám', 'làm', 'cảm', 'thẫm', 'phạm'];
+
+  // speech of the Chunom site (decks/audiomanager.js: the browser voice, else Google TTS)
+  let speaker = null, loading = null;
+  const say = text => {
+    const go = () => { speaker = speaker || new AudioManager(new Audio(), {}); speaker.speak(text, 'auto', 0.8); };
+    if (typeof AudioManager !== 'undefined') return go();
+    if (!loading) { loading = []; const s = document.createElement('script'); s.src = '/chunom/decks/audiomanager.js'; s.onload = () => loading.forEach(f => f()); document.head.append(s); }
+    loading.push(go);
+  };
+  const pa = (w, stacked = true) => PaText.word(w, parser, { stacked });
+
+  // the hero: the first line of Truyện Kiều
+  const SAMPLE = [['𤾓', 'trăm'], ['𢆥', 'năm'], ['𥪞', 'trong'], ['𡎝', 'cõi'], ['𠊛', 'người'], ['些', 'ta']];
+  $('sample').append(...SAMPLE.map(([h]) => el('div', 'nom', h)), ...SAMPLE.map(([, w]) => el('div', 'pa', pa(w))), ...SAMPLE.map(([, w]) => el('div', 'qn', w)));
+
+  // the sticky bar of the sections, with the one in view marked
+  const SECTIONS = [['idea', 'Idea', 'Ý tưởng'], ['syllable', 'Syllable', 'Âm tiết'], ['onsets', 'Initials', 'Phụ âm đầu'], ['vowels', 'Vowels', 'Nguyên âm'],
+    ['codas', 'Finals', 'Âm cuối'], ['tones', 'Tones', 'Thanh điệu'], ['try', 'Try it', 'Thử viết'], ['read', 'Read', 'Đọc'], ['chart', 'Chart', 'Bảng']];
+  const ol = el('ol', 'steps');
+  const items = SECTIONS.map(([id, en, v], i) => {
+    const li = el('li'), a = el('a', 'step-nav'); a.href = '#' + id;
+    a.append(el('span', 'num', i + 1), vi(el('span', 't', en), v));
+    li.append(a); ol.append(li); return li;
+  });
+  $('toc').append(ol);
+
+  // the PA font: the families of PA_FONTS (js/fonts.js), the choice in localStorage.paFont, PA Pen by default; the plain PA behind it
+  (() => {
+    const fonts = (typeof PA_FONTS !== 'undefined' ? PA_FONTS : [{ family: 'PA Pen' }, { family: 'PA' }]).map(f => f.family);
+    let now = 'PA Pen'; try { now = localStorage.paFont || now; } catch (e) {}
+    if (!fonts.includes(now)) now = fonts.includes('PA Pen') ? 'PA Pen' : fonts[0];
+    const set = f => document.documentElement.style.setProperty('--pa', f === 'PA' ? '"PA"' : `"${f}", "PA"`);
+    const label = el('label', 'pa-font'), select = el('select', 'form-select form-select-sm');
+    label.append(vi(el('span', null, 'Font'), 'Phông chữ'), select);
+    select.setAttribute('aria-label', 'PA font'); select.dataset.viAriaLabel = 'Phông chữ PA';
+    for (const f of fonts) { const o = el('option', null, f === 'PA' ? 'PA (plain)' : f); o.value = f; if (f === 'PA') vi(o, 'PA (đơn giản)'); select.append(o); }
+    select.value = now; set(now);
+    select.addEventListener('change', () => { set(select.value); try { localStorage.paFont = select.value; } catch (e) {} });
+    // in the bar of the sections; on a phone in <body> (the backdrop-filter of the bar would make the bar the frame of position: fixed)
+    const phone = matchMedia('(max-width: 767.98px)'), place = () => (phone.matches ? document.body : $('toc')).append(label);
+    place(); phone.addEventListener('change', place);
+  })();
+  // the bar of the sections below the fixed menu bar (sticky at top 0 it went under it)
+  (() => {
+    const fit = () => { const h = document.querySelector('.nav-backdrop'); $('toc').style.top = (h ? h.getBoundingClientRect().height : 0) + 'px'; };
+    fit(); addEventListener('resize', fit); addEventListener('load', fit);
+  })();
+  const mark = id => items.forEach((li, i) => li.classList.toggle('now', SECTIONS[i][0] === id));
+  mark('idea');
+  const seen = new Map();
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => seen.set(e.target.id, e.isIntersecting));
+    const first = SECTIONS.find(([id]) => seen.get(id));
+    if (first) mark(first[0]);
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  SECTIONS.forEach(([id]) => io.observe($(id)));
+
+  // 2. a syllable is built part by part
+  const EXAMPLES = [['𩵜', 'cá'], ['各', 'các'], ['版', 'bản'], ['𡗉', 'nhiều'], ['船', 'thuyền']];
+  const TONE_NAMES = ['sắc', 'huyền', 'hỏi', 'ngã', 'nặng', 'ngang'];
+  let stacked = true, example = EXAMPLES.length - 1, stage = 0, buildTimer = null;
+  const partsOf = w => {   // the stages of a word: the cell so far, and the part added
+    const cps = Array.from(pa(w, stacked), c => c.codePointAt(0));
+    const out = [], A = cps[0], N = cps[2];
+    const on = ONSETS[A - A0], nu = NUCLEI[N - N0];
+    out.push({ text: chr(A), k: ['on', 'Initial', 'Phụ âm đầu'], g: chr(A), v: on[0], han: on[1] + ' ' + on[2] });
+    out.push({ text: chr(A, J, N), k: ['vo', 'Vowel', 'Nguyên âm'], g: chr(N), v: nu[0] });
+    let rest = cps.slice(3), sofar = [A, J, N];
+    if (rest[0] === K) { sofar.push(K); rest = rest.slice(1); }
+    for (const c of rest) {
+      sofar.push(c);
+      if (c >= C0 && c < T0) { const co = CODAS[c - C0]; out.push({ text: chr(...sofar), k: ['co', 'Final', 'Âm cuối'], g: chr(c), v: co[0], han: co[1] }); }
+      else out.push({ text: chr(...sofar), k: ['to', 'Tone', 'Thanh'], g: chr(c), v: TONE_NAMES[c - T0] });
+    }
+    return out;
+  };
+  const drawBuild = () => {
+    const [han, w] = EXAMPLES[example], parts = partsOf(w);
+    const word = $('buildWord'); word.replaceChildren(hanSpan(han), document.createTextNode(w));
+    $('buildSteps').replaceChildren(...parts.map((p, i) => {
+      const li = el('li', i <= stage ? 'on' + (i === stage ? ' now' : '') : '');
+      const k = vi(el('span', 'k ' + p.k[0], p.k[1]), p.k[2]);
+      const v = el('span', 'v', p.v); if (p.han) v.append(hanSpan(p.han));
+      li.append(el('span', 'pa g', p.g), k, v);
+      return li;
+    }));
+    const cell = $('buildCell'); cell.textContent = parts[Math.min(stage, parts.length - 1)].text;
+    cell.classList.remove('pop'); void cell.offsetWidth; cell.classList.add('pop');
+    return parts.length;
+  };
+  const runBuild = () => {
+    clearTimeout(buildTimer);
+    const n = drawBuild();
+    buildTimer = setTimeout(() => { stage = stage < n - 1 ? stage + 1 : 0; if (stage === 0) example = (example + 1) % EXAMPLES.length; runBuild(); }, stage < n - 1 ? 1000 : 2500);   // the steps follow each other every 1000 ms, the finished syllable stays 2.5 s
+  };
+  EXAMPLES.forEach(([h, w], i) => {
+    const b = el('button', 'btn btn-quiet btn-pill', w); b.type = 'button'; b.lang = 'vi';
+    b.addEventListener('click', () => { example = i; stage = 0; runBuild(); say(w); });
+    $('buildWords').append(b);
+  });
+  const markWord = () => [...$('buildWords').children].forEach((b, i) => b.classList.toggle('active', i === example));
+  document.querySelectorAll('[data-stack]').forEach(b => b.addEventListener('click', () => {
+    stacked = b.dataset.stack === '1';
+    document.querySelectorAll('[data-stack]').forEach(x => x.classList.toggle('active', x === b));
+    stage = 0; runBuild(); drawTry();
+  }));
+  new MutationObserver(markWord).observe($('buildWord'), { childList: true });
+  runBuild();
+
+  // 3–6. the charts
+  const tile = (glyph, qn, src, ex, speak) => {
+    const b = el('button', 'card-box tile'); b.type = 'button'; b.lang = 'vi';
+    b.append(el('span', 'pa', glyph), el('span', 'qn', qn));
+    if (src) b.append(src);
+    if (ex) b.append(el('span', 'ex', ex));
+    b.addEventListener('click', () => { if (speak) say(speak); b.classList.add('playing'); setTimeout(() => b.classList.remove('playing'), 900); });
+    return b;
+  };
+  const source = (han, reading, note) => {
+    const s = el('span', 'src'); s.append(hanSpan(han), document.createTextNode(reading));
+    if (note) s.append(document.createTextNode(note === 'nôm' ? ' (Nôm)' : ' (' + note + ')'));
+    return s;
+  };
+  $('tilesOnsets').append(...ONSETS.map(([qn, han, r, note], i) => tile(chr(A0 + i), qn, source(han, r, note), null, r)));
+  $('tilesVowels').append(...NUCLEI.slice(0, 14).map(([qn, ex], i) => tile(chr(N0 + i), qn, null, ex, ex)));
+  $('tilesGlides').append(...NUCLEI.slice(14).map(([qn, ex], i) => tile(chr(N0 + 14 + i), qn, null, ex, ex)));
+  $('tilesCodas').append(...CODAS.map(([qn, han, ex], i) => tile(chr(C0 + i), qn, han ? source(han, '') : vi(el('span', 'src', i ? 'stroke i' : 'stroke ô'), i ? 'nét i' : 'nét ô'), ex, ex)));
+  $('tilesTones').append(...TONES.map(([name, ex], i) => tile(chr(T0 + i), name, null, ex, ex)));
+  $('tilesToneCodas').append(...TONES.map(([name], i) => tile(chr(C0 + 2, T0 + i), name, null, TONE_CODA[i], TONE_CODA[i])));
+
+  // 7. try it: Quốc Ngữ to PA as it is typed, the parts of the last word below
+  const drawTry = () => {
+    const text = $('tryInput').value;
+    $('tryOut').textContent = PaText.convert(text, parser, { stacked });
+    const words = text.match(/[\p{L}\p{M}]+/gu) || [], last = words[words.length - 1];
+    const p = last && parser.parse(last), split = $('trySplit');
+    split.replaceChildren();
+    if (!p || !pa(last)) return;
+    const add = (cls, label, labelVi, value) => { const s = el('span'); s.append(vi(el('b', 'k ' + cls, label), labelVi), document.createTextNode(' ' + value)); split.append(s); };
+    add('on', 'Initial', 'Phụ âm đầu', p.onset || 'ʔ');
+    add('vo', 'Vowel', 'Nguyên âm', (p.glide || '') + p.vowel.normalize('NFD').replace(/[̣̀́̃̉]/g, '').normalize('NFC'));
+    if (p.coda) add('co', 'Final', 'Âm cuối', '-' + p.coda);
+    if (p.tone && p.tone !== 'ngang') add('to', 'Tone', 'Thanh', { sac: 'sắc', huyen: 'huyền', hoi: 'hỏi', nga: 'ngã', nang: 'nặng' }[p.tone] || p.tone);
+  };
+  $('tryInput').addEventListener('input', drawTry);
+  drawTry();
+
+  // 8. reading: the first four lines of Truyện Kiều (the Nôm of the common editions); a word shows its reading when tapped, the speaker reads the line
+  const KIEU = [
+    [['𤾓', 'trăm'], ['𢆥', 'năm'], ['𥪞', 'trong'], ['𡎝', 'cõi'], ['𠊛', 'người'], ['些', 'ta']],
+    [['𡨸', 'chữ'], ['才', 'tài'], ['𡨸', 'chữ'], ['命', 'mệnh'], ['窖', 'khéo'], ['羅', 'là'], ['恄', 'ghét'], ['饒', 'nhau']],
+    [['𣦆', 'trải'], ['戈', 'qua'], ['𠬠', 'một'], ['局', 'cuộc'], ['𣷭', 'bể'], ['橷', 'dâu']],
+    [['仍', 'những'], ['調', 'điều'], ['𥉫', 'trông'], ['𧡊', 'thấy'], ['𦓡', 'mà'], ['忉', 'đau'], ['疸', 'đớn'], ['𢚸', 'lòng']],
+  ];
+  $('verses').append(...KIEU.map(line => {
+    const box = el('div', 'card-box verse'), words = el('div', 'words');
+    const ws = line.map(([nom, w]) => {
+      const b = el('button', 'w'); b.type = 'button'; b.lang = 'vi';
+      b.append(el('span', 'nom', nom), el('span', 'pa', pa(w)), el('span', 'qn', w));
+      b.addEventListener('click', () => { b.classList.add('open'); say(w); });
+      words.append(b); return b;
+    });
+    const play = el('button', 'btn btn-quiet round play'); play.type = 'button';
+    play.setAttribute('aria-label', 'Read the line'); play.dataset.viAriaLabel = 'Đọc cả câu';
+    play.append(el('i', 'bi bi-volume-up-fill'));
+    play.addEventListener('click', () => { ws.forEach(b => b.classList.add('open')); say(line.map(([, w]) => w).join(' ')); });
+    box.append(words, play);
+    return box;
+  }));
+
+  // 8b. Nam quốc sơn hà: Chữ Nôm with PA as ruby annotation (character, U+F00B0, PA syllable: the font puts the syllable over the character); the Quốc Ngữ is read from the annotation
+  const NAM = [
+    '瀧\u{F00B0}\u{F00E3}\u{F00D0}\u{F00F1}\u{F00D1}\u{F0103}𡶀\u{F00B0}\u{F00DF}\u{F00D0}\u{F00F3}\u{F00D1}\u{F0100}\u{F0109}渃\u{F00B0}\u{F00DF}\u{F00D0}\u{F00F6}\u{F00D1}\u{F0107}\u{F0109}南\u{F00B0}\u{F00DF}\u{F00D0}\u{F00E9}\u{F00D1}\u{F0101}君\u{F00B0}\u{F00E7}\u{F00D0}\u{F00F4}渃\u{F00B0}\u{F00DF}\u{F00D0}\u{F00F6}\u{F00D1}\u{F0107}\u{F0109}南\u{F00B0}\u{F00DF}\u{F00D0}\u{F00E9}\u{F00D1}\u{F0101}於\u{F00B0}\u{F00D2}\u{F00D0}\u{F00EA}\u{F00D1}\u{F010B}。',
+    '分\u{F00B0}\u{F00D8}\u{F00D0}\u{F00EC}\u{F00D1}\u{F0102}位\u{F00B0}\u{F00E7}\u{F00D0}\u{F00EF}\u{F00D1}\u{F010D}瀝\u{F00B0}\u{F00E2}\u{F00D0}\u{F00E9}\u{F00D1}\u{F0108}\u{F010D}耒\u{F00B0}\u{F00E2}\u{F00D0}\u{F00F1}\u{F00D1}\u{F0100}\u{F010A}㐌\u{F00B0}\u{F00D6}\u{F00D0}\u{F00E9}\u{F00D1}\u{F010C}記\u{F00B0}\u{F00D9}\u{F00D0}\u{F00EF}𥪝\u{F00B0}\u{F00E6}\u{F00D0}\u{F00F2}\u{F00D1}\u{F0103}冊\u{F00B0}\u{F00E3}\u{F00D0}\u{F00E9}\u{F00D1}\u{F0108}\u{F0109}𡗶\u{F00B0}\u{F00E6}\u{F00D0}\u{F00EA}\u{F00D1}\u{F0100}\u{F010A}。',
+    '故\u{F00B0}\u{F00D4}\u{F00D0}\u{F00EA}\u{F00D1}\u{F0109}𣋀\u{F00B0}\u{F00E3}\u{F00D0}\u{F00E9}\u{F00D1}\u{F00FF}婁\u{F00B0}\u{F00DD}\u{F00D0}\u{F00F3}\u{F00D1}\u{F010C}賊\u{F00B0}\u{F00DA}\u{F00D0}\u{F00EB}\u{F00D1}\u{F0107}\u{F010D}暴\u{F00B0}\u{F00D3}\u{F00D0}\u{F00E9}\u{F00D1}\u{F00FF}\u{F010D}虐\u{F00B0}\u{F00E0}\u{F00D0}\u{F00F6}\u{F00D1}\u{F0107}\u{F010D}𦤾\u{F00B0}\u{F00D6}\u{F00D0}\u{F00ED}\u{F00D1}\u{F0102}\u{F0109}侵\u{F00B0}\u{F00E8}\u{F00D0}\u{F00EC}\u{F00D1}\u{F0101}犯\u{F00B0}\u{F00D8}\u{F00D0}\u{F00E9}\u{F00D1}\u{F0101}\u{F010D}。',
+    '眾\u{F00B0}\u{F00D5}\u{F00D0}\u{F00F3}\u{F00D1}\u{F0103}\u{F0109}悲\u{F00B0}\u{F00D3}\u{F00D0}\u{F00EC}\u{F00D1}\u{F0100}耒\u{F00B0}\u{F00E2}\u{F00D0}\u{F00F1}\u{F00D1}\u{F0100}\u{F010A}䀡\u{F00B0}\u{F00E8}\u{F00D0}\u{F00EE}\u{F00D1}\u{F0101}𠱊\u{F00B0}\u{F00E3}\u{F00D0}\u{F00EE}\u{F00D1}\u{F010C}酌\u{F00B0}\u{F00D5}\u{F00D0}\u{F00F4}\u{F00D1}\u{F0107}\u{F0109}𥙩\u{F00B0}\u{F00DD}\u{F00D0}\u{F00EC}\u{F00D1}\u{F0100}\u{F0109}失\u{F00B0}\u{F00E5}\u{F00D0}\u{F00EC}\u{F00D1}\u{F0106}\u{F0109}在\u{F00B0}\u{F00E4}\u{F00D0}\u{F00E9}\u{F00D1}\u{F0100}\u{F010D}散\u{F00B0}\u{F00E4}\u{F00D0}\u{F00E9}\u{F00D1}\u{F0102}𫠽\u{F00B0}\u{F00E4}\u{F00D0}\u{F00E9}\u{F00D1}\u{F0104}\u{F010A}。',
+  ];
+  const UNIT = /([^\u{F00B0}-\u{F010E}。])(\u{F00B0}[\u{F00D0}-\u{F010E}]*)?|。/gu;
+  $('verses2').append(...NAM.map(text => {
+    const box = el('div', 'card-box verse'), words = el('div', 'words'), ws = [], qns = [];
+    for (const m of text.matchAll(UNIT)) {
+      if (!m[1]) { words.append(el('span', 'nom', '。')); continue; }
+      const qn = m[2] ? PaText.read(m[2].slice(2), parser).trim() : '';
+      const b = el('button', 'w'); b.type = 'button'; b.lang = 'vi';
+      b.append(el('span', 'rb', m[1] + (m[2] || '')), el('span', 'qn', qn));
+      b.addEventListener('click', () => { b.classList.add('open'); if (qn) say(qn); });
+      words.append(b); ws.push(b); if (qn) qns.push(qn);
+    }
+    const play = el('button', 'btn btn-quiet round play'); play.type = 'button';
+    play.setAttribute('aria-label', 'Read the line'); play.dataset.viAriaLabel = 'Đọc cả câu';
+    play.append(el('i', 'bi bi-volume-up-fill'));
+    play.addEventListener('click', () => { ws.forEach(b => b.classList.add('open')); say(qns.join(' ')); });
+    box.append(words, play);
+    return box;
+  }));
+
+  // 9. the whole chart of stems, drawn when it is opened
+  $('chartBox').addEventListener('toggle', () => {
+    if ($('chartWrap').firstChild) return;
+    const t = el('table'), head = el('tr');
+    head.append(el('th'));
+    NUCLEI.forEach(([qn], i) => { const th = el('th'); th.append(el('span', 'pa', chr(N0 + i)), document.createTextNode(qn.split(',')[0])); head.append(th); });
+    t.append(head);
+    ONSETS.forEach(([qn], a) => {
+      const tr = el('tr'), th = el('th'); th.append(el('span', 'pa', chr(A0 + a)), document.createTextNode(qn.split(',')[0]));
+      tr.append(th);
+      NUCLEI.forEach((_, n) => tr.append(el('td', '', chr(A0 + a, J, N0 + n))));
+      t.append(tr);
+    });
+    $('chartWrap').append(t);
+  });
+})();
+</script>
+</body>
+</html>

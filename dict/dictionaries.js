@@ -1,0 +1,113 @@
+/*
+	The scanned dictionaries. Page images are hot-linked (chunom-assets as WebP; TĐCNTD still on the old server, old.chunom.org).
+
+	stageColor = background behind the page image: just a little darker than the scanned paper (about 1.3:1),
+	so tilting pages do not flicker between light and dark. Paper: Génibrel #c2c2c2, Bonet and TĐCNTD #ffffff.
+
+	lang = language of the printed text; titleLang, noteLang and the optional 4th entry of a contents row
+	override it where the text is English (these only set lang attributes).
+
+	displayed page = image number - offset   (entries start at displayed page 1)
+	data/<id>.json = last headword on each dictionary page, starting at displayed page 1 (used by the search)
+*/
+
+const CHUNOM = 'https://old.chunom.org/media/dict'; // the old server of chunom.org (chunom.org itself is GitHub Pages now); until the TĐCNTD pages are in chunom-assets
+const ASSETS = '/chunom-assets/dict'; // converted to WebP, moved dictionary by dictionary
+
+export const DICTIONARIES = {
+	genibrel: {
+		id: 'genibrel',
+		lang: 'fr', // language of the printed text (title, contents), not of the viewer
+		stageColor: '#acaaa4',
+		short: 'Génibrel 1898',
+		title: 'Génibrel, J.F.M., 1898',
+		subtitle: 'Dictionnaire Annamite-Français',
+		pageUrl: n => `${ASSETS}/genibrel/pages/genibrel%20(${n}).webp`,
+		offset: 10,
+		lastImage: 998,
+		legend: [
+			['[ ]', 'in Chinese (the Chinese/Hán pronunciation of a character)'],
+			['( )', 'in Vietnamese (the meaning of a Chinese character in Vietnamese usage)'],
+			['(T)', 'Tongkinese language (northern)'],
+			['(C)', 'Hue language'],
+			['V', 'see also'],
+			['Id', 'same meaning'],
+			['=', 'same as']
+		],
+		toc: [
+			[-3, 'Title', null, 'en'],
+			[-2, 'Signes et abbréviations', 'full legend'],
+			[-1, 'Au lecteur'],
+			[1, 'Dictionnaire Annamite-Français']
+		]
+	},
+
+	bonet: {
+		id: 'bonet',
+		lang: 'fr',
+		stageColor: '#e3e0d9',
+		short: 'Bonet 1899',
+		title: 'Bonet, Jean, 1899',
+		subtitle: 'Dictionnaire Annamite-Français',
+		note: 'Langue officielle et langue vulgaire',
+		glyphs: true, // the characters found on the pages (data/bonet-chars.json …): spots on the scan, the strip "On this page", the search by character (viewer.js)
+		pageUrl: n => `/chunom-dicts/bonet/${n}.webp`, // repository qtng/chunom-dicts (folder bonet/): the greyscale scan of archive.org (Boston Public Library), 1.5 times the first scans (Gallica, black and white, chunom-assets dict/bonnet/)
+		coordWidth: 1422, // the boxes of data/bonet-chars.json are in pixels of the first scans
+		offset: 39,
+		lastImage: 1032,
+		legend: [
+			['*', 'Chinese character'],
+			['S.A.', '“Sino-Annamite” (Sino-Vietnamese, i.e. Hán-Việt)'],
+			['A.V.', '“Annamite vulgaire” (the meaning of a Chinese character in Vietnamese usage)']
+		],
+		source: ['Internet Archive (Boston Public Library)', 'https://archive.org/details/dictionnaireanna01bone'],
+		toc: [
+			[-27, 'Title', null, 'en'],
+			[-25, 'Preface', null, 'en'],
+			[-21, 'Avertissement Grammatical'],
+			[0, 'Signes de convention pour les abbréviations', 'full legend'],
+			[1, 'Dictionnaire Annamite-Français'],
+			[953, 'Notice sur les divisions politiques et administratives de l’empire Annamite'],
+			[972, 'Provinces, préfectures et sous-préfectures de la Cochinchine'],
+			[975, 'Nouvelles divisions administratives'],
+			[977, 'Tableau des 214 clefs ou radicaux']
+		]
+	},
+
+	// TĐCNTD: pages are not in chunom-assets yet (too large), so it is not linked; open tdcntd.html directly
+	tdcntd: {
+		id: 'tdcntd',
+		hidden: true,
+		lang: 'vi',
+		stageColor: '#e3e0d9',
+		titleLang: 'en',
+		noteLang: 'en',
+		short: 'TĐCNTD 2009',
+		title: 'Institute of Vietnamese Studies, 2009',
+		subtitle: 'Từ Điển Chữ Nôm Trích Dẫn',
+		note: 'Dictionary of Nôm characters with excerpts',
+		pageUrl: n => `${CHUNOM}/tdcntd/${n}.jpg`,
+		offset: 18,
+		lastImage: 1592,
+		legend: [
+			['Bộ', 'radical'],
+			['Nét', 'number of strokes'],
+			['Âm', 'pronunciation'],
+			['Ý', 'meaning']
+		],
+		toc: [
+			[-17, 'Phạm Lệ', 'Foreword'],
+			[-15, 'Cách sử dụng', 'How to use'],
+			[-10, 'Lời nói đầu (phiên bản 2005)', 'Introduction, 2005 edition'],
+			[-8, 'Lời nói đầu (phiên bản 2009)', 'Introduction, 2009 edition'],
+			[-6, 'Nguồn tham khảo (A–C)', 'List of references'],
+			[-5, 'Nguồn tham khảo (C–G)', 'List of references'],
+			[-4, 'Nguồn tham khảo (H–L)', 'List of references'],
+			[-3, 'Nguồn tham khảo (M–P)', 'List of references'],
+			[-2, 'Nguồn tham khảo (P–S)', 'List of references'],
+			[-1, 'Nguồn tham khảo (T–Tr)', 'List of references'],
+			[0, 'Nguồn tham khảo (V–Y)', 'List of references'],
+			[1, 'Từ điển', 'Dictionary']
+		]
+	}
+};
