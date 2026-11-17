@@ -18,6 +18,7 @@
 		fontList [[]]          fonts for Nôm glyphs, also applied to the field while candidates are on
 		returnSelect [false]   Enter selects the first candidate
 		spaceSelect [false]    Space selects the first candidate
+		compoundsPerPage [3]   at most this many words of several syllables on a page of 10 candidates (the rest: single characters)
 		showDefinitions [true]
 		timeout [0]            milliseconds without typing or key presses after which the list closes itself; 0: never
 
@@ -344,7 +345,8 @@
 
 		// The entries that match the typed prefix (see searchKey): first those written exactly as typed so far, then short remainders,
 		// then used and defined ones, then the order of the readings (letters, marks, tones) and of the data; every glyph once, at most 100
-		candidates(prefix) {
+		// kind: 'single' (one syllable) or 'multi' (words of several syllables) only; else both
+		candidates(prefix, kind) {
 			const keys = this.keys ??= [...this.byFold.keys()].sort();
 			const t = searchKey(prefix.toLowerCase()), n = t.letters.length;
 			let lo = 0, hi = keys.length;
@@ -355,7 +357,8 @@
 			const list = [], usage = getUsage();
 			for (let i = lo; i < keys.length && keys[i].startsWith(t.fold); i++) {
 				for (const [key, glyph, order] of this.byFold.get(keys[i])) {
-					const info = this.info.get(key);
+					const info = this.info.get(key), multi = info.syl[info.syl.length - 1] > 0;
+					if (kind && (kind == 'multi') != multi) continue;
 					let ok = true, exact = true;
 					for (let j = 0; j < n && ok; j++) {
 						if (info.letters[j] != t.letters[j]) { exact = false; if (t.letters[j] != t.fold[j]) ok = false; }   // a typed mark must be there
@@ -367,7 +370,7 @@
 					if (!ok) continue;
 					for (let s = 0; s <= info.syl[n - 1] && exact; s++) if ((typedTone.get(s) || 0) != info.tones[s]) exact = false;
 					const chars = [...key], definition = this.defs.get(key + glyph) || '', used = usage[glyph] || 0;
-					list.push({ glyph, key, head: chars.slice(0, n).join(''), remainder: chars.slice(n).join(''), definition,
+					list.push({ glyph, key, multi, head: chars.slice(0, n).join(''), remainder: chars.slice(n).join(''), definition,
 						exact, rest: info.letters.length - n, score: definition ? (used + 1) * 2 : used, sort: info.sort, order });
 				}
 			}
@@ -441,6 +444,9 @@
 .vietime-reading:last-child { grid-row: 1 / span 2; align-self: center }
 .vietime-remainder { font-weight: bold; color: var(--vietime-remainder, #0d6efd) }
 .vietime-hyphen { opacity: .5 }
+.vietime-pager { grid-column: 1 / -1; display: flex; justify-content: center; align-items: center; gap: .8em; font-size: .8em; opacity: .75; user-select: none }
+.vietime-turn { cursor: pointer; padding: 0 .6em; font-size: 1.3em; line-height: 1 }
+.vietime-turn:hover { opacity: .6 }
 .vietime-definition { grid-area: definition; align-self: start; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .75em; opacity: .75 }
 @media (max-width: 575.98px) {
 	.vietime { width: calc(100vw - 24px); max-width: none }
@@ -460,7 +466,7 @@
 			this.input = input;
 			this.target = input.imeTarget || input;   // a field, or the editable element of an adapter
 			this.options = { telex: true, candidates: true, defer: false, dictionaries: DICTIONARIES, fontList: [],
-				returnSelect: false, spaceSelect: false, showDefinitions: true, timeout: 0, ...options };
+				returnSelect: false, spaceSelect: false, compoundsPerPage: 3, showDefinitions: true, timeout: 0, ...options };
 			this.dict = dictionaryFor(this.options.dictionaries);
 			this.items = [];
 			this.shown = [];
@@ -617,8 +623,16 @@
 			const current = this.currentWord();
 			// while a mobile keyboard composes, the word is still raw Telex
 			const word = current && (this.composing && this.options.telex ? telexWord(current.word, this.mode) : current.word);
-			let items = word ? this.dict.candidates(word.toLowerCase()) : [];
-			if (word && this.chain.length) items = this.joined(word.toLowerCase(), current).concat(items);
+			const typed = word ? word.toLowerCase() : '';
+			let items = word ? this.dict.candidates(typed, 'single') : [];
+			const words = word ? this.dict.candidates(typed, 'multi') : [];   // each in its own order, a hundred at most
+			if (word && this.chain.length) {
+				const joined = this.joined(word.toLowerCase(), current);   // the words typed to the end first, the others among the rest
+				const first = joined.filter(c => !c.rest);
+				items = first.concat(this.balance(items, joined.filter(c => c.rest).concat(words), first.length));
+				const seen = new Set();
+				items = items.filter(c => !seen.has(c.glyph) && seen.add(c.glyph));
+			} else items = this.balance(items, words, 0);
 			if (candidateHook) items = candidateHook(items, word || '') || [];
 			this.hide();
 			this.items = items;
@@ -643,19 +657,35 @@
 			return out;
 		}
 
-		// The candidates that write the typed word together with the words chosen before it, the longest first; only those typed to
-		// the end (a prefix of a longer word is not offered here). An item carries `from`: where its replacement starts.
+		// The candidates that write the typed word together with the words chosen before it, the longest first. An item carries
+		// `from`: where its replacement starts.
 		joined(word, current) {
 			const before = this.recent(current), list = [], seen = new Set();
 			for (let l = before.length; l >= 1; l--) {
 				const tail = before.slice(-l);
-				for (const c of this.dict.candidates(tail.map(t => t.key).join('') + word)) {
-					if (c.rest || seen.has(c.glyph)) continue;
+				for (const c of this.dict.candidates(tail.map(t => t.key).join('') + word, 'multi')) {
+					if (seen.has(c.glyph)) continue;
 					seen.add(c.glyph);
 					list.push({ ...c, from: tail[0].from });
 				}
 			}
 			return list;
+		}
+
+		// Words of several syllables and single characters in one list, each in its own order: on every page of 10 at most
+		// `compoundsPerPage` words of several syllables, spread over it (places 2, 5, 8), the rest single characters; what one kind
+		// lacks, the other fills. So a writer finds both on the first page, however many words a letter has.
+		balance(single, multi, offset) {
+			const max = Math.min(10, this.options.compoundsPerPage);
+			single = single.slice(); multi = multi.slice();
+			if (!multi.length || !single.length) return single.concat(multi);
+			const places = new Set(Array.from({ length: Math.max(0, max) }, (_, k) => 1 + Math.floor(k * 10 / max)));
+			const out = [];
+			for (let i = 0; multi.length || single.length; i++) {
+				const wantMulti = places.has((offset + i) % 10);
+				out.push((wantMulti ? multi.length : !single.length) ? multi.shift() : single.shift());
+			}
+			return out;
 		}
 
 		// renders candidates until n are shown (renderItem may leave some out)
@@ -686,6 +716,8 @@
 				el.setAttribute('role', 'option');
 				el.setAttribute('aria-selected', this.page * 10 + i == this.active);
 			});
+			const total = Math.ceil(this.items.length / 10);
+			if (total > 1) entries.push(this.pager(total));
 			this.list.replaceChildren(...entries);
 			this.list.hidden = false;
 			this.keepOpen();
@@ -693,6 +725,20 @@
 			this.input.setAttribute('aria-expanded', 'true');
 			if (this.active >= 0) this.input.setAttribute('aria-activedescendant', `${this.list.id}-${this.active}`);
 			else this.input.removeAttribute('aria-activedescendant');
+		}
+
+		// the row under the page: ‹ 2/5 › (a click turns the page; the field keeps the focus)
+		pager(pages) {
+			const row = document.createElement('div'), button = (text, label, to) => {
+				const b = Object.assign(document.createElement('span'), { className: 'vietime-turn', textContent: text, title: label });
+				b.setAttribute('aria-hidden', 'true');
+				b.addEventListener('mousedown', e => e.preventDefault());
+				b.addEventListener('click', () => this.showPage(to));
+				return b;
+			};
+			row.className = 'vietime-pager';
+			row.append(button('‹', 'PageUp', this.page - 1), Object.assign(document.createElement('span'), { textContent: `${this.page + 1}/${pages}` }), button('›', 'PageDown', this.page + 1));
+			return row;
 		}
 
 		// Rectangle of the caret in viewport coordinates. A textarea has no caret API: its text up to the caret is
