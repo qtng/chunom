@@ -129,7 +129,8 @@
       e.preventDefault();
       if (show(id, a.closest('.band')) && location.hash !== '#' + id) { history.pushState(null, '', '#' + id); pushed = true; }
     });
-    const follow = () => { const id = decodeURIComponent(location.hash.slice(1)); if (!show(id)) { pushed = false; hide(); } };
+    const OLD_IDS = { 'hai-minh': 'haiminh' };   // renamed fonts: the old address still opens the popup
+    const follow = () => { const id = OLD_IDS[decodeURIComponent(location.hash.slice(1))] || decodeURIComponent(location.hash.slice(1)); if (!show(id)) { pushed = false; hide(); } };
     window.addEventListener('popstate', follow);
     window.addEventListener('hashchange', follow);
     follow();

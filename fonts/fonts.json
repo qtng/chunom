@@ -44,39 +44,39 @@
       ]
     },
     {
-      "id": "hai-minh",
+      "id": "haiminh",
       "name": "Hài Minh",
-      "family": "Hai Minh",
+      "family": "HaiMinh",
       "styles": [
         {
           "name": "ExtraLight",
-          "css": "Hai Minh ExtraLight",
-          "file": "hai-minh-extralight",
-          "mb": 30.8
+          "css": "HaiMinh ExtraLight",
+          "file": "haiminh-extralight",
+          "mb": 35.5
         },
         {
           "name": "Light",
-          "css": "Hai Minh Light",
-          "file": "hai-minh-light",
-          "mb": 29.9
+          "css": "HaiMinh Light",
+          "file": "haiminh-light",
+          "mb": 34.5
         },
         {
           "name": "Regular",
-          "css": "Hai Minh",
-          "file": "hai-minh",
-          "mb": 29.4
+          "css": "HaiMinh",
+          "file": "haiminh",
+          "mb": 34.0
         },
         {
           "name": "Bold",
-          "css": "Hai Minh Bold",
-          "file": "hai-minh-bold",
-          "mb": 29.0
+          "css": "HaiMinh Bold",
+          "file": "haiminh-bold",
+          "mb": 33.4
         }
       ],
       "collection": {
-        "file": "hai-minh.ttc",
+        "file": "haiminh.ttc",
         "styles": "Light, Regular, Bold",
-        "mb": 88.0
+        "mb": 101.4
       }
     },
     {
