@@ -52,27 +52,32 @@
           "name": "ExtraLight",
           "css": "Hai Minh ExtraLight",
           "file": "hai-minh-extralight",
-          "mb": 0
+          "mb": 30.8
         },
         {
           "name": "Light",
           "css": "Hai Minh Light",
           "file": "hai-minh-light",
-          "mb": 29.8
+          "mb": 29.9
         },
         {
           "name": "Regular",
           "css": "Hai Minh",
           "file": "hai-minh",
-          "mb": 0
+          "mb": 29.4
         },
         {
           "name": "Bold",
           "css": "Hai Minh Bold",
           "file": "hai-minh-bold",
-          "mb": 0
+          "mb": 29.0
         }
-      ]
+      ],
+      "collection": {
+        "file": "hai-minh.ttc",
+        "styles": "Light, Regular, Bold",
+        "mb": 88.0
+      }
     },
     {
       "id": "migoi",

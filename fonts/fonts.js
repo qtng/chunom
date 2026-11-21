@@ -3,7 +3,7 @@
    The popup of a font has an address of its own, /chunom/fonts#<id> (the old font pages fonts/<id>/ forward there): a link to #<id> opens it, the back button and Esc close it.
    It takes the colours, the number and the watermark of the band it was opened from (opened from an address: the first band that links to it).
    fonts.json: assets (the folder of the .ttf files: https://cdn.qatt.org/fonts/, the R2 bucket; its TTFs carry Content-Disposition: attachment, so the download attribute works across origins), characters (how many every file has), sizes (the size ladder), sample (line: the CJK sample, qatt: the QATT sample),
-   fonts [{id, name, family (the name in the font menus), styles [{name, css (the family of js/fonts.js of qatt.org: CJK slices, "<css> Latin"), file, mb}]}],
+   fonts [{id, name, family (the name in the font menus), styles [{name, css (the family of js/fonts.js of qatt.org: CJK slices, "<css> Latin"), file, mb}], collection? {file (a .ttc), styles (the names, shown), mb}}],
    external (other fonts), charset (the Unicode table).
    The fonts are those of js/fonts.js of qatt.org (written by navigation.js), so the popup loads only the slices of the characters it shows.
    Texts in English and Vietnamese ({en, vi}) are put into tags with data-vi, so the Lang of navigation.js translates them (the Vietnamese texts are drafts). */
@@ -83,7 +83,11 @@
       dl.replaceChildren(...font.styles.map(s => el('a.fp-row', { href: data.assets + s.file + '.ttf', download: '', 'data-stat': 'font_download:' + s.file },
         el('span.fp-sample.fp-sc', { style: `font-family: "${s.css}"`, lang: 'vi-Hani', text: data.sample.line }),
         el('span.fp-meta', {}, el('b', { text: s.name }), el('small', { text: `${s.mb.toLocaleString('en')} MB` })),
-        el('span.fp-dl', { 'aria-hidden': 'true' }, el('i.bi.bi-download')))));
+        el('span.fp-dl', { 'aria-hidden': 'true' }, el('i.bi.bi-download')))),
+        ...(font.collection ? [el('a.fp-row', { href: data.assets + font.collection.file, download: '', 'data-stat': 'font_download:' + font.collection.file },   // one file with several styles (a TrueType collection)
+          el('span.fp-sample.fp-sc', { style: `font-family: "${regular(font).css}"`, lang: 'vi-Hani', text: data.sample.line }),
+          el('span.fp-meta', {}, el('b', {}, { en: 'All in one', vi: 'Tất cả trong một' }), el('small', { text: `${font.collection.styles} · TTC · ${font.collection.mb.toLocaleString('en')} MB` })),
+          el('span.fp-dl', { 'aria-hidden': 'true' }, el('i.bi.bi-download')))] : []));
       note.replaceChildren(...(font.styles.length > 1 ? [{ en: `One family: install them all and your apps show them as the styles of “${font.family}”.`,
         vi: `Một họ phông: cài tất cả, các ứng dụng sẽ hiện chúng là các kiểu của “${font.family}”.` }].map(tr) : []));
       webOpts.wght = null; drawWeb();
