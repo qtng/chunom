@@ -49,22 +49,28 @@
       "family": "Hai Minh",
       "styles": [
         {
+          "name": "ExtraLight",
+          "css": "Hai Minh ExtraLight",
+          "file": "hai-minh-extralight",
+          "mb": 0
+        },
+        {
           "name": "Light",
           "css": "Hai Minh Light",
           "file": "hai-minh-light",
-          "mb": 30.6
+          "mb": 29.8
         },
         {
           "name": "Regular",
           "css": "Hai Minh",
           "file": "hai-minh",
-          "mb": 29.8
+          "mb": 0
         },
         {
           "name": "Medium",
           "css": "Hai Minh Medium",
           "file": "hai-minh-medium",
-          "mb": 29.5
+          "mb": 0
         }
       ]
     },
