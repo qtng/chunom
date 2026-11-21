@@ -67,9 +67,9 @@
           "mb": 0
         },
         {
-          "name": "Medium",
-          "css": "Hai Minh Medium",
-          "file": "hai-minh-medium",
+          "name": "Bold",
+          "css": "Hai Minh Bold",
+          "file": "hai-minh-bold",
           "mb": 0
         }
       ]
