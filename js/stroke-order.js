@@ -8,6 +8,7 @@
                when the lines were reconstructed from the IDS, see below), fadeTo (the opacity the faded strokes end at, 0 = they vanish, a viewer may keep some),
                speed (1 = the first version's pace), hold (ms to wait after the last stroke before onEnd, 2000), onEnd (called then), color / ghost (CSS colours)
 
+  Lines listed in S are left out of the animation (a lead-in that GlyphWiki draws as a line of its own); the grey glyph keeps them.
   The record says how its lines were made: q 1 = they follow a real glyph (m 'r', 's', 'o'), q 0 = they were put together from the IDS (m 'i'): there they sit only about
   where the glyph has its strokes, so every stroke but the last fades while the next ones are drawn (two or three are to be seen at a time), which hides it. Where the lines
   follow a real glyph the strokes stay, and the drawing ends as the black glyph. The look comes from CSS variables of the page: --so-ink (default --cinnabar, else a red),
@@ -64,7 +65,8 @@ function build(rec, o = {}) {
   if (o.ghost) svg.style.setProperty('--so-ghost', o.ghost);
   const el = (name, attrs, parent) => { const e = document.createElementNS(NS, name); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.append(e); return e; };
   el('path', { class: 'so-ghost', d: rec.G }, svg);
-  const groups = rec.g, slots = [];   // the time of every stroke (seconds)
+  // S: lines the animation leaves out (a lead-in that the glyph draws as a line of its own, 八); they stay in the grey glyph
+  const skip = new Set(rec.S || []), groups = rec.g.map(g => { const k = g.filter(j => !skip.has(j)); return k.length ? k : g; }), slots = [];   // the time of every stroke (seconds)
   let t = 0.3;
   groups.forEach((g, gi) => {
     const first = t, lines = g.map(j => { const d = Math.max(0.35, 0.18 + pathLength(rec.L[j]) * 0.0045) / speed; const s = { j, b: t, d }; t += d; return s; });
