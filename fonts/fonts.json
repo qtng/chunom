@@ -75,7 +75,7 @@
       ],
       "collection": {
         "file": "haiminh.ttc",
-        "styles": "Light, Regular, Bold",
+        "styles": "Light, Regular, Medium, Bold",
         "mb": 101.4
       }
     },
