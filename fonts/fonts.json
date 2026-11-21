@@ -49,28 +49,28 @@
       "family": "HaiMinh",
       "styles": [
         {
-          "name": "ExtraLight",
-          "css": "HaiMinh ExtraLight",
-          "file": "haiminh-extralight",
-          "mb": 35.5
-        },
-        {
           "name": "Light",
           "css": "HaiMinh Light",
           "file": "haiminh-light",
-          "mb": 34.5
+          "mb": 0
         },
         {
           "name": "Regular",
           "css": "HaiMinh",
           "file": "haiminh",
-          "mb": 34.0
+          "mb": 0
+        },
+        {
+          "name": "Medium",
+          "css": "HaiMinh Medium",
+          "file": "haiminh-medium",
+          "mb": 0
         },
         {
           "name": "Bold",
           "css": "HaiMinh Bold",
           "file": "haiminh-bold",
-          "mb": 33.4
+          "mb": 0
         }
       ],
       "collection": {
