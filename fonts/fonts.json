@@ -52,31 +52,31 @@
           "name": "Light",
           "css": "HaiMinh Light",
           "file": "haiminh-light",
-          "mb": 0
+          "mb": 35.5
         },
         {
           "name": "Regular",
           "css": "HaiMinh",
           "file": "haiminh",
-          "mb": 0
+          "mb": 34.5
         },
         {
           "name": "Medium",
           "css": "HaiMinh Medium",
           "file": "haiminh-medium",
-          "mb": 0
+          "mb": 33.9
         },
         {
           "name": "Bold",
           "css": "HaiMinh Bold",
           "file": "haiminh-bold",
-          "mb": 0
+          "mb": 33.4
         }
       ],
       "collection": {
         "file": "haiminh.ttc",
         "styles": "Light, Regular, Medium, Bold",
-        "mb": 101.4
+        "mb": 136.6
       }
     },
     {
