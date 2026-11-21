@@ -154,7 +154,7 @@
         { en: 'Changing them, building other fonts or works on them, and copying or passing them on need the written permission of qatt.org.', vi: 'Sửa đổi, dùng làm cơ sở cho phông khác, sao chép lại hay phân phối cần có sự cho phép bằng văn bản của qatt.org.' }, ' ',
         el('a', { href: 'https://qatt.org/fonts/LICENSE.txt', 'data-vi': 'Toàn văn giấy phép' }, 'Full licence text')),
       el('p.mb-2', {}, el('b', {}, { en: 'All other characters', vi: 'Các ký tự khác' }), ' (', { en: 'Han, Chữ Nôm, Latin …', vi: 'chữ Hán, chữ Nôm, Latin…' }, '): ',
-        { en: 'the outlines are drawn by qatt.org with its own stroke designs (Pen, Migoi, Celluloid, Phong Thảo) on the stroke skeletons of', vi: 'nét chữ do qatt.org vẽ bằng các thiết kế nét riêng (Pen, Migoi, Celluloid, Phong Thảo) trên khung nét của' }, ' ', el('a', { href: 'https://glyphwiki.org/', target: '_blank', rel: 'noopener', text: 'GlyphWiki' }),
+        { en: 'the outlines are drawn by qatt.org with its own stroke designs (Pen, Hài Minh, Migoi, Celluloid, Phong Thảo) on the stroke skeletons of', vi: 'nét chữ do qatt.org vẽ bằng các thiết kế nét riêng (Pen, Migoi, Celluloid, Phong Thảo) trên khung nét của' }, ' ', el('a', { href: 'https://glyphwiki.org/', target: '_blank', rel: 'noopener', text: 'GlyphWiki' }),
         { en: ', used under the terms of GlyphWiki.', vi: ', được dùng theo điều khoản của GlyphWiki.' }),
       el('p.note.mb-0', {}, { en: 'The fonts are not free software or open source and are provided as is, without warranty. The full text is inside every font file.', vi: 'Các phông này không phải phần mềm tự do hay mã nguồn mở, và được cung cấp nguyên trạng, không bảo hành. Toàn văn nằm trong mỗi tệp phông.' }));
   }

@@ -44,6 +44,31 @@
       ]
     },
     {
+      "id": "hai-minh",
+      "name": "Hài Minh",
+      "family": "Hai Minh",
+      "styles": [
+        {
+          "name": "Light",
+          "css": "Hai Minh Light",
+          "file": "hai-minh-light",
+          "mb": 30.6
+        },
+        {
+          "name": "Regular",
+          "css": "Hai Minh",
+          "file": "hai-minh",
+          "mb": 29.8
+        },
+        {
+          "name": "Medium",
+          "css": "Hai Minh Medium",
+          "file": "hai-minh-medium",
+          "mb": 29.5
+        }
+      ]
+    },
+    {
       "id": "migoi",
       "name": "Migoi",
       "family": "Migoi",
