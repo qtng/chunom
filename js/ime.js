@@ -397,10 +397,10 @@
 		}
 	}
 
-	// The order of the candidates: those written exactly as typed so far first, then the used ones (a definition counts 1.5 times),
+	// The order of the candidates: the used ones first (a definition counts 1.5 times), then those written exactly as typed so far,
 	// then the share of the Telex keys already typed (a single character and a word of several syllables alike),
 	// then the order of the readings (letters, marks, tones) and of the data
-	const compare = (a, b) => b.exact - a.exact || b.score - a.score || b.share - a.share
+	const compare = (a, b) => b.score - a.score || b.exact - a.exact || b.share - a.share
 		|| (a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0) || a.order - b.order;
 
 	const dictionaries = new Map();
