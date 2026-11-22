@@ -385,7 +385,7 @@
 		lookup(word) {
 			word = (word || '').toLowerCase().replace(/[\s\-']/g, '');
 			if (!word) return [];
-			return this.candidates(word).map(c => ({ glyph: c.glyph, reading: readingOf(c.key), definition: c.definition.trim() }));
+			return spread(this.candidates(word)).map(c => ({ glyph: c.glyph, reading: readingOf(c.key), definition: c.definition.trim() }));
 		}
 
 		lookupGlyph(text) {
@@ -401,9 +401,34 @@
 	// (use, a definition counts 1.5 times), then those written exactly as typed so far ("na" for nam), then the share of the Telex keys
 	// already typed (a single character and a word of several syllables alike), then the order of the readings (letters, marks, tones)
 	// and of the data
-	const first = c => (c.exact && !c.rest) || c.used > 0;
+	const complete = c => c.exact && !c.rest;
+	const first = c => complete(c) || c.used > 0;
 	const compare = (a, b) => first(b) - first(a) || b.score - a.score || b.exact - a.exact || b.share - a.share
 		|| (a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0) || a.order - b.order;
+
+	// The pages of 10: the other candidates (not typed completely, not used: "nam" for "na") get the place
+	// 11 − floor(share × 10) + (page − 1) from the top (the more of them typed, the higher; one lower on every page), or the next free
+	// place below it; with none free they wait for the next page. The complete or used ones fill the other places in their order, after
+	// them what still waits. offset: places already taken (the words typed to the end before).
+	function spread(list, offset = 0) {
+		const top = list.filter(first), out = [];
+		let rest = list.filter(c => !first(c)), page = Math.floor(offset / 10) + 1, taken = offset % 10;
+		while (top.length || rest.length) {
+			const slots = Array.from({ length: 10 }, (_, i) => i < taken ? true : null), waiting = [];
+			for (const c of rest) {
+				const at = 11 - Math.floor(c.share * 10) + page - 1;
+				let i = Math.max(1, at) - 1;
+				while (i < 10 && slots[i]) i++;
+				if (i < 10) slots[i] = c; else waiting.push(c);
+			}
+			rest = waiting;
+			for (let i = taken; i < 10; i++) slots[i] ||= top.shift() || rest.shift() || null;
+			out.push(...slots.slice(taken).filter(Boolean));
+			taken = 0;
+			page++;
+		}
+		return out;
+	}
 
 	const dictionaries = new Map();
 	function dictionaryFor(urls) {
@@ -652,10 +677,10 @@
 			let items = word ? this.dict.candidates(typed) : [];   // a hundred at most
 			if (word && this.chain.length) {
 				const joined = this.joined(word.toLowerCase(), current);   // the words typed to the end first, the others among the rest
-				const seen = new Set();
-				items = joined.filter(c => !c.rest).concat(joined.filter(c => c.rest).concat(items).sort(compare))
+				const seen = new Set(), done = joined.filter(c => !c.rest);
+				items = done.concat(spread(joined.filter(c => c.rest).concat(items).sort(compare), done.length))
 					.filter(c => !seen.has(c.glyph) && seen.add(c.glyph));
-			}
+			} else items = spread(items);
 			if (candidateHook) items = candidateHook(items, word || '') || [];
 			this.hide();
 			this.items = items;
