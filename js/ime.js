@@ -406,17 +406,26 @@
 	const compare = (a, b) => first(b) - first(a) || b.score - a.score || b.exact - a.exact || b.share - a.share
 		|| (a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0) || a.order - b.order;
 
-	// On every page of 10 at most half are complete, unused matches ("na" for na): the other places go to the next of the rest
-	// (nam, nay, việt-nam for "việt"), as long as there are any. Both keep their order. offset: places already taken on the first page.
+	// The pages of 10: the other candidates (not typed completely, not used: "nam" for "na") get the place
+	// 10 − floor(share × 10) + (page − 1) from the top (the more of them typed, the higher; one lower on every page), or the next free
+	// place below it; with none free they wait for the next page. The complete or used ones fill the other places in their order, after
+	// them what still waits. offset: places already taken (the words typed to the end before).
 	function spread(list, offset = 0) {
-		const plain = c => complete(c) && !(c.used > 0);
-		const a = list.filter(plain), b = list.filter(c => !plain(c)), out = [];
-		let onPage = 0;
-		for (let i = offset; a.length || b.length; i++) {
-			if (i % 10 == 0) onPage = 0;
-			const takeA = a.length && (!b.length || (onPage < 5 && compare(a[0], b[0]) <= 0));
-			if (takeA) onPage++;
-			out.push(takeA ? a.shift() : b.shift());
+		const top = list.filter(first), out = [];
+		let rest = list.filter(c => !first(c)), page = Math.floor(offset / 10) + 1, taken = offset % 10;
+		while (top.length || rest.length) {
+			const slots = Array.from({ length: 10 }, (_, i) => i < taken ? true : null), waiting = [];
+			for (const c of rest) {
+				const at = 10 - Math.floor(c.share * 10) + page - 1;
+				let i = Math.max(1, at) - 1;
+				while (i < 10 && slots[i]) i++;
+				if (i < 10) slots[i] = c; else waiting.push(c);
+			}
+			rest = waiting;
+			for (let i = taken; i < 10; i++) slots[i] ||= top.shift() || rest.shift() || null;
+			out.push(...slots.slice(taken).filter(Boolean));
+			taken = 0;
+			page++;
 		}
 		return out;
 	}
