@@ -55,8 +55,8 @@ const STYLE = `
 :where(#detailModal) .modal-header, :where(#detailModal) .modal-footer { border-color: var(--dm-line); }
 :where(#detailModal) .modal-title { font-family: Georgia, "Times New Roman", serif; font-weight: 400; }
 #detailModal .text-secondary { color: var(--dm-muted) !important; }
-#detailModal .font-serif { font-family: var(--font-cjk, "QATT Pen"), serif; }   /* --font-cjk of qatt.org/css/site.css; the name for a page without it */
-#detailModal .font-monospace { font-family: var(--font-cjk, "QATT Pen"), monospace; }
+#detailModal .font-serif { font-family: var(--font-cjk, "Pen"), serif; }   /* --font-cjk of qatt.org/css/site.css; the name for a page without it */
+#detailModal .font-monospace { font-family: var(--font-cjk, "Pen"), monospace; }
 #detailModal .lh-sm { line-height: 1.1; }
 #detailModal .list-group { border-top: 1px solid var(--dm-line) !important; }
 #detailModal .list-group-item { background: transparent !important; border: 0 !important; border-bottom: 1px solid var(--dm-line) !important; border-radius: 0 !important; margin: 0 !important; color: var(--dm-ink); }
@@ -523,7 +523,7 @@ class ChunomDetail {
     return rows;
   }
 
-  // The glyphs of a Quốc Ngữ text, one element per syllable. With the option qattFont (a family of js/fonts.js of qatt.org, e.g. 'QATT Pen'; the page loads qatt-text.js and
+  // The glyphs of a Quốc Ngữ text, one element per syllable. With the option qattFont (a family of js/fonts.js of qatt.org, e.g. 'Pen'; the page loads qatt-text.js and
   // fonts.js) they are text of that font (QattText.word, as the editor does it; a syllable without a glyph is left out), else <qatt-code> elements that qatt.js draws as SVG.
   qattCodes(quocNgu, fontSize = 'inherit') {
     const codes = [], font = this.options.qattFont;
@@ -589,7 +589,7 @@ class ChunomDetail {
       const parts = chars.map((ch, i) => {
         const pa = NOM_CHAR.test(ch) ? Readings.text(syl[i], 'pa') : null;
         if (!pa || pa === syl[i]) return null;
-        return el('span', { className: 'nom-char nom-ruby', 'data-char': ch, style: 'font-family: var(--font-cjk, "QATT Pen"), serif; font-size: 52px; line-height: 1.4' }, ch + String.fromCodePoint(0xF00B0) + pa);
+        return el('span', { className: 'nom-char nom-ruby', 'data-char': ch, style: 'font-family: var(--font-cjk, "Pen"), serif; font-size: 52px; line-height: 1.4' }, ch + String.fromCodePoint(0xF00B0) + pa);
       });
       if (parts.every(Boolean)) span.replaceChildren(...parts);
     }, () => {});
@@ -625,7 +625,7 @@ class ChunomDetail {
   }
 
   // A button under the big glyph (when there is a stroke order for it) plays the animation over the glyph and turns into a stop button meanwhile; a stop leaves the character of
-  // the font (QATT Pen) in its place. Exact lines (q 1) start by themselves (not with reduced motion), approximate ones on a click; both play once, then the character of the font stays.
+  // the font (Pen) in its place. Exact lines (q 1) start by themselves (not with reduced motion), approximate ones on a click; both play once, then the character of the font stays.
   async attachStrokeOrder(box, nom) {
     const SO = await loadStrokeOrder();
     const record = SO && await SO.load(nom);

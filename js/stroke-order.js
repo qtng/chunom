@@ -1,6 +1,6 @@
 /*
   The stroke order of a character as a short animation: the glyph in grey, the strokes drawn one after the other over it with a thick felt-tip line.
-  The grey glyph is the character itself in the CJK font of the site (QATT Pen, --so-font, else --font-cjk), put into the 200 frame of the lines (GLYPH: the inverse of the box of the
+  The grey glyph is the character itself in the CJK font of the site (Pen, --so-font, else --font-cjk), put into the 200 frame of the lines (GLYPH: the inverse of the box of the
   Pen build); an older record with an outline G draws that instead. A level straight line gets the bow that Pen gives its horizontals (bowed()), so the line follows the font.
   The data is one file per character, https://cdn.qatt.org/stroke/r1/<HEX>.json (made in the private repository qtng/chunom-private); there is none for every character.
 
@@ -40,8 +40,8 @@ function addCss() {
   style.textContent = `
 .so-svg { display: block; width: 100%; height: 100%; stroke: none; stroke-width: 0; }   /* no outline: a page may give every svg one, which showed as dark edges on the glyph */
 .so-svg .so-ghost { fill: var(--so-ghost, #8a8a8a); fill-opacity: .42; stroke: none; stroke-width: 0; }
-.so-svg text.so-still { fill: var(--so-still, currentColor); font-family: var(--so-font, var(--font-cjk, "QATT Pen")), serif; }
-.so-svg text.so-ghost { font-family: var(--so-font, var(--font-cjk, "QATT Pen")), serif; }
+.so-svg text.so-still { fill: var(--so-still, currentColor); font-family: var(--so-font, var(--font-cjk, "Pen")), serif; }
+.so-svg text.so-ghost { font-family: var(--so-font, var(--font-cjk, "Pen")), serif; }
 .so-svg .so-s { fill: none; stroke: var(--so-ink, var(--cinnabar, #a8362a)); stroke-width: var(--so-width, 7.5); stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 2; stroke-dashoffset: 1.02; opacity: 0;
   animation: so-draw var(--t) ease-in-out var(--b) forwards, so-fade var(--fd) linear var(--e) forwards; }
 .so-svg .so-s.so-last, .so-svg .so-s.so-keep { animation: so-draw var(--t) ease-in-out var(--b) forwards; }

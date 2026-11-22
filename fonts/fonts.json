@@ -14,31 +14,31 @@
   "fonts": [
     {
       "id": "pen",
-      "name": "QATT Pen",
+      "name": "Pen",
       "family": "Pen",
       "styles": [
         {
           "name": "Thin",
-          "css": "QATT Pen Thin",
-          "file": "qatt-pen-thin",
+          "css": "Pen Thin",
+          "file": "pen-thin",
           "mb": 27.6
         },
         {
           "name": "Light",
-          "css": "QATT Pen Light",
-          "file": "qatt-pen-light",
+          "css": "Pen Light",
+          "file": "pen-light",
           "mb": 28.3
         },
         {
           "name": "Regular",
-          "css": "QATT Pen",
-          "file": "qatt-pen",
+          "css": "Pen",
+          "file": "pen",
           "mb": 27.5
         },
         {
           "name": "Medium",
-          "css": "QATT Pen Medium",
-          "file": "qatt-pen-medium",
+          "css": "Pen Medium",
+          "file": "pen-medium",
           "mb": 26.6
         }
       ]
