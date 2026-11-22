@@ -15,7 +15,7 @@
 		                       where it wants, ime.js still inserts the candidate on a click (no keys, all candidates, not paged)
 		defer [false]          true: load dictionaries on first focus; 'wait': also read-only while loading
 		dictionaries           JSON dictionaries ({order, sources: {key: {items, defs}}} (ime_dict.json), or the old {dict: "|reading:glyph,glyph|…", defs: {readingGlyph: definition}})
-		fontList [[]]          fonts for Nôm glyphs, also applied to the field while candidates are on
+		fontList [[]]          fonts for Nôm glyphs, also applied to the field while ime.js shows its list (candidates; not with renderItem alone)
 		returnSelect [false]   Enter selects the first candidate
 		spaceSelect [false]    Space selects the first candidate
 		showDefinitions [true]
@@ -557,7 +557,7 @@
 			}
 			const fonts = fontFamily([...fontList, ...DEFAULT_FONTS]);
 			this.list.style.setProperty('--vietime-font', fonts);
-			input.style.fontFamily = candidates ? fonts : '';
+			input.style.fontFamily = this.options.candidates ? fonts : '';   // a page that shows the candidates itself (renderItem) keeps the font of its field
 			if (candidates) {
 				input.setAttribute('role', 'combobox');
 				input.setAttribute('aria-autocomplete', 'list');
