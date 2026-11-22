@@ -6,14 +6,15 @@
 
     StrokeOrder.load("國")  -> Promise of the record, null when there is none
     StrokeOrder.play(host, record, options) -> { restart(), stop() }   draws into host (an element), a click on the drawing starts it again
+    StrokeOrder.still(record) -> an svg with the character of the font alone, in the frame of the drawing (--so-still, default currentColor): what is left after a stop
       options: numbers (show the number of every stroke, default false), fade (false: the strokes before stay as drawn; default: they fade, see below), fadeTo (the opacity
-               the faded strokes end at: default 0.3 on exact lines, 0 on approximate ones),
+               the faded strokes end at: default 1 on exact lines (they only change colour), 0 on approximate ones),
                speed (1 = the first version's pace), hold (ms to wait after the last stroke before onEnd, 2000), onEnd (called then), color / ghost (CSS colours)
 
   Lines listed in S are left out of the animation (a lead-in that GlyphWiki draws as a line of its own); the grey glyph keeps them.
   The record says how its lines were made: q 1 = they are the lines of the glyph itself (m 'r', 's', 'o'), q 0 = they sit only about where the glyph has its strokes (put together from
-  the IDS, m 'i', or taken from a rescued glyph). Exact lines trace the character: a broad line (--so-width, 11 of the 200 frame: about the stroke of Pen), the strokes before dim to 30 %
-  (--so-fade-to, 0.3) while the next ones are drawn. Approximate lines hide that they are approximate: a thin line (--so-width-approx, 4) and every stroke but the last fades away (0)
+  the IDS, m 'i', or taken from a rescued glyph). Exact lines trace the character: a broad line (--so-width, 11 of the 200 frame: about the stroke of Pen), the strokes before stay fully
+  visible and only change colour (--so-fade-to, 1) while the next ones are drawn. Approximate lines hide that they are approximate: a thin line (--so-width-approx, 4) and every stroke but the last fades away (0)
   while the next ones are drawn (two or three are to be seen at a time). While a stroke dims it turns from the ink to --so-done (default CanvasText: black, white in a dark theme).
   The ink comes from the page: --so-ink (default --cinnabar, else a red), --so-ghost (default a mid grey that
   shows on light and on dark themes).
@@ -39,6 +40,7 @@ function addCss() {
   style.textContent = `
 .so-svg { display: block; width: 100%; height: 100%; stroke: none; stroke-width: 0; }   /* no outline: a page may give every svg one, which showed as dark edges on the glyph */
 .so-svg .so-ghost { fill: var(--so-ghost, #8a8a8a); fill-opacity: .42; stroke: none; stroke-width: 0; }
+.so-svg text.so-still { fill: var(--so-still, currentColor); font-family: var(--so-font, var(--font-cjk, "QATT Pen")), serif; }
 .so-svg text.so-ghost { font-family: var(--so-font, var(--font-cjk, "QATT Pen")), serif; }
 .so-svg .so-s { fill: none; stroke: var(--so-ink, var(--cinnabar, #a8362a)); stroke-width: var(--so-width, 11); stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 2; stroke-dashoffset: 1.02; opacity: 0;
   animation: so-draw var(--t) ease-in-out var(--b) forwards, so-fade var(--fd) linear var(--e) forwards; }
@@ -78,7 +80,7 @@ function build(rec, o = {}) {
   const speed = o.speed || 1, svg = document.createElementNS(NS, 'svg');
   svg.setAttribute('viewBox', '0 0 200 200'); svg.setAttribute('class', 'so-svg'); svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', rec.c);
   const approx = rec.q !== 1; if (approx) svg.classList.add('so-approx');
-  svg.style.setProperty('--so-fade-to', String(o.fadeTo != null ? o.fadeTo : approx ? 0 : 0.3));
+  svg.style.setProperty('--so-fade-to', String(o.fadeTo != null ? o.fadeTo : approx ? 0 : 1));
   if (o.color) svg.style.setProperty('--so-ink', o.color);
   if (o.ghost) svg.style.setProperty('--so-ghost', o.ghost);
   const el = (name, attrs, parent) => { const e = document.createElementNS(NS, name); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.append(e); return e; };
@@ -93,7 +95,7 @@ function build(rec, o = {}) {
     t += 0.18 / speed;
   });
   const mean = (t - 0.3) / Math.max(1, groups.length), fade = Math.max(0.6 / speed, mean * 2.5);   // two or three strokes are to be seen at a time
-  const keep = o.fade === false;   // every stroke but the last fades: to half on exact lines, away on approximate ones (fadeTo)
+  const keep = o.fade === false;   // every stroke but the last fades: only its colour on exact lines, away on approximate ones (fadeTo)
   slots.forEach(s => {
     s.lines.forEach(l => {
       const p = el('path', { class: 'so-s' + (s.gi === groups.length - 1 ? ' so-last' : keep ? ' so-keep' : ''), pathLength: 1, d: bowed(rec.L[l.j]) }, svg);
@@ -110,6 +112,17 @@ function build(rec, o = {}) {
   return { svg, ms: t * 1000 };
 }
 
+// the character of the font alone, where the drawing has it
+function still(rec) {
+  addCss();
+  const svg = document.createElementNS(NS, 'svg'), g = document.createElementNS(NS, 'g'), tx = document.createElementNS(NS, 'text');
+  svg.setAttribute('viewBox', '0 0 200 200'); svg.setAttribute('class', 'so-svg'); svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', rec.c);
+  g.setAttribute('transform', GLYPH.transform);
+  Object.entries({ class: 'so-still', x: 0, y: GLYPH.base, 'font-size': GLYPH.size }).forEach(([k, v]) => tx.setAttribute(k, v));
+  tx.textContent = rec.c; g.append(tx); svg.append(g);
+  return svg;
+}
+
 function play(host, rec, o = {}) {
   addCss();
   let timer = null, alive = true;
@@ -124,5 +137,5 @@ function play(host, rec, o = {}) {
   return { restart: start, stop() { alive = false; clearTimeout(timer); } };
 }
 
-window.StrokeOrder = { load, play, build };
+window.StrokeOrder = { load, play, build, still };
 })();

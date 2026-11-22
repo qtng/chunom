@@ -63,13 +63,13 @@ const STYLE = `
 #detailModal .list-group-item:last-child { border-bottom: 0 !important; }
 #detailModal .list-group-item-action:hover { background: color-mix(in srgb, var(--dm-paper) 60%, transparent) !important; }
 #detailModal .glyph-box { min-width: 120px; height: 160px; flex-shrink: 0; cursor: pointer; border-color: var(--dm-line) !important; position: relative; }
-#detailModal .so-play { position: absolute; right: .3rem; bottom: .3rem; width: 1.9rem; height: 1.9rem; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  border: 1px solid var(--dm-line); background: color-mix(in srgb, var(--dm-bg) 80%, transparent); color: var(--dm-muted); font-size: 1.15rem; line-height: 1; }
+#detailModal .so-play { margin-top: .4rem; padding: .15rem .7rem; border-radius: 999px; display: inline-flex; align-items: center; gap: .3rem; font-size: .8rem; line-height: 1.2;
+  border: 1px solid var(--dm-line); background: transparent; color: var(--dm-muted); }
+#detailModal .so-play i { font-size: 1rem; }
 #detailModal .so-play:hover { color: var(--dm-ink); }
 #detailModal .glyph-box.so-playing > :not(.so-overlay) { visibility: hidden !important; }   /* whatever the box shows (the animated gif, an svg, the character as text) is hidden while the animation plays; !important: the image has an inline visibility of its own */
-#detailModal .so-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; transition: opacity .5s; --so-done: CanvasText; }   /* the stroke being drawn is in the ink of the player (cinnabar), it turns black while it dims (white in a dark theme, where Canvas is dark) */
-#detailModal .so-overlay.so-out { opacity: 0; }
-#detailModal .so-overlay .so-svg { width: auto; height: 100%; aspect-ratio: 1; }
+#detailModal .so-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; --so-done: CanvasText; }   /* the stroke being drawn is in the ink of the player (cinnabar), it turns black once drawn (white in a dark theme, where Canvas is dark) */
+#detailModal .so-overlay .so-svg { width: auto; height: 100%; aspect-ratio: 1; --so-still: var(--dm-ink); }
 #detailModal .badge-rank { font-weight: 400; border: 1px solid var(--dm-field); color: var(--dm-muted); font-size: .65rem; background: transparent; }
 #detailModal .clickable-meta { cursor: pointer; transition: opacity .2s; }
 #detailModal .clickable-meta:hover { opacity: 1 !important; text-decoration: underline; }
@@ -624,28 +624,43 @@ class ChunomDetail {
     return img;
   }
 
-  // A play button on the big glyph (when there is a stroke order for it): the animation covers the glyph, after its end and 2 seconds it fades out and the glyph is back; a click on it starts it again.
+  // A button under the big glyph (when there is a stroke order for it) plays the animation over the glyph and turns into a stop button meanwhile; a stop leaves the character of
+  // the font (QATT Pen) in its place. Exact lines (q 1) start by themselves and run in a loop (not with reduced motion); approximate ones play once, then the character of the font.
   async attachStrokeOrder(box, nom) {
     const SO = await loadStrokeOrder();
     const record = SO && await SO.load(nom);
     if (!record || !box.isConnected) return;
-    const label = window.Lang ? Lang.t('Stroke order', 'Thứ tự nét') : 'Stroke order';
-    const button = el('button', { type: 'button', className: 'so-play', title: label, 'aria-label': label, 'data-vi-title': 'Thứ tự nét', 'data-vi-aria-label': 'Thứ tự nét' }, el('i', { className: 'bi bi-play-fill' }));
-    box.append(button);
+    const exact = record.q === 1, loop = exact;
+    const icon = el('i', { className: 'bi bi-play-fill' }), text = el('span', { textContent: 'Stroke order', 'data-vi': 'Thứ tự nét' });
+    const button = el('button', { type: 'button', className: 'so-play' }, icon, text);
+    box.after(button);
+    let overlay = null, player = null;
+    const playing = on => {
+      icon.className = on ? 'bi bi-stop-fill' : 'bi bi-play-fill';
+      text.textContent = on ? 'Stop' : 'Stroke order';
+      text.dataset.vi = on ? 'Dừng' : 'Thứ tự nét';
+    };
+    const stop = () => {   // the character of the font instead of the animation
+      player?.stop(); player = null;
+      if (overlay) overlay.replaceChildren(SO.still(record));
+      playing(false);
+    };
+    const start = () => {
+      if (!overlay) {
+        overlay = el('div', { className: 'so-overlay' });
+        overlay.addEventListener('click', ev => ev.stopPropagation());
+        box.append(overlay);
+        box.classList.add('so-playing');
+      }
+      player?.stop();
+      player = SO.play(overlay, record, { onEnd: () => { if (!box.isConnected) return; if (loop) player.restart(); else stop(); } });
+      playing(true);
+    };
     button.addEventListener('click', event => {
       event.stopPropagation();   // not a click to copy the glyph
-      const overlay = el('div', { className: 'so-overlay' });
-      box.append(overlay);
-      box.classList.add('so-playing');
-      button.hidden = true;
-      const done = () => {
-        box.classList.remove('so-playing');   // the glyph is back under the overlay while that fades out
-        overlay.classList.add('so-out');
-        setTimeout(() => { overlay.remove(); button.hidden = false; }, 500);
-      };
-      SO.play(overlay, record, { onEnd: done });
-      overlay.addEventListener('click', ev => ev.stopPropagation());
+      if (player) stop(); else start();
     });
+    if (exact && !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) start();
   }
 
   async copyText(text, target) {
