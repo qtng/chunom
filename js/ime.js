@@ -397,10 +397,11 @@
 		}
 	}
 
-	// The order of the candidates: first those written exactly as typed so far or used before, then the score (use, a definition
-	// counts 1.5 times), then exactness again, then the share of the Telex keys already typed (a single character and a word of
-	// several syllables alike), then the order of the readings (letters, marks, tones) and of the data
-	const first = c => c.exact || c.used > 0;
+	// The order of the candidates: first those typed exactly and completely ("na" for na, not for nam) or used before, then the score
+	// (use, a definition counts 1.5 times), then those written exactly as typed so far ("na" for nam), then the share of the Telex keys
+	// already typed (a single character and a word of several syllables alike), then the order of the readings (letters, marks, tones)
+	// and of the data
+	const first = c => (c.exact && !c.rest) || c.used > 0;
 	const compare = (a, b) => first(b) - first(a) || b.score - a.score || b.exact - a.exact || b.share - a.share
 		|| (a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0) || a.order - b.order;
 
