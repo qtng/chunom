@@ -14,7 +14,8 @@
   The record says how its lines were made: q 1 = they are the lines of the glyph itself (m 'r', 's', 'o'), q 0 = they sit only about where the glyph has its strokes (put together from
   the IDS, m 'i', or taken from a rescued glyph). Exact lines trace the character: a broad line (--so-width, 11 of the 200 frame: about the stroke of Pen), the strokes before dim to half
   (--so-fade-to, 0.5) while the next ones are drawn. Approximate lines hide that they are approximate: a thin line (--so-width-approx, 4) and every stroke but the last fades away (0)
-  while the next ones are drawn (two or three are to be seen at a time). The ink comes from the page: --so-ink (default --cinnabar, else a red), --so-ghost (default a mid grey that
+  while the next ones are drawn (two or three are to be seen at a time). While a stroke dims it turns from the ink to --so-done (default CanvasText: black, white in a dark theme).
+  The ink comes from the page: --so-ink (default --cinnabar, else a red), --so-ghost (default a mid grey that
   shows on light and on dark themes).
 */
 (() => {
@@ -49,7 +50,7 @@ function addCss() {
    gap after it is longer than the line: a dash that starts exactly at the end of the line is a zero-length dash, and some browsers draw that as a dot with a round cap */
 .so-svg.so-approx .so-s { stroke-width: var(--so-width-approx, 4); }
 @keyframes so-draw { from { stroke-dashoffset: 1.02; opacity: 1; } to { stroke-dashoffset: 0; opacity: 1; } }
-@keyframes so-fade { to { opacity: var(--so-fade-to, .5); } }
+@keyframes so-fade { to { opacity: var(--so-fade-to, .5); stroke: var(--so-done, CanvasText); } }   /* the stroke turns from the ink to the colour of the text while it dims */
 @keyframes so-pop { to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .so-svg .so-s { animation-duration: .01s !important; animation-delay: 0s !important; } }`;
   document.head.append(style);

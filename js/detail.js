@@ -67,7 +67,7 @@ const STYLE = `
   border: 1px solid var(--dm-line); background: color-mix(in srgb, var(--dm-bg) 80%, transparent); color: var(--dm-muted); font-size: 1.15rem; line-height: 1; }
 #detailModal .so-play:hover { color: var(--dm-ink); }
 #detailModal .glyph-box.so-playing > :not(.so-overlay) { visibility: hidden !important; }   /* whatever the box shows (the animated gif, an svg, the character as text) is hidden while the animation plays; !important: the image has an inline visibility of its own */
-#detailModal .so-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; transition: opacity .5s; --so-ink: CanvasText; }   /* the felt-tip line is black (white in a dark theme, where Canvas is dark) */
+#detailModal .so-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; transition: opacity .5s; --so-done: CanvasText; }   /* the stroke being drawn is in the ink of the player (cinnabar), it turns black while it dims (white in a dark theme, where Canvas is dark) */
 #detailModal .so-overlay.so-out { opacity: 0; }
 #detailModal .so-overlay .so-svg { width: auto; height: 100%; aspect-ratio: 1; }
 #detailModal .badge-rank { font-weight: 400; border: 1px solid var(--dm-field); color: var(--dm-muted); font-size: .65rem; background: transparent; }
