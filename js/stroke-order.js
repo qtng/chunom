@@ -1,5 +1,7 @@
 /*
   The stroke order of a character as a short animation: the glyph in grey, the strokes drawn one after the other over it with a thick felt-tip line.
+  The grey glyph is the character itself in the CJK font of the site (QATT Pen, --so-font, else --font-cjk), put into the 200 frame of the lines (GLYPH: the inverse of the box of the
+  Pen build); an older record with an outline G draws that instead. A level straight line gets the bow that Pen gives its horizontals (bowed()), so the line follows the font.
   The data is one file per character, https://cdn.qatt.org/stroke/r1/<HEX>.json (made in the private repository qtng/chunom-private); there is none for every character.
 
     StrokeOrder.load("國")  -> Promise of the record, null when there is none
@@ -35,6 +37,7 @@ function addCss() {
   style.textContent = `
 .so-svg { display: block; width: 100%; height: 100%; --so-fade-to: 0; stroke: none; stroke-width: 0; }   /* no outline: a page may give every svg one, which showed as dark edges on the glyph */
 .so-svg .so-ghost { fill: var(--so-ghost, #8a8a8a); fill-opacity: .42; stroke: none; stroke-width: 0; }
+.so-svg text.so-ghost { font-family: var(--so-font, var(--font-cjk, "QATT Pen")), serif; }
 .so-svg .so-s { fill: none; stroke: var(--so-ink, var(--cinnabar, #a8362a)); stroke-width: var(--so-width, 9); stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 2; stroke-dashoffset: 1.02; opacity: 0;
   animation: so-draw var(--t) ease-in-out var(--b) forwards, so-fade var(--fd) linear var(--e) forwards; }
 .so-svg .so-s.so-last, .so-svg .so-s.so-keep { animation: so-draw var(--t) ease-in-out var(--b) forwards; }
@@ -48,6 +51,17 @@ function addCss() {
 @keyframes so-pop { to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .so-svg .so-s { animation-duration: .01s !important; animation-delay: 0s !important; } }`;
   document.head.append(style);
+}
+
+// the box of the Pen build (box "noto": the KAGE frame scaled by 1.005, 1.02 about its middle and moved up by 2.1, then 200 units = 1 em, the baseline at 176): its inverse puts the
+// character of the font onto the lines
+const GLYPH = { size: 200, base: 176, transform: `matrix(${1 / 1.005} 0 0 ${1 / 1.02} ${100 - 100 / 1.005} ${100 + (2.1 - 100) / 1.02})` };
+// the bow of a horizontal as Pen draws it (lib/pen_strokes.js of the font build): a straight line that is nearly level rises in the middle by 2.6 (length / 120)^2, at most 2.6
+function bowed(d) {
+  const m = /^M(-?[\d.]+) (-?[\d.]+)L(-?[\d.]+) (-?[\d.]+)$/.exec(d); if (!m) return d;
+  const [x0, y0, x1, y1] = m.slice(1).map(Number), ax = Math.abs(x1 - x0), ay = Math.abs(y1 - y0); if (!(ay < ax * 0.3)) return d;
+  const bow = 2.6 * Math.min(1, (Math.hypot(ax, ay) / 120) ** 2); if (bow < 0.05) return d;
+  return `M${x0} ${y0}Q${+((x0 + x1) / 2).toFixed(1)} ${+((y0 + y1) / 2 - 2 * bow).toFixed(1)} ${x1} ${y1}`;
 }
 
 function pathLength(d) {   // about, from the points of the path
@@ -64,7 +78,8 @@ function build(rec, o = {}) {
   if (o.color) svg.style.setProperty('--so-ink', o.color);
   if (o.ghost) svg.style.setProperty('--so-ghost', o.ghost);
   const el = (name, attrs, parent) => { const e = document.createElementNS(NS, name); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.append(e); return e; };
-  el('path', { class: 'so-ghost', d: rec.G }, svg);
+  if (rec.G) el('path', { class: 'so-ghost', d: rec.G }, svg);
+  else { const g = el('g', { transform: GLYPH.transform }, svg), tx = el('text', { class: 'so-ghost', x: 0, y: GLYPH.base, 'font-size': GLYPH.size }, g); tx.textContent = rec.c; }
   // S: lines the animation leaves out (a lead-in that the glyph draws as a line of its own, 八); they stay in the grey glyph
   const skip = new Set(rec.S || []), groups = rec.g.map(g => { const k = g.filter(j => !skip.has(j)); return k.length ? k : g; }), slots = [];   // the time of every stroke (seconds)
   let t = 0.3;
@@ -77,7 +92,7 @@ function build(rec, o = {}) {
   const keep = o.fade != null ? !o.fade : rec.q === 1;   // lines that follow a real glyph need no hiding
   slots.forEach(s => {
     s.lines.forEach(l => {
-      const p = el('path', { class: 'so-s' + (s.gi === groups.length - 1 ? ' so-last' : keep ? ' so-keep' : ''), pathLength: 1, d: rec.L[l.j] }, svg);
+      const p = el('path', { class: 'so-s' + (s.gi === groups.length - 1 ? ' so-last' : keep ? ' so-keep' : ''), pathLength: 1, d: bowed(rec.L[l.j]) }, svg);
       p.style.cssText = `--b:${l.b.toFixed(2)}s;--t:${l.d.toFixed(2)}s;--e:${s.end.toFixed(2)}s;--fd:${fade.toFixed(2)}s`;
     });
     if (o.numbers) {
