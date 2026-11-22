@@ -407,7 +407,7 @@
 		|| (a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0) || a.order - b.order;
 
 	// The pages of 10: the other candidates (not typed completely, not used: "nam" for "na") get the place
-	// 11 − floor(share × 10) + (page − 1) from the top (the more of them typed, the higher; one lower on every page), or the next free
+	// 14 − floor(share × 10) + (page − 1) from the top (the more of them typed, the higher; one lower on every page), or the next free
 	// place below it; with none free they wait for the next page. The complete or used ones fill the other places in their order, after
 	// them what still waits. offset: places already taken (the words typed to the end before).
 	function spread(list, offset = 0) {
@@ -416,7 +416,7 @@
 		while (top.length || rest.length) {
 			const slots = Array.from({ length: 10 }, (_, i) => i < taken ? true : null), waiting = [];
 			for (const c of rest) {
-				const at = 11 - Math.floor(c.share * 10) + page - 1;
+				const at = 14 - Math.floor(c.share * 10) + page - 1;
 				let i = Math.max(1, at) - 1;
 				while (i < 10 && slots[i]) i++;
 				if (i < 10) slots[i] = c; else waiting.push(c);
