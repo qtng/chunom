@@ -385,7 +385,7 @@
 		lookup(word) {
 			word = (word || '').toLowerCase().replace(/[\s\-']/g, '');
 			if (!word) return [];
-			return this.candidates(word).map(c => ({ glyph: c.glyph, reading: readingOf(c.key), definition: c.definition.trim() }));
+			return spread(this.candidates(word)).map(c => ({ glyph: c.glyph, reading: readingOf(c.key), definition: c.definition.trim() }));
 		}
 
 		lookupGlyph(text) {
@@ -401,9 +401,25 @@
 	// (use, a definition counts 1.5 times), then those written exactly as typed so far ("na" for nam), then the share of the Telex keys
 	// already typed (a single character and a word of several syllables alike), then the order of the readings (letters, marks, tones)
 	// and of the data
-	const first = c => (c.exact && !c.rest) || c.used > 0;
+	const complete = c => c.exact && !c.rest;
+	const first = c => complete(c) || c.used > 0;
 	const compare = (a, b) => first(b) - first(a) || b.score - a.score || b.exact - a.exact || b.share - a.share
 		|| (a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0) || a.order - b.order;
+
+	// On every page of 10 at most half are complete, unused matches ("na" for na): the other places go to the next of the rest
+	// (nam, nay, việt-nam for "việt"), as long as there are any. Both keep their order. offset: places already taken on the first page.
+	function spread(list, offset = 0) {
+		const plain = c => complete(c) && !(c.used > 0);
+		const a = list.filter(plain), b = list.filter(c => !plain(c)), out = [];
+		let onPage = 0;
+		for (let i = offset; a.length || b.length; i++) {
+			if (i % 10 == 0) onPage = 0;
+			const takeA = a.length && (!b.length || (onPage < 5 && compare(a[0], b[0]) <= 0));
+			if (takeA) onPage++;
+			out.push(takeA ? a.shift() : b.shift());
+		}
+		return out;
+	}
 
 	const dictionaries = new Map();
 	function dictionaryFor(urls) {
@@ -652,10 +668,10 @@
 			let items = word ? this.dict.candidates(typed) : [];   // a hundred at most
 			if (word && this.chain.length) {
 				const joined = this.joined(word.toLowerCase(), current);   // the words typed to the end first, the others among the rest
-				const seen = new Set();
-				items = joined.filter(c => !c.rest).concat(joined.filter(c => c.rest).concat(items).sort(compare))
+				const seen = new Set(), done = joined.filter(c => !c.rest);
+				items = done.concat(spread(joined.filter(c => c.rest).concat(items).sort(compare), done.length))
 					.filter(c => !seen.has(c.glyph) && seen.add(c.glyph));
-			}
+			} else items = spread(items);
 			if (candidateHook) items = candidateHook(items, word || '') || [];
 			this.hide();
 			this.items = items;
