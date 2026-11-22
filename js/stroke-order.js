@@ -7,13 +7,13 @@
     StrokeOrder.load("國")  -> Promise of the record, null when there is none
     StrokeOrder.play(host, record, options) -> { restart(), stop() }   draws into host (an element), a click on the drawing starts it again
       options: numbers (show the number of every stroke, default false), fade (false: the strokes before stay as drawn; default: they fade, see below), fadeTo (the opacity
-               the faded strokes end at: default 0.5 on exact lines, 0 on approximate ones),
+               the faded strokes end at: default 0.3 on exact lines, 0 on approximate ones),
                speed (1 = the first version's pace), hold (ms to wait after the last stroke before onEnd, 2000), onEnd (called then), color / ghost (CSS colours)
 
   Lines listed in S are left out of the animation (a lead-in that GlyphWiki draws as a line of its own); the grey glyph keeps them.
   The record says how its lines were made: q 1 = they are the lines of the glyph itself (m 'r', 's', 'o'), q 0 = they sit only about where the glyph has its strokes (put together from
-  the IDS, m 'i', or taken from a rescued glyph). Exact lines trace the character: a broad line (--so-width, 11 of the 200 frame: about the stroke of Pen), the strokes before dim to half
-  (--so-fade-to, 0.5) while the next ones are drawn. Approximate lines hide that they are approximate: a thin line (--so-width-approx, 4) and every stroke but the last fades away (0)
+  the IDS, m 'i', or taken from a rescued glyph). Exact lines trace the character: a broad line (--so-width, 11 of the 200 frame: about the stroke of Pen), the strokes before dim to 30 %
+  (--so-fade-to, 0.3) while the next ones are drawn. Approximate lines hide that they are approximate: a thin line (--so-width-approx, 4) and every stroke but the last fades away (0)
   while the next ones are drawn (two or three are to be seen at a time). While a stroke dims it turns from the ink to --so-done (default CanvasText: black, white in a dark theme).
   The ink comes from the page: --so-ink (default --cinnabar, else a red), --so-ghost (default a mid grey that
   shows on light and on dark themes).
@@ -50,7 +50,7 @@ function addCss() {
    gap after it is longer than the line: a dash that starts exactly at the end of the line is a zero-length dash, and some browsers draw that as a dot with a round cap */
 .so-svg.so-approx .so-s { stroke-width: var(--so-width-approx, 4); }
 @keyframes so-draw { from { stroke-dashoffset: 1.02; opacity: 1; } to { stroke-dashoffset: 0; opacity: 1; } }
-@keyframes so-fade { to { opacity: var(--so-fade-to, .5); stroke: var(--so-done, CanvasText); } }   /* the stroke turns from the ink to the colour of the text while it dims */
+@keyframes so-fade { to { opacity: var(--so-fade-to, .3); stroke: var(--so-done, CanvasText); } }   /* the stroke turns from the ink to the colour of the text while it dims */
 @keyframes so-pop { to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .so-svg .so-s { animation-duration: .01s !important; animation-delay: 0s !important; } }`;
   document.head.append(style);
@@ -78,7 +78,7 @@ function build(rec, o = {}) {
   const speed = o.speed || 1, svg = document.createElementNS(NS, 'svg');
   svg.setAttribute('viewBox', '0 0 200 200'); svg.setAttribute('class', 'so-svg'); svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', rec.c);
   const approx = rec.q !== 1; if (approx) svg.classList.add('so-approx');
-  svg.style.setProperty('--so-fade-to', String(o.fadeTo != null ? o.fadeTo : approx ? 0 : 0.5));
+  svg.style.setProperty('--so-fade-to', String(o.fadeTo != null ? o.fadeTo : approx ? 0 : 0.3));
   if (o.color) svg.style.setProperty('--so-ink', o.color);
   if (o.ghost) svg.style.setProperty('--so-ghost', o.ghost);
   const el = (name, attrs, parent) => { const e = document.createElementNS(NS, name); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.append(e); return e; };
