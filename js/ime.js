@@ -410,17 +410,18 @@
 		return dictionaries.get(id);
 	}
 
-	// How much each candidate is used, one localStorage key: {"reading:glyph": value}. Older entries {glyph: count} (from before
-	// the reading was stored) stay and count for every reading of the glyph until the pair has a value of its own.
+	// How much each candidate is used, one localStorage key: {"reading:glyph": value}. Older entries {glyph: count} (without the reading)
+	// are removed.
 	const USAGE_KEY = 'vietime-usage';
 	let usage = null;
 	function getUsage() {
 		if (!usage) {
 			try { usage = JSON.parse(localStorage.getItem(USAGE_KEY)) || {}; } catch { usage = {}; }
+			for (const k of Object.keys(usage)) if (k.indexOf(':', 1) < 0) delete usage[k];
 		}
 		return usage;
 	}
-	const usedOf = (key, glyph) => { const u = getUsage(); return (key != null ? u[key + ':' + glyph] : undefined) ?? u[glyph] ?? 0; };
+	const usedOf = (key, glyph) => key != null && getUsage()[key + ':' + glyph] || 0;
 	// The chosen candidate gains 1. If it was not the first, the ones shown above it among the first 10 lose some: the more of the
 	// chosen word was typed (share of its keys), the more (× 0.8 at 100 %, × 0.96 at 20 %); a value under 0.05 is forgotten.
 	function countUsage(chosen, above) {
@@ -428,11 +429,9 @@
 		for (const c of above) {
 			if (c.key == null) continue;   // an item a candidateHook added
 			const k = c.key + ':' + c.glyph, value = Math.round(usedOf(c.key, c.glyph) * factor * 1000) / 1000;
-			if (value >= 0.05) u[k] = value;
-			else if (c.glyph in u) u[k] = 0;   // keeps the older count of the glyph from coming back
-			else delete u[k];
+			if (value >= 0.05) u[k] = value; else delete u[k];
 		}
-		u[chosen.key != null ? chosen.key + ':' + chosen.glyph : chosen.glyph] = usedOf(chosen.key, chosen.glyph) + 1;
+		if (chosen.key != null) u[chosen.key + ':' + chosen.glyph] = usedOf(chosen.key, chosen.glyph) + 1;   // not an item a candidateHook added
 		try { localStorage.setItem(USAGE_KEY, JSON.stringify(u)); } catch { /* storage unavailable */ }
 	}
 
