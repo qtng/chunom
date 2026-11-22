@@ -13,7 +13,7 @@
 
   Lines listed in S are left out of the animation (a lead-in that GlyphWiki draws as a line of its own); the grey glyph keeps them.
   The record says how its lines were made: q 1 = they are the lines of the glyph itself (m 'r', 's', 'o'), q 0 = they sit only about where the glyph has its strokes (put together from
-  the IDS, m 'i', or taken from a rescued glyph). Exact lines trace the character: a broad line (--so-width, 11 of the 200 frame: about the stroke of Pen), the strokes before stay fully
+  the IDS, m 'i', or taken from a rescued glyph). Exact lines trace the character: a line 15 % thinner than the stroke of Pen (--so-width, 8.5 of the 200 frame; Pen: 10), so that the structure shows, the strokes before stay fully
   visible and only change colour (--so-fade-to, 1) while the next ones are drawn. Approximate lines hide that they are approximate: a thin line (--so-width-approx, 4) and every stroke but the last fades away (0)
   while the next ones are drawn (two or three are to be seen at a time). While a stroke dims it turns from the ink to --so-done (default CanvasText: black, white in a dark theme).
   The ink comes from the page: --so-ink (default --cinnabar, else a red), --so-ghost (default a mid grey that
@@ -42,7 +42,7 @@ function addCss() {
 .so-svg .so-ghost { fill: var(--so-ghost, #8a8a8a); fill-opacity: .42; stroke: none; stroke-width: 0; }
 .so-svg text.so-still { fill: var(--so-still, currentColor); font-family: var(--so-font, var(--font-cjk, "QATT Pen")), serif; }
 .so-svg text.so-ghost { font-family: var(--so-font, var(--font-cjk, "QATT Pen")), serif; }
-.so-svg .so-s { fill: none; stroke: var(--so-ink, var(--cinnabar, #a8362a)); stroke-width: var(--so-width, 11); stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 2; stroke-dashoffset: 1.02; opacity: 0;
+.so-svg .so-s { fill: none; stroke: var(--so-ink, var(--cinnabar, #a8362a)); stroke-width: var(--so-width, 8.5); stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 2; stroke-dashoffset: 1.02; opacity: 0;
   animation: so-draw var(--t) ease-in-out var(--b) forwards, so-fade var(--fd) linear var(--e) forwards; }
 .so-svg .so-s.so-last, .so-svg .so-s.so-keep { animation: so-draw var(--t) ease-in-out var(--b) forwards; }
 .so-svg .so-n { opacity: 0; animation: so-pop .15s var(--a) forwards; }

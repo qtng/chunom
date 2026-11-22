@@ -625,12 +625,12 @@ class ChunomDetail {
   }
 
   // A button under the big glyph (when there is a stroke order for it) plays the animation over the glyph and turns into a stop button meanwhile; a stop leaves the character of
-  // the font (QATT Pen) in its place. Exact lines (q 1) start by themselves and run in a loop (not with reduced motion); approximate ones play once, then the character of the font.
+  // the font (QATT Pen) in its place. Exact lines (q 1) start by themselves (not with reduced motion), approximate ones on a click; both play once, then the character of the font stays.
   async attachStrokeOrder(box, nom) {
     const SO = await loadStrokeOrder();
     const record = SO && await SO.load(nom);
     if (!record || !box.isConnected) return;
-    const exact = record.q === 1, loop = exact;
+    const exact = record.q === 1;
     const icon = el('i', { className: 'bi bi-play-fill' }), text = el('span', { textContent: 'Stroke order', 'data-vi': 'Thứ tự nét' });
     const button = el('button', { type: 'button', className: 'so-play' }, icon, text);
     box.after(button);
@@ -653,7 +653,7 @@ class ChunomDetail {
         box.classList.add('so-playing');
       }
       player?.stop();
-      player = SO.play(overlay, record, { onEnd: () => { if (!box.isConnected) return; if (loop) player.restart(); else stop(); } });
+      player = SO.play(overlay, record, { onEnd: () => { if (box.isConnected) stop(); } });
       playing(true);
     };
     button.addEventListener('click', event => {
