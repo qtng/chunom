@@ -408,8 +408,9 @@
 
 	// The pages of 10: the other candidates (not typed completely, not used: "nam" for "na") get the place
 	// 14 − floor(share × 10) + (page − 1) from the top (the more of them typed, the higher; one lower on every page), or the next free
-	// place below it; with none free they wait for the next page. The complete or used ones fill the other places in their order, after
-	// them what still waits. offset: places already taken (the words typed to the end before).
+	// place below it; with none free they wait for the next page. The complete or used ones fill the other places in their order. Only
+	// while there are enough of them to fill a page: from the first page where they are too few (or none: "nuoc") on, the plain order
+	// (compare), so that nothing is pushed down by the places. offset: places already taken (the words typed to the end before).
 	function spread(list, offset = 0) {
 		const top = list.filter(first), out = [];
 		let rest = list.filter(c => !first(c)), page = Math.floor(offset / 10) + 1, taken = offset % 10;
@@ -421,9 +422,10 @@
 				while (i < 10 && slots[i]) i++;
 				if (i < 10) slots[i] = c; else waiting.push(c);
 			}
+			if (top.length < slots.filter(s => !s).length) { out.push(...top, ...rest); break; }   // too few to fill the page: the plain order
 			rest = waiting;
-			for (let i = taken; i < 10; i++) slots[i] ||= top.shift() || rest.shift() || null;
-			out.push(...slots.slice(taken).filter(Boolean));
+			for (let i = taken; i < 10; i++) slots[i] ||= top.shift();
+			out.push(...slots.slice(taken));
 			taken = 0;
 			page++;
 		}
