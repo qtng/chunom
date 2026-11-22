@@ -6,15 +6,16 @@
 
     StrokeOrder.load("國")  -> Promise of the record, null when there is none
     StrokeOrder.play(host, record, options) -> { restart(), stop() }   draws into host (an element), a click on the drawing starts it again
-      options: numbers (show the number of every stroke, default false), fade (true: the strokes before fade while the next ones are drawn, false: they stay; default: only
-               when the lines were reconstructed from the IDS, see below), fadeTo (the opacity the faded strokes end at, 0 = they vanish, a viewer may keep some),
+      options: numbers (show the number of every stroke, default false), fade (false: the strokes before stay as drawn; default: they fade, see below), fadeTo (the opacity
+               the faded strokes end at: default 0.5 on exact lines, 0 on approximate ones),
                speed (1 = the first version's pace), hold (ms to wait after the last stroke before onEnd, 2000), onEnd (called then), color / ghost (CSS colours)
 
   Lines listed in S are left out of the animation (a lead-in that GlyphWiki draws as a line of its own); the grey glyph keeps them.
-  The record says how its lines were made: q 1 = they follow a real glyph (m 'r', 's', 'o'), q 0 = they were put together from the IDS (m 'i'): there they sit only about
-  where the glyph has its strokes, so every stroke but the last fades while the next ones are drawn (two or three are to be seen at a time), which hides it. Where the lines
-  follow a real glyph the strokes stay, and the drawing ends as the black glyph. The look comes from CSS variables of the page: --so-ink (default --cinnabar, else a red),
-  --so-ghost (default a mid grey that shows on light and on dark themes), --so-width (the width of the line in the 200 frame, 9: about the width of a stroke of the glyph).
+  The record says how its lines were made: q 1 = they are the lines of the glyph itself (m 'r', 's', 'o'), q 0 = they sit only about where the glyph has its strokes (put together from
+  the IDS, m 'i', or taken from a rescued glyph). Exact lines trace the character: a broad line (--so-width, 11 of the 200 frame: about the stroke of Pen), the strokes before dim to half
+  (--so-fade-to, 0.5) while the next ones are drawn. Approximate lines hide that they are approximate: a thin line (--so-width-approx, 4) and every stroke but the last fades away (0)
+  while the next ones are drawn (two or three are to be seen at a time). The ink comes from the page: --so-ink (default --cinnabar, else a red), --so-ghost (default a mid grey that
+  shows on light and on dark themes).
 */
 (() => {
 const BASE = 'https://cdn.qatt.org/stroke/r1/';
@@ -35,10 +36,10 @@ function addCss() {
   const style = document.createElement('style');
   style.id = 'stroke-order-css';
   style.textContent = `
-.so-svg { display: block; width: 100%; height: 100%; --so-fade-to: 0; stroke: none; stroke-width: 0; }   /* no outline: a page may give every svg one, which showed as dark edges on the glyph */
+.so-svg { display: block; width: 100%; height: 100%; stroke: none; stroke-width: 0; }   /* no outline: a page may give every svg one, which showed as dark edges on the glyph */
 .so-svg .so-ghost { fill: var(--so-ghost, #8a8a8a); fill-opacity: .42; stroke: none; stroke-width: 0; }
 .so-svg text.so-ghost { font-family: var(--so-font, var(--font-cjk, "QATT Pen")), serif; }
-.so-svg .so-s { fill: none; stroke: var(--so-ink, var(--cinnabar, #a8362a)); stroke-width: var(--so-width, 9); stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 2; stroke-dashoffset: 1.02; opacity: 0;
+.so-svg .so-s { fill: none; stroke: var(--so-ink, var(--cinnabar, #a8362a)); stroke-width: var(--so-width, 11); stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 2; stroke-dashoffset: 1.02; opacity: 0;
   animation: so-draw var(--t) ease-in-out var(--b) forwards, so-fade var(--fd) linear var(--e) forwards; }
 .so-svg .so-s.so-last, .so-svg .so-s.so-keep { animation: so-draw var(--t) ease-in-out var(--b) forwards; }
 .so-svg .so-n { opacity: 0; animation: so-pop .15s var(--a) forwards; }
@@ -46,8 +47,9 @@ function addCss() {
 .so-svg .so-n text { fill: #fff; font: 700 8.5px system-ui, sans-serif; text-anchor: middle; }
 /* a line is drawn by moving a dash along it (pathLength 1). Before its start it is invisible (opacity 0), and the dash starts outside the line (offset above 1) and the
    gap after it is longer than the line: a dash that starts exactly at the end of the line is a zero-length dash, and some browsers draw that as a dot with a round cap */
+.so-svg.so-approx .so-s { stroke-width: var(--so-width-approx, 4); }
 @keyframes so-draw { from { stroke-dashoffset: 1.02; opacity: 1; } to { stroke-dashoffset: 0; opacity: 1; } }
-@keyframes so-fade { to { opacity: var(--so-fade-to); } }
+@keyframes so-fade { to { opacity: var(--so-fade-to, .5); } }
 @keyframes so-pop { to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .so-svg .so-s { animation-duration: .01s !important; animation-delay: 0s !important; } }`;
   document.head.append(style);
@@ -74,7 +76,8 @@ function pathLength(d) {   // about, from the points of the path
 function build(rec, o = {}) {
   const speed = o.speed || 1, svg = document.createElementNS(NS, 'svg');
   svg.setAttribute('viewBox', '0 0 200 200'); svg.setAttribute('class', 'so-svg'); svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', rec.c);
-  if (o.fadeTo != null) svg.style.setProperty('--so-fade-to', String(o.fadeTo));
+  const approx = rec.q !== 1; if (approx) svg.classList.add('so-approx');
+  svg.style.setProperty('--so-fade-to', String(o.fadeTo != null ? o.fadeTo : approx ? 0 : 0.5));
   if (o.color) svg.style.setProperty('--so-ink', o.color);
   if (o.ghost) svg.style.setProperty('--so-ghost', o.ghost);
   const el = (name, attrs, parent) => { const e = document.createElementNS(NS, name); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.append(e); return e; };
@@ -89,7 +92,7 @@ function build(rec, o = {}) {
     t += 0.18 / speed;
   });
   const mean = (t - 0.3) / Math.max(1, groups.length), fade = Math.max(0.6 / speed, mean * 2.5);   // two or three strokes are to be seen at a time
-  const keep = o.fade != null ? !o.fade : rec.q === 1;   // lines that follow a real glyph need no hiding
+  const keep = o.fade === false;   // every stroke but the last fades: to half on exact lines, away on approximate ones (fadeTo)
   slots.forEach(s => {
     s.lines.forEach(l => {
       const p = el('path', { class: 'so-s' + (s.gi === groups.length - 1 ? ' so-last' : keep ? ' so-keep' : ''), pathLength: 1, d: bowed(rec.L[l.j]) }, svg);
