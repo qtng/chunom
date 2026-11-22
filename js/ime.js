@@ -373,7 +373,7 @@
 					const typed = n + t.letters.filter(l => VARIANT[l]).length + typedTone.size;
 					const chars = [...key], definition = this.defs.get(key + glyph) || '', used = usedOf(key, glyph);
 					list.push({ glyph, key, multi, head: chars.slice(0, n).join(''), remainder: chars.slice(n).join(''), definition,
-						exact, rest: info.letters.length - n, share: Math.min(1, typed / info.strokes), score: definition ? (used + 1) * 1.5 : used,
+						exact, used, rest: info.letters.length - n, share: Math.min(1, typed / info.strokes), score: definition ? (used + 1) * 1.5 : used,
 						sort: info.sort, order });
 				}
 			}
@@ -397,10 +397,11 @@
 		}
 	}
 
-	// The order of the candidates: the used ones first (a definition counts 1.5 times), then those written exactly as typed so far,
-	// then the share of the Telex keys already typed (a single character and a word of several syllables alike),
-	// then the order of the readings (letters, marks, tones) and of the data
-	const compare = (a, b) => b.score - a.score || b.exact - a.exact || b.share - a.share
+	// The order of the candidates: first those written exactly as typed so far or used before, then the score (use, a definition
+	// counts 1.5 times), then exactness again, then the share of the Telex keys already typed (a single character and a word of
+	// several syllables alike), then the order of the readings (letters, marks, tones) and of the data
+	const first = c => c.exact || c.used > 0;
+	const compare = (a, b) => first(b) - first(a) || b.score - a.score || b.exact - a.exact || b.share - a.share
 		|| (a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0) || a.order - b.order;
 
 	const dictionaries = new Map();
