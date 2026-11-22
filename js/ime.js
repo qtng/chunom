@@ -18,7 +18,6 @@
 		fontList [[]]          fonts for Nôm glyphs, also applied to the field while candidates are on
 		returnSelect [false]   Enter selects the first candidate
 		spaceSelect [false]    Space selects the first candidate
-		compoundsPerPage [3]   at most this many words of several syllables on a page of 10 candidates (the rest: single characters)
 		showDefinitions [true]
 		timeout [0]            milliseconds without typing or key presses after which the list closes itself; 0: never
 
@@ -33,7 +32,7 @@
 	Methods:
 		ime.update({ telex: false, candidates: false })
 		VietIme.load()               loads the default dictionaries, returns a promise
-		VietIme.lookup('chữ nôm')    [{glyph, reading, definition}], found by the letters without marks ("nuoc" finds "nước"), exact matches first
+		VietIme.lookup('chữ nôm')    [{glyph, reading, definition}], found by the letters without marks ("nuoc" finds "nước"), in the order of the candidates
 		VietIme.lookupGlyph('越')    entries whose glyphs contain the characters
 		VietIme.telex('vieetj')      'việt'
 
@@ -235,7 +234,8 @@
 	const TONE = { '́': 1, '̀': 2, '̉': 3, '̃': 4, '̣': 5 };
 	const VARIANT = { 'ă': 1, 'â': 2, 'đ': 1, 'ê': 1, 'ô': 1, 'ơ': 2, 'ư': 1 };
 	// { fold: the letters without marks, letters: [each letter without its tone], syl: [the syllable of each letter], tones: [the tone of each syllable],
-	//   toneAt: [[letter, tone], …], sort } (a new syllable starts at a capital: "chữNôm")
+	//   toneAt: [[letter, tone], …], strokes: the Telex keys of the whole reading (a letter, a mark and a tone are one each: cầu = c a u a f = 5), sort }
+	// (a new syllable starts at a capital: "chữNôm")
 	function searchKey(text) {
 		let fold = '', marks = '', s = 0;
 		const letters = [], syl = [], tones = [0], toneAt = [];
@@ -251,7 +251,8 @@
 			letters.push(letter);
 			syl.push(s);
 		}
-		return { fold, letters, syl, tones, toneAt, sort: fold + '\0' + marks + '\0' + tones.join('') };
+		const strokes = letters.length + [...marks].filter(m => m != '0').length + tones.filter(Boolean).length;
+		return { fold, letters, syl, tones, toneAt, strokes, sort: fold + '\0' + marks + '\0' + tones.join('') };
 	}
 
 	const tick = () => new Promise(resolve => { const c = new MessageChannel(); c.port1.onmessage = () => resolve(); c.port2.postMessage(0); });   // give the page a turn
@@ -343,9 +344,8 @@
 			return this.byChar;
 		}
 
-		// The entries that match the typed prefix (see searchKey): first those written exactly as typed so far, then short remainders,
-		// then used and defined ones, then the order of the readings (letters, marks, tones) and of the data; every glyph once, at most 100
-		// kind: 'single' (one syllable) or 'multi' (words of several syllables) only; else both
+		// The entries that match the typed prefix (see searchKey), single characters and words of several syllables in one list (see compare);
+		// every glyph once, at most 100. kind: 'single' (one syllable) or 'multi' (words of several syllables) only; else both
 		candidates(prefix, kind) {
 			const keys = this.keys ??= [...this.byFold.keys()].sort();
 			const t = searchKey(prefix.toLowerCase()), n = t.letters.length;
@@ -354,7 +354,7 @@
 				const mid = (lo + hi) >> 1;
 				if (keys[mid] < t.fold) lo = mid + 1; else hi = mid;
 			}
-			const list = [], usage = getUsage();
+			const list = [];
 			for (let i = lo; i < keys.length && keys[i].startsWith(t.fold); i++) {
 				for (const [key, glyph, order] of this.byFold.get(keys[i])) {
 					const info = this.info.get(key), multi = info.syl[info.syl.length - 1] > 0;
@@ -369,12 +369,15 @@
 					for (const [s, tone] of typedTone) if (info.tones[s] != tone) ok = false;   // a typed tone must be there
 					if (!ok) continue;
 					for (let s = 0; s <= info.syl[n - 1] && exact; s++) if ((typedTone.get(s) || 0) != info.tones[s]) exact = false;
-					const chars = [...key], definition = this.defs.get(key + glyph) || '', used = usage[glyph] || 0;
+					// the keys typed so far: the letters, the marks typed on them, the tones typed (one per syllable)
+					const typed = n + t.letters.filter(l => VARIANT[l]).length + typedTone.size;
+					const chars = [...key], definition = this.defs.get(key + glyph) || '', used = usedOf(key, glyph);
 					list.push({ glyph, key, multi, head: chars.slice(0, n).join(''), remainder: chars.slice(n).join(''), definition,
-						exact, rest: info.letters.length - n, score: definition ? (used + 1) * 2 : used, sort: info.sort, order });
+						exact, used, rest: info.letters.length - n, share: Math.min(1, typed / info.strokes), score: definition ? (used + 1) * 1.5 : used,
+						sort: info.sort, order });
 				}
 			}
-			list.sort((a, b) => b.exact - a.exact || a.rest - b.rest || b.score - a.score || (a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0) || a.order - b.order);
+			list.sort(compare);
 			const seen = new Set();
 			return list.filter(c => !seen.has(c.glyph) && seen.add(c.glyph)).slice(0, 100);
 		}
@@ -394,6 +397,13 @@
 		}
 	}
 
+	// The order of the candidates: first those written exactly as typed so far or used before, then the score (use, a definition
+	// counts 1.5 times), then exactness again, then the share of the Telex keys already typed (a single character and a word of
+	// several syllables alike), then the order of the readings (letters, marks, tones) and of the data
+	const first = c => c.exact || c.used > 0;
+	const compare = (a, b) => first(b) - first(a) || b.score - a.score || b.exact - a.exact || b.share - a.share
+		|| (a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0) || a.order - b.order;
+
 	const dictionaries = new Map();
 	function dictionaryFor(urls) {
 		const id = urls.join(' ');
@@ -401,18 +411,28 @@
 		return dictionaries.get(id);
 	}
 
-	// Selection counts, one localStorage key
+	// How much each candidate is used, one localStorage key: {"reading:glyph": value}. Older entries {glyph: count} (without the reading)
+	// are removed.
 	const USAGE_KEY = 'vietime-usage';
 	let usage = null;
 	function getUsage() {
 		if (!usage) {
 			try { usage = JSON.parse(localStorage.getItem(USAGE_KEY)) || {}; } catch { usage = {}; }
+			for (const k of Object.keys(usage)) if (k.indexOf(':', 1) < 0) delete usage[k];
 		}
 		return usage;
 	}
-	function countUsage(glyph) {
-		const u = getUsage();
-		u[glyph] = (u[glyph] || 0) + 1;
+	const usedOf = (key, glyph) => key != null && getUsage()[key + ':' + glyph] || 0;
+	// The chosen candidate gains 1. If it was not the first, the ones shown above it among the first 10 lose some: the more of the
+	// chosen word was typed (share of its keys), the more (× 0.8 at 100 %, × 0.96 at 20 %); a value under 0.05 is forgotten.
+	function countUsage(chosen, above) {
+		const u = getUsage(), factor = 1 - 0.2 * (chosen.share ?? 1);
+		for (const c of above) {
+			if (c.key == null) continue;   // an item a candidateHook added
+			const k = c.key + ':' + c.glyph, value = Math.round(usedOf(c.key, c.glyph) * factor * 1000) / 1000;
+			if (value >= 0.05) u[k] = value; else delete u[k];
+		}
+		if (chosen.key != null) u[chosen.key + ':' + chosen.glyph] = usedOf(chosen.key, chosen.glyph) + 1;   // not an item a candidateHook added
 		try { localStorage.setItem(USAGE_KEY, JSON.stringify(u)); } catch { /* storage unavailable */ }
 	}
 
@@ -466,7 +486,7 @@
 			this.input = input;
 			this.target = input.imeTarget || input;   // a field, or the editable element of an adapter
 			this.options = { telex: true, candidates: true, defer: false, dictionaries: DICTIONARIES, fontList: [],
-				returnSelect: false, spaceSelect: false, compoundsPerPage: 3, showDefinitions: true, timeout: 0, ...options };
+				returnSelect: false, spaceSelect: false, showDefinitions: true, timeout: 0, ...options };
 			this.dict = dictionaryFor(this.options.dictionaries);
 			this.items = [];
 			this.shown = [];
@@ -628,15 +648,13 @@
 			// while a mobile keyboard composes, the word is still raw Telex
 			const word = current && (this.composing && this.options.telex ? telexWord(current.word, this.mode) : current.word);
 			const typed = word ? word.toLowerCase() : '';
-			let items = word ? this.dict.candidates(typed, 'single') : [];
-			const words = word ? this.dict.candidates(typed, 'multi') : [];   // each in its own order, a hundred at most
+			let items = word ? this.dict.candidates(typed) : [];   // a hundred at most
 			if (word && this.chain.length) {
 				const joined = this.joined(word.toLowerCase(), current);   // the words typed to the end first, the others among the rest
-				const first = joined.filter(c => !c.rest);
-				items = first.concat(this.balance(items, joined.filter(c => c.rest).concat(words), first.length));
 				const seen = new Set();
-				items = items.filter(c => !seen.has(c.glyph) && seen.add(c.glyph));
-			} else items = this.balance(items, words, 0);
+				items = joined.filter(c => !c.rest).concat(joined.filter(c => c.rest).concat(items).sort(compare))
+					.filter(c => !seen.has(c.glyph) && seen.add(c.glyph));
+			}
 			if (candidateHook) items = candidateHook(items, word || '') || [];
 			this.hide();
 			this.items = items;
@@ -674,22 +692,6 @@
 				}
 			}
 			return list;
-		}
-
-		// Words of several syllables and single characters in one list, each in its own order: on every page of 10 at most
-		// `compoundsPerPage` words of several syllables, spread over it (places 2, 5, 8), the rest single characters; what one kind
-		// lacks, the other fills. So a writer finds both on the first page, however many words a letter has.
-		balance(single, multi, offset) {
-			const max = Math.min(10, this.options.compoundsPerPage);
-			single = single.slice(); multi = multi.slice();
-			if (!multi.length || !single.length) return single.concat(multi);
-			const places = new Set(Array.from({ length: Math.max(0, max) }, (_, k) => 1 + Math.floor(k * 10 / max)));
-			const out = [];
-			for (let i = 0; multi.length || single.length; i++) {
-				const wantMulti = places.has((offset + i) % 10);
-				out.push((wantMulti ? multi.length : !single.length) ? multi.shift() : single.shift());
-			}
-			return out;
 		}
 
 		// renders candidates until n are shown (renderItem may leave some out)
@@ -811,10 +813,12 @@
 		}
 
 		select(index) {
-			const item = this.shown[Math.min(index, this.shown.length - 1)]?.item, current = this.currentWord();
+			index = Math.min(index, this.shown.length - 1);
+			const item = this.shown[index]?.item, current = this.currentWord();
 			if (!item || !current) return;
+			const above = this.shown.slice(0, Math.min(index, 10)).map(s => s.item);   // the candidates it was chosen over
 			this.hide();
-			countUsage(item.glyph);
+			countUsage(item, above);
 			const from = item.from ?? current.start;
 			this.replace(from, current.end, item.glyph);
 			this.chain = this.chain.filter(c => c.to <= from);
