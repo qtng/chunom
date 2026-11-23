@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Help check the dictionaries | Chunom.org</title>
+  <meta name="description" content="Help check what the computer read in the scanned dictionaries of Chữ Nôm: one place at a time, correct or wrong.">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://qatt.org/css/site.css">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <script src="https://qatt.org/js/navigation.js"></script>
+  <script src="/chunom/js/review.js"></script>
+  <style>
+    :root { --ink: #2b2118; --accent: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
+    body { margin: 0; background: var(--paper); color: var(--ink); }
+    .hero { background: radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%), linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%);
+      border-bottom: 1px solid #e8dcc0; color: var(--ink); }
+    .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(1.8rem, 6vw, 2.6rem); }
+    .hero .han { color: var(--accent); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; }
+    .hero .lead { max-width: 36rem; color: #4a3d30; }
+    main { max-width: 44rem; margin: 0 auto; padding: 0 1rem 2rem; }
+    .card-box { margin: 0 0 1rem; padding: .9rem 1rem 1rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .14); }
+    .project { display: flex; align-items: center; gap: 1rem; }
+    .project .t { flex: 1; min-width: 0; }
+    .project h2 { font-size: 1.1rem; margin: 0 0 .15rem; }
+    .project small { color: var(--muted); }
+    .bar { height: .35rem; border-radius: 1rem; margin-top: .4rem; background: color-mix(in srgb, currentColor 10%, transparent); overflow: hidden; }
+    .bar i { display: block; height: 100%; background: #2b8a3e; }
+    .how { color: var(--muted); font-size: .92rem; }
+  </style>
+</head>
+<body>
+<header class="hero pt-4 pt-sm-5 pb-4 mb-3">
+  <div class="container text-center">
+    <div class="han mb-2">校字</div>
+    <h1 class="mb-3" data-vi="Giúp kiểm tra các từ điển">Help check the dictionaries</h1>
+    <p class="lead mx-auto mb-3" data-vi="Máy tính đã đọc các từ điển chữ Nôm được quét. Hãy xem từng chỗ một và cho biết máy đọc đúng hay sai.">A computer has read the scanned dictionaries of Chữ Nôm. Look at one place at a time and say whether it read it right.</p>
+    <button type="button" class="btn btn-cinnabar btn-pill" onclick="ChunomReview.open()"><i class="bi bi-play-fill me-1"></i><span data-vi="Bắt đầu">Start</span></button>
+  </div>
+</header>
+<main>
+  <div id="projects"><p class="how" data-vi="Đang tải…">Loading…</p></div>
+  <p class="how mt-3"><span data-vi="Mỗi câu trả lời đều được lưu ngay. Bạn có thể dừng lúc nào cũng được. Cần đăng nhập để câu trả lời được tính.">Every answer is saved at once; you can stop whenever you like. You need to sign in so that your answers can be counted.</span>
+    <span data-vi="Trên máy tính: phím ← sai, ↓ không biết, → đúng.">On a computer: the keys ← wrong, ↓ don't know, → correct.</span></p>
+</main>
+<script>
+  (async () => {
+    const box = document.getElementById('projects');
+    const T = (en, vi) => window.Lang ? Lang.t(en, vi) : en;
+    let list;
+    try { list = await ChunomReview.projects(); } catch (e) { box.textContent = T('The projects could not be loaded.', 'Không tải được các dự án.'); return; }
+    const draw = () => box.replaceChildren(...list.map(p => {
+      const pct = p.items ? Math.round(p.judged / p.items * 100) : 0;
+      const card = document.createElement('div');
+      card.className = 'card-box project';
+      card.innerHTML = `<div class="t"><h2></h2><small></small><div class="bar"><i style="width:${pct}%"></i></div></div>
+        <button type="button" class="btn btn-cinnabar btn-pill"></button>`;
+      card.querySelector('h2').textContent = T(p.title_en, p.title_vi);
+      card.querySelector('small').textContent = `${p.judged.toLocaleString()} / ${p.items.toLocaleString()} ${T('places checked', 'chỗ đã kiểm tra')} (${pct} %)`;
+      const b = card.querySelector('button');
+      b.textContent = T('Start', 'Bắt đầu');
+      b.addEventListener('click', () => ChunomReview.open({ project: p.id }));
+      return card;
+    }));
+    draw();
+    document.addEventListener('langchange', draw);
+  })();
+</script>
+</body>
+</html>
