@@ -51,7 +51,8 @@
     }
     .project .line .nw { white-space: nowrap; }   /* each number with its word: wrapped as a whole */
     .more { margin-top: .6rem; }
-    .more summary { cursor: pointer; font-size: .85rem; color: var(--muted); width: max-content; }
+    .more summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+    .more summary .sum { float: right; margin-left: 1rem; }   /* Details on the left, the numbers on the right */
     .tip { position: fixed; z-index: 1080; pointer-events: none; padding: .25rem .55rem; border-radius: .4rem; background: #2b2118; color: #fff; font-size: .8rem; white-space: nowrap;
       box-shadow: 0 .2rem .6rem rgba(0, 0, 0, .25); }
     .tip[hidden] { display: none; }
@@ -120,14 +121,16 @@
       const pct = n => !total || !n ? '0 %' : n / total < .001 ? '< 0.1 %' : `${(n / total * 100).toFixed(n / total < .01 ? 1 : 0)} %`;
       const open_ = open.has(p.id);
       const details = el('details', { className: 'more', open: open_ },
-        el('summary', { textContent: `${num(total)} ${T('places', 'chỗ')} · ${num(g.answers)} ${T('answers', 'câu trả lời')}` }),
+        el('summary', {},
+          el('span', { textContent: T('Details', 'Chi tiết') }),
+          el('span', { className: 'sum', textContent: `${num(total)} ${T('places', 'chỗ')} · ${num(g.answers)} ${T('answers', 'câu trả lời')}` })),
         el('div', { className: 'legend' }, ...STATES.map(([k, c, en, vi, den, dvi]) => legendItem(k === 'in_progress' ? 'progress' : k === 'open' ? 'open' : '', c, T(en, vi), g[k] || 0, total, T(den, dvi)))),
         el('h3', { textContent: T('Answers per place', 'Số câu trả lời mỗi chỗ') + ` (${T('decided from', 'quyết từ')} ${g.min_answers || 5})` }),
         el('div', { className: 'stack thin', role: 'img', ariaLabel: DEPTH.map((d, i) => `${d}: ${num(g.depth[i])}`).join(', ') },
           ...DEPTH.map((d, i) => g.depth[i] ? segment(i ? '' : 'open', depthColour(i), g.depth[i], total, `${d} ${T(i === 1 ? 'answer' : 'answers', 'câu trả lời')}`) : null)),
         el('div', { className: 'legend' }, ...DEPTH.map((d, i) => legendItem(i ? '' : 'open', depthColour(i), `${d} ${T(i === 1 ? 'answer' : 'answers', 'câu trả lời')}`, g.depth[i], total))));
       details.addEventListener('toggle', () => { if (details.open) open.add(p.id); else open.delete(p.id); });
-      // in view: the title, one short line, the bar and the button; the rest folded below the summary line
+      // in view: the title, one short line, the bar and the button; the rest folded in Details
       start.classList.add('go');
       return el('section', { className: 'card-box project' },
         el('div', { className: 'head' },
