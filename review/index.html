@@ -17,7 +17,6 @@
     .hero { background: radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%), linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%);
       border-bottom: 1px solid #e8dcc0; color: var(--ink); }
     .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(1.8rem, 6vw, 2.6rem); }
-    .hero .han { color: var(--accent); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; }
     .hero .lead { max-width: 36rem; color: #4a3d30; }
     main { max-width: 44rem; margin: 0 auto; padding: 0 1rem 2rem; }
     .card-box { margin: 0 0 1rem; padding: .9rem 1rem 1rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .14); }
@@ -39,7 +38,7 @@
     .legend .sw.progress { background: repeating-linear-gradient(135deg, color-mix(in srgb, currentColor 32%, transparent) 0 2px, color-mix(in srgb, currentColor 14%, transparent) 2px 4px); }
     .legend .l { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .legend .n { font-variant-numeric: tabular-nums; color: var(--muted); }
-    /* the card: the title with its line and the button side by side, the bar and Details below */
+    /* the card: the title with its line and the button side by side, the bar and the folded details below */
     .project { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "head go" "bar bar" "more more"; column-gap: 1rem; align-items: center; }
     .project .head { grid-area: head; margin-bottom: .6rem; }
     .project .go { grid-area: go; align-self: start; }
@@ -53,7 +52,6 @@
     .project .line .nw { white-space: nowrap; }   /* each number with its word: wrapped as a whole */
     .more { margin-top: .6rem; }
     .more summary { cursor: pointer; font-size: .85rem; color: var(--muted); width: max-content; }
-    .more .sum-line { font-size: .85rem; color: var(--muted); margin: .4rem 0 0; }
     .tip { position: fixed; z-index: 1080; pointer-events: none; padding: .25rem .55rem; border-radius: .4rem; background: #2b2118; color: #fff; font-size: .8rem; white-space: nowrap;
       box-shadow: 0 .2rem .6rem rgba(0, 0, 0, .25); }
     .tip[hidden] { display: none; }
@@ -63,7 +61,6 @@
 <body>
 <header class="hero pt-4 pt-sm-5 pb-4 mb-3">
   <div class="container text-center">
-    <div class="han mb-2">校字</div>
     <h1 class="mb-3" data-vi="Giúp kiểm tra các từ điển">Help check the dictionaries</h1>
     <p class="lead mx-auto mb-3" data-vi="Máy tính đã đọc các từ điển chữ Nôm được quét. Hãy xem từng chỗ một và cho biết máy đọc đúng hay sai.">A computer has read the scanned dictionaries of Chữ Nôm. Look at one place at a time and say whether it read it right.</p>
     <button type="button" class="btn btn-cinnabar btn-pill" onclick="ChunomReview.open()"><i class="bi bi-play-fill me-1"></i><span data-vi="Bắt đầu">Start</span></button>
@@ -112,7 +109,7 @@
     try { [list, progress] = await Promise.all([ChunomReview.projects(), ChunomReview.progress()]); }
     catch (e) { box.textContent = T('The projects could not be loaded.', 'Không tải được các dự án.'); return; }
     const byId = new Map(progress.map(x => [x.id, x]));
-    const open = new Set();   // the projects whose Details are open (kept when the language is switched)
+    const open = new Set();   // the projects whose details are open (kept when the language is switched)
     const draw = () => box.replaceChildren(...list.map(p => {
       const g = byId.get(p.id) || { items: p.items, open: p.items, depth: [p.items, 0, 0, 0, 0, 0], answers: 0, helpers: 0 };
       const total = g.items;
@@ -123,15 +120,14 @@
       const pct = n => !total || !n ? '0 %' : n / total < .001 ? '< 0.1 %' : `${(n / total * 100).toFixed(n / total < .01 ? 1 : 0)} %`;
       const open_ = open.has(p.id);
       const details = el('details', { className: 'more', open: open_ },
-        el('summary', { textContent: T('Details', 'Chi tiết') }),
-        el('p', { className: 'sum-line', textContent: `${num(total)} ${T('places', 'chỗ')} · ${num(g.answers)} ${T('answers', 'câu trả lời')}` }),
+        el('summary', { textContent: `${num(total)} ${T('places', 'chỗ')} · ${num(g.answers)} ${T('answers', 'câu trả lời')}` }),
         el('div', { className: 'legend' }, ...STATES.map(([k, c, en, vi, den, dvi]) => legendItem(k === 'in_progress' ? 'progress' : k === 'open' ? 'open' : '', c, T(en, vi), g[k] || 0, total, T(den, dvi)))),
         el('h3', { textContent: T('Answers per place', 'Số câu trả lời mỗi chỗ') + ` (${T('decided from', 'quyết từ')} ${g.min_answers || 5})` }),
         el('div', { className: 'stack thin', role: 'img', ariaLabel: DEPTH.map((d, i) => `${d}: ${num(g.depth[i])}`).join(', ') },
           ...DEPTH.map((d, i) => g.depth[i] ? segment(i ? '' : 'open', depthColour(i), g.depth[i], total, `${d} ${T(i === 1 ? 'answer' : 'answers', 'câu trả lời')}`) : null)),
         el('div', { className: 'legend' }, ...DEPTH.map((d, i) => legendItem(i ? '' : 'open', depthColour(i), `${d} ${T(i === 1 ? 'answer' : 'answers', 'câu trả lời')}`, g.depth[i], total))));
       details.addEventListener('toggle', () => { if (details.open) open.add(p.id); else open.delete(p.id); });
-      // in view: the title, one short line, the bar and the button; the rest folded in Details
+      // in view: the title, one short line, the bar and the button; the rest folded below the summary line
       start.classList.add('go');
       return el('section', { className: 'card-box project' },
         el('div', { className: 'head' },
