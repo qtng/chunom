@@ -31,7 +31,7 @@
     .stack i { display: block; height: 100%; min-width: 0; background: var(--c); cursor: default; }
     .stack i.open { background: transparent; }
     .stack i.progress { background: repeating-linear-gradient(135deg, color-mix(in srgb, currentColor 32%, transparent) 0 3px, color-mix(in srgb, currentColor 14%, transparent) 3px 7px); }
-    .legend { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: .15rem .9rem; margin-top: .45rem; font-size: .85rem; }
+    .legend { display: grid; grid-template-columns: 1fr; max-width: 24rem; gap: .15rem .9rem; margin-top: .45rem; font-size: .85rem; }
     .legend div { display: flex; align-items: center; gap: .4rem; min-width: 0; }
     .legend .sw { flex: none; width: .8rem; height: .8rem; border-radius: 3px; background: var(--c); }
     .legend .sw.open { background: color-mix(in srgb, currentColor 9%, transparent); }
@@ -39,7 +39,7 @@
     .legend .l { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .legend .n { font-variant-numeric: tabular-nums; color: var(--muted); }
     /* the card: the title with its line and the button side by side, the bar and the folded details below */
-    .project { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "head go" "bar bar" "sum sum" "more more"; column-gap: 1rem; align-items: center; }
+    .project { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "head go" "bar bar" "more more"; column-gap: 1rem; align-items: center; }
     .project .head { grid-area: head; margin-bottom: .6rem; }
     .project .go { grid-area: go; align-self: start; }
     .project > .stack { grid-area: bar; margin-top: .2rem; }
@@ -50,9 +50,9 @@
       .project .go .bi { display: none; }
     }
     .project .line .nw { white-space: nowrap; }   /* each number with its word: wrapped as a whole */
-    .more { margin-top: .3rem; }
+    .more { margin-top: .6rem; }
     .more summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
-    .project .sum-line { grid-area: sum; font-size: .85rem; color: var(--muted); margin: .45rem 0 0; }   /* the numbers, then Details below */
+    .more summary .sum { float: right; margin-left: 1rem; }   /* Details on the left, the numbers on the right */
     .tip { position: fixed; z-index: 1080; pointer-events: none; padding: .25rem .55rem; border-radius: .4rem; background: #2b2118; color: #fff; font-size: .8rem; white-space: nowrap;
       box-shadow: 0 .2rem .6rem rgba(0, 0, 0, .25); }
     .tip[hidden] { display: none; }
@@ -121,7 +121,9 @@
       const pct = n => !total || !n ? '0 %' : n / total < .001 ? '< 0.1 %' : `${(n / total * 100).toFixed(n / total < .01 ? 1 : 0)} %`;
       const open_ = open.has(p.id);
       const details = el('details', { className: 'more', open: open_ },
-        el('summary', { textContent: T('Details', 'Chi tiết') }),
+        el('summary', {},
+          el('span', { textContent: T('Details', 'Chi tiết') }),
+          el('span', { className: 'sum', textContent: `${num(total)} ${T('places', 'chỗ')} · ${num(g.answers)} ${T('answers', 'câu trả lời')}` })),
         el('div', { className: 'legend' }, ...STATES.map(([k, c, en, vi, den, dvi]) => legendItem(k === 'in_progress' ? 'progress' : k === 'open' ? 'open' : '', c, T(en, vi), g[k] || 0, total, T(den, dvi)))),
         el('h3', { textContent: T('Answers per place', 'Số câu trả lời mỗi chỗ') + ` (${T('decided from', 'quyết từ')} ${g.min_answers || 5})` }),
         el('div', { className: 'stack thin', role: 'img', ariaLabel: DEPTH.map((d, i) => `${d}: ${num(g.depth[i])}`).join(', ') },
@@ -138,7 +140,6 @@
         start,
         el('div', { className: 'stack', role: 'img', ariaLabel: shown.map(([k, , en, vi]) => `${T(en, vi)} ${num(g[k])}`).join(', ') },
           ...shown.map(([k, c, en, vi, den, dvi]) => segment(k === 'in_progress' ? 'progress' : k === 'open' ? 'open' : '', c, g[k], total, `${T(en, vi)} (${T(den, dvi)})`))),
-        el('p', { className: 'sum-line', textContent: `${num(total)} ${T('places', 'chỗ')} · ${num(g.answers)} ${T('answers', 'câu trả lời')}` }),
         details);
     }));
     draw();
