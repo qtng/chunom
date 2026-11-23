@@ -39,7 +39,16 @@
     .legend .sw.progress { background: repeating-linear-gradient(135deg, color-mix(in srgb, currentColor 32%, transparent) 0 2px, color-mix(in srgb, currentColor 14%, transparent) 2px 4px); }
     .legend .l { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .legend .n { font-variant-numeric: tabular-nums; color: var(--muted); }
-    .project .stack { margin-top: .2rem; }
+    /* the card: the title with its line and the button side by side, the bar and Details below; on a phone the button below the bar, across the card */
+    .project { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "head go" "bar bar" "more more"; column-gap: 1rem; align-items: center; }
+    .project .head { grid-area: head; margin-bottom: .6rem; }
+    .project .go { grid-area: go; align-self: start; }
+    .project > .stack { grid-area: bar; margin-top: .2rem; }
+    .project > .more { grid-area: more; }
+    @media (max-width: 575.98px) {
+      .project { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "bar" "go" "more"; }
+      .project .go { width: 100%; margin-top: .8rem; }
+    }
     .more { margin-top: .6rem; }
     .more summary { cursor: pointer; font-size: .85rem; color: var(--muted); width: max-content; }
     .more .sum-line { font-size: .85rem; color: var(--muted); margin: .4rem 0 0; }
@@ -121,11 +130,12 @@
         el('div', { className: 'legend' }, ...DEPTH.map((d, i) => legendItem(i ? '' : 'open', depthColour(i), `${d} ${T(i === 1 ? 'answer' : 'answers', 'câu trả lời')}`, g.depth[i], total))));
       details.addEventListener('toggle', () => { if (details.open) open.add(p.id); else open.delete(p.id); });
       // in view: the title, one short line, the bar and the button; the rest folded in Details
+      start.classList.add('go');
       return el('section', { className: 'card-box project' },
         el('div', { className: 'head' },
           el('div', { className: 't' }, el('h2', { textContent: T(p.title_en, p.title_vi) }),
-            el('small', { textContent: `${pct(decided)} ${T('decided', 'đã quyết')} · ${pct(answered)} ${T('answered', 'đã có câu trả lời')} · ${num(g.helpers)} ${T(g.helpers === 1 ? 'helper' : 'helpers', 'người giúp')}` })),
-          start),
+            el('small', { textContent: `${pct(decided)} ${T('decided', 'đã quyết')} · ${pct(answered)} ${T('answered', 'đã trả lời')} · ${num(g.helpers)} ${T(g.helpers === 1 ? 'helper' : 'helpers', 'người giúp')}` }))),
+        start,
         el('div', { className: 'stack', role: 'img', ariaLabel: shown.map(([k, , en, vi]) => `${T(en, vi)} ${num(g[k])}`).join(', ') },
           ...shown.map(([k, c, en, vi, den, dvi]) => segment(k === 'in_progress' ? 'progress' : k === 'open' ? 'open' : '', c, g[k], total, `${T(en, vi)} (${T(den, dvi)})`))),
         details);
