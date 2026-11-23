@@ -90,7 +90,7 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 .crv-fix .crv-row { display: flex; gap: .5rem; margin-top: .6rem; justify-content: flex-end }
 .crv-fix .crv-b { padding: .5rem 1.2rem }
 /* Skip: no answer, the next place (a normal secondary button below the three answers) */
-.crv-skipline { text-align: center; margin-top: .7rem }
+.crv-skipline { text-align: center; margin-top: 1.6rem }
 .crv-foot { display: flex; justify-content: space-between; align-items: center; gap: .5rem; margin-top: .9rem; font-size: .85rem }
 .crv-link { border: 0; background: none; color: inherit; opacity: .75; text-decoration: underline; cursor: pointer; padding: 0; font: inherit }
 .crv-link:hover { opacity: 1 }
@@ -331,7 +331,7 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 		finish.addEventListener('click', () => thanks());
 		const projects_ = el('button', { type: 'button', className: 'crv-link', textContent: T('Other projects', 'Dự án khác') });
 		projects_.addEventListener('click', () => overview());
-		const skip = el('button', { type: 'button', className: 'btn btn-secondary btn-sm px-4', textContent: T('Skip', 'Bỏ qua') });
+		const skip = el('button', { type: 'button', className: 'btn btn-secondary btn-sm px-5', textContent: T('Skip', 'Bỏ qua') });
 		skip.addEventListener('click', () => skipItem());
 		body.replaceChildren(question(p, d.claim), win, s.btns, el('div', { className: 'crv-skipline' }, skip), s.msg, el('div', { className: 'crv-foot' }, projects_, finish));
 		s.win = win;
