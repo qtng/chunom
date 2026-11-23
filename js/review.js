@@ -218,7 +218,11 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 		const win = el('div', { className: 'crv-win' });
 		const place = () => {
 			const width = win.clientWidth || Math.min(innerWidth - 32, 600);
-			const [x0, y0, x1, y1] = d.view, s = Math.min(2.4, width / (x1 - x0));
+			// with the box shown: only the box and a narrow margin (the headword must not be seen, only the character), enlarged up to a part of the screen height;
+			// with the box hidden: the view of the item (the headword and the box painted black)
+			const m = (d.box[2] - d.box[0]) * .18;
+			const [x0, y0, x1, y1] = showBox === false ? d.view : [d.box[0] - m, d.box[1] - m, d.box[2] + m, d.box[3] + m];
+			const s = showBox === false ? Math.min(2.4, width / (x1 - x0)) : Math.min(4, width / (x1 - x0), Math.min(320, innerHeight * .4) / (y1 - y0));
 			win.style.height = `${Math.round((y1 - y0) * s)}px`;
 			const left = (width - (x1 - x0) * s) / 2;
 			img.style.width = `${d.w * s}px`;
