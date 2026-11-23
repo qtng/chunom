@@ -21,12 +21,27 @@
     .hero .lead { max-width: 36rem; color: #4a3d30; }
     main { max-width: 44rem; margin: 0 auto; padding: 0 1rem 2rem; }
     .card-box { margin: 0 0 1rem; padding: .9rem 1rem 1rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .14); }
-    .project { display: flex; align-items: center; gap: 1rem; }
-    .project .t { flex: 1; min-width: 0; }
-    .project h2 { font-size: 1.1rem; margin: 0 0 .15rem; }
-    .project small { color: var(--muted); }
-    .bar { height: .35rem; border-radius: 1rem; margin-top: .4rem; background: color-mix(in srgb, currentColor 10%, transparent); overflow: hidden; }
-    .bar i { display: block; height: 100%; background: #2b8a3e; }
+    .project h2 { font-size: 1.15rem; margin: 0; }
+    .project .head { display: flex; align-items: center; gap: 1rem; margin-bottom: .6rem; }
+    .project .head .t { flex: 1; min-width: 0; }
+    .project .head small { color: var(--muted); }
+    .project h3 { font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: .7rem 0 .3rem; }
+    /* the state of every place: one stacked bar (the states exclude each other), 2px gaps between the parts */
+    .stack { display: flex; gap: 2px; height: 1rem; border-radius: 4px; overflow: hidden; background: color-mix(in srgb, currentColor 9%, transparent); }
+    .stack.thin { height: .6rem; }
+    .stack i { display: block; height: 100%; min-width: 0; background: var(--c); cursor: default; }
+    .stack i.open { background: transparent; }
+    .stack i.progress { background: repeating-linear-gradient(135deg, color-mix(in srgb, currentColor 32%, transparent) 0 3px, color-mix(in srgb, currentColor 14%, transparent) 3px 7px); }
+    .legend { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: .15rem .9rem; margin-top: .45rem; font-size: .85rem; }
+    .legend div { display: flex; align-items: center; gap: .4rem; min-width: 0; }
+    .legend .sw { flex: none; width: .8rem; height: .8rem; border-radius: 3px; background: var(--c); }
+    .legend .sw.open { background: color-mix(in srgb, currentColor 9%, transparent); }
+    .legend .sw.progress { background: repeating-linear-gradient(135deg, color-mix(in srgb, currentColor 32%, transparent) 0 2px, color-mix(in srgb, currentColor 14%, transparent) 2px 4px); }
+    .legend .l { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .legend .n { font-variant-numeric: tabular-nums; color: var(--muted); }
+    .tip { position: fixed; z-index: 1080; pointer-events: none; padding: .25rem .55rem; border-radius: .4rem; background: #2b2118; color: #fff; font-size: .8rem; white-space: nowrap;
+      box-shadow: 0 .2rem .6rem rgba(0, 0, 0, .25); }
+    .tip[hidden] { display: none; }
     .how { color: var(--muted); font-size: .92rem; }
   </style>
 </head>
@@ -43,24 +58,64 @@
   <div id="projects"><p class="how" data-vi="Đang tải…">Loading…</p></div>
   <p class="how mt-3"><span data-vi="Mỗi câu trả lời đều được lưu ngay. Bạn có thể dừng lúc nào cũng được. Cần đăng nhập để câu trả lời được tính.">Every answer is saved at once; you can stop whenever you like. You need to sign in so that your answers can be counted.</span></p>
 </main>
+<div class="tip" id="tip" hidden></div>
 <script>
   (async () => {
-    const box = document.getElementById('projects');
+    const box = document.getElementById('projects'), tip = document.getElementById('tip');
     const T = (en, vi) => window.Lang ? Lang.t(en, vi) : en;
-    let list;
-    try { list = await ChunomReview.projects(); } catch (e) { box.textContent = T('The projects could not be loaded.', 'Không tải được các dự án.'); return; }
+    const el = (tag, props = {}, ...kids) => { const n = Object.assign(document.createElement(tag), props); n.append(...kids.filter(k => k != null)); return n; };
+    const num = n => n.toLocaleString(document.documentElement.lang === 'vi' ? 'vi' : 'en');
+    // the states of a place, in the order of the bar (red and green apart; the colours of the answers of the popup, Bootstrap's where it has them)
+    const STATES = [
+      ['confirmed', 'var(--bs-success, #198754)', 'Confirmed', 'Đã xác nhận', 'decided: at least 75 % "correct"', 'đã quyết: ít nhất 75 % "đúng"'],
+      ['fixed', '#1c7ed6', 'Done (editor)', 'Đã biên tập', 'checked and corrected by the editor', 'biên tập viên đã kiểm tra và sửa'],
+      ['wrong', 'var(--bs-danger, #dc3545)', 'Wrong', 'Sai', 'decided: at least 75 % "wrong"', 'đã quyết: ít nhất 75 % "sai"'],
+      ['disputed', '#8f8679', 'Disputed', 'Còn tranh cãi', 'many answers without a clear majority', 'nhiều câu trả lời nhưng không có đa số rõ ràng'],
+      ['unreadable', '#e67700', 'Unreadable', 'Không đọc được', 'decided: at least 75 % "unreadable"', 'đã quyết: ít nhất 75 % "không đọc được"'],
+      ['in_progress', '', 'In progress', 'Đang kiểm tra', 'answered, not decided yet', 'đã có câu trả lời, chưa quyết'],
+      ['open', '', 'Open', 'Chưa kiểm tra', 'no answer yet', 'chưa có câu trả lời']];
+    // how many answers the places have: one hue, light to dark
+    const DEPTH = ['0', '1', '2', '3', '4', '5+'];
+    const depthColour = i => i === 0 ? '' : `color-mix(in srgb, #1c7ed6 ${20 + i * 16}%, transparent)`;
+
+    function show(e, text) { tip.textContent = text; tip.hidden = false; tip.style.left = `${Math.min(e.clientX + 12, innerWidth - tip.offsetWidth - 8)}px`; tip.style.top = `${e.clientY + 14}px`; }
+    function segment(cls, colour, n, total, text) {
+      const i = el('i', { className: cls });
+      if (colour) i.style.setProperty('--c', colour);
+      i.style.flex = `${n} 1 0`;
+      const t = `${text}: ${num(n)} (${total ? (n / total * 100).toFixed(n && n / total < .01 ? 2 : 1) : 0} %)`;
+      i.addEventListener('pointermove', e => show(e, t)); i.addEventListener('pointerleave', () => { tip.hidden = true; });
+      return i;
+    }
+    function legendItem(cls, colour, label, n, total, title) {
+      const sw = el('span', { className: `sw ${cls}` });
+      if (colour) sw.style.setProperty('--c', colour);
+      return el('div', { title }, sw, el('span', { className: 'l', textContent: label }), el('span', { className: 'n', textContent: `${num(n)}${total && n ? ` · ${(n / total * 100).toFixed(n / total < .01 ? 2 : 1)} %` : ''}` }));
+    }
+
+    let list, progress;
+    try { [list, progress] = await Promise.all([ChunomReview.projects(), ChunomReview.progress()]); }
+    catch (e) { box.textContent = T('The projects could not be loaded.', 'Không tải được các dự án.'); return; }
+    const byId = new Map(progress.map(x => [x.id, x]));
     const draw = () => box.replaceChildren(...list.map(p => {
-      const pct = p.items ? Math.round(p.judged / p.items * 100) : 0;
-      const card = document.createElement('div');
-      card.className = 'card-box project';
-      card.innerHTML = `<div class="t"><h2></h2><small></small><div class="bar"><i style="width:${pct}%"></i></div></div>
-        <button type="button" class="btn btn-cinnabar btn-pill"></button>`;
-      card.querySelector('h2').textContent = T(p.title_en, p.title_vi);
-      card.querySelector('small').textContent = `${p.judged.toLocaleString()} / ${p.items.toLocaleString()} ${T('places checked', 'chỗ đã kiểm tra')} (${pct} %)`;
-      const b = card.querySelector('button');
-      b.textContent = T('Start', 'Bắt đầu');
-      b.addEventListener('click', () => ChunomReview.open({ project: p.id }));
-      return card;
+      const g = byId.get(p.id) || { items: p.items, open: p.items, depth: [p.items, 0, 0, 0, 0, 0], answers: 0, helpers: 0 };
+      const total = g.items;
+      const start = el('button', { type: 'button', className: 'btn btn-cinnabar btn-pill', textContent: T('Start', 'Bắt đầu') });
+      start.addEventListener('click', () => ChunomReview.open({ project: p.id }));
+      const shown = STATES.filter(([k]) => g[k]);
+      return el('section', { className: 'card-box project' },
+        el('div', { className: 'head' },
+          el('div', { className: 't' }, el('h2', { textContent: T(p.title_en, p.title_vi) }),
+            el('small', { textContent: `${num(total)} ${T('places', 'chỗ')} · ${num(g.answers)} ${T('answers', 'câu trả lời')} · ${num(g.helpers)} ${T(g.helpers === 1 ? 'helper' : 'helpers', 'người giúp')}` })),
+          start),
+        el('h3', { textContent: T('State of the places', 'Tình trạng các chỗ') }),
+        el('div', { className: 'stack', role: 'img', ariaLabel: shown.map(([k, , en, vi]) => `${T(en, vi)} ${num(g[k])}`).join(', ') },
+          ...shown.map(([k, c, en, vi, den, dvi]) => segment(k === 'in_progress' ? 'progress' : k === 'open' ? 'open' : '', c, g[k], total, `${T(en, vi)} (${T(den, dvi)})`))),
+        el('div', { className: 'legend' }, ...STATES.map(([k, c, en, vi, den, dvi]) => legendItem(k === 'in_progress' ? 'progress' : k === 'open' ? 'open' : '', c, T(en, vi), g[k] || 0, total, T(den, dvi)))),
+        el('h3', { textContent: T('Answers per place', 'Số câu trả lời mỗi chỗ') + ` (${T('decided from', 'quyết từ')} ${g.min_answers || 5})` }),
+        el('div', { className: 'stack thin', role: 'img', ariaLabel: DEPTH.map((d, i) => `${d}: ${num(g.depth[i])}`).join(', ') },
+          ...DEPTH.map((d, i) => g.depth[i] ? segment(i ? '' : 'open', depthColour(i), g.depth[i], total, `${d} ${T(i === 1 ? 'answer' : 'answers', 'câu trả lời')}`) : null)),
+        el('div', { className: 'legend' }, ...DEPTH.map((d, i) => legendItem(i ? '' : 'open', depthColour(i), `${d} ${T(i === 1 ? 'answer' : 'answers', 'câu trả lời')}`, g.depth[i], total))));
     }));
     draw();
     document.addEventListener('langchange', draw);
