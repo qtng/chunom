@@ -64,6 +64,11 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 .crv-v:disabled { opacity: .5; cursor: default; transform: none }
 .crv-v .sign { font: 700 1.7rem/1 system-ui, sans-serif; color: var(--c) }
 .crv-v.wrong { --c: #e03131 } .crv-v.ok { --c: #2f9e44 } .crv-v.unsure { --c: #868e96 }
+/* wrong and correct in their full colour, white sign and word; don't know stays a quiet tile */
+.crv-v.wrong, .crv-v.ok { background: var(--c); border-color: var(--c); color: #fff; box-shadow: 0 .25rem .7rem color-mix(in srgb, var(--c) 35%, transparent) }
+.crv-v.wrong .sign, .crv-v.ok .sign { color: #fff }
+.crv-v.wrong:hover { background: #c92a2a; border-color: #c92a2a } .crv-v.ok:hover { background: #2b8a3e; border-color: #2b8a3e }
+.crv-v.wrong kbd, .crv-v.ok kbd { opacity: .75 }
 .crv-v kbd { position: absolute; top: .35rem; right: .5rem; font-weight: 400; font-size: .7rem; line-height: 1; opacity: .5; background: none; color: inherit; padding: 0 }
 @media not (hover: hover) { .crv-v kbd { display: none } }
 .crv-fix { margin-top: 1rem; padding: .8rem; border-radius: .7rem; background: color-mix(in srgb, #c92a2a 8%, transparent) }
