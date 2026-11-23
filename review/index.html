@@ -39,15 +39,16 @@
     .legend .sw.progress { background: repeating-linear-gradient(135deg, color-mix(in srgb, currentColor 32%, transparent) 0 2px, color-mix(in srgb, currentColor 14%, transparent) 2px 4px); }
     .legend .l { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .legend .n { font-variant-numeric: tabular-nums; color: var(--muted); }
-    /* the card: the title with its line and the button side by side, the bar and Details below; on a phone the button below the bar, across the card */
+    /* the card: the title with its line and the button side by side, the bar and Details below */
     .project { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "head go" "bar bar" "more more"; column-gap: 1rem; align-items: center; }
     .project .head { grid-area: head; margin-bottom: .6rem; }
     .project .go { grid-area: go; align-self: start; }
     .project > .stack { grid-area: bar; margin-top: .2rem; }
     .project > .more { grid-area: more; }
-    @media (max-width: 575.98px) {
-      .project { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "bar" "go" "more"; }
-      .project .go { width: 100%; margin-top: .8rem; }
+    @media (max-width: 575.98px) {   /* the button beside the text as on the desktop, smaller */
+      .project { column-gap: .6rem; }
+      .project .go { font-size: .9rem !important; padding: .35rem .9rem !important; }
+      .project .go .bi { display: none; }
     }
     .more { margin-top: .6rem; }
     .more summary { cursor: pointer; font-size: .85rem; color: var(--muted); width: max-content; }
