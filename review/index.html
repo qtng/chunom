@@ -113,7 +113,7 @@
       const open_ = open.has(p.id);
       const details = el('details', { className: 'more', open: open_ },
         el('summary', { textContent: T('Details', 'Chi tiết') }),
-        el('p', { className: 'sum-line', textContent: `${num(total)} ${T('places', 'chỗ')} · ${num(g.answers)} ${T('answers', 'câu trả lời')} · ${num(g.helpers)} ${T(g.helpers === 1 ? 'helper' : 'helpers', 'người giúp')}` }),
+        el('p', { className: 'sum-line', textContent: `${num(total)} ${T('places', 'chỗ')} · ${num(g.answers)} ${T('answers', 'câu trả lời')}` }),
         el('div', { className: 'legend' }, ...STATES.map(([k, c, en, vi, den, dvi]) => legendItem(k === 'in_progress' ? 'progress' : k === 'open' ? 'open' : '', c, T(en, vi), g[k] || 0, total, T(den, dvi)))),
         el('h3', { textContent: T('Answers per place', 'Số câu trả lời mỗi chỗ') + ` (${T('decided from', 'quyết từ')} ${g.min_answers || 5})` }),
         el('div', { className: 'stack thin', role: 'img', ariaLabel: DEPTH.map((d, i) => `${d}: ${num(g.depth[i])}`).join(', ') },
@@ -124,7 +124,7 @@
       return el('section', { className: 'card-box project' },
         el('div', { className: 'head' },
           el('div', { className: 't' }, el('h2', { textContent: T(p.title_en, p.title_vi) }),
-            el('small', { textContent: `${pct(decided)} ${T('decided', 'đã quyết')} · ${pct(answered)} ${T('answered', 'đã có câu trả lời')}` })),
+            el('small', { textContent: `${pct(decided)} ${T('decided', 'đã quyết')} · ${pct(answered)} ${T('answered', 'đã có câu trả lời')} · ${num(g.helpers)} ${T(g.helpers === 1 ? 'helper' : 'helpers', 'người giúp')}` })),
           start),
         el('div', { className: 'stack', role: 'img', ariaLabel: shown.map(([k, , en, vi]) => `${T(en, vi)} ${num(g[k])}`).join(', ') },
           ...shown.map(([k, c, en, vi, den, dvi]) => segment(k === 'in_progress' ? 'progress' : k === 'open' ? 'open' : '', c, g[k], total, `${T(en, vi)} (${T(den, dvi)})`))),
