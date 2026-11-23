@@ -1,5 +1,5 @@
 /*
-	ChunomReview – the popup in which signed-in users judge places of a review project: correct, wrong, unreadable (one place at a time); Skip goes on without an answer.
+	ChunomReview – the popup in which signed-in users judge places of a review project: correct, wrong, unreadable (one place at a time); Skip goes on without an answer. Bootstrap and Bootstrap Icons of the page are used (the icons are loaded when the page has none).
 
 	Usage (any page of the Chunom site or of qatt.org):
 		<script src="https://chunom.org/chunom/js/review.js"></script>          (on the Chunom site: /chunom/js/review.js)
@@ -67,7 +67,6 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 .crv-b.unsure, .crv-b.quiet { background: none; color: inherit; border-color: color-mix(in srgb, currentColor 30%, transparent) }
 .crv-b.unsure:hover, .crv-b.quiet:hover { background: color-mix(in srgb, currentColor 8%, transparent) }
 .crv-b.main { background: var(--accent, #a8362a) }
-.crv-b kbd { display: block; font-weight: 400; font-size: .7rem; line-height: 1; opacity: .7; margin-top: .25rem; background: none; color: inherit; padding: 0 }
 /* the three verdicts: tinted tiles in their colour, a large sign above the word */
 .crv-v { --c: #868e96; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .15rem; min-height: 5rem;
 	padding: .6rem .4rem; border-radius: 1rem; border: 2px solid color-mix(in srgb, var(--c) 45%, transparent); background: color-mix(in srgb, var(--c) 10%, transparent);
@@ -76,16 +75,13 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 .crv-v:active { transform: scale(.97) }
 .crv-v:focus-visible { outline: 3px solid color-mix(in srgb, var(--c) 50%, transparent); outline-offset: 2px }
 .crv-v:disabled { opacity: .5; cursor: default; transform: none }
-.crv-v .sign { font: 700 1.7rem/1 system-ui, sans-serif; color: var(--c) }
-.crv-v.wrong { --c: #e03131 } .crv-v.ok { --c: #2f9e44 } .crv-v.unsure { --c: #e67700 }
-.crv-v .sign svg { width: 1.7rem; height: 1.7rem; display: block }
+.crv-v .sign { font-size: 1.7rem; line-height: 1; color: var(--c) }
+/* the colours of Bootstrap (a theme that sets them changes the buttons too); unreadable in amber: white on the yellow of Bootstrap is hard to read */
+.crv-v.wrong { --c: var(--bs-danger, #dc3545) } .crv-v.ok { --c: var(--bs-success, #198754) } .crv-v.unsure { --c: #e67700 }
 /* wrong and correct in their full colour, white sign and word; unreadable in amber, an answer of its own */
 .crv-v.wrong, .crv-v.ok, .crv-v.unsure { background: var(--c); border-color: var(--c); color: #fff; box-shadow: 0 .25rem .7rem color-mix(in srgb, var(--c) 35%, transparent) }
 .crv-v.wrong .sign, .crv-v.ok .sign, .crv-v.unsure .sign { color: #fff }
-.crv-v.wrong:hover { background: #c92a2a; border-color: #c92a2a } .crv-v.ok:hover { background: #2b8a3e; border-color: #2b8a3e } .crv-v.unsure:hover { background: #d9480f; border-color: #d9480f }
-.crv-v.wrong kbd, .crv-v.ok kbd, .crv-v.unsure kbd { opacity: .75 }
-.crv-v kbd { position: absolute; top: .35rem; right: .5rem; font-weight: 400; font-size: .7rem; line-height: 1; opacity: .5; background: none; color: inherit; padding: 0 }
-@media not (hover: hover) { .crv-v kbd { display: none } }
+.crv-v.wrong:hover, .crv-v.ok:hover, .crv-v.unsure:hover { background: color-mix(in srgb, var(--c) 85%, #000); border-color: color-mix(in srgb, var(--c) 85%, #000) }
 .crv-fix { margin-top: 1rem; padding: .8rem; border-radius: .7rem; background: color-mix(in srgb, #c92a2a 8%, transparent) }
 .crv-fix label { display: block; font-size: .9rem; margin-bottom: .4rem }
 .crv-fix input { width: 100%; box-sizing: border-box; font-size: 1.4rem; padding: .35rem .6rem; border-radius: .5rem; border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
@@ -93,12 +89,8 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 .crv-fix input.cjk { font-family: var(--font-cjk, "Pen"), serif }
 .crv-fix .crv-row { display: flex; gap: .5rem; margin-top: .6rem; justify-content: flex-end }
 .crv-fix .crv-b { padding: .5rem 1.2rem }
-/* Skip: no answer, the next place (smaller, below the three answers) */
-.crv-skip { display: block; margin: .6rem auto 0; padding: .3rem 1.1rem; border: 1px solid color-mix(in srgb, currentColor 22%, transparent); border-radius: 2rem; background: none;
-	color: inherit; font-size: .88rem; opacity: .8; cursor: pointer }
-.crv-skip:hover { opacity: 1; background: color-mix(in srgb, currentColor 6%, transparent) }
-.crv-skip kbd { font-size: .7rem; opacity: .6; margin-left: .35rem; background: none; color: inherit; padding: 0 }
-@media not (hover: hover) { .crv-skip kbd { display: none } }
+/* Skip: no answer, the next place (a normal secondary button below the three answers) */
+.crv-skipline { text-align: center; margin-top: .7rem }
 .crv-foot { display: flex; justify-content: space-between; align-items: center; gap: .5rem; margin-top: .9rem; font-size: .85rem }
 .crv-link { border: 0; background: none; color: inherit; opacity: .75; text-decoration: underline; cursor: pointer; padding: 0; font: inherit }
 .crv-link:hover { opacity: 1 }
@@ -120,7 +112,6 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 	.crv-in { max-height: 100dvh; height: 100% }
 	.crv-body { padding: .8rem }
 	.crv-b { padding: .9rem .3rem }
-	.crv-b kbd { display: none }
 	.crv-v { min-height: 4.6rem }
 	.crv-claim { font-size: 1.9rem } .crv-claim.cjk { font-size: 2.6rem }
 }`;
@@ -158,6 +149,8 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 	function dialog() {
 		if (dlg) return dlg;
 		if (!document.getElementById('crv-style')) document.head.append(el('style', { id: 'crv-style', textContent: STYLE }));
+		if (![...document.styleSheets].some(x => /bootstrap-icons/.test(x.href || '')) && !document.querySelector('link[href*="bootstrap-icons"]'))
+			document.head.append(el('link', { rel: 'stylesheet', href: QATT + 'vendor/bootstrap-icons/bootstrap-icons.min.css' }));
 		// the sharpening of the scan (an unsharp mask: the image plus 0.7 times its difference from a blurred copy)
 		if (!document.getElementById('crv-sharp')) document.body.insertAdjacentHTML('beforeend', '<svg width="0" height="0" style="position:absolute" aria-hidden="true">' +
 			'<filter id="crv-sharp" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="2.5" result="b"/>' +
@@ -323,27 +316,24 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 			el('span', { className: `crv-claim${p.claim_kind === 'cjk' ? ' cjk' : ''}`, textContent: claim, lang: p.claim_kind === 'cjk' ? 'zh-Hant' : 'vi' }));
 	}
 
-	// the sign of "unreadable": an eye struck through
-	const EYE_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' +
-		'<path d="M2 12s3.6-7 10-7c2.1 0 3.9.7 5.4 1.7M22 12s-3.6 7-10 7c-2.1 0-3.9-.7-5.4-1.7"/><circle cx="12" cy="12" r="3"/><path d="M3 3l18 18"/></svg>';
 	const REVEAL = 500;   // ms between the question with its buttons and the scan
 	function card(loaded) {
 		const s = state, p = s.project, d = s.item.data, it = s.item;
 		const win = windowOf(d, p.show_box);
-		const b = (cls, sign, en, vi, key, v) => {
-			const btn = el('button', { type: 'button', className: `crv-v ${cls}` }, sign.startsWith('<') ? Object.assign(el('span', { className: 'sign', ariaHidden: 'true' }), { innerHTML: sign }) : el('span', { className: 'sign', textContent: sign, ariaHidden: 'true' }), el('span', { textContent: T(en, vi) }), el('kbd', { textContent: key }));
+		const b = (cls, icon, en, vi, v) => {
+			const btn = el('button', { type: 'button', className: `crv-v ${cls}` }, el('i', { className: `sign bi ${icon}`, ariaHidden: 'true' }), el('span', { textContent: T(en, vi) }));
 			btn.addEventListener('click', () => answer(v));
 			return btn;
 		};
-		s.btns = el('div', { className: 'crv-btns' }, b('wrong', '✕', 'Wrong', 'Sai', '←', -1), b('unsure', EYE_OFF, 'Unreadable', 'Không đọc được', '↓', 0), b('ok', '✓', 'Correct', 'Đúng', '→', 1));
+		s.btns = el('div', { className: 'crv-btns' }, b('wrong', 'bi-x-lg', 'Wrong', 'Sai', -1), b('unsure', 'bi-eye-slash', 'Unreadable', 'Không đọc được', 0), b('ok', 'bi-check-lg', 'Correct', 'Đúng', 1));
 		s.msg = msg();
 		const finish = el('button', { type: 'button', className: 'crv-link', textContent: T('Finish', 'Kết thúc') });
 		finish.addEventListener('click', () => thanks());
 		const projects_ = el('button', { type: 'button', className: 'crv-link', textContent: T('Other projects', 'Dự án khác') });
 		projects_.addEventListener('click', () => overview());
-		const skip = el('button', { type: 'button', className: 'crv-skip' }, T('Skip', 'Bỏ qua'), el('kbd', { textContent: 'S' }));
+		const skip = el('button', { type: 'button', className: 'btn btn-secondary btn-sm px-4', textContent: T('Skip', 'Bỏ qua') });
 		skip.addEventListener('click', () => skipItem());
-		body.replaceChildren(question(p, d.claim), win, s.btns, skip, s.msg, el('div', { className: 'crv-foot' }, projects_, finish));
+		body.replaceChildren(question(p, d.claim), win, s.btns, el('div', { className: 'crv-skipline' }, skip), s.msg, el('div', { className: 'crv-foot' }, projects_, finish));
 		s.win = win;
 		showProgress();
 		// the times of the answer: from the moment the scan is shown (negative: answered before it was there; null: the scan could not be loaded)
@@ -444,16 +434,6 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 		nextItem();
 	}
 
-	function onKey(e) {
-		const s = state;
-		if (!s || !s.item || s.fixing || s.busy || e.altKey || e.ctrlKey || e.metaKey || /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
-		if (e.key === 's' || e.key === 'S') { e.preventDefault(); skipItem(); return; }
-		const v = { ArrowLeft: -1, ArrowDown: 0, ArrowRight: 1 }[e.key];
-		if (v === undefined) return;
-		e.preventDefault();
-		answer(v);
-	}
-	document.addEventListener('keydown', e => { if (dlg && dlg.open) onKey(e); });
 	addEventListener('resize', () => { if (state && state.win && state.win.isConnected) state.win.place(); });
 
 	window.ChunomReview = { open, projects };
