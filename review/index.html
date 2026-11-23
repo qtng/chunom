@@ -52,7 +52,12 @@
     .project .line .nw { white-space: nowrap; }   /* each number with its word: wrapped as a whole */
     .more { margin-top: .6rem; }
     .more summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
-    .more summary .sum { float: right; margin-left: 1rem; }   /* Details on the left, the numbers on the right */
+    /* the numbers on the left, "▸ Details" on the right (the marker drawn before the word, not before the numbers) */
+    .more summary { display: flex; justify-content: space-between; gap: 1rem; list-style: none; }
+    .more summary::-webkit-details-marker { display: none; }
+    .more summary .lbl { white-space: nowrap; }
+    .more summary .lbl::before { content: ""; display: inline-block; margin-right: .4em; border-style: solid; border-width: .3em 0 .3em .5em; border-color: transparent transparent transparent currentColor; transition: transform .15s; }
+    .more[open] summary .lbl::before { transform: rotate(90deg); }
     .tip { position: fixed; z-index: 1080; pointer-events: none; padding: .25rem .55rem; border-radius: .4rem; background: #2b2118; color: #fff; font-size: .8rem; white-space: nowrap;
       box-shadow: 0 .2rem .6rem rgba(0, 0, 0, .25); }
     .tip[hidden] { display: none; }
@@ -122,8 +127,8 @@
       const open_ = open.has(p.id);
       const details = el('details', { className: 'more', open: open_ },
         el('summary', {},
-          el('span', { textContent: T('Details', 'Chi tiết') }),
-          el('span', { className: 'sum', textContent: `${num(total)} ${T('places', 'chỗ')} · ${num(g.answers)} ${T('answers', 'câu trả lời')}` })),
+          el('span', { className: 'sum', textContent: `${num(total)} ${T('places', 'chỗ')} · ${num(g.answers)} ${T('answers', 'câu trả lời')}` }),
+          el('span', { className: 'lbl', textContent: T('Details', 'Chi tiết') })),
         el('div', { className: 'legend' }, ...STATES.map(([k, c, en, vi, den, dvi]) => legendItem(k === 'in_progress' ? 'progress' : k === 'open' ? 'open' : '', c, T(en, vi), g[k] || 0, total, T(den, dvi)))),
         el('h3', { textContent: T('Answers per place', 'Số câu trả lời mỗi chỗ') + ` (${T('decided from', 'quyết từ')} ${g.min_answers || 5})` }),
         el('div', { className: 'stack thin', role: 'img', ariaLabel: DEPTH.map((d, i) => `${d}: ${num(g.depth[i])}`).join(', ') },
