@@ -39,6 +39,10 @@
     .legend .sw.progress { background: repeating-linear-gradient(135deg, color-mix(in srgb, currentColor 32%, transparent) 0 2px, color-mix(in srgb, currentColor 14%, transparent) 2px 4px); }
     .legend .l { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .legend .n { font-variant-numeric: tabular-nums; color: var(--muted); }
+    .project .stack { margin-top: .2rem; }
+    .more { margin-top: .6rem; }
+    .more summary { cursor: pointer; font-size: .85rem; color: var(--muted); width: max-content; }
+    .more .sum-line { font-size: .85rem; color: var(--muted); margin: .4rem 0 0; }
     .tip { position: fixed; z-index: 1080; pointer-events: none; padding: .25rem .55rem; border-radius: .4rem; background: #2b2118; color: #fff; font-size: .8rem; white-space: nowrap;
       box-shadow: 0 .2rem .6rem rgba(0, 0, 0, .25); }
     .tip[hidden] { display: none; }
@@ -97,25 +101,34 @@
     try { [list, progress] = await Promise.all([ChunomReview.projects(), ChunomReview.progress()]); }
     catch (e) { box.textContent = T('The projects could not be loaded.', 'Không tải được các dự án.'); return; }
     const byId = new Map(progress.map(x => [x.id, x]));
+    const open = new Set();   // the projects whose Details are open (kept when the language is switched)
     const draw = () => box.replaceChildren(...list.map(p => {
       const g = byId.get(p.id) || { items: p.items, open: p.items, depth: [p.items, 0, 0, 0, 0, 0], answers: 0, helpers: 0 };
       const total = g.items;
-      const start = el('button', { type: 'button', className: 'btn btn-cinnabar btn-pill', textContent: T('Start', 'Bắt đầu') });
+      const start = el('button', { type: 'button', className: 'btn btn-cinnabar btn-pill btn-lg px-4' }, el('i', { className: 'bi bi-play-fill me-1' }), T('Start', 'Bắt đầu'));
       start.addEventListener('click', () => ChunomReview.open({ project: p.id }));
       const shown = STATES.filter(([k]) => g[k]);
-      return el('section', { className: 'card-box project' },
-        el('div', { className: 'head' },
-          el('div', { className: 't' }, el('h2', { textContent: T(p.title_en, p.title_vi) }),
-            el('small', { textContent: `${num(total)} ${T('places', 'chỗ')} · ${num(g.answers)} ${T('answers', 'câu trả lời')} · ${num(g.helpers)} ${T(g.helpers === 1 ? 'helper' : 'helpers', 'người giúp')}` })),
-          start),
-        el('h3', { textContent: T('State of the places', 'Tình trạng các chỗ') }),
-        el('div', { className: 'stack', role: 'img', ariaLabel: shown.map(([k, , en, vi]) => `${T(en, vi)} ${num(g[k])}`).join(', ') },
-          ...shown.map(([k, c, en, vi, den, dvi]) => segment(k === 'in_progress' ? 'progress' : k === 'open' ? 'open' : '', c, g[k], total, `${T(en, vi)} (${T(den, dvi)})`))),
+      const decided = (g.confirmed || 0) + (g.wrong || 0) + (g.unreadable || 0) + (g.disputed || 0) + (g.fixed || 0), answered = total - (g.open || 0);
+      const pct = n => !total || !n ? '0 %' : n / total < .001 ? '< 0.1 %' : `${(n / total * 100).toFixed(n / total < .01 ? 1 : 0)} %`;
+      const open_ = open.has(p.id);
+      const details = el('details', { className: 'more', open: open_ },
+        el('summary', { textContent: T('Details', 'Chi tiết') }),
+        el('p', { className: 'sum-line', textContent: `${num(total)} ${T('places', 'chỗ')} · ${num(g.answers)} ${T('answers', 'câu trả lời')} · ${num(g.helpers)} ${T(g.helpers === 1 ? 'helper' : 'helpers', 'người giúp')}` }),
         el('div', { className: 'legend' }, ...STATES.map(([k, c, en, vi, den, dvi]) => legendItem(k === 'in_progress' ? 'progress' : k === 'open' ? 'open' : '', c, T(en, vi), g[k] || 0, total, T(den, dvi)))),
         el('h3', { textContent: T('Answers per place', 'Số câu trả lời mỗi chỗ') + ` (${T('decided from', 'quyết từ')} ${g.min_answers || 5})` }),
         el('div', { className: 'stack thin', role: 'img', ariaLabel: DEPTH.map((d, i) => `${d}: ${num(g.depth[i])}`).join(', ') },
           ...DEPTH.map((d, i) => g.depth[i] ? segment(i ? '' : 'open', depthColour(i), g.depth[i], total, `${d} ${T(i === 1 ? 'answer' : 'answers', 'câu trả lời')}`) : null)),
         el('div', { className: 'legend' }, ...DEPTH.map((d, i) => legendItem(i ? '' : 'open', depthColour(i), `${d} ${T(i === 1 ? 'answer' : 'answers', 'câu trả lời')}`, g.depth[i], total))));
+      details.addEventListener('toggle', () => { if (details.open) open.add(p.id); else open.delete(p.id); });
+      // in view: the title, one short line, the bar and the button; the rest folded in Details
+      return el('section', { className: 'card-box project' },
+        el('div', { className: 'head' },
+          el('div', { className: 't' }, el('h2', { textContent: T(p.title_en, p.title_vi) }),
+            el('small', { textContent: `${pct(decided)} ${T('decided', 'đã quyết')} · ${pct(answered)} ${T('answered', 'đã có câu trả lời')}` })),
+          start),
+        el('div', { className: 'stack', role: 'img', ariaLabel: shown.map(([k, , en, vi]) => `${T(en, vi)} ${num(g[k])}`).join(', ') },
+          ...shown.map(([k, c, en, vi, den, dvi]) => segment(k === 'in_progress' ? 'progress' : k === 'open' ? 'open' : '', c, g[k], total, `${T(en, vi)} (${T(den, dvi)})`))),
+        details);
     }));
     draw();
     document.addEventListener('langchange', draw);
