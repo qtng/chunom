@@ -1,5 +1,5 @@
 /*
-	ChunomReview – the popup in which signed-in users judge places of a review project: correct, wrong, don't know (one place at a time).
+	ChunomReview – the popup in which signed-in users judge places of a review project: correct, wrong, unreadable (one place at a time); Skip goes on without an answer.
 
 	Usage (any page of the Chunom site or of qatt.org):
 		<script src="https://chunom.org/chunom/js/review.js"></script>          (on the Chunom site: /chunom/js/review.js)
@@ -78,7 +78,7 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 .crv-v:disabled { opacity: .5; cursor: default; transform: none }
 .crv-v .sign { font: 700 1.7rem/1 system-ui, sans-serif; color: var(--c) }
 .crv-v.wrong { --c: #e03131 } .crv-v.ok { --c: #2f9e44 } .crv-v.unsure { --c: #868e96 }
-/* wrong and correct in their full colour, white sign and word; don't know stays a quiet tile */
+/* wrong and correct in their full colour, white sign and word; unreadable stays a quiet tile */
 .crv-v.wrong, .crv-v.ok { background: var(--c); border-color: var(--c); color: #fff; box-shadow: 0 .25rem .7rem color-mix(in srgb, var(--c) 35%, transparent) }
 .crv-v.wrong .sign, .crv-v.ok .sign { color: #fff }
 .crv-v.wrong:hover { background: #c92a2a; border-color: #c92a2a } .crv-v.ok:hover { background: #2b8a3e; border-color: #2b8a3e }
@@ -92,6 +92,12 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 .crv-fix input.cjk { font-family: var(--font-cjk, "Pen"), serif }
 .crv-fix .crv-row { display: flex; gap: .5rem; margin-top: .6rem; justify-content: flex-end }
 .crv-fix .crv-b { padding: .5rem 1.2rem }
+/* Skip: no answer, the next place (smaller, below the three answers) */
+.crv-skip { display: block; margin: .6rem auto 0; padding: .3rem 1.1rem; border: 1px solid color-mix(in srgb, currentColor 22%, transparent); border-radius: 2rem; background: none;
+	color: inherit; font-size: .88rem; opacity: .8; cursor: pointer }
+.crv-skip:hover { opacity: 1; background: color-mix(in srgb, currentColor 6%, transparent) }
+.crv-skip kbd { font-size: .7rem; opacity: .6; margin-left: .35rem; background: none; color: inherit; padding: 0 }
+@media not (hover: hover) { .crv-skip kbd { display: none } }
 .crv-foot { display: flex; justify-content: space-between; align-items: center; gap: .5rem; margin-top: .9rem; font-size: .85rem }
 .crv-link { border: 0; background: none; color: inherit; opacity: .75; text-decoration: underline; cursor: pointer; padding: 0; font: inherit }
 .crv-link:hover { opacity: 1 }
@@ -243,19 +249,23 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 	}
 
 	// the next item (fetched ahead while the current one is shown)
+	// the places skipped in this session (per project): not given again while the popup is open
+	const skipped = new Map();
+	const isSkipped = it => !!it && (skipped.get(state.project.id) || new Set()).has(it.item);
 	async function fetchItem(avoid) {
-		for (let i = 0; i < 3; i++) {
-			const it = await rpc('review_next', { p_project: state.project.id });
-			if (!it || it.item !== avoid) return it;
+		let it = null;
+		for (let i = 0; i < 6; i++) {
+			it = await rpc('review_next', { p_project: state.project.id });
+			if (!it || (it.item !== avoid && !isSkipped(it))) return it;
 		}
-		return null;
+		return it && it.item !== avoid ? it : null;   // only skipped places are left: one of them again
 	}
 	async function nextItem() {
 		const s = state;
 		if (s.batch && s.n >= s.batch) { thanks(); return; }
 		head(titleOf(s.project), progress());
 		let it = s.next; s.next = null;
-		if (!it || it.item === s.item?.item) {
+		if (!it || it.item === s.item?.item || isSkipped(it)) {
 			body.replaceChildren(el('p', { textContent: T('Loading…', 'Đang tải…') }));
 			try { it = await fetchItem(s.item?.item); } catch (e) { body.replaceChildren(msg(e.message)); return; }
 		}
@@ -321,13 +331,15 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 			btn.addEventListener('click', () => answer(v));
 			return btn;
 		};
-		s.btns = el('div', { className: 'crv-btns' }, b('wrong', '✕', 'Wrong', 'Sai', '←', -1), b('unsure', '?', "Don't know", 'Không biết', '↓', 0), b('ok', '✓', 'Correct', 'Đúng', '→', 1));
+		s.btns = el('div', { className: 'crv-btns' }, b('wrong', '✕', 'Wrong', 'Sai', '←', -1), b('unsure', '?', 'Unreadable', 'Không đọc được', '↓', 0), b('ok', '✓', 'Correct', 'Đúng', '→', 1));
 		s.msg = msg();
 		const finish = el('button', { type: 'button', className: 'crv-link', textContent: T('Finish', 'Kết thúc') });
 		finish.addEventListener('click', () => thanks());
 		const projects_ = el('button', { type: 'button', className: 'crv-link', textContent: T('Other projects', 'Dự án khác') });
 		projects_.addEventListener('click', () => overview());
-		body.replaceChildren(question(p, d.claim), win, s.btns, s.msg, el('div', { className: 'crv-foot' }, projects_, finish));
+		const skip = el('button', { type: 'button', className: 'crv-skip' }, T('Skip', 'Bỏ qua'), el('kbd', { textContent: 'S' }));
+		skip.addEventListener('click', () => skipItem());
+		body.replaceChildren(question(p, d.claim), win, s.btns, skip, s.msg, el('div', { className: 'crv-foot' }, projects_, finish));
 		s.win = win;
 		showProgress();
 		// the times of the answer: from the moment the scan is shown (negative: answered before it was there; null: the scan could not be loaded)
@@ -412,15 +424,26 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 			el('h3', { textContent: T('Thank you!', 'Cảm ơn bạn!') }),
 			el('p', { textContent: empty ? T('You have checked every place of this project.', 'Bạn đã kiểm tra mọi chỗ của dự án này.')
 				: s.n ? T('Your answers are saved. See you next time!', 'Câu trả lời của bạn đã được lưu. Hẹn gặp lại lần sau!') : T('See you next time!', 'Hẹn gặp lại lần sau!') }),
-			s.n ? el('div', { className: 'sum' }, n(s.n, 'this time', 'lần này'), n(s.ok, 'correct', 'đúng'), n(s.wrong, 'wrong', 'sai'), n(s.unsure, "don't know", 'không biết'),
+			s.n ? el('div', { className: 'sum' }, n(s.n, 'this time', 'lần này'), n(s.ok, 'correct', 'đúng'), n(s.wrong, 'wrong', 'sai'), n(s.unsure, 'unreadable', 'không đọc được'),
 				n(s.project.mine, 'in all', 'tổng cộng')) : null,
 			el('div', { className: 'crv-row' }, empty ? null : more, other, done)));
 		s.item = null; s.next = null;
 	}
 
+	// Skip: no answer; the place is not given again in this session
+	function skipItem() {
+		const s = state;
+		if (!s || !s.item || s.busy) return;
+		const id = s.project.id;
+		if (!skipped.has(id)) skipped.set(id, new Set());
+		skipped.get(id).add(s.item.item);
+		nextItem();
+	}
+
 	function onKey(e) {
 		const s = state;
 		if (!s || !s.item || s.fixing || s.busy || e.altKey || e.ctrlKey || e.metaKey || /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+		if (e.key === 's' || e.key === 'S') { e.preventDefault(); skipItem(); return; }
 		const v = { ArrowLeft: -1, ArrowDown: 0, ArrowRight: 1 }[e.key];
 		if (v === undefined) return;
 		e.preventDefault();
