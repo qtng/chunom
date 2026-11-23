@@ -30,28 +30,42 @@ dialog.crv { border: 0; padding: 0; width: min(40rem, 100vw); max-width: 100vw; 
 dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 .crv-in { display: flex; flex-direction: column; max-height: calc(100dvh - 2rem) }
 .crv-head { display: flex; align-items: center; gap: .6rem; padding: .7rem 1rem; border-bottom: 1px solid color-mix(in srgb, currentColor 14%, transparent) }
-.crv-head h2 { flex: 1; margin: 0; font: 600 1rem/1.3 inherit; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.crv-head h2 { flex: 1; margin: 0; font-weight: 600; font-size: 1rem; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
 .crv-count { font-size: .85rem; opacity: .7; white-space: nowrap }
 .crv-x { border: 0; background: none; color: inherit; font-size: 1.6rem; line-height: 1; padding: 0 .2rem; cursor: pointer; opacity: .7 }
 .crv-x:hover { opacity: 1 }
 .crv-body { padding: 1rem; overflow-y: auto }
-.crv-q { margin: 0 0 .7rem; font-size: 1.05rem; line-height: 1.4 }
-.crv-claim { font-weight: 700; color: var(--accent, #a8362a) }
-.crv-claim.cjk { font-family: var(--font-cjk, "Pen"), serif; font-weight: 400; font-size: 1.8em; vertical-align: -.15em }
-.crv-win { position: relative; overflow: hidden; background: #fff; border-radius: .5rem; box-shadow: 0 0 0 1px color-mix(in srgb, currentColor 15%, transparent) }
+.crv-q { margin: 0 0 .8rem; text-align: center }
+.crv-q p { margin: 0; font-size: 1rem; line-height: 1.4; opacity: .85 }
+/* the claim large, on a line of its own: easy to read, hard to misread */
+.crv-claim { display: block; margin-top: .15rem; font-weight: 600; font-size: 2.1rem; line-height: 1.2; letter-spacing: .01em; color: var(--accent, #a8362a) }
+.crv-claim.cjk { font-family: var(--font-cjk, "Pen"), serif; font-weight: 400; font-size: 3rem; line-height: 1.1 }
+.crv-win { position: relative; overflow: hidden; margin: 0 auto; max-width: 100%; background: #fff; border-radius: .5rem; box-shadow: 0 0 0 1px color-mix(in srgb, currentColor 15%, transparent) }
 .crv-win img { position: absolute; left: 0; top: 0; max-width: none; pointer-events: none; user-select: none; filter: url(#crv-sharp) contrast(1.35) brightness(1.05) }   /* clearer strokes: a little sharpened, more contrast */
 .crv-win .crv-frame { position: absolute; outline: 2px solid var(--accent, #a8362a); outline-offset: 3px; border-radius: 1px; pointer-events: none }
 .crv-win .crv-frame.mask { outline: 0; border-radius: .6rem; background: rgba(255, 255, 255, .35); -webkit-backdrop-filter: blur(var(--crv-blur)); backdrop-filter: blur(var(--crv-blur)) }   /* the character hidden under a soft blur (the box and a margin) */
 .crv-win .crv-wait { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #777; font-size: .9rem }
 .crv-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .5rem; margin-top: 1rem }
-.crv-b { border: 1px solid transparent; border-radius: 2rem; padding: .75rem .5rem; font: 600 1rem/1.2 inherit; cursor: pointer; color: #fff; touch-action: manipulation }
+.crv-b { border: 1px solid transparent; border-radius: 2rem; padding: .75rem .5rem; font-weight: 600; font-size: 1rem; line-height: 1.2; cursor: pointer; color: #fff; touch-action: manipulation }
 .crv-b:disabled { opacity: .5; cursor: default }
 .crv-b.wrong { background: #c92a2a } .crv-b.wrong:hover { background: #a61e1e }
 .crv-b.ok { background: #2b8a3e } .crv-b.ok:hover { background: #237032 }
 .crv-b.unsure, .crv-b.quiet { background: none; color: inherit; border-color: color-mix(in srgb, currentColor 30%, transparent) }
 .crv-b.unsure:hover, .crv-b.quiet:hover { background: color-mix(in srgb, currentColor 8%, transparent) }
 .crv-b.main { background: var(--accent, #a8362a) }
-.crv-b kbd { display: block; font: 400 .7rem/1 inherit; opacity: .7; margin-top: .25rem; background: none; color: inherit; padding: 0 }
+.crv-b kbd { display: block; font-weight: 400; font-size: .7rem; line-height: 1; opacity: .7; margin-top: .25rem; background: none; color: inherit; padding: 0 }
+/* the three verdicts: tinted tiles in their colour, a large sign above the word */
+.crv-v { --c: #868e96; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .15rem; min-height: 5rem;
+	padding: .6rem .4rem; border-radius: 1rem; border: 2px solid color-mix(in srgb, var(--c) 45%, transparent); background: color-mix(in srgb, var(--c) 10%, transparent);
+	color: inherit; font-weight: 600; font-size: .95rem; line-height: 1.2; cursor: pointer; touch-action: manipulation; transition: background .12s, border-color .12s, transform .08s }
+.crv-v:hover { background: color-mix(in srgb, var(--c) 18%, transparent); border-color: var(--c) }
+.crv-v:active { transform: scale(.97) }
+.crv-v:focus-visible { outline: 3px solid color-mix(in srgb, var(--c) 50%, transparent); outline-offset: 2px }
+.crv-v:disabled { opacity: .5; cursor: default; transform: none }
+.crv-v .sign { font: 700 1.7rem/1 system-ui, sans-serif; color: var(--c) }
+.crv-v.wrong { --c: #e03131 } .crv-v.ok { --c: #2f9e44 } .crv-v.unsure { --c: #868e96 }
+.crv-v kbd { position: absolute; top: .35rem; right: .5rem; font-weight: 400; font-size: .7rem; line-height: 1; opacity: .5; background: none; color: inherit; padding: 0 }
+@media not (hover: hover) { .crv-v kbd { display: none } }
 .crv-fix { margin-top: 1rem; padding: .8rem; border-radius: .7rem; background: color-mix(in srgb, #c92a2a 8%, transparent) }
 .crv-fix label { display: block; font-size: .9rem; margin-bottom: .4rem }
 .crv-fix input { width: 100%; box-sizing: border-box; font-size: 1.4rem; padding: .35rem .6rem; border-radius: .5rem; border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
@@ -81,6 +95,8 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 	.crv-body { padding: .8rem }
 	.crv-b { padding: .9rem .3rem }
 	.crv-b kbd { display: none }
+	.crv-v { min-height: 4.6rem }
+	.crv-claim { font-size: 1.9rem } .crv-claim.cjk { font-size: 2.6rem }
 }`;
 
 	const el = (tag, props = {}, ...kids) => { const n = Object.assign(document.createElement(tag), props); n.append(...kids.filter(k => k != null)); return n; };
@@ -221,14 +237,16 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 	function windowOf(d, showBox) {
 		const win = el('div', { className: 'crv-win' });
 		const place = () => {
-			const width = win.clientWidth || Math.min(innerWidth - 32, 600);
+			const width = (win.parentElement && win.parentElement.clientWidth) || Math.min(innerWidth - 32, 600);
 			// with the box shown: only the box and a narrow margin (the headword must not be seen, only the character), enlarged up to a part of the screen height;
 			// with the box hidden: the view of the item (the headword and the box painted black)
 			const m = (d.box[2] - d.box[0]) * .18;
 			const [x0, y0, x1, y1] = showBox === false ? d.view : [d.box[0] - m, d.box[1] - m, d.box[2] + m, d.box[3] + m];
 			const s = showBox === false ? Math.min(2.4, width / (x1 - x0)) : Math.min(4, width / (x1 - x0), Math.min(320, innerHeight * .4) / (y1 - y0));
+			// the window as wide as the part shown, centred (nothing beside it: with the box shown not even the headword)
 			win.style.height = `${Math.round((y1 - y0) * s)}px`;
-			const left = (width - (x1 - x0) * s) / 2;
+			win.style.width = `${Math.round((x1 - x0) * s)}px`;
+			const left = 0;
 			img.style.width = `${d.w * s}px`;
 			img.style.transform = `translate(${left - x0 * s}px, ${-y0 * s}px)`;
 			// the box hidden: grown by a quarter of its width on every side (a box is often a little off the character), blurred
@@ -249,18 +267,20 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 
 	function question(p, claim) {
 		const q = T(p.question_en, p.question_vi), [a, b] = q.split('{claim}');
-		return el('p', { className: 'crv-q' }, a, el('span', { className: `crv-claim${p.claim_kind === 'cjk' ? ' cjk' : ''}`, textContent: claim }), b ?? '');
+		// the sentence with "…" in the place of the claim, the claim itself large below it
+		return el('div', { className: 'crv-q' }, el('p', { textContent: a + '…' + (b ?? '') }),
+			el('span', { className: `crv-claim${p.claim_kind === 'cjk' ? ' cjk' : ''}`, textContent: claim, lang: p.claim_kind === 'cjk' ? 'zh-Hant' : 'vi' }));
 	}
 
 	function card() {
 		const s = state, p = s.project, d = s.item.data;
 		const win = windowOf(d, p.show_box);
-		const b = (cls, en, vi, key, v) => {
-			const btn = el('button', { type: 'button', className: `crv-b ${cls}` }, T(en, vi), el('kbd', { textContent: key }));
+		const b = (cls, sign, en, vi, key, v) => {
+			const btn = el('button', { type: 'button', className: `crv-v ${cls}` }, el('span', { className: 'sign', textContent: sign, ariaHidden: 'true' }), el('span', { textContent: T(en, vi) }), el('kbd', { textContent: key }));
 			btn.addEventListener('click', () => answer(v));
 			return btn;
 		};
-		s.btns = el('div', { className: 'crv-btns' }, b('wrong', 'Wrong', 'Sai', '←', -1), b('unsure', "Don't know", 'Không biết', '↓', 0), b('ok', 'Correct', 'Đúng', '→', 1));
+		s.btns = el('div', { className: 'crv-btns' }, b('wrong', '✕', 'Wrong', 'Sai', '←', -1), b('unsure', '?', "Don't know", 'Không biết', '↓', 0), b('ok', '✓', 'Correct', 'Đúng', '→', 1));
 		s.msg = msg();
 		const finish = el('button', { type: 'button', className: 'crv-link', textContent: T('Finish', 'Kết thúc') });
 		finish.addEventListener('click', () => thanks());
