@@ -8,6 +8,7 @@
 		                                        the thanks come (else until "Finish"). The popup closes after the thanks.
 		ChunomReview.open({ overview: true })   the list of the projects in the popup
 		await ChunomReview.projects()           the active projects (for a page that lists them): [{ id, title_en, title_vi, items, judged, mine, … }]
+	A project with show_box off paints the box of the place black (the character is hidden: a reading is judged by itself).
 
 	The data is in the Supabase project ChunomApp (review_projects, review_items, review_votes; the functions review_projects(), review_next(), review_vote();
 	private repository qtng/chunom-private). A project with corrections asks for the right value after "wrong"; without one nothing is stored.
@@ -40,6 +41,7 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 .crv-win { position: relative; overflow: hidden; background: #fff; border-radius: .5rem; box-shadow: 0 0 0 1px color-mix(in srgb, currentColor 15%, transparent) }
 .crv-win img { position: absolute; left: 0; top: 0; max-width: none; pointer-events: none; user-select: none }
 .crv-win .crv-frame { position: absolute; outline: 2px solid var(--accent, #a8362a); outline-offset: 3px; border-radius: 1px; pointer-events: none }
+.crv-win .crv-frame.mask { background: #000; outline: 4px solid #000; outline-offset: 0; border-radius: 2px }   /* the box painted over: the character is hidden */
 .crv-win .crv-wait { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #777; font-size: .9rem }
 .crv-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .5rem; margin-top: 1rem }
 .crv-b { border: 1px solid transparent; border-radius: 2rem; padding: .75rem .5rem; font: 600 1rem/1.2 inherit; cursor: pointer; color: #fff; touch-action: manipulation }
@@ -212,7 +214,7 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 	}
 	const progress = () => state.batch ? `${Math.min(state.n + 1, state.batch)} / ${state.batch}` : (state.n ? `${state.n} ✓` : '');
 
-	function windowOf(d) {
+	function windowOf(d, showBox) {
 		const win = el('div', { className: 'crv-win' });
 		const place = () => {
 			const width = win.clientWidth || Math.min(innerWidth - 32, 600);
@@ -223,7 +225,7 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 			img.style.transform = `translate(${left - x0 * s}px, ${-y0 * s}px)`;
 			Object.assign(frame.style, { left: `${left + (d.box[0] - x0) * s}px`, top: `${(d.box[1] - y0) * s}px`, width: `${(d.box[2] - d.box[0]) * s}px`, height: `${(d.box[3] - d.box[1]) * s}px` });
 		};
-		const img = el('img', { alt: '', draggable: false }), frame = el('div', { className: 'crv-frame' });
+		const img = el('img', { alt: '', draggable: false }), frame = el('div', { className: showBox === false ? 'crv-frame mask' : 'crv-frame' });
 		const wait = el('div', { className: 'crv-wait', textContent: T('Loading the scan…', 'Đang tải bản quét…') });
 		img.onload = () => wait.remove();
 		img.onerror = () => { wait.textContent = T('The scan could not be loaded.', 'Không tải được bản quét.'); };
@@ -241,7 +243,7 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 
 	function card() {
 		const s = state, p = s.project, d = s.item.data;
-		const win = windowOf(d);
+		const win = windowOf(d, p.show_box);
 		const b = (cls, en, vi, key, v) => {
 			const btn = el('button', { type: 'button', className: `crv-b ${cls}` }, T(en, vi), el('kbd', { textContent: key }));
 			btn.addEventListener('click', () => answer(v));
