@@ -8,6 +8,7 @@
 		                                        the thanks come (else until "Finish"). The popup closes after the thanks.
 		ChunomReview.open({ overview: true })   the list of the projects in the popup
 		await ChunomReview.projects()           the active projects (for a page that lists them): [{ id, title_en, title_vi, items, judged, mine, … }]
+		await ChunomReview.progress()           how far every project is: [{ id, items, fixed, confirmed, wrong, unreadable, disputed, in_progress, open, depth, answers, helpers }]
 	A project with show_box off hides the box of the place under a blur (the character is not seen: a reading is judged by itself).
 
 	The data is in the Supabase project ChunomApp (review_projects, review_items, review_votes; the functions review_projects(), review_next(), review_vote();
@@ -143,6 +144,7 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 		return data;
 	}
 	async function projects() { await connect(); return rpc('review_projects', {}); }
+	async function projectProgress() { await connect(); return rpc('review_progress', {}); }   // per project: items, fixed, confirmed, wrong, unreadable, disputed, in_progress, open, depth [0..4, 5+], answers, helpers
 
 	// ---------- the dialog ----------
 	let dlg = null, body = null, title = null, count = null, prog = null;
@@ -436,7 +438,7 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 
 	addEventListener('resize', () => { if (state && state.win && state.win.isConnected) state.win.place(); });
 
-	window.ChunomReview = { open, projects };
+	window.ChunomReview = { open, projects, progress: projectProgress };
 
 	// back from the sign-in (the page was reloaded): open again with the same options
 	let resume = null;
