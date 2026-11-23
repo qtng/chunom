@@ -30,6 +30,8 @@ const TURN_FLIP = { outTravel: 0.12, outTilt: 0, outMs: 140, inTravel: 0.12, inT
 const WIDE = '(min-width: 1200px)'; // sidebar instead of tabs; keep in sync with dict.css
 const isHan = ch => /[\p{Script=Han}\u{F0000}-\u{FFFFD}]/u.test(ch);
 const t = (en, vi) => window.Lang ? Lang.t(en, vi) : en;
+// the owner of the site (app_metadata.is_owner in the Supabase session of this browser, as navigation.js reads is_admin); only shows a link, the page behind it checks again
+const isOwner = () => { try { return (JSON.parse(localStorage.getItem('sb-kfgqhhmdzboszpwsqkxt-auth-token')) || {}).user?.app_metadata?.is_owner === true; } catch { return false; } };
 
 const store = {
 	get(key) { try { return localStorage.getItem(`dict:${key}`); } catch { return null; } },
@@ -124,6 +126,11 @@ export class DictionaryViewer {
 		ui.zoomLabel = el('span', { className: 'btn btn-quiet disabled dict-zoom-label' });
 		ui.night = el('button', { type: 'button', className: 'btn btn-quiet', title: 'Invert page colours (N)', ariaLabel: 'Invert page colours' }, el('i', { className: 'bi bi-moon-stars' }));
 		ui.tools = el('div', { className: 'btn-group dict-tools' }, ui.zoomOut, ui.zoomLabel, ui.zoomIn, ui.night);
+		// the owner (app_metadata.is_owner in the session of this browser): a link to the marking page of the admin area, on the page shown
+		if (c.glyphs && isOwner()) {
+			ui.markLink = el('a', { className: 'btn btn-quiet', title: 'Mark characters on this page (admin)', ariaLabel: 'Mark characters on this page (admin)' }, el('i', { className: 'bi bi-bounding-box-circles' }));
+			ui.tools.append(ui.markLink);
+		}
 		if (c.glyphs) {
 			ui.search.placeholder = 'Search a word or 字';
 			ui.search.dataset.viPlaceholder = 'Tìm từ hoặc 字';
@@ -560,6 +567,7 @@ export class DictionaryViewer {
 		const { ui, config: c } = this;
 
 		ui.number.value = page;
+		if (ui.markLink) ui.markLink.href = `https://qatt.org/admin/view.html?f=dict-index&p=admin/mark.html#${page}`;
 		ui.prev.disabled = ui.prev2.disabled = page <= this.min;
 		ui.next.disabled = ui.next2.disabled = page >= this.max;
 		document.title = `${c.short} · p. ${page} | Chunom.org`;
