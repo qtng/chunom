@@ -8,7 +8,7 @@
 		                                        the thanks come (else until "Finish"). The popup closes after the thanks.
 		ChunomReview.open({ overview: true })   the list of the projects in the popup
 		await ChunomReview.projects()           the active projects (for a page that lists them): [{ id, title_en, title_vi, items, judged, mine, … }]
-	A project with show_box off paints the box of the place black (the character is hidden: a reading is judged by itself).
+	A project with show_box off hides the box of the place under a blur (the character is not seen: a reading is judged by itself).
 
 	The data is in the Supabase project ChunomApp (review_projects, review_items, review_votes; the functions review_projects(), review_next(), review_vote();
 	private repository qtng/chunom-private). A project with corrections asks for the right value after "wrong"; without one nothing is stored.
@@ -39,9 +39,9 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 .crv-claim { font-weight: 700; color: var(--accent, #a8362a) }
 .crv-claim.cjk { font-family: var(--font-cjk, "Pen"), serif; font-weight: 400; font-size: 1.8em; vertical-align: -.15em }
 .crv-win { position: relative; overflow: hidden; background: #fff; border-radius: .5rem; box-shadow: 0 0 0 1px color-mix(in srgb, currentColor 15%, transparent) }
-.crv-win img { position: absolute; left: 0; top: 0; max-width: none; pointer-events: none; user-select: none }
+.crv-win img { position: absolute; left: 0; top: 0; max-width: none; pointer-events: none; user-select: none; filter: url(#crv-sharp) contrast(1.35) brightness(1.05) }   /* clearer strokes: a little sharpened, more contrast */
 .crv-win .crv-frame { position: absolute; outline: 2px solid var(--accent, #a8362a); outline-offset: 3px; border-radius: 1px; pointer-events: none }
-.crv-win .crv-frame.mask { background: #000; outline: 4px solid #000; outline-offset: 0; border-radius: 2px }   /* the box painted over: the character is hidden */
+.crv-win .crv-frame.mask { outline: 0; border-radius: .6rem; background: rgba(255, 255, 255, .35); -webkit-backdrop-filter: blur(var(--crv-blur)); backdrop-filter: blur(var(--crv-blur)) }   /* the character hidden under a soft blur (the box and a margin) */
 .crv-win .crv-wait { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #777; font-size: .9rem }
 .crv-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .5rem; margin-top: 1rem }
 .crv-b { border: 1px solid transparent; border-radius: 2rem; padding: .75rem .5rem; font: 600 1rem/1.2 inherit; cursor: pointer; color: #fff; touch-action: manipulation }
@@ -116,6 +116,10 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 	function dialog() {
 		if (dlg) return dlg;
 		if (!document.getElementById('crv-style')) document.head.append(el('style', { id: 'crv-style', textContent: STYLE }));
+		// the sharpening of the scan (an unsharp mask: the image plus 0.7 times its difference from a blurred copy)
+		if (!document.getElementById('crv-sharp')) document.body.insertAdjacentHTML('beforeend', '<svg width="0" height="0" style="position:absolute" aria-hidden="true">' +
+			'<filter id="crv-sharp" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="2.5" result="b"/>' +
+			'<feComposite in="SourceGraphic" in2="b" operator="arithmetic" k1="0" k2="1.7" k3="-0.7" k4="0"/></filter></svg>');
 		title = el('h2'); count = el('span', { className: 'crv-count' });
 		const x = el('button', { type: 'button', className: 'crv-x', textContent: '×', ariaLabel: T('Close', 'Đóng'), onclick: () => close() });
 		body = el('div', { className: 'crv-body' });
@@ -227,7 +231,10 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 			const left = (width - (x1 - x0) * s) / 2;
 			img.style.width = `${d.w * s}px`;
 			img.style.transform = `translate(${left - x0 * s}px, ${-y0 * s}px)`;
-			Object.assign(frame.style, { left: `${left + (d.box[0] - x0) * s}px`, top: `${(d.box[1] - y0) * s}px`, width: `${(d.box[2] - d.box[0]) * s}px`, height: `${(d.box[3] - d.box[1]) * s}px` });
+			// the box hidden: grown by a quarter of its width on every side (a box is often a little off the character), blurred
+			const g = showBox === false ? (d.box[2] - d.box[0]) * .25 : 0;
+			Object.assign(frame.style, { left: `${left + (d.box[0] - g - x0) * s}px`, top: `${(d.box[1] - g - y0) * s}px`, width: `${(d.box[2] - d.box[0] + 2 * g) * s}px`, height: `${(d.box[3] - d.box[1] + 2 * g) * s}px` });
+			frame.style.setProperty('--crv-blur', `${Math.round((d.box[2] - d.box[0]) * s * .18)}px`);
 		};
 		const img = el('img', { alt: '', draggable: false }), frame = el('div', { className: showBox === false ? 'crv-frame mask' : 'crv-frame' });
 		const wait = el('div', { className: 'crv-wait', textContent: T('Loading the scan…', 'Đang tải bản quét…') });
