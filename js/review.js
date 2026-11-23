@@ -28,7 +28,19 @@
 dialog.crv { border: 0; padding: 0; width: min(40rem, 100vw); max-width: 100vw; max-height: 100dvh; border-radius: 1rem; color: var(--ink, CanvasText);
 	background: var(--paper, Canvas); box-shadow: 0 1.2rem 3.5rem rgba(0, 0, 0, .35); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; overflow: hidden }
 dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
-.crv-in { display: flex; flex-direction: column; max-height: calc(100dvh - 2rem) }
+.crv-in { position: relative; display: flex; flex-direction: column; max-height: calc(100dvh - 2rem) }
+/* the progress of a batch, below the head */
+.crv-prog { height: .3rem; background: color-mix(in srgb, currentColor 10%, transparent) }
+.crv-prog[hidden] { display: none }
+.crv-prog i { display: block; height: 100%; width: 0; background: #2f9e44; transition: width .35s ease }
+/* the counter jumps at every answer; a "+1" flies up from the button that was pressed */
+.crv-count.bump { animation: crv-bump .45s ease }
+@keyframes crv-bump { 0% { transform: scale(1) } 35% { transform: scale(1.45); color: #2f9e44 } 100% { transform: scale(1) } }
+.crv-plus { position: absolute; z-index: 5; pointer-events: none; font-weight: 800; font-size: 1.3rem; line-height: 1; padding: .3rem .7rem; border-radius: 2rem;
+	color: #fff; background: var(--c, #2f9e44); box-shadow: 0 .3rem .8rem rgba(0, 0, 0, .25);
+	transform: translate(-50%, -50%); animation: crv-fly .8s ease-out forwards }
+@keyframes crv-fly { 0% { opacity: 0; transform: translate(-50%, -30%) scale(.7) } 20% { opacity: 1; transform: translate(-50%, -60%) scale(1.15) } 100% { opacity: 0; transform: translate(-50%, -260%) scale(1) } }
+@media (prefers-reduced-motion: reduce) { .crv-plus, .crv-count.bump { animation-duration: .01s } }
 .crv-head { display: flex; align-items: center; gap: .6rem; padding: .7rem 1rem; border-bottom: 1px solid color-mix(in srgb, currentColor 14%, transparent) }
 .crv-head h2 { flex: 1; margin: 0; font-weight: 600; font-size: 1rem; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
 .crv-count { font-size: .85rem; opacity: .7; white-space: nowrap }
@@ -41,6 +53,8 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 .crv-claim { display: block; margin-top: .15rem; font-weight: 600; font-size: 2.1rem; line-height: 1.2; letter-spacing: .01em; color: var(--accent, #a8362a) }
 .crv-claim.cjk { font-family: var(--font-cjk, "Pen"), serif; font-weight: 400; font-size: 3rem; line-height: 1.1 }
 .crv-win { position: relative; overflow: hidden; margin: 0 auto; max-width: 100%; background: #fff; border-radius: .5rem; box-shadow: 0 0 0 1px color-mix(in srgb, currentColor 15%, transparent) }
+.crv-win img, .crv-win .crv-frame { transition: opacity .15s }
+.crv-win.veil img, .crv-win.veil .crv-frame { opacity: 0 }   /* the scan is shown half a second after the question and the buttons */
 .crv-win img { position: absolute; left: 0; top: 0; max-width: none; pointer-events: none; user-select: none; filter: url(#crv-sharp) contrast(1.35) brightness(1.05) }   /* clearer strokes: a little sharpened, more contrast */
 .crv-win .crv-frame { position: absolute; outline: 2px solid var(--accent, #a8362a); outline-offset: 3px; border-radius: 1px; pointer-events: none }
 .crv-win .crv-frame.mask { outline: 0; border-radius: .6rem; background: rgba(255, 255, 255, .35); -webkit-backdrop-filter: blur(var(--crv-blur)); backdrop-filter: blur(var(--crv-blur)) }   /* the character hidden under a soft blur (the box and a margin) */
@@ -133,7 +147,7 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 	async function projects() { await connect(); return rpc('review_projects', {}); }
 
 	// ---------- the dialog ----------
-	let dlg = null, body = null, title = null, count = null;
+	let dlg = null, body = null, title = null, count = null, prog = null;
 	function dialog() {
 		if (dlg) return dlg;
 		if (!document.getElementById('crv-style')) document.head.append(el('style', { id: 'crv-style', textContent: STYLE }));
@@ -144,13 +158,19 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 		title = el('h2'); count = el('span', { className: 'crv-count' });
 		const x = el('button', { type: 'button', className: 'crv-x', textContent: '×', ariaLabel: T('Close', 'Đóng'), onclick: () => close() });
 		body = el('div', { className: 'crv-body' });
-		dlg = el('dialog', { className: 'crv' }, el('div', { className: 'crv-in' }, el('div', { className: 'crv-head' }, title, count, x), body));
+		prog = el('div', { className: 'crv-prog', hidden: true }, el('i'));
+		dlg = el('dialog', { className: 'crv' }, el('div', { className: 'crv-in' }, el('div', { className: 'crv-head' }, title, count, x), prog, body));
 		dlg.addEventListener('cancel', e => { e.preventDefault(); close(); });
 		document.body.append(dlg);
 		return dlg;
 	}
 	function close() { if (dlg && dlg.open) dlg.close(); state = null; }
-	const head = (t, c = '') => { title.textContent = t; count.textContent = c; };
+	const head = (t, c = '') => { title.textContent = t; count.textContent = c; if (!state || !state.batch || !state.item) prog.hidden = true; };
+	function showProgress() {
+		const s = state;
+		prog.hidden = !s.batch;
+		if (s.batch) prog.firstChild.style.width = `${Math.min(100, s.n / s.batch * 100)}%`;
+	}
 	const msg = text => el('div', { className: 'crv-msg', role: 'status', textContent: text || '' });
 
 	// ---------- a session ----------
@@ -214,6 +234,14 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 		nextItem();
 	}
 
+	// the page images, loaded in the background (one promise per address: true when loaded, false when it failed)
+	const images = new Map();
+	function preload(src) {
+		if (!images.has(src)) images.set(src, new Promise(ok => { const i = new Image(); i.onload = () => (i.decode ? i.decode().catch(() => {}) : Promise.resolve()).then(() => ok(true)); i.onerror = () => ok(false); i.src = src; }));
+		if (images.size > 40) images.delete(images.keys().next().value);
+		return images.get(src);
+	}
+
 	// the next item (fetched ahead while the current one is shown)
 	async function fetchItem(avoid) {
 		for (let i = 0; i < 3; i++) {
@@ -233,11 +261,16 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 		}
 		if (state !== s) return;
 		if (!it) { thanks(true); return; }
+		// the question and the buttons only once the scan is loaded (so that the scan can follow them at a fixed time)
+		const slow = setTimeout(() => { if (state === s) body.replaceChildren(el('p', { textContent: T('Loading the scan…', 'Đang tải bản quét…') })); }, 250);
+		const loaded = await preload(it.data.image);
+		clearTimeout(slow);
+		if (state !== s) return;
 		s.item = it; s.fixing = false;
-		card();
-		fetchItem(it.item).then(n => { if (state === s && s.item === it) { s.next = n; if (n) new Image().src = n.data.image; } }).catch(() => {});
+		card(loaded);
+		fetchItem(it.item).then(n => { if (state === s && s.item === it) { s.next = n; if (n) preload(n.data.image); } }).catch(() => {});
 	}
-	const progress = () => state.batch ? `${Math.min(state.n + 1, state.batch)} / ${state.batch}` : (state.n ? `${state.n} ✓` : '');
+	const progress = () => state.batch ? `${state.n} / ${state.batch}` : (state.n ? String(state.n) : '');
 
 	function windowOf(d, showBox) {
 		const win = el('div', { className: 'crv-win' });
@@ -264,6 +297,8 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 		img.onload = () => wait.remove();
 		img.onerror = () => { wait.textContent = T('The scan could not be loaded.', 'Không tải được bản quét.'); };
 		img.src = d.image;
+		win.classList.add('veil');
+		win.reveal = () => win.classList.remove('veil');
 		win.append(img, frame, wait);
 		requestAnimationFrame(place);
 		win.place = place;
@@ -277,8 +312,9 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 			el('span', { className: `crv-claim${p.claim_kind === 'cjk' ? ' cjk' : ''}`, textContent: claim, lang: p.claim_kind === 'cjk' ? 'zh-Hant' : 'vi' }));
 	}
 
-	function card() {
-		const s = state, p = s.project, d = s.item.data;
+	const REVEAL = 500;   // ms between the question with its buttons and the scan
+	function card(loaded) {
+		const s = state, p = s.project, d = s.item.data, it = s.item;
 		const win = windowOf(d, p.show_box);
 		const b = (cls, sign, en, vi, key, v) => {
 			const btn = el('button', { type: 'button', className: `crv-v ${cls}` }, el('span', { className: 'sign', textContent: sign, ariaHidden: 'true' }), el('span', { textContent: T(en, vi) }), el('kbd', { textContent: key }));
@@ -293,16 +329,24 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 		projects_.addEventListener('click', () => overview());
 		body.replaceChildren(question(p, d.claim), win, s.btns, s.msg, el('div', { className: 'crv-foot' }, projects_, finish));
 		s.win = win;
+		showProgress();
+		// the times of the answer: from the moment the scan is shown (negative: answered before it was there; null: the scan could not be loaded)
+		s.cardAt = performance.now(); s.shownAt = null; s.clickAt = null;
+		setTimeout(() => { if (state === s && s.item === it) { win.reveal(); if (loaded) s.shownAt = performance.now(); } }, REVEAL);
 	}
 
 	async function answer(v, correction) {
 		const s = state;
 		if (!s || s.busy || !s.item) return;
+		if (correction == null) s.clickAt = performance.now();   // a correction keeps the time of its click on "wrong"
 		if (v === -1 && s.project.correction && correction == null) { askFix(); return; }
+		const at = s.clickAt ?? performance.now();
+		const ms = s.shownAt != null && at >= s.shownAt ? Math.round(at - s.shownAt) : s.shownAt == null && s.item && at - s.cardAt < REVEAL ? -Math.max(1, Math.round(REVEAL - (at - s.cardAt))) : null;
 		s.busy = true;
+		fly(v);
 		s.btns.querySelectorAll('button').forEach(b => b.disabled = true);
 		try {
-			const r = await rpc('review_vote', { p_project: s.project.id, p_item: s.item.item, p_verdict: v, p_correction: correction ?? null });
+			const r = await rpc('review_vote', { p_project: s.project.id, p_item: s.item.item, p_verdict: v, p_correction: correction ?? null, p_ms: ms });
 			s.project.mine = r.mine;
 		} catch (e) {
 			s.busy = false;
@@ -312,7 +356,21 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 		}
 		s.busy = false;
 		s.n++; s[v === 1 ? 'ok' : v === -1 ? 'wrong' : 'unsure']++;
+		count.textContent = progress(); count.classList.remove('bump'); void count.offsetWidth; count.classList.add('bump');
+		showProgress();
 		nextItem();
+	}
+
+	// a "+1" that flies up from the button of the answer (in its colour)
+	function fly(v) {
+		const s = state, btn = s && s.btns && s.btns.querySelector(v === 1 ? '.ok' : v === -1 ? '.wrong' : '.unsure');
+		if (!btn || !dlg || !btn.offsetParent) return;   // hidden while a correction is typed
+		const box = dlg.firstChild.getBoundingClientRect(), r = btn.getBoundingClientRect();
+		const plus = el('span', { className: 'crv-plus', textContent: '+1', ariaHidden: 'true' });
+		plus.style.left = `${r.left + r.width / 2 - box.left}px`; plus.style.top = `${r.top - box.top}px`;   // from the top edge of the button
+		plus.style.setProperty('--c', v === 1 ? '#2f9e44' : v === -1 ? '#e03131' : '#868e96');
+		dlg.firstChild.append(plus);
+		setTimeout(() => plus.remove(), 900);
 	}
 
 	// "wrong" in a project with corrections: the right value; nothing is stored without it
