@@ -77,12 +77,13 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 .crv-v:focus-visible { outline: 3px solid color-mix(in srgb, var(--c) 50%, transparent); outline-offset: 2px }
 .crv-v:disabled { opacity: .5; cursor: default; transform: none }
 .crv-v .sign { font: 700 1.7rem/1 system-ui, sans-serif; color: var(--c) }
-.crv-v.wrong { --c: #e03131 } .crv-v.ok { --c: #2f9e44 } .crv-v.unsure { --c: #868e96 }
-/* wrong and correct in their full colour, white sign and word; unreadable stays a quiet tile */
-.crv-v.wrong, .crv-v.ok { background: var(--c); border-color: var(--c); color: #fff; box-shadow: 0 .25rem .7rem color-mix(in srgb, var(--c) 35%, transparent) }
-.crv-v.wrong .sign, .crv-v.ok .sign { color: #fff }
-.crv-v.wrong:hover { background: #c92a2a; border-color: #c92a2a } .crv-v.ok:hover { background: #2b8a3e; border-color: #2b8a3e }
-.crv-v.wrong kbd, .crv-v.ok kbd { opacity: .75 }
+.crv-v.wrong { --c: #e03131 } .crv-v.ok { --c: #2f9e44 } .crv-v.unsure { --c: #e67700 }
+.crv-v .sign svg { width: 1.7rem; height: 1.7rem; display: block }
+/* wrong and correct in their full colour, white sign and word; unreadable in amber, an answer of its own */
+.crv-v.wrong, .crv-v.ok, .crv-v.unsure { background: var(--c); border-color: var(--c); color: #fff; box-shadow: 0 .25rem .7rem color-mix(in srgb, var(--c) 35%, transparent) }
+.crv-v.wrong .sign, .crv-v.ok .sign, .crv-v.unsure .sign { color: #fff }
+.crv-v.wrong:hover { background: #c92a2a; border-color: #c92a2a } .crv-v.ok:hover { background: #2b8a3e; border-color: #2b8a3e } .crv-v.unsure:hover { background: #d9480f; border-color: #d9480f }
+.crv-v.wrong kbd, .crv-v.ok kbd, .crv-v.unsure kbd { opacity: .75 }
 .crv-v kbd { position: absolute; top: .35rem; right: .5rem; font-weight: 400; font-size: .7rem; line-height: 1; opacity: .5; background: none; color: inherit; padding: 0 }
 @media not (hover: hover) { .crv-v kbd { display: none } }
 .crv-fix { margin-top: 1rem; padding: .8rem; border-radius: .7rem; background: color-mix(in srgb, #c92a2a 8%, transparent) }
@@ -322,16 +323,19 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 			el('span', { className: `crv-claim${p.claim_kind === 'cjk' ? ' cjk' : ''}`, textContent: claim, lang: p.claim_kind === 'cjk' ? 'zh-Hant' : 'vi' }));
 	}
 
+	// the sign of "unreadable": an eye struck through
+	const EYE_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' +
+		'<path d="M2 12s3.6-7 10-7c2.1 0 3.9.7 5.4 1.7M22 12s-3.6 7-10 7c-2.1 0-3.9-.7-5.4-1.7"/><circle cx="12" cy="12" r="3"/><path d="M3 3l18 18"/></svg>';
 	const REVEAL = 500;   // ms between the question with its buttons and the scan
 	function card(loaded) {
 		const s = state, p = s.project, d = s.item.data, it = s.item;
 		const win = windowOf(d, p.show_box);
 		const b = (cls, sign, en, vi, key, v) => {
-			const btn = el('button', { type: 'button', className: `crv-v ${cls}` }, el('span', { className: 'sign', textContent: sign, ariaHidden: 'true' }), el('span', { textContent: T(en, vi) }), el('kbd', { textContent: key }));
+			const btn = el('button', { type: 'button', className: `crv-v ${cls}` }, sign.startsWith('<') ? Object.assign(el('span', { className: 'sign', ariaHidden: 'true' }), { innerHTML: sign }) : el('span', { className: 'sign', textContent: sign, ariaHidden: 'true' }), el('span', { textContent: T(en, vi) }), el('kbd', { textContent: key }));
 			btn.addEventListener('click', () => answer(v));
 			return btn;
 		};
-		s.btns = el('div', { className: 'crv-btns' }, b('wrong', '✕', 'Wrong', 'Sai', '←', -1), b('unsure', '?', 'Unreadable', 'Không đọc được', '↓', 0), b('ok', '✓', 'Correct', 'Đúng', '→', 1));
+		s.btns = el('div', { className: 'crv-btns' }, b('wrong', '✕', 'Wrong', 'Sai', '←', -1), b('unsure', EYE_OFF, 'Unreadable', 'Không đọc được', '↓', 0), b('ok', '✓', 'Correct', 'Đúng', '→', 1));
 		s.msg = msg();
 		const finish = el('button', { type: 'button', className: 'crv-link', textContent: T('Finish', 'Kết thúc') });
 		finish.addEventListener('click', () => thanks());
