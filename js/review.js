@@ -334,7 +334,7 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 		const finish = el('button', { type: 'button', className: 'crv-link', textContent: T('Finish', 'Kết thúc') });
 		finish.addEventListener('click', () => thanks());
 		const projects_ = el('button', { type: 'button', className: 'crv-link', textContent: T('Other projects', 'Dự án khác') });
-		projects_.addEventListener('click', () => overview());
+		projects_.addEventListener('click', toProjects);
 		const skip = el('button', { type: 'button', className: 'btn btn-secondary btn-sm px-5', textContent: T('Skip', 'Bỏ qua') });
 		skip.addEventListener('click', () => skipItem());
 		body.replaceChildren(question(p, d.claim), win, s.btns, el('div', { className: 'crv-skipline' }, skip), s.msg, el('div', { className: 'crv-foot' }, projects_, finish));
@@ -407,6 +407,13 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 			.then(ok => { if (ok && input.isConnected) new VietIme(input, { candidates: cjk, defer: true }); }).catch(() => {});
 	}
 
+	// "Other projects": the review page with all projects (every answer is already saved); on that page itself the popup just closes
+	const REVIEW_PAGE = SITE + 'chunom/review/';
+	function toProjects() {
+		if (location.href.startsWith(REVIEW_PAGE)) { close(); return; }
+		location.href = REVIEW_PAGE;
+	}
+
 	function thanks(empty) {
 		const s = state;
 		if (!s) { close(); return; }
@@ -415,7 +422,7 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 		const more = el('button', { type: 'button', className: 'crv-b main', textContent: T('Continue', 'Tiếp tục') });
 		more.addEventListener('click', () => start(s.project, s.batch));
 		const other = el('button', { type: 'button', className: 'crv-b quiet', textContent: T('Other projects', 'Dự án khác') });
-		other.addEventListener('click', () => overview());
+		other.addEventListener('click', toProjects);
 		const done = el('button', { type: 'button', className: 'crv-b quiet', textContent: T('Close', 'Đóng') });
 		done.addEventListener('click', () => close());
 		body.replaceChildren(el('div', { className: 'crv-thanks' },
