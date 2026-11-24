@@ -91,7 +91,10 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 .crv-fix .crv-row { display: flex; gap: .5rem; margin-top: .6rem; justify-content: flex-end }
 .crv-fix .crv-b { padding: .5rem 1.2rem }
 /* Skip: no answer, the next place (a normal secondary button below the three answers) */
-.crv-skipline { text-align: center; margin-top: 1.6rem }
+/* Skip in the middle, Undo (one step back) left of it with some space; the third column keeps Skip centred */
+.crv-skipline { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; margin-top: 1.6rem }
+.crv-skipline .crv-undo { justify-self: end; margin-right: 1.4rem; display: inline-flex; align-items: center; gap: .3rem; white-space: nowrap }
+.crv-skipline .crv-undo:disabled { opacity: .3; cursor: default; text-decoration: none }
 .crv-foot { display: flex; justify-content: space-between; align-items: center; gap: .5rem; margin-top: .9rem; font-size: .85rem }
 .crv-link { border: 0; background: none; color: inherit; opacity: .75; text-decoration: underline; cursor: pointer; padding: 0; font: inherit }
 .crv-link:hover { opacity: 1 }
@@ -234,7 +237,7 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 	}
 
 	function start(p, batch) {
-		state = { project: p, batch: batch > 0 ? Math.floor(batch) : 0, n: 0, ok: 0, wrong: 0, unsure: 0, item: null, next: null, busy: false, fixing: false };
+		state = { project: p, batch: batch > 0 ? Math.floor(batch) : 0, n: 0, ok: 0, wrong: 0, unsure: 0, item: null, next: null, last: null, busy: false, fixing: false };
 		nextItem();
 	}
 
@@ -337,7 +340,11 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 		projects_.addEventListener('click', toProjects);
 		const skip = el('button', { type: 'button', className: 'btn btn-secondary btn-sm px-5', textContent: T('Skip', 'Bỏ qua') });
 		skip.addEventListener('click', () => skipItem());
-		body.replaceChildren(question(p, d.claim), win, s.btns, el('div', { className: 'crv-skipline' }, skip), s.msg, el('div', { className: 'crv-foot' }, projects_, finish));
+		// Undo: the place answered last comes back; the new answer replaces the old one (review_vote replaces a vote). One step: greyed out until the next answer
+		const undo = el('button', { type: 'button', className: 'crv-link crv-undo', disabled: !s.last },
+			el('i', { className: 'bi bi-arrow-counterclockwise', ariaHidden: 'true' }), el('span', { textContent: T('Undo', 'Hoàn tác') }));
+		undo.addEventListener('click', undoLast);
+		body.replaceChildren(question(p, d.claim), win, s.btns, el('div', { className: 'crv-skipline' }, undo, skip, el('span')), s.msg, el('div', { className: 'crv-foot' }, projects_, finish));
 		s.win = win;
 		showProgress();
 		// the times of the answer: from the moment the scan is shown (negative: answered before it was there; null: the scan could not be loaded)
@@ -366,6 +373,7 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 		}
 		s.busy = false;
 		s.n++; s[v === 1 ? 'ok' : v === -1 ? 'wrong' : 'unsure']++;
+		s.last = { item: s.item, v };   // for Undo
 		count.textContent = progress(); count.classList.remove('bump'); void count.offsetWidth; count.classList.add('bump');
 		showProgress();
 		nextItem();
@@ -436,6 +444,22 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 	}
 
 	// Skip: no answer; the place is not given again in this session
+	// back to the place answered last: its answer no longer counts in this round, the place shown now comes after it
+	async function undoLast() {
+		const s = state;
+		if (!s || s.busy || !s.last) return;
+		const prev = s.last; s.last = null;
+		s.n--; s[prev.v === 1 ? 'ok' : prev.v === -1 ? 'wrong' : 'unsure']--;
+		count.textContent = progress();
+		showProgress();
+		if (s.item && s.item.item !== prev.item.item) s.next = s.item;
+		s.busy = true;
+		const loaded = await preload(prev.item.data.image);
+		s.busy = false;
+		if (state !== s) return;
+		s.item = prev.item; s.fixing = false;
+		card(loaded);
+	}
 	function skipItem() {
 		const s = state;
 		if (!s || !s.item || s.busy) return;
