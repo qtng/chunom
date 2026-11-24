@@ -108,9 +108,11 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 .crv-thanks .sum div { min-width: 4.5rem } .crv-thanks .sum b { display: block; font-size: 1.6rem }
 .crv-thanks .crv-row { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center }
 .crv-thanks .crv-b { padding: .55rem 1.2rem; font-size: .95rem }
+/* a theme may draw its headings with a line below (boho: dashed): not in the head of the popup, the head has its own line */
+dialog.crv .crv-head h2 { border: 0; padding: 0 }
 @media (max-width: 575.98px) {
-	dialog.crv { width: 100vw; height: 100dvh; max-height: 100dvh; border-radius: 0; margin: 0 }
-	.crv-in { max-height: 100dvh; height: 100% }
+	dialog.crv { width: calc(100vw - 1.5rem); max-height: calc(100dvh - 1.5rem); margin: auto }
+	.crv-in { max-height: calc(100dvh - 1.5rem) }
 	.crv-body { padding: .8rem }
 	.crv-b { padding: .9rem .3rem }
 	.crv-v { min-height: 4.6rem }
