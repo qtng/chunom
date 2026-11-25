@@ -552,7 +552,21 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 	.crb .story { grid-template-columns: 6.5rem minmax(0, 1fr); gap: .75rem }
 	.crb .story h2 { font-size: 1.1rem }
 	.crb .story p { font-size: .82rem }
-}`;
+}
+/* the thanks: one bubble per helper (the first letter of the name), its size from the answers, packed around the largest; the own one ringed */
+.crb .thanks { margin-top: 1.4rem; padding: 1rem 1.1rem 1.1rem }
+.crb .thanks .kicker { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--accent, #a8362a) }
+.crb .thanks h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.25rem; margin: .1rem 0 .6rem }
+.crb .thanks .cloud { position: relative; margin: 0 auto }
+.crb .thanks .h { position: absolute; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #fff; font-weight: 700; line-height: 1;
+	background: var(--c); box-shadow: 0 .15rem .4rem rgba(60, 40, 20, .18); transform: translate(-50%, -50%) }
+.crb .thanks .h.anon { background: color-mix(in srgb, currentColor 22%, transparent); color: inherit }
+.crb .thanks .h.me { outline: 3px solid var(--accent, #a8362a); outline-offset: 2px; z-index: 1 }
+.crb .thanks .foot { margin: .9rem 0 0; font-size: .9rem; color: var(--bs-body-color); text-align: center }
+.crb .thanks .mine { display: block; font-weight: 700; color: var(--accent, #a8362a) }
+.crb .thanks .mine .dot { display: inline-flex; align-items: center; justify-content: center; width: 1.4rem; height: 1.4rem; border-radius: 50%; background: var(--c); color: #fff;
+	font-size: .75rem; vertical-align: -.25rem; outline: 2px solid var(--accent, #a8362a); outline-offset: 1px; margin-right: .3rem }
+.crb .thanks .mine .dot.anon { background: color-mix(in srgb, currentColor 22%, transparent); color: inherit }`;
 	// the states of a place, in the order of the bar (red and green apart; the colours of the answers of the popup, Bootstrap's where it has them)
 	const STATES = [
 		['confirmed', 'var(--bs-success, #198754)', 'Confirmed', 'Đã xác nhận', 'decided: at least 75 % "correct"', 'đã quyết: ít nhất 75 % "đúng"'],
@@ -569,7 +583,8 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 
 	/* ChunomReview.board(element, { projects, compact, info })
 	   projects: the ids to show (else all active ones); compact: rows for a box of another page (no details); info: false leaves out the cards of the
-	   projects' pages (info.url of review_projects; one card per page, below its projects). Redrawn on langchange. */
+	   projects' pages (info.url of review_projects; one card per page, below its projects); thanks: false leaves out the thanks to the helpers (a cloud of
+	   their first letters, review_helpers(); never in a compact box). Redrawn on langchange. */
 	async function board(box, opts = {}) {
 		if (!document.getElementById('crb-style')) document.head.append(el('style', { id: 'crb-style', textContent: BOARD_STYLE }));
 		box.classList.add('crb');
@@ -592,8 +607,8 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 			return el('div', { title }, sw, el('span', { className: 'l', textContent: label }), el('span', { className: 'n', textContent: `${num(n)}${total && n ? ` · ${(n / total * 100).toFixed(n / total < .01 ? 2 : 1)} %` : ''}` }));
 		}
 
-		let list, prog;
-		try { [list, prog] = await Promise.all([projects(), projectProgress()]); }
+		let list, prog, helpers = null;
+		try { [list, prog, helpers] = await Promise.all([projects(), projectProgress(), opts.compact || opts.thanks === false ? null : connect().then(() => rpc('review_helpers', {})).catch(() => null)]); }
 		catch (e) { box.replaceChildren(el('p', { textContent: T('The projects could not be loaded.', 'Không tải được các dự án.') })); return; }
 		if (opts.projects) list = opts.projects.map(id => list.find(p => p.id === id)).filter(Boolean);
 		const byId = new Map(prog.map(x => [x.id, x]));
@@ -655,6 +670,48 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 			return a;
 		}
 
+		// the thanks (not in a compact box): review_helpers() = { helpers: [{ l, n, me }], answers }
+		const PAL = ['#b5543c', '#4f7c6b', '#c08a2e', '#6b6aa8', '#3f7fa0', '#9a5b8a', '#7a8b3c'];
+		function thanks() {
+			const hs = helpers && helpers.helpers || [];
+			if (!hs.length) return null;
+			const cloud = el('div', { className: 'cloud' }), mine = hs.findIndex(h => h.me);
+			const foot = el('p', { className: 'foot' });
+			if (mine >= 0) {
+				const h = hs[mine];
+				foot.append(el('span', { className: 'mine' }, el('span', { className: `dot${h.l ? '' : ' anon'}`, style: `--c:${PAL[mine % PAL.length]}`, textContent: h.l || '•' }),
+					T(`You: ${num(h.n)} ${h.n === 1 ? 'answer' : 'answers'}, thank you!`, `Bạn: ${num(h.n)} câu trả lời, cảm ơn bạn!`)));
+			}
+			foot.append(T(`${num(helpers.answers)} answers in all.`, `Tổng cộng ${num(helpers.answers)} câu trả lời.`));
+			const card = el('section', { className: 'card-box thanks' },
+				el('div', { className: 'kicker', textContent: T('Thank you', 'Cảm ơn') }),
+				el('h2', { textContent: hs.length === 1 ? T('1 helper has checked the dictionaries so far', 'Đã có 1 người giúp kiểm tra các từ điển')
+					: T(`${num(hs.length)} helpers have checked the dictionaries so far`, `Đã có ${num(hs.length)} người giúp kiểm tra các từ điển`) }),
+				cloud, foot);
+			// the layout: the bubbles by size, each at the first free place on a spiral around the centre (wider than high), then fitted to the width;
+			// the diameter (answers / most answers)^0.4 between 1.5 and 3.9rem. The same numbers give the same picture.
+			const place = () => {
+				const W = cloud.clientWidth; if (!W) return;
+				const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16, max = Math.max(...hs.map(h => h.n), 1), gap = 4, done = [];
+				for (const [i, h] of hs.entries()) {
+					const r = (1.5 + 2.4 * Math.pow(h.n / max, .4)) * rem / 2;
+					for (let t = 0; t < 400; t += .05) {
+						const x = Math.cos(t) * 3 * t * 1.6, y = Math.sin(t) * 3 * t;
+						if (done.every(p => Math.hypot(p.x - x, p.y - y) >= p.r + r + gap)) { done.push({ i, h, r, x, y }); break; }
+					}
+				}
+				const x0 = Math.min(...done.map(p => p.x - p.r)), x1 = Math.max(...done.map(p => p.x + p.r)), y0 = Math.min(...done.map(p => p.y - p.r)), y1 = Math.max(...done.map(p => p.y + p.r));
+				const k = Math.min(1, (W - 8) / (x1 - x0)), ox = (W - (x1 - x0) * k) / 2;
+				cloud.style.height = `${(y1 - y0) * k + 8}px`;
+				cloud.replaceChildren(...done.map(({ i, h, r, x, y }) => el('span', { className: `h${h.l ? '' : ' anon'}${h.me ? ' me' : ''}`, textContent: h.l || '•',
+					style: `--c:${PAL[i % PAL.length]};left:${ox + (x - x0) * k}px;top:${4 + (y - y0) * k}px;width:${2 * r * k}px;height:${2 * r * k}px;font-size:${r * k * .84}px` })));
+			};
+			requestAnimationFrame(place);
+			let w = 0;
+			new ResizeObserver(() => { if (cloud.clientWidth !== w) { w = cloud.clientWidth; place(); } }).observe(cloud);
+			return card;
+		}
+
 		const draw = () => {
 			const out = [];
 			list.forEach((p, i) => {
@@ -663,7 +720,8 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 				const url = p.info && p.info.url;
 				if (url && opts.info !== false && !list.slice(i + 1).some(q => q.info && q.info.url === url)) out.push(story(p.info));
 			});
-			box.replaceChildren(...out);
+			if (!opts.compact && opts.thanks !== false) out.push(thanks());
+			box.replaceChildren(...out.filter(Boolean));
 		};
 		draw();
 		document.addEventListener('langchange', draw);
