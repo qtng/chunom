@@ -496,12 +496,13 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 .crb .stack.thin { height: .6rem }
 .crb .stack i { display: block; height: 100%; min-width: 0; background: var(--c); cursor: default }
 .crb .stack i.open { background: transparent }
-.crb .stack i.progress { background: repeating-linear-gradient(135deg, color-mix(in srgb, currentColor 32%, transparent) 0 3px, color-mix(in srgb, currentColor 14%, transparent) 3px 7px) }
+/* in progress: hatched in a light green (on the way to confirmed) */
+.crb .stack i.progress { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--bs-success, #198754) 30%, transparent) 0 3px, color-mix(in srgb, var(--bs-success, #198754) 12%, transparent) 3px 7px) }
 .crb .legend { display: grid; grid-template-columns: 1fr; max-width: 24rem; gap: .15rem .9rem; margin-top: .45rem; font-size: .85rem }
 .crb .legend div { display: flex; align-items: center; gap: .4rem; min-width: 0 }
 .crb .legend .sw { flex: none; width: .8rem; height: .8rem; border-radius: 3px; background: var(--c) }
 .crb .legend .sw.open { background: color-mix(in srgb, currentColor 9%, transparent) }
-.crb .legend .sw.progress { background: repeating-linear-gradient(135deg, color-mix(in srgb, currentColor 32%, transparent) 0 2px, color-mix(in srgb, currentColor 14%, transparent) 2px 4px) }
+.crb .legend .sw.progress { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--bs-success, #198754) 30%, transparent) 0 2px, color-mix(in srgb, var(--bs-success, #198754) 12%, transparent) 2px 4px) }
 .crb .legend .l { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
 .crb .legend .n { font-variant-numeric: tabular-nums; color: var(--crb-muted) }
 /* the card: the title with its line and the button side by side, the bar and the folded details below */
