@@ -689,12 +689,13 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 					: T(`${num(hs.length)} helpers have checked the dictionaries so far`, `Đã có ${num(hs.length)} người giúp kiểm tra các từ điển`) }),
 				cloud, foot);
 			// the layout: the bubbles by size, each at the first free place on a spiral around the centre (wider than high), then fitted to the width;
-			// the area in proportion to the answers (the diameter 5rem × √(answers / most answers)), at least 1.4rem. The same numbers give the same picture.
+			// the diameter half and half: the area in proportion to the answers (5rem × √(answers / most answers), at least 1.4rem) and a gentler
+			// scale (1.5rem + 2.4rem × (answers / most answers)^0.4): the most active stand out, the others stay visible. The same numbers give the same picture.
 			const place = () => {
 				const W = cloud.clientWidth; if (!W) return;
 				const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16, max = Math.max(...hs.map(h => h.n), 1), gap = 4, done = [];
 				for (const [i, h] of hs.entries()) {
-					const r = Math.max(1.4, 5 * Math.sqrt(h.n / max)) * rem / 2;
+					const f = h.n / max, r = (.5 * Math.max(1.4, 5 * Math.sqrt(f)) + .5 * (1.5 + 2.4 * Math.pow(f, .4))) * rem / 2;
 					for (let t = 0; t < 400; t += .05) {
 						const x = Math.cos(t) * 3 * t * 1.6, y = Math.sin(t) * 3 * t;
 						if (done.every(p => Math.hypot(p.x - x, p.y - y) >= p.r + r + gap)) { done.push({ i, h, r, x, y }); break; }
