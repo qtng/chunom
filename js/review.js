@@ -689,12 +689,12 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 					: T(`${num(hs.length)} helpers have checked the dictionaries so far`, `Đã có ${num(hs.length)} người giúp kiểm tra các từ điển`) }),
 				cloud, foot);
 			// the layout: the bubbles by size, each at the first free place on a spiral around the centre (wider than high), then fitted to the width;
-			// the diameter (answers / most answers)^0.4 between 1.5 and 3.9rem. The same numbers give the same picture.
+			// the area in proportion to the answers (the diameter 5rem × √(answers / most answers)), at least 1.4rem. The same numbers give the same picture.
 			const place = () => {
 				const W = cloud.clientWidth; if (!W) return;
 				const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16, max = Math.max(...hs.map(h => h.n), 1), gap = 4, done = [];
 				for (const [i, h] of hs.entries()) {
-					const r = (1.5 + 2.4 * Math.pow(h.n / max, .4)) * rem / 2;
+					const r = Math.max(1.4, 5 * Math.sqrt(h.n / max)) * rem / 2;
 					for (let t = 0; t < 400; t += .05) {
 						const x = Math.cos(t) * 3 * t * 1.6, y = Math.sin(t) * 3 * t;
 						if (done.every(p => Math.hypot(p.x - x, p.y - y) >= p.r + r + gap)) { done.push({ i, h, r, x, y }); break; }
@@ -704,7 +704,7 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 				const k = Math.min(1, (W - 8) / (x1 - x0)), ox = (W - (x1 - x0) * k) / 2;
 				cloud.style.height = `${(y1 - y0) * k + 8}px`;
 				cloud.replaceChildren(...done.map(({ i, h, r, x, y }) => el('span', { className: `h${h.l ? '' : ' anon'}${h.me ? ' me' : ''}`, textContent: h.l || '•',
-					style: `--c:${PAL[i % PAL.length]};left:${ox + (x - x0) * k}px;top:${4 + (y - y0) * k}px;width:${2 * r * k}px;height:${2 * r * k}px;font-size:${r * k * .84}px` })));
+					style: `--c:${PAL[i % PAL.length]};left:${ox + (x - x0) * k}px;top:${4 + (y - y0) * k}px;width:${2 * r * k}px;height:${2 * r * k}px;font-size:${Math.max(11, r * k * .84)}px` })));
 			};
 			requestAnimationFrame(place);
 			let w = 0;
