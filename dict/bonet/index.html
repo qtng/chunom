@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
   <script src="https://qatt.org/js/navigation.js"></script>
   <script defer src="/chunom/js/detail.js"></script>
+  <script src="/chunom/js/review.js"></script>
   <style>
     :root { --ink: #2b2118; --accent: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
     body { margin: 0; background: var(--paper); color: var(--ink); }
@@ -30,6 +31,11 @@
     h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.55rem; margin: 0 0 .5rem; }
     h2 .no { color: var(--accent); font-size: 1rem; margin-right: .5rem; vertical-align: .15em; }
     .muted { color: var(--muted); }
+    /* the box of the review projects at the top (js/review.js, ChunomReview.board) */
+    #help .kick { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); }
+    #help h2 { margin-top: .15rem; }
+    #help .all { font-size: .9rem; font-weight: 600; color: var(--accent); text-decoration: none; white-space: nowrap; }
+    #help .all:hover { text-decoration: underline; }
     .han-font { font-family: var(--font-cjk), serif; }
 
     /* big numbers */
@@ -164,6 +170,14 @@
 
 <main>
 
+  <section class="card-box" id="help">
+    <div class="kick"><i class="bi bi-people me-1"></i><span data-vi="Dự án đang chạy">An open project</span></div>
+    <h2><span data-vi="Giúp hoàn thiện bảng tra">Help finish the index</span></h2>
+    <p>The program and an AI read most of the book, but not without mistakes. Now people check what they read: you see one place of the scan and say whether it is right. A few minutes help, every answer counts.</p>
+    <div id="review-board"><p class="muted small" data-vi="Đang tải…">Loading…</p></div>
+    <div class="text-end mt-1"><a class="all" href="/chunom/review/"><span data-vi="Tất cả các dự án">All projects</span> <i class="bi bi-arrow-right"></i></a></div>
+  </section>
+
   <section class="card-box" id="book">
     <h2><span class="no">1</span><span data-vi="Cuốn sách">The book</span></h2>
     <p>In 1899 Jean Bonet published in Paris his <i lang="fr">Dictionnaire annamite-français</i>: two volumes, 951 pages, every word of Vietnamese in the Latin script, with its character in Chữ Nôm and its meaning in French. It shows how Vietnamese was written and read at the end of the 19th century, when Chữ Nôm was still in use beside Quốc Ngữ.</p>
@@ -275,11 +289,16 @@
     <div class="d-flex flex-wrap gap-2 mt-3">
       <a class="btn btn-cinnabar btn-pill" href="/chunom/dict/bonet.html"><i class="bi bi-book me-1"></i><span data-vi="Mở từ điển">Open the dictionary</span></a>
       <a class="btn btn-quiet btn-pill" href="/chunom/dict/bonet/chars.html"><i class="bi bi-grid-3x3-gap me-1"></i><span data-vi="Tất cả các chữ">All characters</span></a>
+      <a class="btn btn-quiet btn-pill" href="#help"><i class="bi bi-check2-square me-1"></i><span data-vi="Giúp kiểm tra">Help check</span></a>
     </div>
   </section>
 
 </main>
 
+<script>
+  // the review projects of Bonet: progress and Start (js/review.js)
+  ChunomReview.board(document.getElementById('review-board'), { projects: ['bonet-char', 'bonet-reading'], compact: true, info: false });
+</script>
 <script type="module">
   const el = (tag, props = {}, ...children) => { const n = Object.assign(document.createElement(tag), props); n.append(...children); return n; };
   const fmt = n => n.toLocaleString(window.Lang?.current === 'vi' ? 'vi' : 'en');

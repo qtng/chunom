@@ -9,6 +9,8 @@
 		ChunomReview.open({ overview: true })   the list of the projects in the popup
 		await ChunomReview.projects()           the active projects (for a page that lists them): [{ id, title_en, title_vi, items, judged, mine, … }]
 		await ChunomReview.progress()           how far every project is: [{ id, items, fixed, confirmed, wrong, unreadable, disputed, in_progress, open, depth, answers, helpers }]
+		ChunomReview.board(element, { projects: ['bonet-char'], compact: true })   the progress of the projects with their Start buttons (the review page;
+		                                        compact: rows for a box of a project's own page) and the cards of the projects' pages (info of review_projects)
 	A project with show_box off hides the box of the place under a blur (the character is not seen: a reading is judged by itself).
 
 	The data is in the Supabase project ChunomApp (review_projects, review_items, review_votes; the functions review_projects(), review_next(), review_vote();
@@ -45,6 +47,9 @@ dialog.crv::backdrop { background: rgba(20, 15, 10, .55) }
 .crv-head { display: flex; align-items: center; gap: .6rem; padding: .7rem 1rem; border-bottom: 1px solid color-mix(in srgb, currentColor 14%, transparent) }
 .crv-head h2 { flex: 1; margin: 0; font-weight: 600; font-size: 1rem; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
 .crv-count { font-size: .85rem; opacity: .7; white-space: nowrap }
+.crv-about { color: inherit; opacity: .6; font-size: 1.05rem; line-height: 1; text-decoration: none }
+.crv-about:hover { opacity: 1; color: var(--accent, #a8362a) }
+.crv-about[hidden] { display: none }
 .crv-x { border: 0; background: none; color: inherit; font-size: 1.6rem; line-height: 1; padding: 0 .2rem; cursor: pointer; opacity: .7 }
 .crv-x:hover { opacity: 1 }
 .crv-body { padding: 1rem; overflow-y: auto }
@@ -152,7 +157,7 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 	async function projectProgress() { await connect(); return rpc('review_progress', {}); }   // per project: items, fixed, confirmed, wrong, unreadable, disputed, in_progress, open, depth [0..4, 5+], answers, helpers
 
 	// ---------- the dialog ----------
-	let dlg = null, body = null, title = null, count = null, prog = null;
+	let dlg = null, body = null, title = null, count = null, prog = null, about = null;
 	function dialog() {
 		if (dlg) return dlg;
 		if (!document.getElementById('crv-style')) document.head.append(el('style', { id: 'crv-style', textContent: STYLE }));
@@ -163,16 +168,24 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 			'<filter id="crv-sharp" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="2.5" result="b"/>' +
 			'<feComposite in="SourceGraphic" in2="b" operator="arithmetic" k1="0" k2="1.7" k3="-0.7" k4="0"/></filter></svg>');
 		title = el('h2'); count = el('span', { className: 'crv-count' });
+		// ⓘ: the page of the project (info.url of review_projects), in a new tab (the answers are saved, the popup stays)
+		about = el('a', { className: 'crv-about', target: '_blank', rel: 'noopener', hidden: true }, el('i', { className: 'bi bi-info-circle', ariaHidden: 'true' }));
 		const x = el('button', { type: 'button', className: 'crv-x', textContent: '×', ariaLabel: T('Close', 'Đóng'), onclick: () => close() });
 		body = el('div', { className: 'crv-body' });
 		prog = el('div', { className: 'crv-prog', hidden: true }, el('i'));
-		dlg = el('dialog', { className: 'crv' }, el('div', { className: 'crv-in' }, el('div', { className: 'crv-head' }, title, count, x), prog, body));
+		dlg = el('dialog', { className: 'crv' }, el('div', { className: 'crv-in' }, el('div', { className: 'crv-head' }, title, about, count, x), prog, body));
 		dlg.addEventListener('cancel', e => { e.preventDefault(); close(); });
 		document.body.append(dlg);
 		return dlg;
 	}
 	function close() { if (dlg && dlg.open) dlg.close(); state = null; }
-	const head = (t, c = '') => { title.textContent = t; count.textContent = c; if (!state || !state.batch || !state.item) prog.hidden = true; };
+	const head = (t, c = '') => {
+		title.textContent = t; count.textContent = c;
+		if (!state || !state.batch || !state.item) prog.hidden = true;
+		const url = state && state.project.info && state.project.info.url, href = url && new URL(url, SITE).href;
+		about.hidden = !href || location.href.split('#')[0] === href;   // not on that page itself
+		if (href) { about.href = href; about.title = about.ariaLabel = T('About this project', 'Về dự án này'); }
+	};
 	function showProgress() {
 		const s = state;
 		prog.hidden = !s.batch;
@@ -471,7 +484,191 @@ dialog.crv .crv-head h2 { border: 0; padding: 0 }
 
 	addEventListener('resize', () => { if (state && state.win && state.win.isConnected) state.win.place(); });
 
-	window.ChunomReview = { open, projects, progress: projectProgress };
+	// ---------- the progress of the projects on a page (the review page, a project's own page) ----------
+	const BOARD_STYLE = `
+.crb { --crb-muted: var(--muted, color-mix(in srgb, currentColor 62%, transparent)) }
+.crb .project h2 { font-size: 1.15rem; margin: 0 }
+.crb .project .head small { color: var(--crb-muted) }
+.crb .project h3 { font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--crb-muted); margin: .7rem 0 .3rem }
+.crb .card-box { margin: 0 0 1rem }
+/* the state of every place: one stacked bar (the states exclude each other), 2px gaps between the parts */
+.crb .stack { display: flex; gap: 2px; height: 1rem; border-radius: 4px; overflow: hidden; background: color-mix(in srgb, currentColor 9%, transparent) }
+.crb .stack.thin { height: .6rem }
+.crb .stack i { display: block; height: 100%; min-width: 0; background: var(--c); cursor: default }
+.crb .stack i.open { background: transparent }
+.crb .stack i.progress { background: repeating-linear-gradient(135deg, color-mix(in srgb, currentColor 32%, transparent) 0 3px, color-mix(in srgb, currentColor 14%, transparent) 3px 7px) }
+.crb .legend { display: grid; grid-template-columns: 1fr; max-width: 24rem; gap: .15rem .9rem; margin-top: .45rem; font-size: .85rem }
+.crb .legend div { display: flex; align-items: center; gap: .4rem; min-width: 0 }
+.crb .legend .sw { flex: none; width: .8rem; height: .8rem; border-radius: 3px; background: var(--c) }
+.crb .legend .sw.open { background: color-mix(in srgb, currentColor 9%, transparent) }
+.crb .legend .sw.progress { background: repeating-linear-gradient(135deg, color-mix(in srgb, currentColor 32%, transparent) 0 2px, color-mix(in srgb, currentColor 14%, transparent) 2px 4px) }
+.crb .legend .l { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.crb .legend .n { font-variant-numeric: tabular-nums; color: var(--crb-muted) }
+/* the card: the title with its line and the button side by side, the bar and the folded details below */
+.crb .project { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "head go" "bar bar" "more more"; column-gap: 1rem; align-items: center }
+.crb .project .head { grid-area: head; margin-bottom: .6rem; min-width: 0 }
+.crb .project .go { grid-area: go; align-self: start }
+.crb .project > .stack { grid-area: bar; margin-top: .2rem }
+.crb .project > .more { grid-area: more }
+.crb .project .line .nw { white-space: nowrap }   /* each number with its word: wrapped as a whole */
+/* compact (inside a box of another page): rows without a card of their own, no details, a smaller button */
+.crb.compact .project { padding: .7rem 0; border-top: 1px solid color-mix(in srgb, currentColor 12%, transparent) }
+.crb.compact .project:first-child { border-top: 0; padding-top: .2rem }
+.crb.compact .project h2 { font-size: 1.02rem }
+.crb.compact .project .head { margin-bottom: .45rem }
+.crb.compact .project .go { font-size: .95rem; padding: .35rem 1.1rem }
+.crb.compact .stack { height: .75rem }
+@media (max-width: 575.98px) {   /* the button beside the text as on the desktop, smaller */
+	.crb .project { column-gap: .6rem }
+	.crb .project .go { font-size: .9rem !important; padding: .35rem .9rem !important }
+	.crb .project .go .bi { display: none }
+}
+.crb .more { margin-top: .6rem }
+/* the numbers on the left, "▸ Details" on the right (the marker drawn before the word, not before the numbers) */
+.crb .more summary { display: flex; justify-content: space-between; gap: 1rem; list-style: none; cursor: pointer; font-size: .85rem; color: var(--crb-muted) }
+.crb .more summary::-webkit-details-marker { display: none }
+.crb .more summary .lbl { white-space: nowrap }
+.crb .more summary .lbl::before { content: ""; display: inline-block; margin-right: .4em; border-style: solid; border-width: .3em 0 .3em .5em; border-color: transparent transparent transparent currentColor; transition: transform .15s }
+.crb .more[open] summary .lbl::before { transform: rotate(90deg) }
+.crb-tip { position: fixed; z-index: 1080; pointer-events: none; padding: .25rem .55rem; border-radius: .4rem; background: #2b2118; color: #fff; font-size: .8rem; white-space: nowrap;
+	box-shadow: 0 .2rem .6rem rgba(0, 0, 0, .25) }
+.crb-tip[hidden] { display: none }
+/* the card of a project's page (info of review_projects): a piece of a scan, a line, the title, a sentence, the link */
+.crb .story { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 1rem; align-items: center; margin-top: 1.4rem; padding: .8rem;
+	color: var(--bs-body-color); text-decoration: none; transition: transform .15s, box-shadow .15s }
+.crb .story:hover, .crb .story:focus-visible { transform: translateY(-2px); color: var(--bs-body-color) }
+.crb .story .scan { position: relative; overflow: hidden; border-radius: .45rem; background: #fff; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .08) }
+.crb .story .scan img { position: absolute; max-width: none; filter: sepia(.25) }
+.crb .story .scan .hit { position: absolute; border: 2px solid var(--accent, #a8362a); border-radius: .25rem }
+.crb .story .scan .yr { position: absolute; right: .3rem; bottom: .25rem; font: italic .75rem Georgia, serif; color: #7b6c58; background: rgba(255, 255, 255, .85); padding: 0 .3rem; border-radius: .2rem }
+.crb .story .kicker { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--accent, #a8362a) }
+.crb .story h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.25rem; margin: .1rem 0 .3rem }
+.crb .story p { margin: 0 0 .35rem; font-size: .9rem; line-height: 1.4; color: var(--bs-body-color) }
+.crb .story .more-link { font-size: .88rem; font-weight: 600; color: var(--accent, #a8362a); white-space: nowrap }
+.crb .story .more-link .bi { display: inline-block; transition: transform .15s }
+.crb .story:hover .more-link .bi { transform: translateX(3px) }
+@media (max-width: 575.98px) {
+	.crb .story { grid-template-columns: 6.5rem minmax(0, 1fr); gap: .75rem }
+	.crb .story h2 { font-size: 1.1rem }
+	.crb .story p { font-size: .82rem }
+}`;
+	// the states of a place, in the order of the bar (red and green apart; the colours of the answers of the popup, Bootstrap's where it has them)
+	const STATES = [
+		['confirmed', 'var(--bs-success, #198754)', 'Confirmed', 'Đã xác nhận', 'decided: at least 75 % "correct"', 'đã quyết: ít nhất 75 % "đúng"'],
+		['fixed', '#1c7ed6', 'Done (editor)', 'Đã biên tập', 'checked and corrected by the editor', 'biên tập viên đã kiểm tra và sửa'],
+		['wrong', 'var(--bs-danger, #dc3545)', 'Wrong', 'Sai', 'decided: at least 75 % "wrong"', 'đã quyết: ít nhất 75 % "sai"'],
+		['disputed', '#8f8679', 'Disputed', 'Còn tranh cãi', 'many answers without a clear majority', 'nhiều câu trả lời nhưng không có đa số rõ ràng'],
+		['unreadable', '#e67700', 'Unreadable', 'Không đọc được', 'decided: at least 75 % "unreadable"', 'đã quyết: ít nhất 75 % "không đọc được"'],
+		['in_progress', '', 'In progress', 'Đang kiểm tra', 'answered, not decided yet', 'đã có câu trả lời, chưa quyết'],
+		['open', '', 'Open', 'Chưa kiểm tra', 'no answer yet', 'chưa có câu trả lời']];
+	// how many answers the places have: one hue, light to dark
+	const DEPTH = ['0', '1', '2', '3', '4', '5+'];
+	const depthColour = i => i === 0 ? '' : `color-mix(in srgb, #1c7ed6 ${20 + i * 16}%, transparent)`;
+	const L = o => o ? T(o.en || '', o.vi || o.en || '') : '';   // { en, vi } of the info of a project
+
+	/* ChunomReview.board(element, { projects, compact, info })
+	   projects: the ids to show (else all active ones); compact: rows for a box of another page (no details); info: false leaves out the cards of the
+	   projects' pages (info.url of review_projects; one card per page, below its projects). Redrawn on langchange. */
+	async function board(box, opts = {}) {
+		if (!document.getElementById('crb-style')) document.head.append(el('style', { id: 'crb-style', textContent: BOARD_STYLE }));
+		box.classList.add('crb');
+		box.classList.toggle('compact', !!opts.compact);
+		let tip = document.querySelector('.crb-tip');
+		if (!tip) document.body.append(tip = el('div', { className: 'crb-tip', hidden: true }));
+		const num = n => n.toLocaleString(document.documentElement.lang === 'vi' ? 'vi' : 'en');
+		const show = (e, text) => { tip.textContent = text; tip.hidden = false; tip.style.left = `${Math.min(e.clientX + 12, innerWidth - tip.offsetWidth - 8)}px`; tip.style.top = `${e.clientY + 14}px`; };
+		function segment(cls, colour, n, total, text) {
+			const i = el('i', { className: cls });
+			if (colour) i.style.setProperty('--c', colour);
+			i.style.flex = `${n} 1 0`;
+			const t = `${text}: ${num(n)} (${total ? (n / total * 100).toFixed(n && n / total < .01 ? 2 : 1) : 0} %)`;
+			i.addEventListener('pointermove', e => show(e, t)); i.addEventListener('pointerleave', () => { tip.hidden = true; });
+			return i;
+		}
+		function legendItem(cls, colour, label, n, total, title) {
+			const sw = el('span', { className: `sw ${cls}` });
+			if (colour) sw.style.setProperty('--c', colour);
+			return el('div', { title }, sw, el('span', { className: 'l', textContent: label }), el('span', { className: 'n', textContent: `${num(n)}${total && n ? ` · ${(n / total * 100).toFixed(n / total < .01 ? 2 : 1)} %` : ''}` }));
+		}
+
+		let list, prog;
+		try { [list, prog] = await Promise.all([projects(), projectProgress()]); }
+		catch (e) { box.replaceChildren(el('p', { textContent: T('The projects could not be loaded.', 'Không tải được các dự án.') })); return; }
+		if (opts.projects) list = opts.projects.map(id => list.find(p => p.id === id)).filter(Boolean);
+		const byId = new Map(prog.map(x => [x.id, x]));
+		const opened = new Set();   // the projects whose details are open (kept when the language is switched)
+
+		function project(p) {
+			const g = byId.get(p.id) || { items: p.items, open: p.items, depth: [p.items, 0, 0, 0, 0, 0], answers: 0, helpers: 0 };
+			const total = g.items;
+			const start = el('button', { type: 'button', className: `btn btn-cinnabar btn-pill go${opts.compact ? '' : ' btn-lg px-4'}` }, el('i', { className: 'bi bi-play-fill me-1' }), T('Start', 'Bắt đầu'));
+			start.addEventListener('click', () => open({ project: p.id }));
+			const shown = STATES.filter(([k]) => g[k]);
+			const decided = (g.confirmed || 0) + (g.wrong || 0) + (g.unreadable || 0) + (g.disputed || 0) + (g.fixed || 0), answered = total - (g.open || 0);
+			const pct = n => !total || !n ? '0 %' : n / total < .001 ? '< 0.1 %' : `${(n / total * 100).toFixed(n / total < .01 ? 1 : 0)} %`;
+			let details = null;
+			if (!opts.compact) {
+				details = el('details', { className: 'more', open: opened.has(p.id) },
+					el('summary', {},
+						el('span', { className: 'sum', textContent: `${num(total)} ${T('places', 'chỗ')} · ${num(g.answers)} ${T('answers', 'câu trả lời')}` }),
+						el('span', { className: 'lbl', textContent: T('Details', 'Chi tiết') })),
+					el('div', { className: 'legend' }, ...STATES.map(([k, c, en, vi, den, dvi]) => legendItem(k === 'in_progress' ? 'progress' : k === 'open' ? 'open' : '', c, T(en, vi), g[k] || 0, total, T(den, dvi)))),
+					el('h3', { textContent: T('Answers per place', 'Số câu trả lời mỗi chỗ') + ` (${T('decided from', 'quyết từ')} ${g.min_answers || 5})` }),
+					el('div', { className: 'stack thin', role: 'img', ariaLabel: DEPTH.map((d, i) => `${d}: ${num(g.depth[i])}`).join(', ') },
+						...DEPTH.map((d, i) => g.depth[i] ? segment(i ? '' : 'open', depthColour(i), g.depth[i], total, `${d} ${T(i === 1 ? 'answer' : 'answers', 'câu trả lời')}`) : null)),
+					el('div', { className: 'legend' }, ...DEPTH.map((d, i) => legendItem(i ? '' : 'open', depthColour(i), `${d} ${T(i === 1 ? 'answer' : 'answers', 'câu trả lời')}`, g.depth[i], total))));
+				details.addEventListener('toggle', () => { if (details.open) opened.add(p.id); else opened.delete(p.id); });
+			}
+			return el('section', { className: opts.compact ? 'project' : 'card-box project' },
+				el('div', { className: 'head' },
+					el('h2', { textContent: titleOf(p) }),
+					el('small', { className: 'line' }, ...[`${pct(decided)} ${T('decided', 'đã quyết')}`, `${pct(answered)} ${T('answered', 'đã trả lời')}`, `${num(g.helpers)} ${T(g.helpers === 1 ? 'helper' : 'helpers', 'người giúp')}`]
+						.flatMap((t, i) => [i ? ' · ' : null, el('span', { className: 'nw', textContent: t })]).filter(Boolean))),
+				start,
+				el('div', { className: 'stack', role: 'img', ariaLabel: shown.map(([k, , en, vi]) => `${T(en, vi)} ${num(g[k])}`).join(', ') },
+					...shown.map(([k, c, en, vi, den, dvi]) => segment(k === 'in_progress' ? 'progress' : k === 'open' ? 'open' : '', c, g[k], total, `${T(en, vi)} (${T(den, dvi)})`))),
+				details);
+		}
+
+		// the card of a project's page: info = { url, image, size: [w, h], focus: [x0, y0, x1, y1], box: [x0, y0, x1, y1], badge, kicker, title, text, link }
+		function story(info) {
+			const kids = [];
+			if (info.image && info.size && info.focus) {
+				const [w, h] = info.size, [x0, y0, x1, y1] = info.focus, fw = x1 - x0, fh = y1 - y0, pc = v => `${v * 100}%`;
+				const scan = el('div', { className: 'scan', ariaHidden: 'true' });
+				scan.style.aspectRatio = `${fw} / ${fh}`;
+				const img = el('img', { src: new URL(info.image, SITE).href, alt: '', loading: 'lazy' });
+				Object.assign(img.style, { width: pc(w / fw), left: pc(-x0 / fw), top: pc(-y0 / fh) });
+				scan.append(img);
+				if (info.box) { const [a, b, c, d] = info.box, hit = el('span', { className: 'hit' }); Object.assign(hit.style, { left: pc((a - x0) / fw), top: pc((b - y0) / fh), width: pc((c - a) / fw), height: pc((d - b) / fh) }); scan.append(hit); }
+				if (info.badge) scan.append(el('span', { className: 'yr', textContent: info.badge }));
+				kids.push(scan);
+			}
+			kids.push(el('div', {},
+				info.kicker ? el('div', { className: 'kicker', textContent: L(info.kicker) }) : null,
+				el('h2', { textContent: L(info.title) }),
+				info.text ? el('p', { textContent: L(info.text) }) : null,
+				el('span', { className: 'more-link' }, el('span', { textContent: L(info.link) || T('Read more', 'Đọc thêm') }), ' ', el('i', { className: 'bi bi-arrow-right' }))));
+			const a = el('a', { className: 'card-box story', href: new URL(info.url, SITE).href }, ...kids);
+			if (!info.image) a.style.gridTemplateColumns = '1fr';
+			return a;
+		}
+
+		const draw = () => {
+			const out = [];
+			list.forEach((p, i) => {
+				out.push(project(p));
+				// the card of a page after the last project that links it
+				const url = p.info && p.info.url;
+				if (url && opts.info !== false && !list.slice(i + 1).some(q => q.info && q.info.url === url)) out.push(story(p.info));
+			});
+			box.replaceChildren(...out);
+		};
+		draw();
+		document.addEventListener('langchange', draw);
+	}
+
+	window.ChunomReview = { open, projects, progress: projectProgress, board };
 
 	// back from the sign-in (the page was reloaded): open again with the same options
 	let resume = null;

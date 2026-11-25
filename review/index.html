@@ -19,68 +19,8 @@
     .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(1.8rem, 6vw, 2.6rem); }
     .hero .lead { max-width: 36rem; color: #4a3d30; }
     main { max-width: 44rem; margin: 0 auto; padding: 0 1rem 2rem; }
-    .card-box { margin: 0 0 1rem; padding: .9rem 1rem 1rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .14); }
-    .project h2 { font-size: 1.15rem; margin: 0; }
-    .project .head { display: flex; align-items: center; gap: 1rem; margin-bottom: .6rem; }
-    .project .head .t { flex: 1; min-width: 0; }
-    .project .head small { color: var(--muted); }
-    .project h3 { font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: .7rem 0 .3rem; }
-    /* the state of every place: one stacked bar (the states exclude each other), 2px gaps between the parts */
-    .stack { display: flex; gap: 2px; height: 1rem; border-radius: 4px; overflow: hidden; background: color-mix(in srgb, currentColor 9%, transparent); }
-    .stack.thin { height: .6rem; }
-    .stack i { display: block; height: 100%; min-width: 0; background: var(--c); cursor: default; }
-    .stack i.open { background: transparent; }
-    .stack i.progress { background: repeating-linear-gradient(135deg, color-mix(in srgb, currentColor 32%, transparent) 0 3px, color-mix(in srgb, currentColor 14%, transparent) 3px 7px); }
-    .legend { display: grid; grid-template-columns: 1fr; max-width: 24rem; gap: .15rem .9rem; margin-top: .45rem; font-size: .85rem; }
-    .legend div { display: flex; align-items: center; gap: .4rem; min-width: 0; }
-    .legend .sw { flex: none; width: .8rem; height: .8rem; border-radius: 3px; background: var(--c); }
-    .legend .sw.open { background: color-mix(in srgb, currentColor 9%, transparent); }
-    .legend .sw.progress { background: repeating-linear-gradient(135deg, color-mix(in srgb, currentColor 32%, transparent) 0 2px, color-mix(in srgb, currentColor 14%, transparent) 2px 4px); }
-    .legend .l { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .legend .n { font-variant-numeric: tabular-nums; color: var(--muted); }
-    /* the card: the title with its line and the button side by side, the bar and the folded details below */
-    .project { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "head go" "bar bar" "more more"; column-gap: 1rem; align-items: center; }
-    .project .head { grid-area: head; margin-bottom: .6rem; }
-    .project .go { grid-area: go; align-self: start; }
-    .project > .stack { grid-area: bar; margin-top: .2rem; }
-    .project > .more { grid-area: more; }
-    @media (max-width: 575.98px) {   /* the button beside the text as on the desktop, smaller */
-      .project { column-gap: .6rem; }
-      .project .go { font-size: .9rem !important; padding: .35rem .9rem !important; }
-      .project .go .bi { display: none; }
-    }
-    .project .line .nw { white-space: nowrap; }   /* each number with its word: wrapped as a whole */
-    .more { margin-top: .6rem; }
-    .more summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
-    /* the numbers on the left, "▸ Details" on the right (the marker drawn before the word, not before the numbers) */
-    .more summary { display: flex; justify-content: space-between; gap: 1rem; list-style: none; }
-    .more summary::-webkit-details-marker { display: none; }
-    .more summary .lbl { white-space: nowrap; }
-    .more summary .lbl::before { content: ""; display: inline-block; margin-right: .4em; border-style: solid; border-width: .3em 0 .3em .5em; border-color: transparent transparent transparent currentColor; transition: transform .15s; }
-    .more[open] summary .lbl::before { transform: rotate(90deg); }
-    .tip { position: fixed; z-index: 1080; pointer-events: none; padding: .25rem .55rem; border-radius: .4rem; background: #2b2118; color: #fff; font-size: .8rem; white-space: nowrap;
-      box-shadow: 0 .2rem .6rem rgba(0, 0, 0, .25); }
-    .tip[hidden] { display: none; }
+    .card-box { padding: .9rem 1rem 1rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .14); }
     .how { color: var(--muted); font-size: .92rem; }
-    /* the story card: what the answers are for (links to the story of Bonet) */
-    .story { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 1rem; align-items: center; margin-top: 1.4rem; padding: .8rem;
-      color: var(--bs-body-color); text-decoration: none; transition: transform .15s, box-shadow .15s; }
-    .story:hover, .story:focus-visible { transform: translateY(-2px); color: var(--bs-body-color); }
-    .story .scan { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: .45rem; background: #fff; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .08); }
-    .story .scan img { position: absolute; left: -2%; top: -3%; width: 300%; max-width: none; filter: sepia(.25); }
-    .story .scan .hit { position: absolute; left: 29%; top: 1%; width: 26%; height: 44%; border: 2px solid var(--accent); border-radius: .25rem; }
-    .story .scan .yr { position: absolute; right: .3rem; bottom: .25rem; font: italic .75rem Georgia, serif; color: #7b6c58; background: rgba(255, 255, 255, .85); padding: 0 .3rem; border-radius: .2rem; }
-    .story .kicker { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); }
-    .story h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.25rem; margin: .1rem 0 .3rem; }
-    .story p { margin: 0 0 .35rem; font-size: .9rem; line-height: 1.4; color: var(--bs-body-color); }
-    .story .more-link { font-size: .88rem; font-weight: 600; color: var(--accent); white-space: nowrap; }
-    .story:hover .more-link .bi { transform: translateX(3px); }
-    .story .more-link .bi { display: inline-block; transition: transform .15s; }
-    @media (max-width: 575.98px) {
-      .story { grid-template-columns: 6.5rem minmax(0, 1fr); gap: .75rem; }
-      .story h2 { font-size: 1.1rem; }
-      .story p { font-size: .82rem; }
-    }
   </style>
 </head>
 <body>
@@ -93,94 +33,10 @@
 </header>
 <main>
   <div id="projects"><p class="how" data-vi="Đang tải…">Loading…</p></div>
-  <a class="card-box story" href="/chunom/dict/bonet/">
-    <div class="scan" aria-hidden="true">
-      <img src="/chunom/dict/bonet/img/anatomy.webp" alt="" loading="lazy">
-      <span class="hit"></span>
-      <span class="yr">1899</span>
-    </div>
-    <div>
-      <div class="kicker" data-vi="Câu chuyện phía sau">The story behind</div>
-      <h2 data-vi="Đọc Bonet">Reading Bonet</h2>
-      <p class="why" data-vi="Một cuốn từ điển in năm 1899, 951 trang. Máy tính đã tìm ra 4.035 chữ Nôm trong đó. Câu trả lời của bạn cho thấy máy đọc sai ở đâu, để ai cũng tra cứu được cuốn sách này.">A dictionary printed in 1899, 951 pages. A computer found 4,035 characters in it; your answers show where it went wrong, so that everybody can search the book.</p>
-      <span class="more-link"><span data-vi="Đọc câu chuyện">Read the story</span> <i class="bi bi-arrow-right"></i></span>
-    </div>
-  </a>
 </main>
-<div class="tip" id="tip" hidden></div>
 <script>
-  (async () => {
-    const box = document.getElementById('projects'), tip = document.getElementById('tip');
-    const T = (en, vi) => window.Lang ? Lang.t(en, vi) : en;
-    const el = (tag, props = {}, ...kids) => { const n = Object.assign(document.createElement(tag), props); n.append(...kids.filter(k => k != null)); return n; };
-    const num = n => n.toLocaleString(document.documentElement.lang === 'vi' ? 'vi' : 'en');
-    // the states of a place, in the order of the bar (red and green apart; the colours of the answers of the popup, Bootstrap's where it has them)
-    const STATES = [
-      ['confirmed', 'var(--bs-success, #198754)', 'Confirmed', 'Đã xác nhận', 'decided: at least 75 % "correct"', 'đã quyết: ít nhất 75 % "đúng"'],
-      ['fixed', '#1c7ed6', 'Done (editor)', 'Đã biên tập', 'checked and corrected by the editor', 'biên tập viên đã kiểm tra và sửa'],
-      ['wrong', 'var(--bs-danger, #dc3545)', 'Wrong', 'Sai', 'decided: at least 75 % "wrong"', 'đã quyết: ít nhất 75 % "sai"'],
-      ['disputed', '#8f8679', 'Disputed', 'Còn tranh cãi', 'many answers without a clear majority', 'nhiều câu trả lời nhưng không có đa số rõ ràng'],
-      ['unreadable', '#e67700', 'Unreadable', 'Không đọc được', 'decided: at least 75 % "unreadable"', 'đã quyết: ít nhất 75 % "không đọc được"'],
-      ['in_progress', '', 'In progress', 'Đang kiểm tra', 'answered, not decided yet', 'đã có câu trả lời, chưa quyết'],
-      ['open', '', 'Open', 'Chưa kiểm tra', 'no answer yet', 'chưa có câu trả lời']];
-    // how many answers the places have: one hue, light to dark
-    const DEPTH = ['0', '1', '2', '3', '4', '5+'];
-    const depthColour = i => i === 0 ? '' : `color-mix(in srgb, #1c7ed6 ${20 + i * 16}%, transparent)`;
-
-    function show(e, text) { tip.textContent = text; tip.hidden = false; tip.style.left = `${Math.min(e.clientX + 12, innerWidth - tip.offsetWidth - 8)}px`; tip.style.top = `${e.clientY + 14}px`; }
-    function segment(cls, colour, n, total, text) {
-      const i = el('i', { className: cls });
-      if (colour) i.style.setProperty('--c', colour);
-      i.style.flex = `${n} 1 0`;
-      const t = `${text}: ${num(n)} (${total ? (n / total * 100).toFixed(n && n / total < .01 ? 2 : 1) : 0} %)`;
-      i.addEventListener('pointermove', e => show(e, t)); i.addEventListener('pointerleave', () => { tip.hidden = true; });
-      return i;
-    }
-    function legendItem(cls, colour, label, n, total, title) {
-      const sw = el('span', { className: `sw ${cls}` });
-      if (colour) sw.style.setProperty('--c', colour);
-      return el('div', { title }, sw, el('span', { className: 'l', textContent: label }), el('span', { className: 'n', textContent: `${num(n)}${total && n ? ` · ${(n / total * 100).toFixed(n / total < .01 ? 2 : 1)} %` : ''}` }));
-    }
-
-    let list, progress;
-    try { [list, progress] = await Promise.all([ChunomReview.projects(), ChunomReview.progress()]); }
-    catch (e) { box.textContent = T('The projects could not be loaded.', 'Không tải được các dự án.'); return; }
-    const byId = new Map(progress.map(x => [x.id, x]));
-    const open = new Set();   // the projects whose details are open (kept when the language is switched)
-    const draw = () => box.replaceChildren(...list.map(p => {
-      const g = byId.get(p.id) || { items: p.items, open: p.items, depth: [p.items, 0, 0, 0, 0, 0], answers: 0, helpers: 0 };
-      const total = g.items;
-      const start = el('button', { type: 'button', className: 'btn btn-cinnabar btn-pill btn-lg px-4' }, el('i', { className: 'bi bi-play-fill me-1' }), T('Start', 'Bắt đầu'));
-      start.addEventListener('click', () => ChunomReview.open({ project: p.id }));
-      const shown = STATES.filter(([k]) => g[k]);
-      const decided = (g.confirmed || 0) + (g.wrong || 0) + (g.unreadable || 0) + (g.disputed || 0) + (g.fixed || 0), answered = total - (g.open || 0);
-      const pct = n => !total || !n ? '0 %' : n / total < .001 ? '< 0.1 %' : `${(n / total * 100).toFixed(n / total < .01 ? 1 : 0)} %`;
-      const open_ = open.has(p.id);
-      const details = el('details', { className: 'more', open: open_ },
-        el('summary', {},
-          el('span', { className: 'sum', textContent: `${num(total)} ${T('places', 'chỗ')} · ${num(g.answers)} ${T('answers', 'câu trả lời')}` }),
-          el('span', { className: 'lbl', textContent: T('Details', 'Chi tiết') })),
-        el('div', { className: 'legend' }, ...STATES.map(([k, c, en, vi, den, dvi]) => legendItem(k === 'in_progress' ? 'progress' : k === 'open' ? 'open' : '', c, T(en, vi), g[k] || 0, total, T(den, dvi)))),
-        el('h3', { textContent: T('Answers per place', 'Số câu trả lời mỗi chỗ') + ` (${T('decided from', 'quyết từ')} ${g.min_answers || 5})` }),
-        el('div', { className: 'stack thin', role: 'img', ariaLabel: DEPTH.map((d, i) => `${d}: ${num(g.depth[i])}`).join(', ') },
-          ...DEPTH.map((d, i) => g.depth[i] ? segment(i ? '' : 'open', depthColour(i), g.depth[i], total, `${d} ${T(i === 1 ? 'answer' : 'answers', 'câu trả lời')}`) : null)),
-        el('div', { className: 'legend' }, ...DEPTH.map((d, i) => legendItem(i ? '' : 'open', depthColour(i), `${d} ${T(i === 1 ? 'answer' : 'answers', 'câu trả lời')}`, g.depth[i], total))));
-      details.addEventListener('toggle', () => { if (details.open) open.add(p.id); else open.delete(p.id); });
-      // in view: the title, one short line, the bar and the button; the rest folded in Details
-      start.classList.add('go');
-      return el('section', { className: 'card-box project' },
-        el('div', { className: 'head' },
-          el('div', { className: 't' }, el('h2', { textContent: T(p.title_en, p.title_vi) }),
-            el('small', { className: 'line' }, ...[`${pct(decided)} ${T('decided', 'đã quyết')}`, `${pct(answered)} ${T('answered', 'đã trả lời')}`, `${num(g.helpers)} ${T(g.helpers === 1 ? 'helper' : 'helpers', 'người giúp')}`]
-              .flatMap((t, i) => [i ? ' · ' : null, el('span', { className: 'nw', textContent: t })]).filter(Boolean)))),
-        start,
-        el('div', { className: 'stack', role: 'img', ariaLabel: shown.map(([k, , en, vi]) => `${T(en, vi)} ${num(g[k])}`).join(', ') },
-          ...shown.map(([k, c, en, vi, den, dvi]) => segment(k === 'in_progress' ? 'progress' : k === 'open' ? 'open' : '', c, g[k], total, `${T(en, vi)} (${T(den, dvi)})`))),
-        details);
-    }));
-    draw();
-    document.addEventListener('langchange', draw);
-  })();
+  // the projects with their progress and Start, and the cards of their pages (review_projects.info): js/review.js
+  ChunomReview.board(document.getElementById('projects'));
 </script>
 </body>
 </html>
