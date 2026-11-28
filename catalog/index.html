@@ -9,6 +9,7 @@
   <link rel="canonical" href="https://chunom.org/chunom/catalog/">
   <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://qatt.org/css/site.css">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
   <link rel="stylesheet" href="/chunom/css/shelf-cards.css">
   <link rel="stylesheet" href="/chunom/css/shelf.css">
   <link rel="stylesheet" href="/chunom/css/catalog.css">
@@ -24,7 +25,11 @@
 <header class="hero py-4"><div class="container text-center">
   <p class="han mb-1" lang="vi-Hani">書目漢喃</p>
   <h1 class="mb-2" data-vi="Thư mục bản quét Hán Nôm">Hán-Nôm scans in libraries</h1>
-  <p class="lead mx-auto mb-0" data-vi="Sách Hán Nôm thuộc phạm vi công cộng, được các thư viện số hoá. Mở từng trang ngay tại đây.">Public-domain Hán-Nôm books digitized by libraries. Open every page right here.</p>
+  <p class="lead mx-auto mb-3" data-vi="Sách Hán Nôm thuộc phạm vi công cộng, được các thư viện số hoá. Mở từng trang ngay tại đây.">Public-domain Hán-Nôm books digitized by libraries. Open every page right here.</p>
+  <p class="d-flex flex-wrap justify-content-center gap-2 mb-0">
+    <a class="btn btn-cinnabar btn-pill" href="/chunom/shelf/"><i class="bi bi-bookshelf"></i> <span data-vi="Tủ sách">Bookshelf</span></a>
+    <a class="btn btn-cinnabar btn-pill" href="/chunom/dict/"><i class="bi bi-journal-bookmark"></i> <span data-vi="Từ điển">Dictionaries</span></a>
+  </p>
 </div></header>
 <main class="container py-4">
 <form class="catalog-filters card-box" role="search" onsubmit="return false">
@@ -52,8 +57,8 @@
 <div class="works" id="works"><p class="text-secondary" data-vi="Đang tải thư mục …">Loading the catalogue …</p></div>
 </main>
 <footer class="container py-4 small text-body-secondary">
-  <p class="mb-1" data-vi="Các bản quét thuộc về thư viện lưu giữ và được hiển thị theo giấy phép hoặc điều kiện sử dụng của họ; mỗi trang ghi rõ nguồn.">The scans belong to the holding libraries and are shown under their licences or terms of use; every page names its source.</p>
-  <p class="mb-0" data-vi="Thư mục còn đang được xây dựng: tên sách, tác giả và loại chữ được tạo tự động và chưa kiểm tra hết.">The catalogue is still being built: titles, authors and script were generated automatically and are not all checked yet.</p>
+  <p class="mb-1">The scans belong to the holding libraries and are shown under their licences or terms of use; every page names its source.</p>
+  <p class="mb-0">The catalogue is still being built: titles, authors and script were generated automatically and are not all checked yet.</p>
 </footer>
 </body>
 </html>
