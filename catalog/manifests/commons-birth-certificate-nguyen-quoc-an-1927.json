@@ -1,0 +1,359 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "Birth certificate of Nguyễn Quốc Ân, City of Hanoi (1927) (Not stated on Wikimedia Commons, not stated)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, Birth certificate of Nguyễn Quốc Ân - City of Hanoi (1927) Buuhoa85 01.jpg"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/File%3ABirth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_01.jpg",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 594,
+      "height": 808,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Birth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_01.jpg/500px-Birth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_01.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 594,
+                "height": 808
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/9/94/Birth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_01.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ABirth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_01.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/2",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "2"
+        ]
+      },
+      "width": 622,
+      "height": 860,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/2/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/2/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/2",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Birth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_02.jpg/500px-Birth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_02.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 622,
+                "height": 860
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/2/29/Birth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_02.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ABirth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_02.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/3",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "3"
+        ]
+      },
+      "width": 675,
+      "height": 900,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/3/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/3/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/3",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Birth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_03.jpg/500px-Birth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_03.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 675,
+                "height": 900
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/5/53/Birth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_03.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ABirth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_03.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/4",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "4"
+        ]
+      },
+      "width": 675,
+      "height": 900,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/4/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/4/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/4",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Birth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_04.jpg/500px-Birth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_04.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 675,
+                "height": 900
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/7/73/Birth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_04.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ABirth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_04.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/5",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "5"
+        ]
+      },
+      "width": 323,
+      "height": 306,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/5/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/5/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/5",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Birth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_05.jpg/250px-Birth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_05.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 323,
+                "height": 306
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Birth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_05.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ABirth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_05.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/6",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "6"
+        ]
+      },
+      "width": 304,
+      "height": 198,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/6/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/6/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quoc-an-1927.json/canvas/6",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Birth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_06.jpg/250px-Birth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_06.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 304,
+                "height": 198
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/6/64/Birth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_06.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ABirth_certificate_of_Nguy%E1%BB%85n_Qu%E1%BB%91c_%C3%82n_-_City_of_Hanoi_%281927%29_Buuhoa85_06.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

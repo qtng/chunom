@@ -12,11 +12,38 @@
   },
   "items": [
     {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.24/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "An Nam bộ vựng khảo (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.24)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b53093605j/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "An Nam đại quốc họa đồ (Bibliothèque nationale de France, not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-ab-483.json",
       "type": "Manifest",
       "label": {
         "none": [
           "An Nam phong thổ thoại (Yale University Library (Maurice Durand collection), AB.483)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.98/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "古墨名公傳記演音 (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.98)"
         ]
       }
     },
@@ -30,11 +57,182 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/au-hoc-ngu-ngon-thi-a-55/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ấu học ngũ ngôn thi (A55 (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/au-hoc-quynh-lam/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ấu học quỳnh lâm (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.55/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bắc hành tạp lục (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.55)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.31/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bắc sứ thông lục (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.31)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/bac-su-thong-luc/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bắc sứ thông lục (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://bl.digirati.io/iiif/ark:/81055/vdc_100189189170.0x000001",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bắc Sứ Thủy Lục Địa Đô (British Library, Or 14907)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.14/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bạch Vân Am quốc âm thi (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.14)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.9/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bạch Vân am quốc âm thi tập (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.9)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.56/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bạch Viên thi tập (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.56)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.6/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bạch Viên thi tập (Chuyện Bạch Viên Tôn Các (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.6)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093244p/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Bạch Viên Tôn các truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 114)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.35/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bản dịch Chinh phụ ngâm khúc (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.35)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ban-dien-tro-ha-o-loi/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bản diễn trò Hà Ô Lôi (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.87/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "[Bản đồ đường đi từ Hà Nội đến Hà Tĩnh] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.87)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.81/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bản hạnh ngữ lục (Tổ gia thực lục (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.81)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.41/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bảng chỉ vần Kiều (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.41)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.134/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bang giao lục (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.134)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.40/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bát Kiều (so sánh 8 bản Kiều (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.40)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/bat-nha-tam-kinh-thich-giai-hoa-ngon-ngon-minh-chau-huong-hai/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bát nhã tâm kinh thích giải Hoa ngôn (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.17/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bích câu kì ngộ (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.17)"
         ]
       }
     },
@@ -48,11 +246,83 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/bich-cau-ky-ngo_202509/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bích Câu kỳ ngộ (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.18/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bích câu kỳ ngộ (Chuyện Tú Uyên (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.18)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/bo-thi-cong-duc-kinh-dien-am-ab.-102/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bố thí công đức kinh diễn âm (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932471/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Bướm hoa tân truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 82)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/buom-hoa-tan-truyen/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bướm hoa tân truyện (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ca-co-lac-chuong-q-5/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Cà cổ nhạc chương (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.51/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ca dao Hưng Nguyên (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.51)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/cac-thanh-truyen/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Các thánh truyện (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093265z/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Calendrier franco-vietnamien 1863 (Bibliothèque nationale de France, not stated)"
         ]
       }
     },
@@ -84,11 +354,38 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/chang-chuoi-tan-truyen/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Chàng chuối tân truyện (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.21/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Chiêu Quân cống hồ (Song phượng kỳ duyên (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.21)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093228n/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Chiếu-quân cống hồ thư (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 121)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/chieu-quan-cong-ho-thu/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Chiếu-quân cống hồ thư (Not stated (upload to the Internet Archive), not stated)"
         ]
       }
     },
@@ -102,6 +399,69 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.111/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Chinh phụ ngâm (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.111)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.33/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Chinh phụ ngâm (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.33)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/chinh-phu-ngam-1/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Chinh phụ ngâm (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.36/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Chinh phụ ngâm, Đặng Trần Côn (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.36)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.34/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Chinh phụ ngâm khúc bị khảo (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.34)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/chu-dich-luc-thap-tu-quai-giai-am/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Chu dịch lục thập tứ quái giải âm (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.85/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Chữ Nôm, Nho trong chuyện Song tinh và chuyện Ỷ Lan (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.85)"
+        ]
+      }
+    },
+    {
       "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json",
       "type": "Manifest",
       "label": {
@@ -111,11 +471,110 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.102/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Chuyện Kim Nham (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.102)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.126/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Chuyện ông Thánh Phan-chi-cô Xa-vi-ê (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.126)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/co-chau-phap-van-phat-ban-hanh-ngu-luc/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Cổ Châu Pháp Vân phật bản hạnh ngữ lục (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/co-chau-phat-ban-hanh-1752/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Cổ Châu Phật bản hạnh (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/cong-an-tra-nghiem-bi-phap-phap/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Công án tra nghiệm bí pháp (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/cong-van-dich-dinh-bai-bien-cac-dan/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Công văn dịch đình bài biện các đàn (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/cu-tran-lac-dao-phu/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Cư trần lạc đạo phú (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932024/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Cung oán ngâm khúc (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 92)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-cung-oan-ngam-khuc-1905.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Cung oán ngâm khúc (Not stated (scan from Google Books), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/cung-oan-ngam-khuc/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Cung oán ngâm khúc (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.10/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Cung Oán thi (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.10)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/dac-thu-lam-tuyen-thanh-dao-ca/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đắc thú lâm tuyền thành đạo ca (Not stated (upload to the Internet Archive), not stated)"
         ]
       }
     },
@@ -174,11 +633,38 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/dai-nam-quoc-ngu/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Nam quốc ngữ (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093241b/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Đại Nam Quốc sử Diễn ca (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 110)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/dai-nam-quoc-su-dien-ca/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Nam Quốc sử Diễn ca (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/dai-nam-quoc-tuy-uy/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Nam quốc túy (Incomplete (Not stated (upload to the Internet Archive), not stated)"
         ]
       }
     },
@@ -201,11 +687,83 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.73/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đặng gia thế phả 1600-2000 (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.73)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/dao-giao-nguyen-luu/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đạo giáo nguyên lưu (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/dat-na-thai-tu-hanh/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đạt Na thái tử hạnh (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/dau-thang-gia-giam-tap/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đầu thang gia giảm tập (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/di-da-kinh-thich-giai-hoa-ngon/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Di Đà kinh thích giải Hoa ngôn (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093242s/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Địa tạng bản hạnh (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 73)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/dia-tang-ban-hanh/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Địa tạng bản hạnh (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/dia-tang-kinh-giai-thich-hoa-ngon-q.-ha/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Địa Tạng Kinh thích giải Hoa ngôn (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/dich-kinh-dai-toan-tiet-yeu-dien-nghia-q-1/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Dịch kinh đại toàn tiết yếu diễn nghĩa (Not stated (upload to the Internet Archive), not stated)"
         ]
       }
     },
@@ -228,6 +786,96 @@
       }
     },
     {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb10797023/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Dictionarium Anamitico-Latinum (Bayerische Staatsbibliothek, 4 L.as. 26-2)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.onb.ac.at/presentation/ABO/%2BZ222427808/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Dictionarium Anamitico-Latinum (Österreichische Nationalbibliothek, +Z222427808)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.onb.ac.at/presentation/ABO/%2BZ222427900/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Dictionarium Anamitico-Latinum (Österreichische Nationalbibliothek, +Z222427900)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.onb.ac.at/presentation/ABO/%2BZ22242800X/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Dictionarium Anamitico-Latinum (Österreichische Nationalbibliothek, +Z22242800X)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/bub_gb_MkQ0AQAAMAAJ/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Dictionnaire annamite-français : (langue officielle et langue vulgaire (University of Wisconsin - Madison, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb10572635/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Dictionnaire étymologique chinois-annamite latin-français (Bayerische Staatsbibliothek, L.as. 412 d)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.15/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Điểm mê khúc (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.15)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.13/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đoàn thị thực lục Hồng Hà văn sĩ gia phả (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.13)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/duc-chua-giesu-q-2/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đức Chúa Giêsu (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/duc-ba-phat-truyen/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đức Phật Bà truyện: Nam Hải Quan Thế Âm sự tích diễn ca 𱙘 ： 𳁓 (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093160b/manifest.json",
       "type": "Manifest",
       "label": {
@@ -237,11 +885,38 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/duong-ngoc-co-tich/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Dương Ngọc cổ-tích (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/duong-thi-tuyet-cu-dien-ca/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đường thi tuyệt cú diễn ca (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093240w/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Dương tiết diễn nghĩa (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 20)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.109/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đường xá nước ta xưa (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.109)"
         ]
       }
     },
@@ -264,6 +939,24 @@
       }
     },
     {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb10251375/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Gia Định thành thông chí (Bayerische Staatsbibliothek, A.or. 5255)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/gia-dinh-thanh-thong-chi/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Gia Định thành thông chí (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://chunom.org/chunom/catalog/manifests/commons-gia-long-1817-french-ship.json",
       "type": "Manifest",
       "label": {
@@ -282,11 +975,47 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.76/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Gia phả họ Nguyễn ở xă Vy Viễn huyện Nghi Xuân (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.76)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/bub_gb_PKQTAAAAQAAJ/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Grammaire annamite : suivie d'un vocabulaire français-annamite et annamite-français (Oxford University, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.23/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hà Đông Hà Tây Trương Thôi Hàn Chu cổ truyện (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.23)"
+        ]
+      }
+    },
+    {
       "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-1727.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Hà Nội học chính thám hoa Vũ Phạm Hàm tập văn (National Library of Vietnam (Thư viện Quốc gia Việt Nam), R.1727)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b525059421/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "[Hà Nội] (map, 1873) (Bibliothèque nationale de France, not stated)"
         ]
       }
     },
@@ -300,6 +1029,24 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.53/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hán Cao truyện diễn nghĩa (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.53)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/han-lam-thieu-vi-thong-giam-su-ky/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hàn lâm thiếu vi thông giám sử ký (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093251r/manifest.json",
       "type": "Manifest",
       "label": {
@@ -309,11 +1056,29 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.58/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hạnh Am thi cảo (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.58)"
+        ]
+      }
+    },
+    {
       "id": "https://chunom.org/chunom/catalog/manifests/commons-hanoi-notice-dong-xuan-1923.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Notice by the City of Hanoi on land requisition for the Đồng Xuân Market (1923) (National Archives Centre I (Trung tâm Lưu trữ quốc gia I) (exhibition « Ký ức chợ xưa »), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ho-thuong-thu-gia-le/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hồ Thượng thư gia lễ (Not stated (upload to the Internet Archive), not stated)"
         ]
       }
     },
@@ -350,6 +1115,15 @@
       "label": {
         "none": [
           "Hoàng trừ truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 65)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.104/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng trừ truyện (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.104)"
         ]
       }
     },
@@ -453,6 +1227,33 @@
       }
     },
     {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb10251383/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng Việt luật lệ (Bayerische Staatsbibliothek, A.or. 5275-1)"
+        ]
+      }
+    },
+    {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb10251384/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng Việt luật lệ (Bayerische Staatsbibliothek, A.or. 5275-2)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/hoang-viet-luat-le-toat-yeu-dien-ca-u-dien/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng Việt luật lệ toát yếu diễn ca (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json",
       "type": "Manifest",
       "label": {
@@ -471,11 +1272,38 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/hoi-dong-tu-giao/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hội đồng tứ giáo (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-272.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Hội thí văn tuyển (National Library of Vietnam (Thư viện Quốc gia Việt Nam), R.272)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/hong-duc-quoc-am-thi-tap/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hồng Đức quốc âm thi tập (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.46/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hồng nghĩa giác tư y thư (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.46)"
         ]
       }
     },
@@ -489,11 +1317,83 @@
       }
     },
     {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb11467942/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Khâm định Việt sử thông giám cương mục (Bayerische Staatsbibliothek, 4 A.or. 3047 g-1)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.38/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Khảo cứu Kiều (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.38)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/khuyen-hieu-thu/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Khuyến hiếu thư (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.62/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Kiến văn tiểu lục (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.62)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.45/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Kiều tầm nguyên (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.45)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093260q/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Kim Kiều diễn ca (Bibliothèque nationale de France, Vietnamien B 97)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/kim-kieu-dien-ca/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Kim Kiều diễn ca (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b105000092/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Kim Vân Kiêu án (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 99)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.39/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Kim Vân Kiều án và Nguyễn Văn Thắng (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.39)"
         ]
       }
     },
@@ -516,11 +1416,164 @@
       }
     },
     {
+      "id": "https://bl.digirati.io/iiif/ark:/81055/vdc_100165477525.0x000001",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (British Library, Or 14844)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/bpt6k54394659/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Bibliothèque nationale de France, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/bpt6k5453029r/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Bibliothèque nationale de France, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093426h/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Bibliothèque nationale de France, Vietnamien B 104)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932276/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
-          "Kim Vân Kiều tân truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 109)"
+          "Truyện Kiều (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 109)"
+        ]
+      }
+    },
+    {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb11452908/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Bayerische Staatsbibliothek, 2 A.or. 13,II-14)"
+        ]
+      }
+    },
+    {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb11452909/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Bayerische Staatsbibliothek, 2 A.or. 13,II-15,1/2)"
+        ]
+      }
+    },
+    {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb11452910/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Bayerische Staatsbibliothek, 2 A.or. 13,II-15,1/2)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.112/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.112)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.37/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.37)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.onb.ac.at/presentation/ABO/%2BZ148808804/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Österreichische Nationalbibliothek, +Z148808804)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.onb.ac.at/presentation/ABO/%2BZ317973505/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Österreichische Nationalbibliothek, +Z317973505)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.onb.ac.at/presentation/ABO/%2BZ317973608/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Österreichische Nationalbibliothek, +Z317973608)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.64/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Kinh Bắc tiến sĩ Nguyễn Văn Thắng thi tập (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.64)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.75/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Kinh doãn hoan thành Nguyễn bố văn húy Công Trứ (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.75)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/kinh-nhung-le-mua-phuc-sinh-q-3/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Kinh những lễ mùa phục sinh (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.80/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Kinh phụ mẫu (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.80)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/so-nghieu-doi-thoai/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Kính phụng Táo thần diễn ca - Sô nghiêu đối thoại (Not stated (upload to the Internet Archive), not stated)"
         ]
       }
     },
@@ -552,11 +1605,164 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.96/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lập trai tiên sinh hành trạng (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.96)"
+        ]
+      }
+    },
+    {
       "id": "https://chunom.org/chunom/catalog/manifests/commons-le-chan-tong-document.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Document in chữ Nôm written by a Westerner (reign of Lê Chân Tông) (Not stated on Wikimedia Commons, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.77/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lê thị tự tình khúc (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.77)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.86/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lê triều dã sử (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.86)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.79/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lê triều tạo sĩ đăng khoa lục (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.79)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/bub_gb_HdQuAAAAYAAJ/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lexique franco-annamite = Tu vi phalangsaannam (Harvard University, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.74/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lĩnh tạo phú (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.74)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.70/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lôi Dương Nhuế Biện Lê tiên sinh thi tập (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.70)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.11/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lữ hành ngâm (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.11)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/bpt6k5844254h/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lục Vân Tiên (Bibliothèque nationale de France, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/bpt6k54602432/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lục Vân Tiên (Bibliothèque nationale de France, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/bpt6k5439461n/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lục Vân Tiên (Bibliothèque nationale de France, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb11452896/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lục Vân Tiên (Bayerische Staatsbibliothek, 2 A.or. 13,I-19)"
+        ]
+      }
+    },
+    {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb11542942/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lục Vân Tiên (Bayerische Staatsbibliothek, A.or. 7572 f)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/luc-van-tien-q-1/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lục Vân Tiên (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.onb.ac.at/presentation/ABO/%2BZ148807204/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lục Vân Tiên (Österreichische Nationalbibliothek, +Z148807204)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093266d/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lưu Bình diễn ca (Bibliothèque nationale de France, Vietnamien B 86)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/luu-binh-dien-ca/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lưu Bình diễn ca (Not stated (upload to the Internet Archive), not stated)"
         ]
       }
     },
@@ -570,11 +1776,29 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/luu-binh-phu/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lưu-Bình phú (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932632/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Lý-công tân-thư (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 112)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ly-cong-tan-thu/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lý-công tân-thư (Not stated (upload to the Internet Archive), not stated)"
         ]
       }
     },
@@ -588,11 +1812,65 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.60/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Mai Đình mộng ký (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.60)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/manh-tu_202605/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Mạnh Tử (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.127/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Minh nghĩa giáo thiên truyện (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.127)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/minh-tam-bao-giam-thich-nghia/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Minh tâm bảo giám thích nghĩa (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093269r/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Minh-tâm báu-giám thích-nghiã (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 58)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/mong-son-thi-thuc-khoa-nghi-1918/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Mông Sơn thí thực khoa nghi (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/nam-hai-quan-am-ban-hanh/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nam Hải Quan Âm bản hạnh quốc ngữ (Not stated (upload to the Internet Archive), not stated)"
         ]
       }
     },
@@ -624,6 +1902,69 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/nam-vo-tan-truyen/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nam-vô tân-truyện (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/nan-tu-giai-am-am/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nan tự giải âm (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ngam-thuong-kho/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngắm thương khó (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.16/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngô gia thế phả (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.16)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.83/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngô gia văn phái (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.83)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.84/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngô gia văn phái (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.84)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.30/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngọc Kiều Lê (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.30)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093271k/manifest.json",
       "type": "Manifest",
       "label": {
@@ -633,11 +1974,47 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.54/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngọc Kiều Lê tân truyện (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.54)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ngoc-kieu-le-tan-truyen/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngọc Kiều Lê tân truyện (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.48/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngũ canh dạ cảm tình nhân (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.48)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932721/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Ngũ canh phú (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 100)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ngu-canh-phu/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngũ canh phú (Not stated (upload to the Internet Archive), not stated)"
         ]
       }
     },
@@ -750,11 +2127,101 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/ngu-kinh-tiet-yeu-dien-nghia/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngũ kinh tiết yếu diễn nghĩa (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ngu-kinh-tiet-yeu-thu-kinh-q.-1/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngũ kinh tiết yếu thư kinh (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ngu-thien-tu-dich-quoc-ngu/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngũ thiên tự dịch quốc ngữ (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.67/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nguyễn Bá Xuyến: lí lịch, hành trạng, quốc ngữ thi ca tập (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.67)"
+        ]
+      }
+    },
+    {
       "id": "https://chunom.org/chunom/catalog/manifests/commons-nguyen-thi-tay-son-ky.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Nguyễn thị Tây Sơn ký (École française d'Extrême-Orient (as credited on Commons), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093273g/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nguyệt Hoa vấn đáp (Bibliothèque nationale de France, Vietnamien B 68)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/nguyet-hoa-van-dap/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nguyệt Hoa vấn đáp (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.57/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nhạc khúc thi văn (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.57)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/nhat-dung-thuong-dam/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nhật dụng thường đàm (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.130/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nhất thời lễ tụng nhật dụng hành trì tập yếu chư nghi (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.130)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093118v/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nhị độ mai diễn ca (Bibliothèque nationale de France, Vietnamien B 105)"
         ]
       }
     },
@@ -768,11 +2235,56 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/nhi-do-mai-dien-ca/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nhị độ mai diễn ca (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/nhi-do-mai-tan-truyen/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nhị độ mai tân truyện (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nhu-tay-nhut-trinh-1890.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Như tây nhựt trình (Bibliothèque nationale de France, not stated (Gallica btv1b10889751m))"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/nhuan-chinh-trung-hieu-tiet-nghia-nhi-do-mai-truyen/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nhuận chinh trung hiếu tiết nghĩa nhị độ mai truyện (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932689/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Nữ-Lưu tương truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 72)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/nu-luu-tuong-truyen/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nữ-Lưu tương truyện (Not stated (upload to the Internet Archive), not stated)"
         ]
       }
     },
@@ -786,11 +2298,74 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/bub_gb_QcMVAAAAYAAJ/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Petit dictionnaire annamite-français (Harvard University, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/bub_gb_2kg0AQAAMAAJ/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Petit dictionnaire français-annamite (University of Wisconsin - Madison, not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093156m/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Phạm-công Cúc-Hoa (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 124)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/pham-cong-cuc-hoa/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Phạm-công Cúc-Hoa (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.49/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Phạm Kinh Vỹ niên phả (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.49)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/phap-thi-yeu-luc/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Pháp thí yếu lục (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/phat-thuyet-dai-bao-phu-mau-an-trong-kinh/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Phật thuyết đại báo phụ mẫu ân trọng kinh (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/phat-tu-an-thien-giai-quoc-am-luc-chuong/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Phật tử an thiền giải quốc âm lục chương (Not stated (upload to the Internet Archive), not stated)"
         ]
       }
     },
@@ -804,11 +2379,29 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/phong-tinh-tan-truyen/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Phong-tinh tân-truyện (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093424m/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Phủ Biên tạp lục (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 18)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.50/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Phủ Diễn hát (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.50)"
         ]
       }
     },
@@ -822,6 +2415,33 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.5/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Phù-dung tân-truyện (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.5)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/phu-dung-tan-truyen/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Phù-dung tân-truyện (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.12/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Phượng minh toàn tập (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.12)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093665g/manifest.json",
       "type": "Manifest",
       "label": {
@@ -831,11 +2451,47 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/qua-da-gie-si-ma-mua-an-chay-ca/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Qua-da-giê-si-ma Mùa ăn chay cả (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100933425/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Quan âm chú giải tân truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 66)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/quan-am-chu-giai-tan-truyen/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Quan âm chú giải tân truyện (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/quan-am-dien-ca-toan-truyen-yen/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Quan Âm diễn ca toàn truyện (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/quan-am-nguyen-tu-ban-hanh/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Quan Âm nguyên tử bản hạnh (Not stated (upload to the Internet Archive), not stated)"
         ]
       }
     },
@@ -858,6 +2514,51 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/quan-phu-tu-kinh-huan-hop-khac/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Quan phu tử kinh huấn hợp khắc (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.63/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Quân trung đối (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.63)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.66/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Quế Sơn thi tập (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.66)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.101/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Quốc âm phú (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.101)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/quocamtantu/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Quốc âm tân tự (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100930478/manifest.json",
       "type": "Manifest",
       "label": {
@@ -867,11 +2568,272 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.116/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Quốc văn tạp lục (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.116)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/quy-y-thien-ban-1930/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Quy y thiện bản (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093666x/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil de coutumes (Bibliothèque nationale de France, Vietnamien B 33)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.117/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice: [Các bài thuốc đông y Việt Nam] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.117)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.105/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice: [Gia phả các dòng họ] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.105)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.119/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice : [Gia phả họ Đỗ, Phan] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.119)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.118/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice: Kim Vân Kiều án - Bài trình của sứ bộ đi Thanh về (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.118)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.133/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice : [Sử liệu thời Lê Trung Hưng] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.133)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.94/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice: [Thơ ca du hành từ Hà Nội vào kinh đô Huế - 1] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.94)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.113/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice: [Thơ ca du hành từ Hà Nội vào kinh đô Huế - 2] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.113)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.90/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice : [Thơ văn Lê -Trịnh - Mạc] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.90)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.91/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice: [Thơ văn Lý Văn Phức], Tô Xuyên Lý Văn Phức (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.91)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.120/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice : [Truyền kì mạn lục -1] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.120)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.121/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice : [Truyền kì mạn lục -2] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.121)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.92/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice: [Truyện thơ Nôm 1] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.92)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.93/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice: [Truyện thơ Nôm 2] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.93)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.95/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice: [Truyện thơ Nôm 3] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.95)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.97/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice: [Tuyển tập thơ Nôm 1] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.97)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.131/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice: [Văn Nôm công giáo] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.131)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.88/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice : [Văn tế] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.88)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.89/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice : [Văn thơ đi sứ] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.89)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.114/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice: [Văn thơ Lý Văn Phức 1] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.114)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.115/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice: [Văn thơ Lý Văn Phức 2] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.115)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.99/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice: [Văn thơ Nôm 1] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.99)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.100/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice: [Văn thơ Nôm 2] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.100)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.122/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice: [Văn thơ Nôm 3] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.122)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.106/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice: [Văn thơ Phật giáo] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.106)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.103/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil factice: [Văn thơ Phật giáo thời Trần] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.103)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b54100441b/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Sách học đề cương (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 35)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/sai-vai-tan-luc-quoc-am-dien-ca/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Sãi Vãi tân lục quốc âm diễn ca (Not stated (upload to the Internet Archive), not stated)"
         ]
       }
     },
@@ -903,6 +2865,42 @@
       }
     },
     {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-so-hoc-van-tan-2024.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Sơ Học Vấn Tân (Wikimedia Commons (modern edition, no holding library), not applicable)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/so-hoc-van-tan/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Sơ Học Vấn Tân (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/so-hoc-van-tan_202605/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Sơ Học Vấn Tân (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/so-tap-kich-thich-phap-a.-1381/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Sơ tập kích thích pháp (A.1381 (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://chunom.org/chunom/catalog/manifests/commons-temple-state-appointment-by-emperor-khai-dinh-bestowed-to.json",
       "type": "Manifest",
       "label": {
@@ -917,6 +2915,51 @@
       "label": {
         "none": [
           "State appointment by Emperor Thành Thái bestowed to Nguyễn Hữu Tiễn (Temple University Libraries, Digital Collections (Vietnam Nôm Manuscripts Field Digitization Project), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/su-ly-dung-thong/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Sự lý dung thông (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.61/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Sứ trình quốc âm tập (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.61)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.65/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Sứ trình tiện lãm khúc (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.65)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.78/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Sứ văn kí sự (rút từ (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.78)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.26/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tam quốc chí diễn ca (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.26)"
         ]
       }
     },
@@ -939,6 +2982,69 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/tam-thien-tu-giai-am-a-54/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tam thiên tự giải âm (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/tam-thien-tu-giai-am-tu-hoc-toat-yeu-oat-eu-1887/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tam thiên tự giải âm - Tự học toát yếu (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/tam-thien-tu-lich-dai-van-quoc-am/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tam thiên tự lịch đại văn quốc âm (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.128/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tam tổ thật lục (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.128)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/tam-tu-kinh-giai-am-dien-ca/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tam tự kinh giải âm diễn ca (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/tam-tu-kinh-luc-bat-dien-am/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tam tự kinh lục bát diễn âm (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/tam-tu-kinh-quoc-ngu-dien-ca/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tam Tự Kinh quốc ngữ diễn ca (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093253n/manifest.json",
       "type": "Manifest",
       "label": {
@@ -957,11 +3063,92 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/tan-bien-truyen-ky-man-luc-tang-bo-giai-am-tap-chu-q-1/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tân biên Truyền kỳ mạn lục tăng bổ giải âm tập chú (VHv.1491 (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/tan-bien-truyen-ky-man-luc-tang-bo-giai-am-tap-chu-q-2/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tân biên Truyền kỳ mạn lục tăng bổ giải âm tập chú (VHv.1491 (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/tan-bien-truyen-ky-man-luc-tang-bo-giai-am-tap-chu-q-3/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tân biên Truyền kỳ mạn lục tăng bổ giải âm tập chú (VHv.1491 (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/tan-bien-truyen-ky-man-luc-tang-bo-giai-am-tap-chu-q-4/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tân biên Truyền kỳ mạn lục tăng bổ giải âm tập chú (VHv.1491 (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/tan-bien-truyen-ky-man-luc-tang-bo-giai-am-tap-chu-vhv.-1491/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tân biên Truyền kỳ mạn lục tăng bổ giải âm tập chú (VHv.1491 (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/tan-san-chinh-phu-ngam-dien-am-tu-khuc/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tân san chinh phụ ngâm diễn âm từ khúc (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://chunom.org/chunom/catalog/manifests/commons-tan-vien-son-thanh-chan-kinh.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Tản Viên sơn thánh chân kinh (National Library of Vietnam (Thư viện Quốc gia Việt Nam), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/tang-bo-thi-kinh-the-chu-dien-nghia-hop-tham-q.-1-2/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tăng bổ Thi kinh thể chú diễn nghĩa hợp tham (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.8/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tây dương liệt phụ truyện (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.8)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.71/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tây Sương lục ký (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.71)"
         ]
       }
     },
@@ -975,11 +3162,317 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/thach-sanh-ly-thong-thu/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thạch-sanh Lý-Thông thư (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thach-sanh-tan-truyen-ab.-221/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thạch Sanh tân truyện (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thai-tong-hoang-de-ngu-che-khoa-hu-luc/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thái Tông hoàng đế ngự chế khoá hư lục (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.132/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thám hoa Phan Kính hội đình thí văn (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.132)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.4/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thẩm Tử Hư truyện (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.4)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thanh-giao-kinh-nguyen/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thánh giáo kinh nguyện (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thanh-giao-kinh-nguyen-2/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thánh giáo kinh nguyện (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thanh-giao-yeu-ly/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thánh giáo yếu lý (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thanh-giao-yeu-ly-quoc-ngu/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thánh giáo yếu lý quốc ngữ (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thanh-hoa-quan-phong/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thanh Hoá quan phong (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thap-gioi-co-hon-quoc-ngu-van/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thập giới cô hồn quốc ngữ văn (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thi-kinh-q.-3/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thi kinh (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thi-kinh-dien-nghia-q.-2/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thi kinh diễn nghĩa (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thi-kinh-dien-nghia-q.-3/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thi kinh diễn nghĩa (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thi-kinh-dien-nghia-q.-4/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thi kinh diễn nghĩa (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thi-kinh-dien-nghia-q.-5/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thi kinh diễn nghĩa (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thi-kinh-giai-am/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thi kinh giải âm (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.52/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thi Kinh quốc ngữ ca (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.52)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thien-nam-minh-giam/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thiên Nam minh giám (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.29/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thiên Nam ngữ lục (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.29)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thien-nam-ngu-ngoai-ky-ab.-478/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thiên Nam ngữ lục ngoại kỷ (AB.478 (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thien-nam-ngu-ngoai-ky-quyen-thuong/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thiên Nam ngữ lục ngoại kỷ (AB.478 (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thien-nam-tiep-chu-ngoai-ki-su-luoc/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thiên Nam tiệp chú ngoại kỷ sử lược (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ban-khac-thien-tong-ban-hanh-1/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thiền tông bản hạnh (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thien-tong-ban-hanh-anh/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thiền tông bản hạnh (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thien-tong-ban-hanh-anh-1932/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thiền tông bản hạnh (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thien-tu-van-an/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thiên tự văn (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thien-tu-van-cao-van-tau-chep/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thiên tự văn (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10099861h/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Thiên tự văn giải âm (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 16)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thien-tu-van-giai-am/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thiên tự văn giải âm (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thien-uyen-truyen-dang-luc-q.-ha/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thiền uyển truyền đăng lục (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.22/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thơ Lê - chúa Trịnh và các quan (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.22)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/tho-mai-gia-le_202506/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thọ Mai gia lễ (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.27/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thơ Nôm (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.27)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.7/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thơ Nôm thời Lê (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.7)"
         ]
       }
     },
@@ -1011,6 +3504,51 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/thu-da-lu-hoai-ngam/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thu dạ lữ hoài ngâm (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/thu-kinh-dai-toan-tiet-yeu-dien-nghia-q.-5/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thư kinh đại toàn tiết yếu diễn nghĩa (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.43/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thù thế tân thanh (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.43)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.44/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thù thế tân thanh (tiết thứ 2 (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.44)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.69/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thư Trai thi văn quốc âm tập (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.69)"
+        ]
+      }
+    },
+    {
       "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json",
       "type": "Manifest",
       "label": {
@@ -1029,11 +3567,29 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.19/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thượng sĩ ngữ lục (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.19)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093255j/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Thuý Kiều thi-tập (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 59)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.42/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thuý Kiều thi-tập (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.42)"
         ]
       }
     },
@@ -1047,11 +3603,110 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/thuy-son-thu-mong-ky/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thuý-sơn thu mộng ký (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.2/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tì Bà quốc âm tân truyện (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.2)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.3/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tì Bà quốc âm tân truyện (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.3)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/tiet-khi-nien-van-tap/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tiết khí niên vận tập (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10099862z/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tiểu học bản quốc phong tục (Bibliothèque nationale de France, Vietnamien A 45)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/tinh-nghiep-van-dien-nghia/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tịnh nghiệp văn diễn nghĩa (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.1/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tĩnh Vương tuần du ký (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.1)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/tran-dai-vuong-chinh-kinh-dich-am/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Trần Đại vương chính kinh dịch âm (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.28/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Triều đại Việt Nam - Chữ húy (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.28)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/trieu-ngu-nuong-tan-thu/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Triệu ngũ nương tân thư (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093159z/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Triệu Ngũ-nương thư (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 127)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/trinh-quoc-cong-nguyen-binh-khiem-thi-tap/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Trình Quốc công Nguyễn Bỉnh Khiêm thi tập (Not stated (upload to the Internet Archive), not stated)"
         ]
       }
     },
@@ -1065,11 +3720,29 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/trinh-thu-truyen/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Trinh thử truyện (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100931538/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Trung quân đối ca (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 87)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/trung-quan-doi-ca/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Trung quân đối ca (Not stated (upload to the Internet Archive), not stated)"
         ]
       }
     },
@@ -1083,11 +3756,38 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/truong-ngao-truyen/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Trương Ngáo truyện (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100931555/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Trương Ngộ diễn-ca (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 113)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/truong-ngo-dien-ca/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Trương Ngộ diễn-ca (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.32/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Trường Phái Hầu thi văn di thập (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.32)"
         ]
       }
     },
@@ -1101,11 +3801,92 @@
       }
     },
     {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-truyen-ky-man-luc-1952.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyền kỳ mạn lục (National Library of Vietnam (Thư viện Quốc gia Việt Nam), Indochina collection (as credited on Commons), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/tu-duc-thanh-che-tu-hoc-giai-nghia-ca-i-nghia/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tự Đức thánh chế tự học giải nghĩa ca (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.123/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tự Phán quyển thượng (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.123)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.124/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tự Phán quyển thượng (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.124)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.125/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tự Phán quyển thượng (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.125)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10099911t/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Tứ thế bụt thức (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 15)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.107/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tứ thời khúc (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.107)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.25/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tứ thời khúc vịnh (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.25)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/tu-thu-the-chu-q.-thu/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tứ thư thể chú (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/tu-thu-uoc-giai-gia-ab.-270-1/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tứ thư ước giải (AB.270-1 (Not stated (upload to the Internet Archive), not stated)"
         ]
       }
     },
@@ -1119,11 +3900,38 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/tuyen-phu-ngo-phoi-tan-truyen/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tuyển phu ngộ phối tân truyện (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.72/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "[Tuyển tập thơ văn Việt Nam] (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.72)"
+        ]
+      }
+    },
+    {
       "id": "https://chunom.org/chunom/catalog/manifests/commons-tuyet-thu.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Tuyết thư (Not stated on Wikimedia Commons, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.82/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ức Trai di tập (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.82)"
         ]
       }
     },
@@ -1137,11 +3945,137 @@
       }
     },
     {
+      "id": "https://iiif.archive.org/iiif/3/uc-trai-tap-quoc-am-thi-tap/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ức Trai tập - Quốc âm thi tập － (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/van-tien-co-tich-truyen/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Vân Tiên cổ tích truyện (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b8596877z/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "La vie de Saint Ignace de Loyola (vietnamien) (Bibliothèque nationale de France, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.108/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Việc sứ 1683 (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.108)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.68/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Việt âm thi tập (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.68)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/viet-su-dien-am/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Việt sử diễn âm (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/viet-su-dien-nghia/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Việt sử diễn nghĩa (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/viet-su-dien-nghia-tu-tu-ca/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Việt sử diễn nghĩa tứ tự ca (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/viet-su-tiep-luc-dien-nghia/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Việt sử tiệp lục diễn nghĩa (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b85968754/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "御製詩五集總目二目錄二 (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 106)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.47/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Vương Kim truyện diễn tự (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.47)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/xuan-huong-thi-tap-q-1/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Xuân Hương thi tập 1930 (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/xuan-huong-thi-tap-q-2/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Xuân Hương thi tập 1930 (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/xuat-gia-sa-di-quoc-am-thap-gioi/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Xuất gia sa di quốc âm thập giới (Not stated (upload to the Internet Archive), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.129/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Yên Lãng thượng thư công gia phả (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.129)"
         ]
       }
     }

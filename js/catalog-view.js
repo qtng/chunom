@@ -38,6 +38,15 @@
     "scan": ["checked on the scan", "đã kiểm tra trên bản quét"],
   };
 
+  // admins (app_metadata.is_admin, as navigation.js reads it) also see the withheld copies; hidden for everyone else
+  const isAdmin = () => { try { return (JSON.parse(localStorage.getItem("sb-kfgqhhmdzboszpwsqkxt-auth-token")) || {}).user?.app_metadata?.is_admin === true; } catch { return false; } };
+  const WITHHELD = {
+    "personal-data": ["Personal data", "Dữ liệu cá nhân"],
+    "copyright": ["Copyright", "Bản quyền"],
+    "permission-needed": ["Permission needed", "Cần xin phép"],
+    "other": ["Rights not clear", "Quyền chưa rõ"],
+  };
+
   let work, viewer, item;
 
   function titles(w) {
@@ -47,9 +56,23 @@
     return { qn: qn.text || w.id, han: han ? han.text : "" };
   }
 
+  // what a copy contains (item.content of the catalogue); "original" is the text itself
+  const CONTENT = {
+    "original": ["Original", "Bản gốc"],
+    "edition-with-translation": ["Edition with translation", "Bản in kèm bản dịch"],
+    "translation": ["Translation", "Bản dịch"],
+    "transcription": ["Quốc ngữ transcription", "Bản phiên âm quốc ngữ"],
+    "modern-edition": ["Modern edition", "Bản in hiện đại"],
+    "dictionary": ["Dictionary", "Từ điển"],
+    "map": ["Map", "Bản đồ"],
+  };
+  const contentText = i => { const c = CONTENT[i.content || "original"] || CONTENT.original; return t(c[0], c[1]); };
+
   function itemLabel(i) {
-    const parts = [i.holding.shelfmark, i.physical.date].filter(Boolean);
-    return `${String(i.holding.institution).split(",")[0]} – ${parts.join(", ")}`;
+    const parts = [i.holding.shelfmark !== "not stated" ? i.holding.shelfmark : "", i.physical.date].filter(Boolean);
+    // without shelfmark and date, the title as the library states it tells the copies apart
+    const tail = parts.length ? parts.join(", ") : String(i.title_on_item || "").slice(0, 70);
+    return `${i.withheld ? `[${t("Withheld", "Chưa công bố")}] ` : ""}${contentText(i)}: ${String(i.holding.institution).split(",")[0]}${tail ? " – " + tail : ""}`;
   }
 
   function row(dt, ...dd) {
@@ -61,7 +84,12 @@
     const typ = TYPES[i.physical.type] || [i.physical.type, i.physical.type];
     const sc = SCRIPTS[work.script || "unknown"] || SCRIPTS.unknown;
     const basis = BASIS[work.script_basis];
+    const wr = i.withheld ? (WITHHELD[i.withheld.reason] || WITHHELD.other) : null;
     const dl = el("dl", { class: "row meta mb-0" },
+      ...(wr ? row(t("Not published", "Chưa công bố"),
+        el("span", { class: "badge-withheld" }, t(wr[0], wr[1])),
+        el("span", { class: "d-block text-secondary" }, t("Shown to admins only.", "Chỉ quản trị viên thấy.")),
+        el("span", { class: "d-block text-secondary source-text" }, i.withheld.note)) : []),
       ...row(t("Script of the text", "Loại chữ của văn bản"),
         el("span", { class: `badge-script script-${work.script || "unknown"}` }, t(sc[0], sc[1])),
         basis ? el("span", { class: "text-secondary" }, ` (${t(basis[0], basis[1])})`) : null,
@@ -69,6 +97,7 @@
       ...row(t("Library", "Thư viện"), i.holding.institution + (i.holding.city ? `, ${i.holding.city}` : "")),
       ...row(t("Shelfmark", "Ký hiệu"), i.holding.shelfmark),
       ...(i.physical.date ? row(t("Date of the copy", "Niên đại của bản"), i.physical.date) : []),
+      ...row(t("Content of this copy", "Nội dung của bản này"), contentText(i)),
       ...row(t("Type", "Loại bản"), t(typ[0], typ[1])),
       ...row(t("Title on the copy", "Tên trên bản"), el("span", { lang: "und" }, i.title_on_item)),
       ...(i.physical.source_description
@@ -131,11 +160,16 @@
       return;
     }
     work = data.works.find(w => w.id === params.get("work"));
+    if (work && !isAdmin()) work.items = work.items.filter(i => !i.withheld);
     if (!work || !work.items.length) {
       $("work-title").textContent = t("This work is not in the catalogue.", "Tác phẩm này không có trong thư mục.");
       $("viewer").hidden = true;
       return;
     }
+    // originals first, then editions, translations …; within each, by date
+    const rank = Object.keys(CONTENT);
+    work.items.sort((a, b) => (rank.indexOf(a.content || "original") - rank.indexOf(b.content || "original"))
+      || ((a.physical.date_earliest || 9999) - (b.physical.date_earliest || 9999)) || a.id.localeCompare(b.id));
     renderWork();
     const page = parseInt((location.hash.match(/p=(\d+)/) || [])[1] || "1", 10);
     $("item-select").addEventListener("change", e => showItem(e.target.value));

@@ -4,6 +4,7 @@
 .badge-script { display: inline-block; padding: 0 .45rem; border: 1px solid var(--line, currentColor); border-radius: 1rem; font-size: .75rem; line-height: 1.5; color: var(--muted, currentColor); }
 .badge-script.script-nom, .badge-script.script-han-nom { border-color: var(--accent, currentColor); color: var(--accent, currentColor); }
 .works .badge-script { float: right; margin: .2rem 0 0 .4rem; }
+.badge-withheld { display: inline-block; padding: 0 .35rem; border: 1px dashed var(--accent, currentColor); border-radius: .3rem; font-size: .72rem; color: var(--accent, currentColor); }
 .badge-nc { display: inline-block; padding: 0 .35rem; border: 1px solid var(--line, currentColor); border-radius: .3rem; font-size: .72rem; letter-spacing: .03em; }
 main.catalog-wide { max-width: 76rem; }
 .catalog-items { max-width: 36rem; }

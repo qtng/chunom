@@ -1,0 +1,89 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-1938.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "Vietnamese birth certificate in Nôm (1938) (Not stated on Wikimedia Commons, not stated)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, 1938 Vietnamese Birth Certificate in Nôm.jpg"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/File%3A1938_Vietnamese_Birth_Certificate_in_N%C3%B4m.jpg",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-1938.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 1600,
+      "height": 1200,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-1938.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-1938.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-1938.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/1938_Vietnamese_Birth_Certificate_in_N%C3%B4m.jpg/1280px-1938_Vietnamese_Birth_Certificate_in_N%C3%B4m.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1600,
+                "height": 1200
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/6/6e/1938_Vietnamese_Birth_Certificate_in_N%C3%B4m.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A1938_Vietnamese_Birth_Certificate_in_N%C3%B4m.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

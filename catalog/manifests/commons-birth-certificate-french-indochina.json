@@ -1,0 +1,89 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-french-indochina.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "French Indo-Chinese birth certificate (Not stated on Wikimedia Commons, not stated)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, French Indo-Chinese birth certificate (m.danluat.thuvienphapluat.vn).jpg"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/File%3AFrench_Indo-Chinese_birth_certificate_%28m.danluat.thuvienphapluat.vn%29.jpg",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-french-indochina.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 400,
+      "height": 368,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-french-indochina.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-french-indochina.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-french-indochina.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/French_Indo-Chinese_birth_certificate_%28m.danluat.thuvienphapluat.vn%29.jpg/330px-French_Indo-Chinese_birth_certificate_%28m.danluat.thuvienphapluat.vn%29.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 400,
+                "height": 368
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/b/b4/French_Indo-Chinese_birth_certificate_%28m.danluat.thuvienphapluat.vn%29.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AFrench_Indo-Chinese_birth_certificate_%28m.danluat.thuvienphapluat.vn%29.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

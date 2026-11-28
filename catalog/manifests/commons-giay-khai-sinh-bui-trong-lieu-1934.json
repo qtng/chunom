@@ -1,0 +1,89 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-giay-khai-sinh-bui-trong-lieu-1934.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "Giấy khai sinh của Bùi Trọng Liễu (1934) (Not stated on Wikimedia Commons, not stated)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, Giấy khai sinh của Bùi Trọng Liễu (1934).jpg"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/File%3AGi%E1%BA%A5y_khai_sinh_c%E1%BB%A7a_B%C3%B9i_Tr%E1%BB%8Dng_Li%E1%BB%85u_%281934%29.jpg",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-giay-khai-sinh-bui-trong-lieu-1934.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 238,
+      "height": 337,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-giay-khai-sinh-bui-trong-lieu-1934.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-giay-khai-sinh-bui-trong-lieu-1934.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-giay-khai-sinh-bui-trong-lieu-1934.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Gi%E1%BA%A5y_khai_sinh_c%E1%BB%A7a_B%C3%B9i_Tr%E1%BB%8Dng_Li%E1%BB%85u_%281934%29.jpg/120px-Gi%E1%BA%A5y_khai_sinh_c%E1%BB%A7a_B%C3%B9i_Tr%E1%BB%8Dng_Li%E1%BB%85u_%281934%29.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 238,
+                "height": 337
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/c/cc/Gi%E1%BA%A5y_khai_sinh_c%E1%BB%A7a_B%C3%B9i_Tr%E1%BB%8Dng_Li%E1%BB%85u_%281934%29.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AGi%E1%BA%A5y_khai_sinh_c%E1%BB%A7a_B%C3%B9i_Tr%E1%BB%8Dng_Li%E1%BB%85u_%281934%29.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
