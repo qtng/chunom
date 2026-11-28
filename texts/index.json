@@ -1,0 +1,14 @@
+{
+  "note": "The works with a transcription (the viewer texts/view.html). items: the copies of the catalogue whose pages match, with the offset of their canvas number (#p, from 1) to the page of the transcription; the first is the copy the transcription was made on. ink: how the viewer frees the writing from the paper (paper and ink: grey values, red: drop Durand's red Quốc Ngữ).",
+  "works": [
+    {
+      "work": "chua-thao-co-truyen",
+      "item": "yale-10732464",
+      "manifest": "https://collections.library.yale.edu/manifests/10732464",
+      "pages": 48,
+      "items": { "yale-10732464": 4, "commons-yale-an-82": 4 },
+      "writer": "Maurice Durand",
+      "ink": { "paper": 190, "ink": 110, "red": "drop" }
+    }
+  ]
+}

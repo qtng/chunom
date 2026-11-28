@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Read a manuscript</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <meta name="description" content="A Nôm manuscript read character by character: every character cut from the scan, its reading in Quốc ngữ below.">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://qatt.org/css/site.css">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/chunom/css/shelf.css">
+  <link rel="stylesheet" href="/chunom/css/texts.css">
+  <script src="https://qatt.org/js/navigation.js"></script>
+  <script defer src="/chunom/js/texts-view.js"></script>
+</head>
+<body>
+<header class="hero py-4"><div class="container text-center">
+  <p class="crumbs mb-2"><a class="back" id="to-catalog" href="/chunom/catalog/" data-vi="← Bản quét trong thư mục">← Scan in the catalogue</a></p>
+  <h1 class="mb-1" id="work-title" data-vi="Đang tải …">Loading …</h1>
+  <p class="qn mb-1" id="work-qn"></p>
+  <p class="lead mx-auto mb-0" id="work-writer"></p>
+</div></header>
+<main class="container texts-wide py-4">
+<section class="card-box tx-reader" id="reader">
+  <div class="tx-toolbar">
+    <button type="button" class="btn btn-sm btn-quiet" data-act="prev" title="Previous page (←)" data-vi-title="Trang trước (←)"><i class="bi bi-chevron-left"></i></button>
+    <span class="tx-pageno small">
+      <span data-vi="Trang">Page</span>
+      <input class="form-control form-control-sm" type="number" min="1" value="1" aria-label="Page" data-vi-aria-label="Trang"> / <span id="total">–</span>
+    </span>
+    <button type="button" class="btn btn-sm btn-quiet" data-act="next" title="Next page (→)" data-vi-title="Trang sau (→)"><i class="bi bi-chevron-right"></i></button>
+    <span class="ms-auto"></span>
+    <div class="btn-group btn-group-sm" role="group" aria-label="Writing" data-vi-aria-label="Nét chữ">
+      <button type="button" class="btn btn-quiet active" data-ink="clean" title="The writing alone, in the colour of the page" data-vi-title="Chỉ nét chữ, theo màu của trang"><span data-vi="Nét chữ">Writing</span></button>
+      <button type="button" class="btn btn-quiet" data-ink="original" title="As on the scan" data-vi-title="Như trên bản quét"><span data-vi="Bản quét">Scan</span></button>
+    </div>
+    <button type="button" class="btn btn-sm btn-quiet" data-act="page" aria-pressed="false" title="Show the whole page" data-vi-title="Hiện cả trang"><i class="bi bi-file-image"></i> <span data-vi="Cả trang">Whole page</span></button>
+  </div>
+  <div class="tx-body">
+    <div class="tx-text" id="text" lang="vi"></div>
+    <figure class="tx-page" id="page" hidden><div class="tx-page-inner"><img alt="" id="page-img"><div class="tx-boxes" id="boxes"></div></div></figure>
+  </div>
+  <p class="tx-message" id="message" hidden></p>
+</section>
+<p class="small text-body-secondary mt-3 mb-0" id="credit"><span>Every character is cut from the scan of the library (IIIF); the reading below it is the transcription of the writer.</span></p>
+</main>
+</body>
+</html>

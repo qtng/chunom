@@ -47,7 +47,19 @@
     "other": ["Rights not clear", "Quyền chưa rõ"],
   };
 
-  let work, viewer, item;
+  let work, viewer, item, text;   // text: the transcription of the work (/chunom/texts/index.json), read in texts/view.html
+
+  // the link to the reader of the transcription, on the same page when the copy shown matches the transcribed one
+  function textLink(page) {
+    if (!text) return;
+    let a = $("to-text");
+    if (!a) {
+      a = el("a", { id: "to-text", class: "btn btn-sm btn-pill btn-accent" }, el("i", { class: "bi bi-book" }), " ", el("span", { "data-vi": "Đọc kèm quốc ngữ" }, "Read with Quốc ngữ"));
+      $("work-authors").after(el("p", { class: "mt-3 mb-0" }, a));
+    }
+    const match = text.items[item.id] != null;
+    a.href = `/chunom/texts/view.html?work=${encodeURIComponent(work.id)}${match ? `&item=${encodeURIComponent(item.id)}#p=${page}` : ""}`;
+  }
 
   function titles(w) {
     const main = (w.titles || []).filter(x => (x.type || "main") === "main");
@@ -121,6 +133,7 @@
     p.set("work", work.id);
     if (work.items.length > 1) p.set("item", item.id); else p.delete("item");
     history.replaceState(null, "", `?${p}${page > 1 ? `#p=${page}` : ""}`);
+    textLink(page);
   }
 
   async function showItem(id, page = 1) {
@@ -171,6 +184,7 @@
     work.items.sort((a, b) => (rank.indexOf(a.content || "original") - rank.indexOf(b.content || "original"))
       || ((a.physical.date_earliest || 9999) - (b.physical.date_earliest || 9999)) || a.id.localeCompare(b.id));
     renderWork();
+    try { text = (await (await fetch("/chunom/texts/index.json")).json()).works.find(x => x.work === work.id) || null; } catch { text = null; }
     const page = parseInt((location.hash.match(/p=(\d+)/) || [])[1] || "1", 10);
     $("item-select").addEventListener("change", e => showItem(e.target.value));
     document.addEventListener("langchange", () => { renderWork(); $("item-select").value = item.id; renderSource(); });
