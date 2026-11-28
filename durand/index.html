@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Maurice Durand Collection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <meta name="description" content="The Nôm manuscripts of Maurice Durand (1914–1966): old Vietnamese texts written out by hand, with the reading in red Quốc ngữ under every character. Sixty years after his death.">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://qatt.org/css/site.css">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <script src="https://qatt.org/js/navigation.js"></script>
+  <style>
+    :root { --ink: #2b2118; --accent: #a8362a; --paper: #f7efdc; --line: #e4d9c0; --field: #cdbf9f; --muted: #7b6c58; }
+    body { margin: 0; background: var(--paper); color: var(--ink); }
+    /* the header of the pages of qatt.org and the Chunom site (.hero): the look of the theme "classic"; other themes override it */
+    .hero {
+      background:
+        radial-gradient(60rem 22rem at 50% -6rem, rgba(168, 54, 42, .10), transparent 70%),
+        linear-gradient(180deg, var(--paper) 0%, #fffdf8 100%);
+      border-bottom: 1px solid #e8dcc0;
+      color: var(--ink);
+    }
+    .hero h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(2.2rem, 7vw, 3.6rem); letter-spacing: .01em; }
+    .hero .han { color: var(--accent); font-size: 1.25rem; letter-spacing: .5em; padding-left: .5em; }
+    .hero .lead { max-width: 38rem; color: #4a3d30; }
+    .hero .years { display: inline-block; margin-bottom: .8rem; padding: .1rem .8rem; border: 1px solid currentColor; border-radius: 2rem; font-size: .85rem; letter-spacing: .08em; color: var(--accent); }
+    @media (max-width: 575.98px) { .hero .han { letter-spacing: .3em; } }
+
+    main { max-width: 62rem; margin: 0 auto; padding: 0 1rem 2.5rem; }
+    .card-box { margin: 0 0 1.4rem; padding: 1.2rem 1.3rem; background: #fffdf8; border: 1px solid var(--line); border-radius: .7rem; box-shadow: 0 .35rem 1rem rgba(60, 40, 20, .14); }
+    h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 1.7rem; margin: 0 0 .7rem; }
+    .prose { font-size: 1.05rem; line-height: 1.65; }
+    .prose p:last-child { margin-bottom: 0; }
+
+    /* the work: a page of his notebooks beside the text */
+    .work { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 1.6rem; align-items: center; }
+    @media (max-width: 767.98px) { .work { grid-template-columns: 1fr; } }
+    .sheet { margin: 0; }
+    .sheet a { display: block; border-radius: .4rem; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 .5rem 1.4rem rgba(60, 40, 20, .18); }
+    .sheet img { display: block; width: 100%; height: auto; aspect-ratio: 2400 / 3282; object-fit: cover; background: #eee8dc; }
+    .sheet figcaption { margin-top: .45rem; font-size: .85rem; color: var(--muted); }
+    .marks { display: flex; gap: 1.2rem; flex-wrap: wrap; margin: 1rem 0 0; padding: 0; list-style: none; font-size: .95rem; }
+    .marks li { display: flex; align-items: center; gap: .45rem; }
+    .marks .dot { width: .8rem; height: .8rem; border-radius: 50%; }
+    .marks .ink { background: #1a1410; box-shadow: 0 0 0 1px var(--muted); }
+    .marks .red { background: #c43c3c; }
+
+    /* the notebooks: a row of pages */
+    .shelf { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+    @media (max-width: 767.98px) { .shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    .shelf figure { margin: 0; }
+    .shelf a { display: block; color: inherit; text-decoration: none; }
+    .shelf img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: 50% 0; border-radius: .35rem; border: 1px solid var(--line); background: #eee8dc; transition: transform .2s ease, box-shadow .2s ease; }
+    .shelf a:hover img, .shelf a:focus-visible img { transform: translateY(-3px); box-shadow: 0 .6rem 1.2rem rgba(60, 40, 20, .2); }
+    .shelf figcaption { margin-top: .4rem; font-size: .9rem; line-height: 1.3; }
+    .shelf figcaption small { display: block; color: var(--muted); }
+
+    /* reading with us */
+    .read { display: flex; gap: 1.4rem; align-items: center; flex-wrap: wrap; }
+    .read .seal { font-family: var(--font-cjk), serif; font-size: 2.8rem; line-height: 1.05; color: var(--accent); writing-mode: vertical-rl; letter-spacing: .1em; }
+    .read .body { flex: 1 1 20rem; }
+    @media (max-width: 575.98px) { .read .seal { writing-mode: horizontal-tb; font-size: 2.2rem; } }
+
+    /* his life and books */
+    .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.4rem; }
+    @media (max-width: 767.98px) { .two { grid-template-columns: 1fr; } }
+    .two .card-box { margin: 0; }
+    .life { margin: 0; padding: 0; list-style: none; }
+    .life li { display: grid; grid-template-columns: 4.6rem 1fr; gap: .6rem; padding: .35rem 0; border-top: 1px solid var(--line); }
+    .life li:first-child { border-top: 0; }
+    .life b { color: var(--accent); font-weight: 600; }
+    .books { margin: 0; padding: 0; list-style: none; }
+    .books li { padding: .4rem 0; border-top: 1px solid var(--line); }
+    .books li:first-child { border-top: 0; }
+    .books i { font-family: Georgia, "Times New Roman", serif; }
+    .books small { display: block; color: var(--muted); }
+    .links { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .credit { font-size: .85rem; color: var(--muted); margin: 1.4rem 0 0; }
+  </style>
+</head>
+<body>
+<header class="hero py-4 py-md-5"><div class="container text-center">
+  <p class="han mb-2" lang="vi-Hani">漢喃</p>
+  <span class="years">1966 · 2026</span>
+  <h1 class="mb-2"><span data-vi="Sưu tập Maurice Durand">Maurice Durand Collection</span></h1>
+  <p class="lead mx-auto mb-3"><span data-vi="Văn bản Nôm chép tay, âm đọc quốc ngữ màu đỏ dưới từng chữ: di sản của Maurice Durand (1914–1966), sáu mươi năm sau ngày ông mất.">Nôm texts written out by hand, the reading in red under every character: the legacy of Maurice Durand (1914–1966), sixty years after his death.</span></p>
+  <p class="mb-0 d-flex flex-wrap justify-content-center gap-2">
+    <a class="btn btn-cinnabar btn-pill" href="/chunom/reader/?work=chua-thao-co-truyen&amp;item=yale-10732464"><i class="bi bi-book"></i> <span data-vi="Đọc Chúa Thao cổ truyện">Read Chúa Thao cổ truyện</span></a>
+    <a class="btn btn-quiet btn-pill" href="https://web.library.yale.edu/digital-collections/han-nom" rel="noopener"><i class="bi bi-box-arrow-up-right"></i> <span data-vi="Sưu tập tại Yale">The collection at Yale</span></a>
+  </p>
+</div></header>
+
+<main class="pt-4">
+  <section class="card-box work">
+    <figure class="sheet">
+      <a href="/chunom/reader/?work=chua-thao-co-truyen&amp;item=yale-10732464#p=5" aria-label="Chúa Thao cổ truyện in the reader">
+        <img src="https://collections.library.yale.edu/iiif/2/10731978/full/900,/0/default.jpg" alt="A page of Chúa Thao cổ truyện: Nôm characters in black, their readings in red below" loading="eager">
+      </a>
+      <figcaption>Chúa Thao cổ truyện (AN.82), <span data-vi="trang 1">page 1</span></figcaption>
+    </figure>
+    <div class="prose">
+      <h2><span data-vi="Sự nghiệp">His work</span></h2>
+      <p>Maurice Durand spent his life opening the old literature of Vietnam to readers. Born in Hanoi to a French father and a Vietnamese mother, he grew up between both worlds and made their bridge his work: as a scholar of the École française d’Extrême-Orient, as a teacher in Paris, and above all in his notebooks.</p>
+      <p>Page after page they hold tales in verse, songs of <i>ca trù</i>, histories and poems in Chữ Nôm, the script in which Vietnamese was written for centuries, always in the same form: the characters in black brush on squared paper, and under every one its reading in red Quốc ngữ. A text that few could still read became one that anyone who reads Vietnamese can follow, character by character.</p>
+      <ul class="marks">
+        <li><span class="dot ink"></span><span data-vi="Chữ Nôm, nét bút lông">Chữ Nôm in brush</span></li>
+        <li><span class="dot red"></span><span data-vi="Âm đọc quốc ngữ">The reading in Quốc ngữ</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="mb-4">
+    <h2 class="text-center mb-3"><span data-vi="Từ các tập vở của ông">From his notebooks</span></h2>
+    <div class="shelf">
+      <figure><a href="https://collections.library.yale.edu/catalog/10732461" rel="noopener">
+        <img src="https://collections.library.yale.edu/iiif/2/10731878/full/500,/0/default.jpg" alt="" loading="lazy">
+        <figcaption>Ca trù thể cách<small>AB 431 · Yale</small></figcaption></a></figure>
+      <figure><a href="https://collections.library.yale.edu/catalog/10732465" rel="noopener">
+        <img src="https://collections.library.yale.edu/iiif/2/10732042/full/500,/0/default.jpg" alt="" loading="lazy">
+        <figcaption>Đông Tác Nguyễn Đại Vương bản truyện<small>Yale</small></figcaption></a></figure>
+      <figure><a href="https://collections.library.yale.edu/catalog/10732466" rel="noopener">
+        <img src="https://collections.library.yale.edu/iiif/2/10732278/full/500,/0/default.jpg" alt="" loading="lazy">
+        <figcaption>Hảo cầu tân truyện<small>AB 134 · Yale</small></figcaption></a></figure>
+      <figure><a href="https://collections.library.yale.edu/catalog/10732462" rel="noopener">
+        <img src="https://collections.library.yale.edu/iiif/2/10731918/full/500,/0/default.jpg" alt="" loading="lazy">
+        <figcaption>Ca trù thể cách<small>AB 456 · Yale</small></figcaption></a></figure>
+    </div>
+  </section>
+
+  <section class="card-box read">
+    <div class="seal" lang="vi-Hani" aria-hidden="true">主滔古傳</div>
+    <div class="body prose">
+      <h2><span data-vi="Cùng đọc">Read with us</span></h2>
+      <p>We are bringing his notebooks onto the screen, one at a time. The first is <i>Chúa Thao cổ truyện</i>, the old tale of Lord Thao, a young prince of the Mạc taken prisoner at Cao Bằng, in some 480 verses of lục bát. Every character is cut from the scan of the library, Durand’s reading stands below it, and every couplet has a translation.</p>
+      <a class="btn btn-cinnabar btn-pill" href="/chunom/reader/?work=chua-thao-co-truyen&amp;item=yale-10732464"><i class="bi bi-book"></i> <span data-vi="Mở trình đọc">Open the reader</span></a>
+    </div>
+  </section>
+
+  <div class="two mb-4">
+    <section class="card-box">
+      <h2><span data-vi="Cuộc đời">His life</span></h2>
+      <ul class="life">
+        <li><b>1914</b><span>Born in Hanoi; his father is an interpreter at the court of justice, his mother comes from Kiến An.</span></li>
+        <li><b data-vi="Thế chiến">War</b><span>An officer in Cameroon and Chad during the Second World War.</span></li>
+        <li><b>1946</b><span>Back in Vietnam; teaches at the École française d’Extrême-Orient and later directs it.</span></li>
+        <li><b>Paris</b><span>Teaches Vietnamese at the École pratique des hautes études.</span></li>
+        <li><b>1966</b><span>Dies in Paris. His library and notebooks, and those of his father, go to Yale University.</span></li>
+      </ul>
+    </section>
+    <section class="card-box">
+      <h2><span data-vi="Sách của ông">His books</span></h2>
+      <ul class="books">
+        <li><a href="https://publications.efeo.fr/en/livres/527_connaissance-du-viet-nam" rel="noopener"><i>Connaissance du Viêt-Nam</i></a><small>with Pierre Huard · 1954</small></li>
+        <li><i>Phan Trần, roman en vers</i><small>text, translation and notes · 1962</small></li>
+        <li><i>L’Œuvre de la poétesse vietnamienne Hồ Xuân Hương</i><small>1968 · the book that brought her to Western readers</small></li>
+        <li><i>Introduction à la littérature vietnamienne</i><small>with Nguyễn Trần Huân · 1969</small></li>
+      </ul>
+    </section>
+  </div>
+
+  <section class="card-box">
+    <h2><span data-vi="Tìm hiểu thêm">Further</span></h2>
+    <div class="links">
+      <a class="btn btn-sm btn-quiet btn-pill" href="https://web.library.yale.edu/digital-collections/han-nom" rel="noopener"><span data-vi="Yale: bản Hán Nôm">Yale: Han Nom manuscripts</span></a>
+      <a class="btn btn-sm btn-quiet btn-pill" href="https://hdl.handle.net/10079/fa/mssa.ms.1728" rel="noopener"><span data-vi="Yale: hồ sơ Maurice Durand">Yale: Maurice Durand papers</span></a>
+      <a class="btn btn-sm btn-quiet btn-pill" href="https://commons.wikimedia.org/wiki/Category:Les_manuscrits_de_Maurice_M._Durand" rel="noopener">Wikimedia Commons</a>
+      <a class="btn btn-sm btn-quiet btn-pill" href="https://publications.efeo.fr/en/editeur/106_durand-maurice" rel="noopener"><span data-vi="Sách ở EFEO">His books at the EFEO</span></a>
+      <a class="btn btn-sm btn-quiet btn-pill" href="https://en.wikipedia.org/wiki/Maurice_Durand_(linguist)" rel="noopener">Wikipedia</a>
+      <a class="btn btn-sm btn-quiet btn-pill" href="/chunom/shelf/"><span data-vi="Tủ sách">Bookshelf</span></a>
+    </div>
+    <p class="credit mb-0"><span data-vi="Hình ảnh: Maurice Durand Papers (MS 1728), Manuscripts and Archives, Yale University Library.">Images: Maurice Durand Papers (MS 1728), Manuscripts and Archives, Yale University Library.</span></p>
+  </section>
+</main>
+</body>
+</html>
