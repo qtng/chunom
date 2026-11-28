@@ -11,68 +11,67 @@
   <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
   <script src="https://qatt.org/js/navigation.js"></script>
   <style>
-    /* a world of its own: a grey day. Outside the window it rains on Hanoi; inside, under a lamp, somebody writes. Grey concrete all around, paper only where there is writing. */
+    /* a world of its own: in front of his desk. At the top one of his notebooks lies open before the reader; below, a silver-grey wall of concrete.
+       No yellowed paper: white and greys, and the black, red and blue of his manuscripts. */
     :root {
-      --wall: #6b6a66; --wall-dark: #4f4e4b; --chalk: #ecebe5; --dim: #bdbbb2; --paper: #f3ecd9; --paper-hi: #fbf7ec; --ink: #1d1813; --red: #b0352a;
-      --cjk: "HaiMinh Medium", var(--font-cjk), serif; --type: "Courier New", Courier, monospace; --serif: Georgia, "Times New Roman", serif;
+      --d-wall: #c3c5c6; --d-ink: #161616; --d-dim: #4c4f52; --d-paper: #fdfdfc; --d-grid: rgba(60, 105, 170, .2); --d-red: #b8262e; --d-blue: #2f5f9e;
+      --d-cjk: "HaiMinh Medium", var(--font-cjk), serif; --d-type: "Courier New", Courier, monospace;
     }
     html body.grey {
-      margin: 0; color: var(--chalk);
-      background-color: var(--wall);
+      margin: 0; color: var(--d-ink);
+      background-color: var(--d-wall);
       background-image:
-        linear-gradient(180deg, rgba(30, 30, 28, .45), rgba(30, 30, 28, .18) 30rem, rgba(30, 30, 28, .22) 75%, rgba(30, 30, 28, .5)),   /* the light falls in at the window */
-        linear-gradient(180deg, rgba(255, 255, 255, .05) 1px, rgba(0, 0, 0, .14) 1px 2px, transparent 2px),   /* the seams between the panels of the formwork */
+        linear-gradient(180deg, rgba(255, 255, 255, .5), rgba(255, 255, 255, .62) 40rem, rgba(255, 255, 255, .55)),
+        linear-gradient(180deg, rgba(255, 255, 255, .35) 1px, rgba(0, 0, 0, .1) 1px 2px, transparent 2px),   /* the seams between the panels of the formwork */
         url("/chunom-assets/durand/concrete.webp");
       background-size: auto, 100% 24rem, 384px 384px;
     }
-    .type { font-family: var(--type); }
 
-    /* the window: Hanoi in the rain (a colour photograph of 1915, greyed by the weather), drops running down the glass */
-    .window { position: relative; max-width: 66rem; height: min(62vh, 32rem); min-height: 20rem; margin: 2.2rem auto 0; overflow: hidden; background: #3a3d3e;
-      border: .8rem solid #2e2e2b; box-shadow: 0 0 0 .35rem #57564f, 0 1.6rem 2.4rem rgba(0, 0, 0, .45), inset 0 0 2.5rem rgba(0, 0, 0, .55); }
-    .sill { max-width: 70rem; height: 1rem; margin: 0 auto; background: linear-gradient(180deg, #8d8b84, #5d5c57); box-shadow: 0 .8rem 1.4rem rgba(0, 0, 0, .4); }
-    @media (max-width: 1120px) { .window { margin-left: 1rem; margin-right: 1rem; } .sill { margin: 0 .5rem; } }
-    .window img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; filter: grayscale(.7) brightness(.8) contrast(.92) blur(1.4px); transform: scale(1.16) translateX(2%); }
-    .window::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(140, 150, 155, .35), rgba(60, 64, 66, .15) 60%, rgba(30, 30, 30, .5)); }
-    .window canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
-    .window .bar { position: absolute; z-index: 2; background: #2f2f2c; box-shadow: 0 0 .6rem rgba(0, 0, 0, .5); }
-    .window .bar.v { top: 0; bottom: 0; left: 50%; width: .7rem; margin-left: -.35rem; }
-    .window .bar.h { left: 0; right: 0; top: 42%; height: .7rem; }
-    .window figcaption { position: absolute; z-index: 3; left: 1rem; bottom: .7rem; font-family: var(--type); font-size: .75rem; color: rgba(236, 235, 229, .75); }
+    /* the head: a page of his notebook, from edge to edge, lying in front of the reader (a plane tilted away, darker where it is further away) */
+    .ms { position: relative; height: min(70vh, 38rem); min-height: 21rem; overflow: hidden; background: #2b2c2d; perspective: 1000px; perspective-origin: 50% 0%; }
+    .ms .plane { display: flex; position: absolute; left: 50%; top: -48%; width: max(190vw, 110rem); transform: translateX(-50%) rotateX(34deg) rotateZ(-1.5deg); transform-origin: 50% 100%; }
+    .ms .plane img { display: block; width: 50%; height: auto; filter: brightness(1.06) contrast(1.06) saturate(1.05); box-shadow: 0 2rem 4rem rgba(0, 0, 0, .6); }
+    .ms .plane::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, transparent 44%, rgba(0, 0, 0, .1) 48.5%, rgba(0, 0, 0, .38) 50%, rgba(0, 0, 0, .08) 51.5%, transparent 56%); }   /* the fold between the two pages */
+    .ms::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(20, 20, 22, .72), rgba(20, 20, 22, .25) 38%, rgba(20, 20, 22, 0) 60%, rgba(20, 20, 22, .18)),
+        radial-gradient(120% 90% at 30% 85%, transparent 50%, rgba(20, 20, 22, .35)); }
+    .ms figcaption { position: absolute; z-index: 2; left: 1rem; top: .8rem; font-family: var(--d-type); font-size: .75rem; color: rgba(255, 255, 255, .7); }
 
-    /* the sheet on the desk below the window, under the lamp: the title is written onto it stroke by stroke */
-    .desk { position: relative; padding: 0 1rem; margin-top: -8rem; z-index: 4; }
-    .desk::before { content: ""; position: absolute; left: 50%; top: 2rem; width: min(60rem, 100%); height: 40rem; transform: translateX(-50%); background: radial-gradient(closest-side, rgba(255, 205, 130, .3), transparent); pointer-events: none; }
-    .sheet { position: relative; color: var(--ink); background-color: var(--paper);
-      background-image: linear-gradient(rgba(110, 130, 160, .17) 1px, transparent 1px), linear-gradient(90deg, rgba(110, 130, 160, .17) 1px, transparent 1px), linear-gradient(180deg, var(--paper-hi), var(--paper));
-      background-size: 1.6rem 1.6rem, 1.6rem 1.6rem, auto; box-shadow: 0 1.6rem 3rem rgba(0, 0, 0, .5), 0 .2rem .4rem rgba(0, 0, 0, .3); }
-    .open { max-width: 44rem; margin: 0 auto; padding: 1.8rem 2rem 1.8rem; text-align: center; transform: rotate(-.8deg); }
-    .open .label { display: inline-block; font-family: var(--type); font-size: .82rem; color: #4a4036; letter-spacing: .06em; }
+    /* the sheet laid on the notebook: the title is written onto it stroke by stroke */
+    .desk { position: relative; z-index: 3; padding: 0 1rem; margin-top: -11rem; }
+    .sheet { position: relative; color: var(--d-ink); background-color: var(--d-paper);
+      background-image: linear-gradient(var(--d-grid) 1px, transparent 1px), linear-gradient(90deg, var(--d-grid) 1px, transparent 1px);
+      background-size: 1.6rem 1.6rem; box-shadow: 0 1.6rem 3rem rgba(0, 0, 0, .35), 0 .2rem .5rem rgba(0, 0, 0, .2); }
+    .open { max-width: 44rem; margin: 0 auto; padding: 1.8rem 2rem; text-align: center; transform: rotate(-.8deg); }
+    .open .label { display: inline-block; font-family: var(--d-type); font-size: .82rem; color: var(--d-dim); letter-spacing: .06em; }
     .verse { display: flex; justify-content: center; gap: clamp(.4rem, 2vw, 1.2rem); margin: 1.1rem 0 .8rem; }
     .verse .c { width: clamp(3.8rem, 15vw, 6.4rem); }
-    .verse .glyph { position: relative; aspect-ratio: 1; --so-ink: var(--ink); --so-done: var(--ink); --so-ghost: #c4b896; --so-width: 9; }
+    .verse .glyph { position: relative; aspect-ratio: 1; --so-ink: var(--d-ink); --so-done: var(--d-ink); --so-ghost: #c9cccf; --so-width: 9; }
     .verse .glyph > * { position: absolute; inset: 0; }
-    .verse .glyph .dry { display: flex; align-items: center; justify-content: center; font-family: var(--cjk); font-size: clamp(3.2rem, 12.5vw, 5.4rem); line-height: 1; color: var(--ink); opacity: 0; transition: opacity .9s ease; }
+    .verse .glyph .dry { display: flex; align-items: center; justify-content: center; font-family: var(--d-cjk); font-size: clamp(3.2rem, 12.5vw, 5.4rem); line-height: 1; color: var(--d-ink); opacity: 0; transition: opacity .9s ease; }
     .verse .glyph.done .dry { opacity: 1; }
     .verse .glyph .so-svg { transition: opacity .9s ease; }
     .verse .glyph.done .so-svg { opacity: 0; }
-    .verse .rd { display: block; margin-top: .2rem; min-height: 1.5em; font-size: clamp(.95rem, 2.6vw, 1.2rem); color: var(--red); font-style: italic; opacity: 0; transition: opacity .6s ease; }
+    .verse .rd { display: block; margin-top: .2rem; min-height: 1.5em; font-size: clamp(.95rem, 2.6vw, 1.2rem); color: var(--d-red); font-style: italic; opacity: 0; transition: opacity .6s ease; }
     .verse .c.read .rd { opacity: 1; }
-    html body.grey .open h1 { color: var(--ink); font-size: clamp(2rem, 6.2vw, 3.2rem); margin: .3rem 0 .5rem; }
-    .open .lead { max-width: 32rem; margin: 0 auto 1.2rem; font-size: 1.06rem; color: #3d342b; }
-    @media (max-width: 575.98px) { .desk { margin-top: -6rem; } .open { padding: 1.5rem 1rem; transform: none; } .window .bar.v { display: none; } }
+    html body.grey h1, html body.grey h2 { color: var(--d-ink); border: 0; }
+    html body.grey .open h1 { font-size: clamp(2rem, 6.2vw, 3.2rem); margin: .3rem 0 .5rem; }
+    .open .lead { max-width: 32rem; margin: 0 auto 1.2rem; font-size: 1.06rem; color: #2e3033; }
+    @media (max-width: 575.98px) { .desk { margin-top: -6rem; } .open { padding: 1.5rem 1rem; transform: none; } }
 
-    /* the story, written straight onto the wall: a date in the margin, the text beside it */
+    /* the story, written straight onto the wall: a place and a year in the margin, the text beside it */
     .story { max-width: 58rem; margin: 0 auto; padding: 4.5rem 1rem 1rem; }
     .step { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1.6rem; margin-bottom: 4.2rem; }
-    .step > .when { font-family: var(--type); color: var(--dim); font-size: .95rem; letter-spacing: .08em; padding-top: .35rem; border-top: 1px solid rgba(236, 235, 229, .35); }
+    .step > .when { font-family: var(--d-type); color: var(--d-dim); font-size: .95rem; letter-spacing: .08em; padding-top: .35rem; border-top: 1px solid rgba(0, 0, 0, .35); }
     .step p { font-size: 1.08rem; line-height: 1.75; max-width: 38rem; }
-    html body.grey .story h2 { color: var(--chalk); border: 0; font-size: clamp(1.7rem, 4.6vw, 2.3rem); margin: 0 0 .9rem; }
+    html body.grey .story h2 { font-size: clamp(1.7rem, 4.6vw, 2.3rem); margin: 0 0 .9rem; }
     @media (max-width: 767.98px) { .step { grid-template-columns: 1fr; gap: .6rem; } .step > .when { border-top: 0; padding-top: 0; } }
 
     .photo { margin: 1.4rem 0 0; }
-    .photo img { display: block; width: 100%; height: auto; border: .45rem solid #efece4; box-shadow: 0 1rem 2rem rgba(0, 0, 0, .45); filter: sepia(.12); }
-    .photo figcaption { margin-top: .6rem; font-family: var(--type); font-size: .8rem; color: var(--dim); }
+    .photo img { display: block; width: 100%; height: auto; border: .45rem solid #fff; box-shadow: 0 1rem 2rem rgba(0, 0, 0, .3); }
+    .photo.bw img { filter: grayscale(1) contrast(1.05); }
+    .photo figcaption { margin-top: .6rem; font-family: var(--d-type); font-size: .8rem; color: var(--d-dim); }
     .side { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 2rem; align-items: start; }
     .side .photo { margin-top: .4rem; }
     .tilt { transform: rotate(-1.6deg); }
@@ -82,33 +81,33 @@
     .work { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 2.2rem; align-items: center; }
     @media (max-width: 767.98px) { .work { grid-template-columns: 1fr; } }
     .page { margin: 0; transform: rotate(-2deg); }
-    .page a { display: block; box-shadow: 0 1.4rem 2.8rem rgba(0, 0, 0, .55); }
-    .page img { display: block; width: 100%; height: auto; aspect-ratio: 2400 / 3282; object-fit: cover; background: #e9dfc6; }
-    .marks { display: flex; gap: 1.2rem; flex-wrap: wrap; margin: 0; padding: 0; list-style: none; font-size: .95rem; color: var(--dim); }
+    .page a { display: block; box-shadow: 0 1.4rem 2.8rem rgba(0, 0, 0, .35); }
+    .page img { display: block; width: 100%; height: auto; aspect-ratio: 2400 / 3282; object-fit: cover; background: #eceeef; }
+    .marks { display: flex; gap: 1.2rem; flex-wrap: wrap; margin: 0; padding: 0; list-style: none; font-size: .95rem; color: var(--d-dim); }
     .marks li { display: flex; align-items: center; gap: .45rem; }
     .marks .dot { width: .8rem; height: .8rem; border-radius: 50%; }
-    .marks .ink { background: #111; box-shadow: 0 0 0 1px var(--dim); } .marks .red { background: var(--red); }
+    .marks .ink { background: var(--d-ink); } .marks .red { background: var(--d-red); }
     .strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin-top: 2.6rem; }
     @media (max-width: 767.98px) { .strip { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    .strip a { color: var(--dim); text-decoration: none; font-size: .85rem; line-height: 1.3; }
-    .strip a:hover { color: var(--chalk); }
-    .strip img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: 50% 0; margin-bottom: .5rem; box-shadow: 0 .6rem 1.2rem rgba(0, 0, 0, .4); background: #e9dfc6; }
+    .strip a { color: var(--d-dim); text-decoration: none; font-size: .85rem; line-height: 1.3; }
+    .strip a:hover { color: var(--d-ink); }
+    .strip img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: 50% 0; margin-bottom: .5rem; box-shadow: 0 .6rem 1.2rem rgba(0, 0, 0, .25); background: #eceeef; }
 
-    .books { list-style: none; margin: 1rem 0 0; padding: 0; font-family: var(--type); font-size: .92rem; line-height: 1.5; color: var(--dim); }
-    .books li { padding: .45rem 0; border-top: 1px dashed rgba(236, 235, 229, .25); }
-    .books i { font-family: var(--serif); font-size: 1.02rem; color: var(--chalk); }
-    html body.grey .story a.lnk { color: #f0c9a8; }
+    .books { list-style: none; margin: 1rem 0 0; padding: 0; font-family: var(--d-type); font-size: .92rem; line-height: 1.5; color: var(--d-dim); }
+    .books li { padding: .45rem 0; border-top: 1px dashed rgba(0, 0, 0, .25); }
+    .books i { font-family: Georgia, "Times New Roman", serif; font-size: 1.02rem; color: var(--d-ink); }
+    html body.grey .story a.lnk { color: var(--d-red); }
 
     /* today: one sheet of squared paper, the contents of the collection, written as he wrote: the Nôm in black, the reading in red below */
     .contents { max-width: 52rem; margin: 0 auto; padding: 2rem 2.2rem 2.2rem; }
-    html body.grey .contents h2 { color: var(--ink); border: 0; text-align: center; font-size: clamp(1.7rem, 4.6vw, 2.3rem); margin-bottom: .3rem; }
-    .contents .intro { text-align: center; max-width: 34rem; margin: 0 auto 1.6rem; color: #3d342b; }
-    .entry { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) auto; gap: .6rem; align-items: baseline; padding: .5rem 0; color: var(--ink); text-decoration: none; border-bottom: 1px dotted rgba(60, 50, 40, .35); }
-    .entry:hover { color: var(--ink); background: rgba(176, 53, 42, .06); }
-    .entry .no { font-family: var(--type); font-size: .8rem; color: #7a6c5a; }
+    html body.grey .contents h2 { text-align: center; font-size: clamp(1.7rem, 4.6vw, 2.3rem); margin-bottom: .3rem; }
+    .contents .intro { text-align: center; max-width: 34rem; margin: 0 auto 1.6rem; color: #2e3033; }
+    .entry { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) auto; gap: .6rem; align-items: baseline; padding: .5rem 0; color: var(--d-ink); text-decoration: none; border-bottom: 1px dotted rgba(47, 95, 158, .45); }
+    .entry:hover { color: var(--d-ink); background: rgba(184, 38, 46, .05); }
+    .entry .no { font-family: var(--d-type); font-size: .8rem; color: var(--d-blue); }
     .entry .n { display: block; font-family: var(--font-cjk), serif; font-size: 1.35rem; line-height: 1.25; letter-spacing: .06em; }
-    .entry .q { display: block; font-style: italic; color: var(--red); font-size: .95rem; }
-    .entry .where { font-family: var(--type); font-size: .75rem; color: #7a6c5a; white-space: nowrap; }
+    .entry .q { display: block; font-style: italic; color: var(--d-red); font-size: .95rem; }
+    .entry .where { font-family: var(--d-type); font-size: .75rem; color: var(--d-dim); white-space: nowrap; }
     .entry.first .n { font-size: 1.7rem; }
     .cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 2.4rem; }
     @media (max-width: 767.98px) { .cols { grid-template-columns: 1fr; } .contents { padding: 1.6rem 1.1rem; } }
@@ -116,7 +115,7 @@
 
     .end { max-width: 52rem; margin: 0 auto; padding: 3.5rem 1rem 3rem; text-align: center; }
     .links { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; }
-    .credit { font-family: var(--type); font-size: .76rem; color: var(--dim); margin: 2rem auto 0; max-width: 46rem; line-height: 1.55; }
+    .credit { font-family: var(--d-type); font-size: .76rem; color: var(--d-dim); margin: 2rem auto 0; max-width: 46rem; line-height: 1.55; }
     html body.grey .credit a { color: inherit; }
 
     .reveal { opacity: 0; translate: 0 1rem; transition: opacity 1s ease, translate 1s ease; }
@@ -126,15 +125,12 @@
 </head>
 <body class="grey">
 
-<figure class="window" aria-hidden="true">
-  <img src="/chunom-assets/durand/lake1.webp" alt="" width="960" height="712">
-  <canvas id="rain"></canvas>
-  <span class="bar v"></span><span class="bar h"></span>
-  <figcaption>Hanoi, 1915</figcaption>
+<figure class="ms m-0" aria-hidden="true">
+  <div class="plane"><img src="https://collections.library.yale.edu/iiif/2/10731978/full/1200,/0/default.jpg" srcset="https://collections.library.yale.edu/iiif/2/10731978/full/800,/0/default.jpg 800w, https://collections.library.yale.edu/iiif/2/10731978/full/1200,/0/default.jpg 1200w, https://collections.library.yale.edu/iiif/2/10731978/full/1800,/0/default.jpg 1800w" sizes="95vw" alt="" width="2400" height="3282"><img src="https://collections.library.yale.edu/iiif/2/10731979/full/1200,/0/default.jpg" srcset="https://collections.library.yale.edu/iiif/2/10731979/full/800,/0/default.jpg 800w, https://collections.library.yale.edu/iiif/2/10731979/full/1200,/0/default.jpg 1200w, https://collections.library.yale.edu/iiif/2/10731979/full/1800,/0/default.jpg 1800w" sizes="95vw" alt="" width="2400" height="3282"></div>
+  <figcaption>Chúa Thao cổ truyện</figcaption>
 </figure>
-<div class="sill" aria-hidden="true"></div>
 
-<!-- the sheet on the desk: 主滔古傳 is written onto it, the reading appears below every character, as in his notebooks -->
+<!-- the sheet on the notebook: 主滔古傳 is written onto it, the reading appears below every character, as in his notebooks -->
 <section class="desk">
   <div class="sheet open">
     <span class="label">MAURICE DURAND · 1914–1966 · 2026</span>
@@ -158,8 +154,8 @@
     <div class="when">HANOI<br>1914</div>
     <div>
       <h2><span data-vi="Giữa hai thế giới">Between two worlds</span></h2>
-      <p>Maurice Durand was born in Hanoi in 1914, the son of an interpreter at the court of justice and of a woman from Kiến An. He grew up between French and Vietnamese, between the boulevards and the narrow streets of the old quarter, where the shop signs were still written in characters.</p>
-      <figure class="photo"><img src="/chunom-assets/durand/chapeaux.webp" alt="A street of the old quarter of Hanoi on an old postcard" width="1100" height="712" loading="lazy">
+      <p>Maurice Durand was born in Hanoi in 1914, the son of an interpreter at the court of justice and of a woman from Kiến An. He grew up between French and Vietnamese, between the boulevards and the narrow streets of the old quarter.</p>
+      <figure class="photo bw"><img src="/chunom-assets/durand/chapeaux.webp" alt="A street of the old quarter of Hanoi on an old postcard" width="1100" height="712" loading="lazy">
         <figcaption><span data-vi="Phố Hàng Nón, bưu thiếp cũ">Rue des Chapeaux, an old postcard</span></figcaption></figure>
     </div>
   </section>
@@ -187,7 +183,7 @@
         </figure>
         <div>
           <h2><span data-vi="Sự nghiệp">His work</span></h2>
-          <p>So he wrote them out. Notebook after notebook, always in the same form: the characters in black brush on squared paper, and under every one its reading in red Quốc ngữ. A text that few could still read became one that anyone who reads Vietnamese can follow, character by character.</p>
+          <p>Notebook after notebook holds these texts, always in the same form: the characters in black brush on squared paper, and under every one its reading in red Quốc ngữ. A text that few could still read became one that anyone who reads Vietnamese can follow, character by character.</p>
           <ul class="marks">
             <li><span class="dot ink"></span><span data-vi="Chữ Nôm, nét bút lông">Chữ Nôm in brush</span></li>
             <li><span class="dot red"></span><span data-vi="Âm đọc quốc ngữ">The reading in Quốc ngữ</span></li>
@@ -250,17 +246,16 @@
     <a class="btn btn-sm btn-quiet btn-pill" href="/chunom/shelf/"><span data-vi="Tủ sách">Bookshelf</span></a>
   </div>
   <p class="credit mb-0">Manuscripts: Maurice Durand Papers (MS 1728), Manuscripts and Archives, Yale University Library.
-    Colour photographs of 1915: Léon Busy, Archives de la Planète, Musée départemental Albert-Kahn (CC0).
+    Colour photograph of 1915: Léon Busy, Archives de la Planète, Musée départemental Albert-Kahn (CC0).
     Postcard: Collection V. Demange, Hanoi. Via <a href="https://commons.wikimedia.org/" rel="noopener">Wikimedia Commons</a>.</p>
 </section>
 
 <script src="/chunom/js/stroke-order.js"></script>
 <script>
 (() => {
-  const quiet = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   // the title is written onto the sheet: every character stroke by stroke, then the ink dries into the brush form and the red reading appears below it
   const cells = [...document.querySelectorAll('#verse .c')];
+  const quiet = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const dry = c => { c.querySelector('.glyph').classList.add('done'); setTimeout(() => c.classList.add('read'), 350); };
   if (quiet || !window.StrokeOrder) cells.forEach(dry);
   else {
@@ -275,40 +270,6 @@
       setTimeout(() => next(0), 700);
     });
   }
-
-  // rain on the window: beads that sit on the glass, and now and then one that grows heavy and runs down, leaving a trail
-  const cv = document.getElementById('rain'), ctx = cv.getContext('2d');
-  let W = 0, H = 0, dpr = 1, beads = [], runs = [], on = true;
-  const size = () => {
-    dpr = Math.min(2, devicePixelRatio || 1); W = cv.clientWidth; H = cv.clientHeight;
-    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    beads = Array.from({ length: Math.round(W * H / 3200) }, () => ({ x: Math.random() * W, y: Math.random() * H, r: Math.random() ** 2.2 * 4.2 + .8 }));
-  };
-  const drop = (x, y, r) => {
-    ctx.beginPath(); ctx.ellipse(x, y, r, r * 1.15, 0, 0, 7);
-    ctx.fillStyle = 'rgba(215, 222, 226, .26)'; ctx.fill();
-    ctx.lineWidth = Math.max(.6, r * .35); ctx.strokeStyle = 'rgba(20, 24, 26, .35)'; ctx.beginPath(); ctx.arc(x, y + r * .15, r, .15 * Math.PI, .85 * Math.PI); ctx.stroke();
-    ctx.fillStyle = 'rgba(255, 255, 255, .55)'; ctx.beginPath(); ctx.arc(x - r * .35, y - r * .4, Math.max(.4, r * .28), 0, 7); ctx.fill();
-  };
-  const frame = () => {
-    ctx.clearRect(0, 0, W, H);
-    for (const b of beads) drop(b.x, b.y, b.r);
-    if (!quiet && runs.length < 6 && Math.random() < .04) runs.push({ x: Math.random() * W, y: -10, r: 3.2 + Math.random() * 2.8, v: .6 + Math.random() * 1.2, w: Math.random() * 6 });
-    for (const d of runs) {
-      d.y += d.v; d.v = Math.min(5, d.v + .02); d.x += Math.sin((d.y + d.w * 40) / 37) * .25;
-      if (Math.random() < .08) beads.push({ x: d.x + (Math.random() - .5) * 2, y: d.y - d.r * 2, r: Math.random() * 1.1 + .5 });
-      ctx.strokeStyle = 'rgba(215, 222, 226, .16)'; ctx.lineWidth = d.r * .8; ctx.beginPath(); ctx.moveTo(d.x, d.y - d.r * 6); ctx.lineTo(d.x, d.y); ctx.stroke();
-      drop(d.x, d.y, d.r);
-    }
-    runs = runs.filter(d => d.y < H + 20);
-    // wipe away the beads a run went through, and keep their number in bounds
-    beads = beads.filter(b => !runs.some(d => Math.abs(b.x - d.x) < d.r + b.r && b.y < d.y && b.y > d.y - d.r * 4)).slice(-Math.round(W * H / 1800));
-    if (on && !quiet) requestAnimationFrame(frame);
-  };
-  size(); frame();
-  addEventListener('resize', () => { size(); if (quiet) frame(); });
-  if (!quiet && 'IntersectionObserver' in window) new IntersectionObserver(es => { const was = on; on = es[0].isIntersecting; if (on && !was) frame(); }).observe(cv);
-
   const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('seen'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px' }) : null;
   document.querySelectorAll('.reveal').forEach(s => (io ? io.observe(s) : s.classList.add('seen')));
 })();
