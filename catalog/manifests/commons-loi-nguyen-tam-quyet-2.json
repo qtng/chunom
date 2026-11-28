@@ -1,0 +1,89 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-loi-nguyen-tam-quyet-2.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "Lời nguyện tâm quyết (Not stated on Wikimedia Commons (image from giacngo.vn), not stated)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, Thích Quảng Đức’s Oath in Chữ Nôm.jpg"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/File%3ATh%C3%ADch_Qu%E1%BA%A3ng_%C4%90%E1%BB%A9c%E2%80%99s_Oath_in_Ch%E1%BB%AF_N%C3%B4m.jpg",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-loi-nguyen-tam-quyet-2.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 409,
+      "height": 600,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-loi-nguyen-tam-quyet-2.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-loi-nguyen-tam-quyet-2.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-loi-nguyen-tam-quyet-2.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Th%C3%ADch_Qu%E1%BA%A3ng_%C4%90%E1%BB%A9c%E2%80%99s_Oath_in_Ch%E1%BB%AF_N%C3%B4m.jpg/330px-Th%C3%ADch_Qu%E1%BA%A3ng_%C4%90%E1%BB%A9c%E2%80%99s_Oath_in_Ch%E1%BB%AF_N%C3%B4m.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 409,
+                "height": 600
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/6/60/Th%C3%ADch_Qu%E1%BA%A3ng_%C4%90%E1%BB%A9c%E2%80%99s_Oath_in_Ch%E1%BB%AF_N%C3%B4m.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ATh%C3%ADch_Qu%E1%BA%A3ng_%C4%90%E1%BB%A9c%E2%80%99s_Oath_in_Ch%E1%BB%AF_N%C3%B4m.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

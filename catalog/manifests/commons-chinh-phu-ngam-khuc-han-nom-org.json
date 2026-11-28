@@ -1,0 +1,899 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "Chinh phụ ngâm khúc (Wikimedia Commons (typeset edition of han-nom.org, no holding library), not applicable)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, 征婦吟曲.pdf"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/File%3A%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 1275,
+      "height": 1650,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf/page1-1920px-%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1275,
+                "height": 1650
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/2",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "2"
+        ]
+      },
+      "width": 1275,
+      "height": 1650,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/2/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/2/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/2",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf/page2-1920px-%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1275,
+                "height": 1650
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/3",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "3"
+        ]
+      },
+      "width": 1275,
+      "height": 1650,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/3/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/3/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/3",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf/page3-1920px-%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1275,
+                "height": 1650
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/4",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "4"
+        ]
+      },
+      "width": 1275,
+      "height": 1650,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/4/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/4/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/4",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf/page4-1920px-%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1275,
+                "height": 1650
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/5",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "5"
+        ]
+      },
+      "width": 1275,
+      "height": 1650,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/5/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/5/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/5",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf/page5-1920px-%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1275,
+                "height": 1650
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/6",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "6"
+        ]
+      },
+      "width": 1275,
+      "height": 1650,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/6/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/6/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/6",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf/page6-1920px-%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1275,
+                "height": 1650
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/7",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "7"
+        ]
+      },
+      "width": 1275,
+      "height": 1650,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/7/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/7/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/7",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf/page7-1920px-%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1275,
+                "height": 1650
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/8",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "8"
+        ]
+      },
+      "width": 1275,
+      "height": 1650,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/8/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/8/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/8",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf/page8-1920px-%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1275,
+                "height": 1650
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/9",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "9"
+        ]
+      },
+      "width": 1275,
+      "height": 1650,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/9/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/9/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/9",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf/page9-1920px-%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1275,
+                "height": 1650
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/10",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "10"
+        ]
+      },
+      "width": 1275,
+      "height": 1650,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/10/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/10/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/10",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf/page10-1920px-%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1275,
+                "height": 1650
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/11",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "11"
+        ]
+      },
+      "width": 1275,
+      "height": 1650,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/11/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/11/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/11",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf/page11-1920px-%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1275,
+                "height": 1650
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/12",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "12"
+        ]
+      },
+      "width": 1275,
+      "height": 1650,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/12/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/12/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/12",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf/page12-1920px-%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1275,
+                "height": 1650
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/13",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "13"
+        ]
+      },
+      "width": 1275,
+      "height": 1650,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/13/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/13/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/13",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf/page13-1920px-%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1275,
+                "height": 1650
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/14",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "14"
+        ]
+      },
+      "width": 1275,
+      "height": 1650,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/14/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/14/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/14",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf/page14-1920px-%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1275,
+                "height": 1650
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/15",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "15"
+        ]
+      },
+      "width": 1275,
+      "height": 1650,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/15/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/15/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/15",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf/page15-1920px-%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1275,
+                "height": 1650
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/16",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "16"
+        ]
+      },
+      "width": 1275,
+      "height": 1650,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/16/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/16/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chinh-phu-ngam-khuc-han-nom-org.json/canvas/16",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf/page16-1920px-%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1275,
+                "height": 1650
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/b/b9/%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E5%BE%81%E5%A9%A6%E5%90%9F%E6%9B%B2.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

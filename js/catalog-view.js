@@ -38,6 +38,15 @@
     "scan": ["checked on the scan", "đã kiểm tra trên bản quét"],
   };
 
+  // admins (app_metadata.is_admin, as navigation.js reads it) also see the withheld copies; hidden for everyone else
+  const isAdmin = () => { try { return (JSON.parse(localStorage.getItem("sb-kfgqhhmdzboszpwsqkxt-auth-token")) || {}).user?.app_metadata?.is_admin === true; } catch { return false; } };
+  const WITHHELD = {
+    "personal-data": ["Personal data", "Dữ liệu cá nhân"],
+    "copyright": ["Copyright", "Bản quyền"],
+    "permission-needed": ["Permission needed", "Cần xin phép"],
+    "other": ["Rights not clear", "Quyền chưa rõ"],
+  };
+
   let work, viewer, item;
 
   function titles(w) {
@@ -63,7 +72,7 @@
     const parts = [i.holding.shelfmark !== "not stated" ? i.holding.shelfmark : "", i.physical.date].filter(Boolean);
     // without shelfmark and date, the title as the library states it tells the copies apart
     const tail = parts.length ? parts.join(", ") : String(i.title_on_item || "").slice(0, 70);
-    return `${contentText(i)}: ${String(i.holding.institution).split(",")[0]}${tail ? " – " + tail : ""}`;
+    return `${i.withheld ? `[${t("Withheld", "Chưa công bố")}] ` : ""}${contentText(i)}: ${String(i.holding.institution).split(",")[0]}${tail ? " – " + tail : ""}`;
   }
 
   function row(dt, ...dd) {
@@ -75,7 +84,12 @@
     const typ = TYPES[i.physical.type] || [i.physical.type, i.physical.type];
     const sc = SCRIPTS[work.script || "unknown"] || SCRIPTS.unknown;
     const basis = BASIS[work.script_basis];
+    const wr = i.withheld ? (WITHHELD[i.withheld.reason] || WITHHELD.other) : null;
     const dl = el("dl", { class: "row meta mb-0" },
+      ...(wr ? row(t("Not published", "Chưa công bố"),
+        el("span", { class: "badge-withheld" }, t(wr[0], wr[1])),
+        el("span", { class: "d-block text-secondary" }, t("Shown to admins only.", "Chỉ quản trị viên thấy.")),
+        el("span", { class: "d-block text-secondary source-text" }, i.withheld.note)) : []),
       ...row(t("Script of the text", "Loại chữ của văn bản"),
         el("span", { class: `badge-script script-${work.script || "unknown"}` }, t(sc[0], sc[1])),
         basis ? el("span", { class: "text-secondary" }, ` (${t(basis[0], basis[1])})`) : null,
@@ -146,6 +160,7 @@
       return;
     }
     work = data.works.find(w => w.id === params.get("work"));
+    if (work && !isAdmin()) work.items = work.items.filter(i => !i.withheld);
     if (!work || !work.items.length) {
       $("work-title").textContent = t("This work is not in the catalogue.", "Tác phẩm này không có trong thư mục.");
       $("viewer").hidden = true;

@@ -16,6 +16,11 @@
   const scriptOf = w => w.script || "unknown";
   const matchesScript = (w, s) => !s || (s === "with-nom" ? ["nom", "han-nom"].includes(scriptOf(w)) : scriptOf(w) === s);
 
+  // admins (app_metadata.is_admin in the Supabase session of this browser, as navigation.js reads it) also see the
+  // withheld copies (item.withheld: personal data, copyright, permission needed); for everyone else they are hidden
+  // here – hidden only, catalog.json contains them
+  const isAdmin = () => { try { return (JSON.parse(localStorage.getItem("sb-kfgqhhmdzboszpwsqkxt-auth-token")) || {}).user?.app_metadata?.is_admin === true; } catch { return false; } };
+
   // short name of a library for the cards and the filter
   const libraryName = inst => String(inst || "").split(",")[0].trim();
 
@@ -70,7 +75,8 @@
       n === 1 ? t("1 copy", "1 bản") : t(`${n} copies or volumes`, `${n} bản hoặc tập`),
       libs, years(work), typeText,
     ].filter(Boolean).join(" · ");
-    const nc = work.items.some(i => i.license && i.license.commercial_use === false);
+    const nc = work.items.some(i => !i.withheld && i.license && i.license.commercial_use === false);
+    const held = work.items.filter(i => i.withheld).length;
     const sc = SCRIPTS[scriptOf(work)];
     return el("a", { class: "card-box work d-block text-decoration-none", href: `view.html?work=${encodeURIComponent(work.id)}` },
       sc ? el("span", { class: `badge-script script-${scriptOf(work)}` }, t(sc[0], sc[1])) : null,
@@ -78,7 +84,9 @@
       el("span", { class: "qn" }, qn),
       authorLine(work) ? el("span", { class: "card-sum text-secondary" }, authorLine(work)) : null,
       el("small", { class: "d-block text-secondary" }, info,
-        nc ? el("span", { class: "badge-nc ms-1", title: t("Free for non-commercial use", "Dùng tự do cho mục đích phi thương mại") }, "NC") : null),
+        nc ? el("span", { class: "badge-nc ms-1", title: t("Free for non-commercial use", "Dùng tự do cho mục đích phi thương mại") }, "NC") : null,
+        held ? el("span", { class: "badge-withheld ms-1", title: t("Not published: shown to admins only", "Chưa công bố: chỉ quản trị viên thấy") },
+          held === n ? t("Withheld", "Chưa công bố") : t(`${held} withheld`, `${held} chưa công bố`)) : null),
     );
   }
 
@@ -111,6 +119,8 @@
       $("works").replaceChildren(el("p", { class: "text-danger" }, t("The catalogue could not be loaded.", "Không tải được thư mục.")));
       return;
     }
+    const admin = isAdmin();
+    for (const w of data.works) if (!admin) w.items = w.items.filter(i => !i.withheld);
     works = data.works.filter(w => w.items.length);
     for (const w of works) { w._hay = haystack(w); w._sort = fold(titles(w).qn); }
     works.sort((a, b) => a._sort.localeCompare(b._sort));

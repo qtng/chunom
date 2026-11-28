@@ -1,0 +1,89 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quang-nghi-1935.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "Birth certificate of Nguyễn Quang Nghi (1935) (Not stated on Wikimedia Commons, not stated)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, Nguyễn Quang Nghi's (阮光儀's) birth certificate (1935).jpg"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/File%3ANguy%E1%BB%85n_Quang_Nghi%27s_%28%E9%98%AE%E5%85%89%E5%84%80%27s%29_birth_certificate_%281935%29.jpg",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quang-nghi-1935.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 966,
+      "height": 810,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quang-nghi-1935.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quang-nghi-1935.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-birth-certificate-nguyen-quang-nghi-1935.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Nguy%E1%BB%85n_Quang_Nghi%27s_%28%E9%98%AE%E5%85%89%E5%84%80%27s%29_birth_certificate_%281935%29.jpg/960px-Nguy%E1%BB%85n_Quang_Nghi%27s_%28%E9%98%AE%E5%85%89%E5%84%80%27s%29_birth_certificate_%281935%29.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 966,
+                "height": 810
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/4/49/Nguy%E1%BB%85n_Quang_Nghi%27s_%28%E9%98%AE%E5%85%89%E5%84%80%27s%29_birth_certificate_%281935%29.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANguy%E1%BB%85n_Quang_Nghi%27s_%28%E9%98%AE%E5%85%89%E5%84%80%27s%29_birth_certificate_%281935%29.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

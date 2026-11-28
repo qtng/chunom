@@ -1,0 +1,89 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-loi-nguyen-tam-quyet-1.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "Lời nguyện tâm quyết (Not stated on Wikimedia Commons, not stated)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, Lời nguyện tâm quyết 𱔀願心决.jpg"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/File%3AL%E1%BB%9Di_nguy%E1%BB%87n_t%C3%A2m_quy%E1%BA%BFt_%F0%B1%94%80%E9%A1%98%E5%BF%83%E5%86%B3.jpg",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-loi-nguyen-tam-quyet-1.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 1205,
+      "height": 1773,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-loi-nguyen-tam-quyet-1.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-loi-nguyen-tam-quyet-1.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-loi-nguyen-tam-quyet-1.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/L%E1%BB%9Di_nguy%E1%BB%87n_t%C3%A2m_quy%E1%BA%BFt_%F0%B1%94%80%E9%A1%98%E5%BF%83%E5%86%B3.jpg/960px-L%E1%BB%9Di_nguy%E1%BB%87n_t%C3%A2m_quy%E1%BA%BFt_%F0%B1%94%80%E9%A1%98%E5%BF%83%E5%86%B3.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1205,
+                "height": 1773
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/c/c0/L%E1%BB%9Di_nguy%E1%BB%87n_t%C3%A2m_quy%E1%BA%BFt_%F0%B1%94%80%E9%A1%98%E5%BF%83%E5%86%B3.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AL%E1%BB%9Di_nguy%E1%BB%87n_t%C3%A2m_quy%E1%BA%BFt_%F0%B1%94%80%E9%A1%98%E5%BF%83%E5%86%B3.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
