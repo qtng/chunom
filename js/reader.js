@@ -126,7 +126,7 @@
     const wide = Math.max(...lines.map(l => l.cells.length), 1);
     const avail = $("text").clientWidth || 320;
     const h = Math.max(22, Math.min(58, Math.floor(avail / wide / 1.12)));
-    return { h, med };
+    return { h, med, avail };
   }
 
   // a reading with the punctuation of the edition (punct_before / punct_after of the token; not on the scan)
@@ -144,6 +144,37 @@
   function note(text) { const m = $("note"); m.textContent = text; m.hidden = !text; }
   function message(text) { const m = $("message"); m.textContent = text; m.hidden = !text; }
 
+  // the waiting picture while a page is prepared: verses of ink blots that are written one after the other (6 and 8 as a lục bát),
+  // the step below it; only after 150 ms, so that a page from the cache does not flicker
+  let loadStep = null, loadTimer = 0;
+  function loaderEl(step) {
+    const wrap = document.createElement("div"); wrap.className = "tx-loading"; wrap.setAttribute("role", "status");
+    let i = 0;
+    for (const n of [6, 8, 6, 8]) {
+      const row = document.createElement("div"); row.className = "tx-loading-verse";
+      for (let k = 0; k < n; k++) {
+        const c = document.createElement("span"); c.className = "tx-loading-cell"; c.style.setProperty("--i", i++);
+        c.append(document.createElement("i"), document.createElement("b"));
+        row.append(c);
+      }
+      wrap.append(row);
+    }
+    const cap = document.createElement("p"); cap.className = "tx-loading-cap";
+    const st = document.createElement("span"); st.className = "tx-loading-step"; st.textContent = step;
+    const hint = document.createElement("span"); hint.className = "tx-loading-hint";
+    hint.textContent = t("The scans come from the library: the first page can take a few seconds.", "Bản quét được tải từ thư viện: trang đầu có thể mất vài giây.");
+    cap.append(Object.assign(document.createElement("i"), { className: "bi bi-brush" }), " ", st, hint);
+    wrap.append(cap);
+    return wrap;
+  }
+  function loading(step) {
+    loadStep = step; const box = $("text");
+    if (step == null) { clearTimeout(loadTimer); loadTimer = 0; box.removeAttribute("aria-busy"); box.querySelector(".tx-loading")?.remove(); return; }
+    const l = box.querySelector(".tx-loading");
+    if (l) { l.querySelector(".tx-loading-step").textContent = step; return; }
+    if (!loadTimer) loadTimer = setTimeout(() => { loadTimer = 0; if (loadStep != null) { box.replaceChildren(loaderEl(loadStep)); box.setAttribute("aria-busy", "true"); } }, 150);
+  }
+
   async function render() {
     const cv = canvases[p - 1];
     $("reader").querySelector("input").value = urlPage();
@@ -153,15 +184,16 @@
     const n = textPage(), box = $("text"), mine = p;
     $("page-img").src = cv ? imageUrl(cv) : "";
     $("boxes").replaceChildren();
-    if (!cv) return;
+    if (!cv) { loading(null); return; }
     if (n < 1 || n > entry.pages) {
-      box.replaceChildren(); $("page").hidden = false; message(t("This page has no transcription.", "Trang này chưa có bản phiên âm."));
+      loading(null); box.replaceChildren(); $("page").hidden = false; message(t("This page has no transcription.", "Trang này chưa có bản phiên âm."));
       return;
     }
     $("page").hidden = !showPage;
     message("");
+    loading(t("Loading the text …", "Đang tải văn bản …"));
     let lines;
-    try { lines = await linesOf(n); } catch { message(t("The text could not be loaded.", "Không tải được văn bản.")); return; }
+    try { lines = await linesOf(n); } catch { loading(null); message(t("The text could not be loaded.", "Không tải được văn bản.")); return; }
     if (mine !== p) return;
     let own = null;
     if (owner || maybeOwner()) {
@@ -171,13 +203,23 @@
     closePop();
     cur = { n, lines, own, cv };
     let mask = null;
+    loading(t("Loading the scan …", "Đang tải bản quét …"));
     if (ink === "clean") { try { mask = await cleanUrl(cv); } catch { mask = null; } if (mine !== p) return; }
-    const ratio = cv.h / cv.w, { h, med } = sizes(lines);
+    if (!mask) { try { await loadImage(imageUrl(cv)); } catch { /* the cells stay empty, the readings are there */ } if (mine !== p) return; }
+    const ratio = cv.h / cv.w, sz = sizes(lines), med = sz.med;
+    // the widths in units of h: the usual cell (cf) and each wider character; h shrinks until the longest verse fits the column
+    const bwOf = b => (b[2] - b[0]) / (med * ratio);
+    let cf = 0;
+    for (const l of lines) for (const [, b] of l.cells) if (b) cf = Math.max(cf, bwOf(b));
+    cf = Math.min(Math.max(cf, 0.9), 1.08);
+    let h = sz.h;
+    for (const l of lines) {
+      const k = l.cells.reduce((s, [, b]) => s + Math.max(cf, b ? bwOf(b) * 1.04 : 0), 0), gaps = 2 * (l.cells.length - 1) + l.cells.length;
+      if (k * h + gaps > sz.avail) h = Math.max(18, Math.floor((sz.avail - gaps) / k));
+    }
     const H = h / (med / 10000), W = H / ratio;   // the page image in px so that a character of median height is h px high
     const px = (v, s) => v / 10000 * s;
-    let cw = 0;
-    for (const l of lines) for (const [, b] of l.cells) if (b) cw = Math.max(cw, px(b[2] - b[0], W));
-    cw = Math.ceil(Math.min(Math.max(cw, h * 0.9), h * 1.08));   // the usual width; a wider character gets a wider cell (below)
+    const cw = Math.ceil(cf * h);   // the usual width; a wider character gets a wider cell (below)
     let bh = 0;
     for (const l of lines) for (const [, b] of l.cells) if (b) bh = Math.max(bh, px(b[3] - b[1], H));
     const ch = Math.ceil(Math.max(h * 1.12, bh * 1.04));   // the whole box of the tallest character fits
@@ -212,6 +254,7 @@
     });
     if (notes.length) frag.push(el("ol", { class: "tx-notes small", "aria-label": t("Readings as written", "Âm đọc nguyên văn") },
       ...notes.map(x => el("li", { "data-k": x.k }, el("span", { lang: "vi" }, x.qn), " ", el("span", { class: "text-body-secondary" }, t(`(as written; today ${x.qm})`, `(nguyên văn; ngày nay ${x.qm})`))))));
+    loading(null);
     box.replaceChildren(...frag);
     updateCount();
     // the next page in advance
@@ -407,7 +450,7 @@
       if (wk) $("to-catalog").href = `/chunom/catalog/view.html?work=${encodeURIComponent(wk)}${asked ? `&item=${encodeURIComponent(asked)}` : ""}${location.hash}`;
       return;
     }
-    if (!entry.released) note(t("Not released yet: this transcription is still being checked and is not shown in the catalogue.", "Chưa công bố: bản phiên âm này đang được kiểm tra và chưa hiện trong thư mục."));
+    if (!entry.released) note(t("Not released yet: this transcription is still being checked and is not shown in the catalogue or the Bookshelf.", "Chưa công bố: bản phiên âm này đang được kiểm tra và chưa hiện trong thư mục và tủ sách."));
     if (asked && entry.copies[asked] == null) note(t("The copy asked for has no transcription; this is the transcription of another copy.", "Bản được chọn chưa có bản phiên âm; đây là bản phiên âm của một bản khác."));
     if (workTexts.length > 1) {   // several copies of the work have a transcription: choose one (as the copies in the catalogue)
       const sel = $("copy-select");
@@ -426,11 +469,15 @@
     // the copy in the address: the one asked for, else the first with the same scan that the catalogue shows, else the own one
     urlItem = entry.copies[asked] != null ? asked : (Object.keys(entry.copies).find(i => catalogItems.includes(i)) || entry.item);
     urlOffset = entry.copies[urlItem]; ownOffset = entry.copies[entry.item];
+    loading(t("Opening the manuscript …", "Đang mở bản chép tay …"));
     try { canvases = readCanvases(await fetch(entry.manifest).then(r => r.json())); }
-    catch { message(t("The scan could not be loaded.", "Không tải được bản quét.")); return; }
+    catch { loading(null); message(t("The scan could not be loaded.", "Không tải được bản quét.")); return; }
     $("total").textContent = canvases.length;
     const hp = parseInt((location.hash.match(/p=(\d+)/) || [])[1] || "", 10);
     p = Math.max(1, Math.min(canvases.length, Number.isFinite(hp) ? hp - urlOffset + ownOffset : ownOffset + 1));
+    // on entering: a page without transcription (the cover, the pages after the text) opens the next page with text (else the last one)
+    if (p - ownOffset < 1) p = ownOffset + 1; else if (p - ownOffset > entry.pages) p = ownOffset + entry.pages;
+    p = Math.max(1, Math.min(canvases.length, p));
 
     const reader = $("reader");
     reader.querySelector('[data-act="prev"]').addEventListener("click", () => go(p - 1));
