@@ -27,3 +27,5 @@
 .reader-card .ribbon::after { bottom: 2px; }
 .reader-card.durand .head, .reader-card.durand:not(.card-cover) .qn { padding-right: 5.5rem; }
 .reader-card .badge-withheld { display: inline-block; margin-top: .3rem; padding: 0 .35rem; border: 1px dashed currentColor; border-radius: .3rem; font-size: .72rem; }
+.reader-card .ribbon[role="link"] { cursor: pointer; pointer-events: auto; }
+.reader-card .ribbon[role="link"]:hover, .reader-card .ribbon[role="link"]:focus-visible { filter: brightness(1.12); outline: none; }
