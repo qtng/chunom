@@ -165,7 +165,7 @@
     entry = index.works.find(w => w.work === q.get("work"));
     if (!entry) { $("work-title").removeAttribute("data-vi"); $("work-title").textContent = t("This work has no transcription yet.", "Tác phẩm này chưa có bản phiên âm."); $("reader").hidden = true; return; }
     const work = catalog && catalog.works.find(w => w.id === entry.work);
-    catalogItems = work ? work.items.map(i => i.id) : [];
+    catalogItems = work ? work.items.filter(i => !i.withheld).map(i => i.id) : [];   // withheld copies (admins only in the catalogue) are not linked
     const main = work ? (work.titles || []).filter(x => (x.type || "main") === "main") : [];
     const qn = (main.find(x => x.script === "quoc-ngu") || {}).text || entry.work, han = (main.find(x => x.script === "han-nom") || {}).text;
     const h1 = $("work-title"); h1.removeAttribute("data-vi");
