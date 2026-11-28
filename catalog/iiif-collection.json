@@ -12,6 +12,15 @@
   },
   "items": [
     {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b53093605j/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "An Nam đại quốc họa đồ (Bibliothèque nationale de France, not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-ab-483.json",
       "type": "Manifest",
       "label": {
@@ -53,6 +62,15 @@
       "label": {
         "none": [
           "Bướm hoa tân truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 82)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093265z/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Calendrier franco-vietnamien 1863 (Bibliothèque nationale de France, not stated)"
         ]
       }
     },
@@ -116,6 +134,15 @@
       "label": {
         "none": [
           "Cung oán ngâm khúc (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 92)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-cung-oan-ngam-khuc-1905.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Cung oán ngâm khúc (Not stated (scan from Google Books), not stated)"
         ]
       }
     },
@@ -228,6 +255,51 @@
       }
     },
     {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb10797023/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Dictionarium Anamitico-Latinum (Bayerische Staatsbibliothek, 4 L.as. 26-2)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.onb.ac.at/presentation/ABO/%2BZ222427808/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Dictionarium Anamitico-Latinum (Österreichische Nationalbibliothek, +Z222427808)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.onb.ac.at/presentation/ABO/%2BZ222427900/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Dictionarium Anamitico-Latinum (Österreichische Nationalbibliothek, +Z222427900)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.onb.ac.at/presentation/ABO/%2BZ22242800X/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Dictionarium Anamitico-Latinum (Österreichische Nationalbibliothek, +Z22242800X)"
+        ]
+      }
+    },
+    {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb10572635/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Dictionnaire étymologique chinois-annamite latin-français (Bayerische Staatsbibliothek, L.as. 412 d)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093160b/manifest.json",
       "type": "Manifest",
       "label": {
@@ -264,6 +336,15 @@
       }
     },
     {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb10251375/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Gia Định thành thông chí (Bayerische Staatsbibliothek, A.or. 5255)"
+        ]
+      }
+    },
+    {
       "id": "https://chunom.org/chunom/catalog/manifests/commons-gia-long-1817-french-ship.json",
       "type": "Manifest",
       "label": {
@@ -287,6 +368,15 @@
       "label": {
         "none": [
           "Hà Nội học chính thám hoa Vũ Phạm Hàm tập văn (National Library of Vietnam (Thư viện Quốc gia Việt Nam), R.1727)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b525059421/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "[Hà Nội] (map, 1873) (Bibliothèque nationale de France, not stated)"
         ]
       }
     },
@@ -453,6 +543,24 @@
       }
     },
     {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb10251383/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng Việt luật lệ (Bayerische Staatsbibliothek, A.or. 5275-1)"
+        ]
+      }
+    },
+    {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb10251384/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng Việt luật lệ (Bayerische Staatsbibliothek, A.or. 5275-2)"
+        ]
+      }
+    },
+    {
       "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json",
       "type": "Manifest",
       "label": {
@@ -489,6 +597,24 @@
       }
     },
     {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb11467942/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Khâm định Việt sử thông giám cương mục (Bayerische Staatsbibliothek, 4 A.or. 3047 g-1)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093260q/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Kim Kiều diễn ca (Bibliothèque nationale de France, Vietnamien B 97)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b105000092/manifest.json",
       "type": "Manifest",
       "label": {
@@ -516,11 +642,92 @@
       }
     },
     {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/bpt6k54394659/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Bibliothèque nationale de France, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/bpt6k5453029r/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Bibliothèque nationale de France, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093426h/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Bibliothèque nationale de France, Vietnamien B 104)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932276/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
-          "Kim Vân Kiều tân truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 109)"
+          "Truyện Kiều (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 109)"
+        ]
+      }
+    },
+    {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb11452908/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Bayerische Staatsbibliothek, 2 A.or. 13,II-14)"
+        ]
+      }
+    },
+    {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb11452909/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Bayerische Staatsbibliothek, 2 A.or. 13,II-15,1/2)"
+        ]
+      }
+    },
+    {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb11452910/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Bayerische Staatsbibliothek, 2 A.or. 13,II-15,1/2)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.onb.ac.at/presentation/ABO/%2BZ148808804/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Österreichische Nationalbibliothek, +Z148808804)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.onb.ac.at/presentation/ABO/%2BZ317973505/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Österreichische Nationalbibliothek, +Z317973505)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.onb.ac.at/presentation/ABO/%2BZ317973608/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện Kiều (Österreichische Nationalbibliothek, +Z317973608)"
         ]
       }
     },
@@ -557,6 +764,69 @@
       "label": {
         "none": [
           "Document in chữ Nôm written by a Westerner (reign of Lê Chân Tông) (Not stated on Wikimedia Commons, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/bpt6k5844254h/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lục Vân Tiên (Bibliothèque nationale de France, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/bpt6k54602432/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lục Vân Tiên (Bibliothèque nationale de France, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/bpt6k5439461n/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lục Vân Tiên (Bibliothèque nationale de France, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb11452896/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lục Vân Tiên (Bayerische Staatsbibliothek, 2 A.or. 13,I-19)"
+        ]
+      }
+    },
+    {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb11542942/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lục Vân Tiên (Bayerische Staatsbibliothek, A.or. 7572 f)"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.onb.ac.at/presentation/ABO/%2BZ148807204/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lục Vân Tiên (Österreichische Nationalbibliothek, +Z148807204)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093266d/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lưu Bình diễn ca (Bibliothèque nationale de France, Vietnamien B 86)"
         ]
       }
     },
@@ -759,11 +1029,38 @@
       }
     },
     {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093273g/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nguyệt Hoa vấn đáp (Bibliothèque nationale de France, Vietnamien B 68)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093118v/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nhị độ mai diễn ca (Bibliothèque nationale de France, Vietnamien B 105)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093280j/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Nhị độ mai diễn ca (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 108)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nhu-tay-nhut-trinh-1890.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Như tây nhựt trình (Bibliothèque nationale de France, not stated (Gallica btv1b10889751m))"
         ]
       }
     },
@@ -867,6 +1164,15 @@
       }
     },
     {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093666x/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Recueil de coutumes (Bibliothèque nationale de France, Vietnamien B 33)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b54100441b/manifest.json",
       "type": "Manifest",
       "label": {
@@ -899,6 +1205,15 @@
       "label": {
         "none": [
           "Sơ Học Vấn Tân (National Library of Vietnam (Thư viện Quốc gia Việt Nam), R.1018)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-so-hoc-van-tan-2024.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Sơ Học Vấn Tân (Wikimedia Commons (modern edition, no holding library), not applicable)"
         ]
       }
     },
@@ -1047,6 +1362,15 @@
       }
     },
     {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10099862z/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tiểu học bản quốc phong tục (Bibliothèque nationale de France, Vietnamien A 45)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093159z/manifest.json",
       "type": "Manifest",
       "label": {
@@ -1101,6 +1425,15 @@
       }
     },
     {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-truyen-ky-man-luc-1952.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyền kỳ mạn lục (National Library of Vietnam (Thư viện Quốc gia Việt Nam), Indochina collection (as credited on Commons), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10099911t/manifest.json",
       "type": "Manifest",
       "label": {
@@ -1133,6 +1466,15 @@
       "label": {
         "none": [
           "Ức Trai tập (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 68 (1-4))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b8596877z/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "La vie de Saint Ignace de Loyola (vietnamien) (Bibliothèque nationale de France, not stated)"
         ]
       }
     },
