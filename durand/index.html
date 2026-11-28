@@ -11,39 +11,35 @@
   <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
   <script src="https://qatt.org/js/navigation.js"></script>
   <style>
-    /* a world of its own: in front of his desk. At the top one of his notebooks lies open before the reader; below, a silver-grey wall of concrete.
-       No yellowed paper: white and greys, and the black, red and blue of his manuscripts. */
+    /* a world of its own: one of his notebooks lies open in front of the reader; below it a dark band with the title and his life, then a light silver-grey wall.
+       White paper, greys, and the black, red and blue of his manuscripts. Few words: points, pictures, one number. */
     :root {
-      --d-wall: #c3c5c6; --d-ink: #161616; --d-dim: #4c4f52; --d-paper: #fdfdfc; --d-grid: rgba(60, 105, 170, .2); --d-red: #b8262e; --d-blue: #2f5f9e;
-      --d-cjk: "HaiMinh Medium", var(--font-cjk), serif; --d-type: "Courier New", Courier, monospace;
+      --d-ink: #161616; --d-dim: #4c4f52; --d-paper: #fdfdfc; --d-grid: rgba(60, 105, 170, .2); --d-red: #b8262e; --d-blue: #2f5f9e;
+      --d-dark: #232427; --d-light: #e9eaea; --d-cjk: "HaiMinh Medium", var(--font-cjk), serif; --d-type: "Courier New", Courier, monospace;
     }
     html body.grey {
-      margin: 0; color: var(--d-ink);
-      background-color: var(--d-wall);
-      background-image:
-        linear-gradient(180deg, rgba(255, 255, 255, .5), rgba(255, 255, 255, .62) 40rem, rgba(255, 255, 255, .55)),
-        linear-gradient(180deg, rgba(255, 255, 255, .35) 1px, rgba(0, 0, 0, .1) 1px 2px, transparent 2px),   /* the seams between the panels of the formwork */
-        url("/chunom-assets/durand/concrete.webp");
-      background-size: auto, 100% 24rem, 384px 384px;
+      margin: 0; color: var(--d-ink); background-color: var(--d-light);
+      background-image: linear-gradient(rgba(240, 241, 241, .8), rgba(240, 241, 241, .8)), url("/chunom-assets/durand/concrete.webp");
+      background-size: auto, 384px 384px;
     }
+    html body.grey h1, html body.grey h2, html body.grey h3 { color: var(--d-ink); border: 0; }
 
-    /* the head: a page of his notebook, from edge to edge, lying in front of the reader (a plane tilted away, darker where it is further away) */
-    .ms { position: relative; height: min(70vh, 38rem); min-height: 21rem; overflow: hidden; background: #2b2c2d; perspective: 1000px; perspective-origin: 50% 0%; }
+    /* the head: two pages of his notebook, edge to edge, lying in front of the reader (tilted away, darker where they are further away) */
+    .ms { position: relative; height: min(66vh, 36rem); min-height: 20rem; overflow: hidden; background: var(--d-dark); perspective: 1000px; perspective-origin: 50% 0%; }
     .ms .plane { display: flex; position: absolute; left: 50%; top: -48%; width: max(190vw, 110rem); transform: translateX(-50%) rotateX(34deg) rotateZ(-1.5deg); transform-origin: 50% 100%; }
-    .ms .plane img { display: block; width: 50%; height: auto; filter: brightness(1.06) contrast(1.06) saturate(1.05); box-shadow: 0 2rem 4rem rgba(0, 0, 0, .6); }
-    .ms .plane::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, transparent 44%, rgba(0, 0, 0, .1) 48.5%, rgba(0, 0, 0, .38) 50%, rgba(0, 0, 0, .08) 51.5%, transparent 56%); }   /* the fold between the two pages */
+    .ms .plane img { display: block; width: 50%; height: auto; filter: brightness(1.06) contrast(1.06) saturate(1.05); }
+    .ms .plane::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, transparent 44%, rgba(0, 0, 0, .1) 48.5%, rgba(0, 0, 0, .38) 50%, rgba(0, 0, 0, .08) 51.5%, transparent 56%); }   /* the fold */
     .ms::after { content: ""; position: absolute; inset: 0; pointer-events: none;
-      background:
-        linear-gradient(180deg, rgba(20, 20, 22, .72), rgba(20, 20, 22, .25) 38%, rgba(20, 20, 22, 0) 60%, rgba(20, 20, 22, .18)),
+      background: linear-gradient(180deg, rgba(20, 20, 22, .72), rgba(20, 20, 22, .25) 38%, rgba(20, 20, 22, 0) 58%, rgba(35, 36, 39, .85)),
         radial-gradient(120% 90% at 30% 85%, transparent 50%, rgba(20, 20, 22, .35)); }
     .ms figcaption { position: absolute; z-index: 2; left: 1rem; top: .8rem; font-family: var(--d-type); font-size: .75rem; color: rgba(255, 255, 255, .7); }
 
-    /* the sheet laid on the notebook: the title is written onto it stroke by stroke */
-    .desk { position: relative; z-index: 3; padding: 0 1rem; margin-top: -11rem; }
+    /* the dark band below the head: the title sheet, then his life in four steps */
+    .band { background: var(--d-dark); color: #e9e9e6; padding: 0 1rem 3.6rem; }
     .sheet { position: relative; color: var(--d-ink); background-color: var(--d-paper);
       background-image: linear-gradient(var(--d-grid) 1px, transparent 1px), linear-gradient(90deg, var(--d-grid) 1px, transparent 1px);
-      background-size: 1.6rem 1.6rem; box-shadow: 0 1.6rem 3rem rgba(0, 0, 0, .35), 0 .2rem .5rem rgba(0, 0, 0, .2); }
-    .open { max-width: 44rem; margin: 0 auto; padding: 1.8rem 2rem; text-align: center; transform: rotate(-.8deg); }
+      background-size: 1.6rem 1.6rem; box-shadow: 0 1.6rem 3rem rgba(0, 0, 0, .4), 0 .2rem .5rem rgba(0, 0, 0, .25); }
+    .open { position: relative; z-index: 3; max-width: 44rem; margin: -11rem auto 0; padding: 1.8rem 2rem; text-align: center; transform: rotate(-.8deg); }
     .open .label { display: inline-block; font-family: var(--d-type); font-size: .82rem; color: var(--d-dim); letter-spacing: .06em; }
     .verse { display: flex; justify-content: center; gap: clamp(.4rem, 2vw, 1.2rem); margin: 1.1rem 0 .8rem; }
     .verse .c { width: clamp(3.8rem, 15vw, 6.4rem); }
@@ -55,62 +51,54 @@
     .verse .glyph.done .so-svg { opacity: 0; }
     .verse .rd { display: block; margin-top: .2rem; min-height: 1.5em; font-size: clamp(.95rem, 2.6vw, 1.2rem); color: var(--d-red); font-style: italic; opacity: 0; transition: opacity .6s ease; }
     .verse .c.read .rd { opacity: 1; }
-    html body.grey h1, html body.grey h2 { color: var(--d-ink); border: 0; }
     html body.grey .open h1 { font-size: clamp(2rem, 6.2vw, 3.2rem); margin: .3rem 0 .5rem; }
-    .open .lead { max-width: 32rem; margin: 0 auto 1.2rem; font-size: 1.06rem; color: #2e3033; }
-    @media (max-width: 575.98px) { .desk { margin-top: -6rem; } .open { padding: 1.5rem 1rem; transform: none; } }
+    .open .lead { max-width: 30rem; margin: 0 auto 1.2rem; font-size: 1.06rem; color: #2e3033; }
 
-    /* the story, written straight onto the wall: a place and a year in the margin, the text beside it */
-    .story { max-width: 58rem; margin: 0 auto; padding: 4.5rem 1rem 1rem; }
-    .step { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1.6rem; margin-bottom: 4.2rem; }
-    .step > .when { font-family: var(--d-type); color: var(--d-dim); font-size: .95rem; letter-spacing: .08em; padding-top: .35rem; border-top: 1px solid rgba(0, 0, 0, .35); }
-    .step p { font-size: 1.08rem; line-height: 1.75; max-width: 38rem; }
-    html body.grey .story h2 { font-size: clamp(1.7rem, 4.6vw, 2.3rem); margin: 0 0 .9rem; }
-    @media (max-width: 767.98px) { .step { grid-template-columns: 1fr; gap: .6rem; } .step > .when { border-top: 0; padding-top: 0; } }
+    .life { max-width: 62rem; margin: 3.4rem auto 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.6rem; }
+    .life li { border-top: 2px solid rgba(233, 233, 230, .25); padding-top: .9rem; }
+    .life .y { display: block; font-family: Georgia, "Times New Roman", serif; font-size: 2.1rem; line-height: 1; color: #fff; }
+    .life .p { display: block; font-family: var(--d-type); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: #e06a70; margin: .45rem 0 .55rem; }
+    .life .t { display: block; font-size: .98rem; line-height: 1.45; color: #cfd0cc; }
+    .life img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; margin-bottom: .9rem; border: .3rem solid #fff; }
+    .life .bw { filter: grayscale(1) contrast(1.05); }
+    @media (max-width: 767.98px) { .open { margin-top: -6rem; padding: 1.5rem 1rem; transform: none; } .life { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
-    .photo { margin: 1.4rem 0 0; }
-    .photo img { display: block; width: 100%; height: auto; border: .45rem solid #fff; box-shadow: 0 1rem 2rem rgba(0, 0, 0, .3); }
-    .photo.bw img { filter: grayscale(1) contrast(1.05); }
-    .photo figcaption { margin-top: .6rem; font-family: var(--d-type); font-size: .8rem; color: var(--d-dim); }
-    .side { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 2rem; align-items: start; }
-    .side .photo { margin-top: .4rem; }
-    .tilt { transform: rotate(-1.6deg); }
-    @media (max-width: 767.98px) { .side { grid-template-columns: 1fr; } }
-
-    /* his work: a page of a notebook, laid down crooked, as on a desk */
-    .work { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 2.2rem; align-items: center; }
+    /* the light part */
+    .wrap { max-width: 62rem; margin: 0 auto; padding: 4.5rem 1rem 1rem; }
+    html body.grey .wrap h2 { font-size: clamp(1.7rem, 4.6vw, 2.3rem); margin: 0 0 1rem; }
+    .work { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 2.6rem; align-items: center; }
     @media (max-width: 767.98px) { .work { grid-template-columns: 1fr; } }
     .page { margin: 0; transform: rotate(-2deg); }
-    .page a { display: block; box-shadow: 0 1.4rem 2.8rem rgba(0, 0, 0, .35); }
-    .page img { display: block; width: 100%; height: auto; aspect-ratio: 2400 / 3282; object-fit: cover; background: #eceeef; }
-    .marks { display: flex; gap: 1.2rem; flex-wrap: wrap; margin: 0; padding: 0; list-style: none; font-size: .95rem; color: var(--d-dim); }
-    .marks li { display: flex; align-items: center; gap: .45rem; }
-    .marks .dot { width: .8rem; height: .8rem; border-radius: 50%; }
-    .marks .ink { background: var(--d-ink); } .marks .red { background: var(--d-red); }
-    .strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin-top: 2.6rem; }
+    .page a { display: block; box-shadow: 0 1.4rem 2.8rem rgba(0, 0, 0, .3); }
+    .page img { display: block; width: 100%; height: auto; aspect-ratio: 2400 / 3282; object-fit: cover; background: #f1f2f2; }
+    .points { list-style: none; margin: 0 0 1.2rem; padding: 0; font-size: 1.1rem; }
+    .points li { display: flex; gap: .75rem; align-items: baseline; padding: .55rem 0; border-bottom: 1px solid rgba(0, 0, 0, .1); }
+    .points li::before { content: ""; flex: 0 0 .55rem; height: .55rem; border-radius: 50%; background: var(--d-blue); transform: translateY(-.1rem); }
+    .points li.ink::before { background: var(--d-ink); } .points li.red::before { background: var(--d-red); }
+
+    .kpi { display: flex; gap: 2rem; align-items: flex-end; flex-wrap: wrap; margin: 4.5rem 0 0; }
+    .kpi .num { flex: 0 0 auto; width: max-content; font-family: Georgia, "Times New Roman", serif; font-size: clamp(5.5rem, 17vw, 10rem); line-height: .9; color: var(--d-ink); letter-spacing: -.02em; }
+    .kpi .num::after { content: ""; display: block; width: 3.2rem; height: .3rem; margin-top: .7rem; background: var(--d-red); }
+    .kpi .txt { flex: 1 1 14rem; font-size: 1.25rem; line-height: 1.45; max-width: 22rem; margin-bottom: .8rem; }
+    .kpi .txt a { display: inline-block; margin-top: .3rem; font-family: var(--d-type); font-size: .8rem; color: var(--d-dim); }
+    .strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin-top: 2rem; }
     @media (max-width: 767.98px) { .strip { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     .strip a { color: var(--d-dim); text-decoration: none; font-size: .85rem; line-height: 1.3; }
     .strip a:hover { color: var(--d-ink); }
-    .strip img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: 50% 0; margin-bottom: .5rem; box-shadow: 0 .6rem 1.2rem rgba(0, 0, 0, .25); background: #eceeef; }
+    .strip img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: 50% 0; margin-bottom: .5rem; box-shadow: 0 .6rem 1.2rem rgba(0, 0, 0, .18); background: #f1f2f2; }
 
-
-    /* one big number between the chapters */
-    .kpi { margin: 0 0 4.5rem; display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1.6rem; align-items: center; }
-    .kpi .num { flex: 0 0 auto; width: max-content; font-family: Georgia, "Times New Roman", serif; font-size: clamp(5.5rem, 17vw, 10rem); line-height: .9; color: var(--d-ink); letter-spacing: -.02em; font-variant-numeric: lining-nums; }
-    .kpi .num::after { content: ""; display: block; width: 3.2rem; height: .3rem; margin-top: .7rem; background: var(--d-red); }
-    .kpi .txt { flex: 1 1 16rem; font-size: 1.15rem; line-height: 1.55; max-width: 26rem; color: #2e3033; }
-    .kpi .txt a { font-family: var(--d-type); font-size: .8rem; color: var(--d-dim); }
-    .kpi .row { display: flex; gap: 2rem; align-items: flex-end; flex-wrap: wrap; grid-column: 2; }
-    @media (max-width: 767.98px) { .kpi { grid-template-columns: 1fr; } .kpi .row { grid-column: 1; } }
-    .books { list-style: none; margin: 1rem 0 0; padding: 0; font-family: var(--d-type); font-size: .92rem; line-height: 1.5; color: var(--d-dim); }
-    .books li { padding: .45rem 0; border-top: 1px dashed rgba(0, 0, 0, .25); }
-    .books i { font-family: Georgia, "Times New Roman", serif; font-size: 1.02rem; color: var(--d-ink); }
-    html body.grey .story a.lnk { color: var(--d-red); }
+    .books { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.4rem; }
+    @media (max-width: 767.98px) { .books { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    .books li { border-top: 2px solid var(--d-ink); padding-top: .7rem; }
+    .books .y { display: block; font-family: var(--d-type); font-size: .85rem; color: var(--d-red); }
+    .books i { display: block; font-family: Georgia, "Times New Roman", serif; font-size: 1.05rem; line-height: 1.3; margin: .3rem 0; }
+    .books small { color: var(--d-dim); }
+    html body.grey .books a { color: var(--d-red); }
 
     /* today: one sheet of squared paper, the contents of the collection, written as he wrote: the Nôm in black, the reading in red below */
     .contents { max-width: 52rem; margin: 0 auto; padding: 2rem 2.2rem 2.2rem; }
     html body.grey .contents h2 { text-align: center; font-size: clamp(1.7rem, 4.6vw, 2.3rem); margin-bottom: .3rem; }
-    .contents .intro { text-align: center; max-width: 34rem; margin: 0 auto 1.6rem; color: #2e3033; }
+    .contents .intro { text-align: center; margin: 0 auto 1.4rem; color: var(--d-dim); }
     .entry { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) auto; gap: .6rem; align-items: baseline; padding: .5rem 0; color: var(--d-ink); text-decoration: none; border-bottom: 1px dotted rgba(47, 95, 158, .45); }
     .entry:hover { color: var(--d-ink); background: rgba(184, 38, 46, .05); }
     .entry .no { font-family: var(--d-type); font-size: .8rem; color: var(--d-blue); }
@@ -122,6 +110,7 @@
     @media (max-width: 767.98px) { .cols { grid-template-columns: 1fr; } .contents { padding: 1.6rem 1.1rem; } }
     .contents .go { text-align: center; margin-top: 1.6rem; }
 
+    .gap { margin-top: 5rem; }
     .end { max-width: 52rem; margin: 0 auto; padding: 3.5rem 1rem 3rem; text-align: center; }
     .links { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; }
     .credit { font-family: var(--d-type); font-size: .76rem; color: var(--d-dim); margin: 2rem auto 0; max-width: 46rem; line-height: 1.55; }
@@ -139,8 +128,8 @@
   <figcaption>Chúa Thao cổ truyện</figcaption>
 </figure>
 
-<!-- the sheet on the notebook: 主滔古傳 is written onto it, the reading appears below every character, as in his notebooks -->
-<section class="desk">
+<section class="band">
+  <!-- the sheet laid on the notebook: 主滔古傳 is written onto it, the reading appears below every character, as in his notebooks -->
   <div class="sheet open">
     <span class="label">MAURICE DURAND · 1914–1966 · 2026</span>
     <div class="verse" id="verse" lang="vi-Hani" aria-label="主滔古傳 – Chúa Thao cổ truyện">
@@ -150,91 +139,72 @@
       <div class="c"><div class="glyph"><span class="dry">傳</span></div><span class="rd" lang="vi">truyện</span></div>
     </div>
     <h1><span data-vi="Sưu tập Maurice Durand">Maurice Durand Collection</span></h1>
-    <p class="lead"><span data-vi="Văn bản Nôm chép tay, âm đọc quốc ngữ màu đỏ dưới từng chữ: di sản của Maurice Durand, sáu mươi năm sau ngày ông mất.">Nôm texts written out by hand, the reading in red under every character: the legacy of Maurice Durand, sixty years after his death.</span></p>
+    <p class="lead"><span data-vi="Văn bản Nôm chép tay, âm đọc màu đỏ dưới từng chữ. Sáu mươi năm sau ngày ông mất.">Nôm texts written out by hand, the reading in red under every character. Sixty years after his death.</span></p>
     <p class="mb-0 d-flex flex-wrap justify-content-center gap-2">
       <a class="btn btn-cinnabar btn-pill" href="/chunom/reader/?work=chua-thao-co-truyen&amp;item=yale-10732464"><i class="bi bi-book"></i> <span data-vi="Đọc Chúa Thao cổ truyện">Read Chúa Thao cổ truyện</span></a>
       <a class="btn btn-quiet btn-pill" href="#contents"><i class="bi bi-list-ul"></i> <span data-vi="Mục lục">Contents</span></a>
     </p>
   </div>
+
+  <ol class="life">
+    <li><img class="bw" src="/chunom-assets/durand/chapeaux.webp" alt="A street of the old quarter of Hanoi on an old postcard" loading="lazy">
+      <span class="y">1914</span><span class="p">Hanoi</span><span class="t" data-vi="Sinh ra ở Hà Nội, cha người Pháp, mẹ người Việt">Born in Hanoi, to a French father and a Vietnamese mother</span></li>
+    <li><img src="/chunom-assets/durand/khue.webp" alt="The Khuê Văn Các pavilion of the Temple of Literature in Hanoi, 1915" loading="lazy">
+      <span class="y">1946</span><span class="p">EFEO · Hanoi</span><span class="t" data-vi="Học giả của Trường Viễn Đông Bác cổ, về sau đứng đầu trường">Scholar at the École française d’Extrême-Orient, later its head</span></li>
+    <li><img src="https://collections.library.yale.edu/iiif/2/10731983/full/500,/0/default.jpg" alt="A page of one of his notebooks" loading="lazy">
+      <span class="y">Paris</span><span class="p">EPHE</span><span class="t" data-vi="Dạy tiếng Việt tại École pratique des hautes études">Teaches Vietnamese at the École pratique des hautes études</span></li>
+    <li><img src="https://collections.library.yale.edu/iiif/2/10731987/full/500,/0/default.jpg" alt="A page of one of his notebooks" loading="lazy">
+      <span class="y">1966</span><span class="p">Paris · Yale</span><span class="t" data-vi="Mất tại Paris; sách vở và di cảo của ông về Đại học Yale">Dies in Paris; his library and papers go to Yale University</span></li>
+  </ol>
 </section>
 
-<div class="story">
-  <section class="step reveal">
-    <div class="when">HANOI<br>1914</div>
+<div class="wrap">
+  <section class="work reveal">
+    <figure class="page">
+      <a href="/chunom/reader/?work=chua-thao-co-truyen&amp;item=yale-10732464#p=5" aria-label="Chúa Thao cổ truyện in the reader">
+        <img src="https://collections.library.yale.edu/iiif/2/10731978/full/900,/0/default.jpg" alt="A page of Chúa Thao cổ truyện: Nôm characters in black, their readings in red below" loading="lazy">
+      </a>
+    </figure>
     <div>
-      <h2><span data-vi="Giữa hai thế giới">Between two worlds</span></h2>
-      <p>Maurice Durand was born in Hanoi in 1914, the son of an interpreter at the court of justice and of a woman from Kiến An. He grew up between French and Vietnamese, between the boulevards and the narrow streets of the old quarter.</p>
-      <figure class="photo bw"><img src="/chunom-assets/durand/chapeaux.webp" alt="A street of the old quarter of Hanoi on an old postcard" width="1100" height="712" loading="lazy">
-        <figcaption><span data-vi="Phố Hàng Nón, bưu thiếp cũ">Rue des Chapeaux, an old postcard</span></figcaption></figure>
-    </div>
-  </section>
-
-  <section class="step reveal">
-    <div class="when">HANOI<br>1946</div>
-    <div class="side">
-      <div>
-        <h2><span data-vi="Học giả">The scholar</span></h2>
-        <p>After the war, which he spent as an officer in Cameroon and Chad, he came back to Hanoi and joined the École française d’Extrême-Orient. He taught there and later led it. Old Vietnamese literature became his subject: the tales in verse, the songs, the poems that had been written in Chữ Nôm for centuries and that fewer and fewer people could still read.</p>
-      </div>
-      <figure class="photo tilt"><img src="/chunom-assets/durand/khue.webp" alt="The Khuê Văn Các pavilion of the Temple of Literature in Hanoi, a colour photograph of 1915" width="1100" height="816" loading="lazy">
-        <figcaption><span data-vi="Khuê Văn Các, Văn Miếu, 1915">Khuê Văn Các, Temple of Literature, 1915</span></figcaption></figure>
-    </div>
-  </section>
-
-  <section class="step reveal">
-    <div class="when"><span data-vi="BÀN VIẾT">AT HIS DESK</span></div>
-    <div>
-      <div class="work">
-        <figure class="page">
-          <a href="/chunom/reader/?work=chua-thao-co-truyen&amp;item=yale-10732464#p=5" aria-label="Chúa Thao cổ truyện in the reader">
-            <img src="https://collections.library.yale.edu/iiif/2/10731978/full/900,/0/default.jpg" alt="A page of Chúa Thao cổ truyện: Nôm characters in black, their readings in red below" loading="lazy">
-          </a>
-        </figure>
-        <div>
-          <h2><span data-vi="Sự nghiệp">His work</span></h2>
-          <p>Notebook after notebook holds these texts, always in the same form: the characters in black brush on squared paper, and under every one its reading in red Quốc ngữ. A text that few could still read became one that anyone who reads Vietnamese can follow, character by character.</p>
-          <ul class="marks">
-            <li><span class="dot ink"></span><span data-vi="Chữ Nôm, nét bút lông">Chữ Nôm in brush</span></li>
-            <li><span class="dot red"></span><span data-vi="Âm đọc quốc ngữ">The reading in Quốc ngữ</span></li>
-          </ul>
-        </div>
-      </div>
-      <div class="strip">
-        <a href="https://collections.library.yale.edu/catalog/10732461" rel="noopener"><img src="https://collections.library.yale.edu/iiif/2/10731878/full/500,/0/default.jpg" alt="" loading="lazy">Ca trù thể cách</a>
-        <a href="https://collections.library.yale.edu/catalog/10732465" rel="noopener"><img src="https://collections.library.yale.edu/iiif/2/10732042/full/500,/0/default.jpg" alt="" loading="lazy">Đông Tác Nguyễn Đại Vương bản truyện</a>
-        <a href="https://collections.library.yale.edu/catalog/10732466" rel="noopener"><img src="https://collections.library.yale.edu/iiif/2/10732278/full/500,/0/default.jpg" alt="" loading="lazy">Hảo cầu tân truyện</a>
-        <a href="https://collections.library.yale.edu/catalog/10732462" rel="noopener"><img src="https://collections.library.yale.edu/iiif/2/10731918/full/500,/0/default.jpg" alt="" loading="lazy">Ca trù thể cách</a>
-      </div>
-    </div>
-  </section>
-
-
-  <div class="kpi reveal">
-    <div class="row">
-      <span class="num" data-count="157">157</span>
-      <p class="txt mb-2">texts in Nôm and Hán with their reading in Quốc ngữ are kept in his papers at Yale, every one of them scanned page by page.<br><a href="https://collections.library.yale.edu/catalog?q=%22Han+Nom+texts+with+Vietnamese%22" rel="noopener">Yale Digital Collections →</a></p>
-    </div>
-  </div>
-  <section class="step reveal">
-    <div class="when">PARIS<br>1966</div>
-    <div>
-      <h2><span data-vi="Sách của ông">His books</span></h2>
-      <p>In Paris he taught Vietnamese at the École pratique des hautes études. He died there in 1966, at fifty-one; two of his books appeared after his death. His library and his notebooks, with the papers of his father, went to Yale University.</p>
-      <ul class="books">
-        <li><i>Connaissance du Viêt-Nam</i>, with Pierre Huard, 1954</li>
-        <li><i>Phan Trần, roman en vers</i>: text, translation and notes, 1962</li>
-        <li><i>L’Œuvre de la poétesse vietnamienne Hồ Xuân Hương</i>, 1968: the book that brought her to Western readers; <a class="lnk" href="/chunom/shelf/23/">her poems from his papers</a> are in the Bookshelf</li>
-        <li><i>Introduction à la littérature vietnamienne</i>, with Nguyễn Trần Huân, 1969</li>
+      <h2><span data-vi="Sự nghiệp">His work</span></h2>
+      <ul class="points">
+        <li><span data-vi="Truyện thơ, bài hát và thơ bằng chữ Nôm">Tales in verse, songs and poems in Chữ Nôm</span></li>
+        <li class="ink"><span data-vi="Nét bút lông đen trên giấy kẻ ô">Black brush on squared paper</span></li>
+        <li class="red"><span data-vi="Âm đọc màu đỏ dưới từng chữ">The reading in red under every character</span></li>
+        <li><span data-vi="Ai đọc được tiếng Việt cũng theo được">Readable for anyone who reads Vietnamese</span></li>
       </ul>
     </div>
+  </section>
+
+  <section class="reveal">
+    <div class="kpi">
+      <span class="num" data-count="157">157</span>
+      <p class="txt"><span data-vi="bản thảo, xem được trên mạng tại Yale">manuscripts, online at Yale</span><br><a href="https://collections.library.yale.edu/catalog?q=%22Han+Nom+texts+with+Vietnamese%22" rel="noopener">Yale Digital Collections →</a></p>
+    </div>
+    <div class="strip">
+      <a href="https://collections.library.yale.edu/catalog/10732461" rel="noopener"><img src="https://collections.library.yale.edu/iiif/2/10731878/full/500,/0/default.jpg" alt="" loading="lazy">Ca trù thể cách</a>
+      <a href="https://collections.library.yale.edu/catalog/10732465" rel="noopener"><img src="https://collections.library.yale.edu/iiif/2/10732042/full/500,/0/default.jpg" alt="" loading="lazy">Đông Tác Nguyễn Đại Vương bản truyện</a>
+      <a href="https://collections.library.yale.edu/catalog/10732466" rel="noopener"><img src="https://collections.library.yale.edu/iiif/2/10732278/full/500,/0/default.jpg" alt="" loading="lazy">Hảo cầu tân truyện</a>
+      <a href="https://collections.library.yale.edu/catalog/10732462" rel="noopener"><img src="https://collections.library.yale.edu/iiif/2/10731918/full/500,/0/default.jpg" alt="" loading="lazy">Ca trù thể cách</a>
+    </div>
+  </section>
+
+  <section class="gap reveal">
+    <h2><span data-vi="Sách của ông">His books</span></h2>
+    <ul class="books">
+      <li><span class="y">1954</span><i>Connaissance du Viêt-Nam</i><small>with Pierre Huard</small></li>
+      <li><span class="y">1962</span><i>Phan Trần</i><small data-vi="văn bản, bản dịch, chú thích">text, translation, notes</small></li>
+      <li><span class="y">1968</span><i>Hồ Xuân Hương</i><small><span data-vi="ra đời sau khi ông mất ·">after his death ·</span> <a href="/chunom/shelf/23/" data-vi="thơ của bà">her poems</a></small></li>
+      <li><span class="y">1969</span><i>Introduction à la littérature vietnamienne</i><small>with Nguyễn Trần Huân</small></li>
+    </ul>
   </section>
 </div>
 
 <!-- today: the contents of the collection on chunom.org, on one sheet -->
-<section class="px-3 reveal" id="contents">
+<section class="px-3 gap reveal" id="contents">
   <div class="sheet contents">
     <h2><span data-vi="Đọc hôm nay">Read today</span></h2>
-    <p class="intro">Sixty years later his notebooks can be read on chunom.org: the first in the reader, character by character beside the scan, and ten more texts from his papers in the Bookshelf, transcribed by readers of this site over the years.</p>
+    <p class="intro"><span data-vi="Một tác phẩm trong trình đọc, mười tác phẩm trong Tủ sách.">One in the reader, ten in the Bookshelf.</span></p>
     <a class="entry first" href="/chunom/reader/?work=chua-thao-co-truyen&amp;item=yale-10732464"><span class="no">1</span><span><span class="n" lang="vi-Hani">主滔古傳</span><span class="q">Chúa Thao cổ truyện</span></span><span class="where"><span data-vi="Trình đọc">Reader</span> →</span></a>
     <div class="cols">
       <a class="entry" href="/chunom/shelf/23/"><span class="no">2</span><span><span class="n" lang="vi-Hani">胡春香詩集</span><span class="q">Hồ Xuân Hương thi tập</span></span><span class="where"><span data-vi="Tủ sách">Bookshelf</span></span></a>
