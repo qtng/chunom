@@ -40,6 +40,9 @@
       background-image: linear-gradient(var(--d-grid) 1px, transparent 1px), linear-gradient(90deg, var(--d-grid) 1px, transparent 1px);
       background-size: 1.6rem 1.6rem; box-shadow: 0 1.6rem 3rem rgba(0, 0, 0, .4), 0 .2rem .5rem rgba(0, 0, 0, .25); }
     .open { position: relative; z-index: 3; max-width: 44rem; margin: -11rem auto 0; padding: 1.8rem 2rem; text-align: center; transform: rotate(-.8deg); }
+    .stamp { position: absolute; top: -1.3rem; right: -1.2rem; display: grid; place-items: center; padding: .45rem .8rem; border: 2px solid var(--d-red); border-radius: 4px; color: var(--d-red); background: rgba(253, 253, 252, .92); transform: rotate(6deg); font-family: var(--d-type); font-size: .78rem; line-height: 1.3; text-transform: uppercase; letter-spacing: .08em; box-shadow: 0 .3rem .8rem rgba(0, 0, 0, .25); }
+    .stamp b { font-size: 1.05rem; letter-spacing: .04em; }
+    @media (max-width: 575.98px) { .stamp { right: -.3rem; top: -1.6rem; } }
     .open .label { display: inline-block; font-family: var(--d-type); font-size: .82rem; color: var(--d-dim); letter-spacing: .06em; }
     .verse { display: flex; justify-content: center; gap: clamp(.4rem, 2vw, 1.2rem); margin: 1.1rem 0 .8rem; }
     .verse .c { width: clamp(3.8rem, 15vw, 6.4rem); }
@@ -66,9 +69,6 @@
     /* the light part */
     .wrap { max-width: 62rem; margin: 0 auto; padding: 4.5rem 1rem 1rem; }
     html body.grey .wrap h2 { font-size: clamp(1.7rem, 4.6vw, 2.3rem); margin: 0 0 1rem; }
-    .bio { max-width: 40rem; margin: 0 auto 5rem; }
-    .bio p { font-size: 1.1rem; line-height: 1.75; margin-bottom: 1.1rem; }
-    .bio p:first-of-type::first-letter { float: left; font-family: Georgia, "Times New Roman", serif; font-size: 3.4rem; line-height: .9; margin: .35rem .5rem 0 0; color: var(--d-red); }
     .work { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 2.6rem; align-items: center; }
     @media (max-width: 767.98px) { .work { grid-template-columns: 1fr; } }
     .page { margin: 0; transform: rotate(-2deg); }
@@ -79,7 +79,8 @@
     .points li::before { content: ""; flex: 0 0 .55rem; height: .55rem; border-radius: 50%; background: var(--d-blue); transform: translateY(-.1rem); }
     .points li.ink::before { background: var(--d-ink); } .points li.red::before { background: var(--d-red); }
 
-    .kpi { display: flex; gap: 2rem; align-items: flex-end; flex-wrap: wrap; margin: 4.5rem 0 0; }
+    .kpi { display: flex; gap: 2rem; align-items: flex-end; flex-wrap: wrap; margin: 1.4rem 0 0; }
+    .why { max-width: 40rem; font-size: 1.15rem; line-height: 1.65; margin: 1.6rem 0 0; }
     .kpi .num { flex: 0 0 auto; width: max-content; font-family: Georgia, "Times New Roman", serif; font-size: clamp(5.5rem, 17vw, 10rem); line-height: .9; color: var(--d-ink); letter-spacing: -.02em; }
     .kpi .num::after { content: ""; display: block; width: 3.2rem; height: .3rem; margin-top: .7rem; background: var(--d-red); }
     .kpi .txt { flex: 1 1 14rem; font-size: 1.25rem; line-height: 1.45; max-width: 22rem; margin-bottom: .8rem; }
@@ -134,7 +135,8 @@
 <section class="band">
   <!-- the sheet laid on the notebook: 主滔古傳 is written onto it, the reading appears below every character, as in his notebooks -->
   <div class="sheet open">
-    <span class="label">MAURICE DURAND · 1914–1966 · 2026</span>
+    <span class="stamp" aria-hidden="true"><b>1966 – 2026</b><span data-vi="60 năm sau">60 years later</span></span>
+    <span class="label">MAURICE DURAND · 1914–1966</span>
     <div class="verse" id="verse" lang="vi-Hani" aria-label="主滔古傳 – Chúa Thao cổ truyện">
       <div class="c"><div class="glyph"><span class="dry">主</span></div><span class="rd" lang="vi">chúa</span></div>
       <div class="c"><div class="glyph"><span class="dry">滔</span></div><span class="rd" lang="vi">thao</span></div>
@@ -142,7 +144,7 @@
       <div class="c"><div class="glyph"><span class="dry">傳</span></div><span class="rd" lang="vi">truyện</span></div>
     </div>
     <h1><span data-vi="Sưu tập Maurice Durand">Maurice Durand Collection</span></h1>
-    <p class="lead"><span data-vi="Văn bản Nôm chép tay, âm đọc màu đỏ dưới từng chữ. Sáu mươi năm sau ngày ông mất.">Nôm texts written out by hand, the reading in red under every character. Sixty years after his death.</span></p>
+    <p class="lead"><span data-vi="Văn bản Nôm do chính tay ông chép, âm đọc màu đỏ dưới từng chữ.">Nôm texts in his own hand, the reading in red under every character.</span></p>
     <p class="mb-0 d-flex flex-wrap justify-content-center gap-2">
       <a class="btn btn-cinnabar btn-pill" href="/chunom/reader/?work=chua-thao-co-truyen&amp;item=yale-10732464"><i class="bi bi-book"></i> <span data-vi="Đọc Chúa Thao cổ truyện">Read Chúa Thao cổ truyện</span></a>
       <a class="btn btn-quiet btn-pill" href="#contents"><i class="bi bi-list-ul"></i> <span data-vi="Mục lục">Contents</span></a>
@@ -151,26 +153,33 @@
 
   <ol class="life">
     <li><img class="bw" src="/chunom-assets/durand/chapeaux.webp" alt="A street of the old quarter of Hanoi on an old postcard" loading="lazy">
-      <span class="y">1914</span><span class="p">Hanoi</span><span class="t" data-vi="Sinh ra ở Hà Nội, cha người Pháp, mẹ người Việt">Born in Hanoi, to a French father and a Vietnamese mother</span></li>
+      <span class="y">1914</span><span class="p">Hanoi</span><span class="t" data-vi="Sinh ở Hà Nội; cha người Pháp, mẹ người Việt">Born in Hanoi; French father, Vietnamese mother</span></li>
     <li><img src="/chunom-assets/durand/khue.webp" alt="The Khuê Văn Các pavilion of the Temple of Literature in Hanoi, 1915" loading="lazy">
-      <span class="y">1946</span><span class="p">EFEO · Hanoi</span><span class="t" data-vi="Học giả của Trường Viễn Đông Bác cổ, về sau đứng đầu trường">Scholar at the École française d’Extrême-Orient, later its head</span></li>
+      <span class="y">1946</span><span class="p">EFEO · Hanoi</span><span class="t" data-vi="Trường Viễn Đông Bác cổ ở Hà Nội, về sau làm giám đốc">École française d’Extrême-Orient in Hanoi, later its director</span></li>
     <li><img src="https://collections.library.yale.edu/iiif/2/10731983/full/500,/0/default.jpg" alt="A page of one of his notebooks" loading="lazy">
-      <span class="y">Paris</span><span class="p">EPHE</span><span class="t" data-vi="Dạy tiếng Việt tại École pratique des hautes études">Teaches Vietnamese at the École pratique des hautes études</span></li>
+      <span class="y">Paris</span><span class="p">EPHE</span><span class="t" data-vi="Dạy tiếng Việt ở Paris">Teaches Vietnamese in Paris</span></li>
     <li><img src="https://collections.library.yale.edu/iiif/2/10731987/full/500,/0/default.jpg" alt="A page of one of his notebooks" loading="lazy">
-      <span class="y">1966</span><span class="p">Paris · Yale</span><span class="t" data-vi="Mất tại Paris; sách vở và di cảo của ông về Đại học Yale">Dies in Paris; his library and papers go to Yale University</span></li>
+      <span class="y">1966</span><span class="p">Paris · Yale</span><span class="t" data-vi="Mất tại Paris; năm 1967 di cảo về Đại học Yale">Dies in Paris; in 1967 his papers go to Yale</span></li>
   </ol>
 </section>
 
 <div class="wrap">
-  <section class="bio reveal">
-    <h2><span data-vi="Cuộc đời">His life</span></h2>
-    <p>Maurice Durand was born in Hanoi on 2 August 1914. His father, Gustave Durand, was chief translator at the court of justice in Hanoi; his mother, Nguyễn Thị Bình, came from Kiến An. He grew up with both languages.</p>
-    <p>In the Second World War he served as an officer in Cameroon and Chad. In 1946 he returned to Hanoi and joined the École française d’Extrême-Orient, where he taught and which he later directed. In Paris he taught Vietnamese at the École pratique des hautes études.</p>
-    <p>His subject was Vietnamese literature as it had lived for centuries in Chữ Nôm: tales in verse, the songs of ca trù, the poems of Hồ Xuân Hương. He edited and translated them, wrote <i>Connaissance du Viêt-Nam</i> with Pierre Huard, and gathered the texts themselves in notebooks, the characters in black brush and the reading in red below.</p>
-    <p class="mb-0">He died in Paris in 1966, at fifty-one. His book on Hồ Xuân Hương and his introduction to Vietnamese literature appeared after his death. His library and papers, with those of his father, went to Yale University in 1967.</p>
+  <section class="reveal">
+    <h2><span data-vi="Di sản">His legacy</span></h2>
+    <div class="kpi">
+      <span class="num" data-count="157">157</span>
+      <p class="txt"><span data-vi="bản thảo do chính tay ông viết, đã số hoá tại Yale">manuscripts in his hand, scanned at Yale</span><br><a href="https://collections.library.yale.edu/catalog?q=%22Han+Nom+texts+with+Vietnamese%22" rel="noopener">Yale Digital Collections →</a></p>
+    </div>
+    <p class="why">Probably the largest coherent body of Nôm texts with a parallel reading: tales in verse, songs and poems, every character with its reading in Quốc ngữ. Only a handful have been transcribed so far; the rest is waiting.</p>
+    <div class="strip">
+      <a href="https://collections.library.yale.edu/catalog/10732461" rel="noopener"><img src="https://collections.library.yale.edu/iiif/2/10731878/full/500,/0/default.jpg" alt="" loading="lazy">Ca trù thể cách</a>
+      <a href="https://collections.library.yale.edu/catalog/10732465" rel="noopener"><img src="https://collections.library.yale.edu/iiif/2/10732042/full/500,/0/default.jpg" alt="" loading="lazy">Đông Tác Nguyễn Đại Vương bản truyện</a>
+      <a href="https://collections.library.yale.edu/catalog/10732466" rel="noopener"><img src="https://collections.library.yale.edu/iiif/2/10732278/full/500,/0/default.jpg" alt="" loading="lazy">Hảo cầu tân truyện</a>
+      <a href="https://collections.library.yale.edu/catalog/10732462" rel="noopener"><img src="https://collections.library.yale.edu/iiif/2/10731918/full/500,/0/default.jpg" alt="" loading="lazy">Ca trù thể cách</a>
+    </div>
   </section>
 
-  <section class="work reveal">
+  <section class="work gap reveal">
     <figure class="page">
       <a href="/chunom/reader/?work=chua-thao-co-truyen&amp;item=yale-10732464#p=5" aria-label="Chúa Thao cổ truyện in the reader">
         <img src="https://collections.library.yale.edu/iiif/2/10731978/full/900,/0/default.jpg" alt="A page of Chúa Thao cổ truyện: Nôm characters in black, their readings in red below" loading="lazy">
@@ -179,24 +188,12 @@
     <div>
       <h2><span data-vi="Sự nghiệp">His work</span></h2>
       <ul class="points">
+        <li><span data-vi="Chính tay ông viết">Written in his own hand</span></li>
         <li><span data-vi="Truyện thơ, bài hát và thơ bằng chữ Nôm">Tales in verse, songs and poems in Chữ Nôm</span></li>
         <li class="ink"><span data-vi="Nét bút lông đen trên giấy kẻ ô">Black brush on squared paper</span></li>
         <li class="red"><span data-vi="Âm đọc màu đỏ dưới từng chữ">The reading in red under every character</span></li>
         <li><span data-vi="Ai đọc được tiếng Việt cũng theo được">Readable for anyone who reads Vietnamese</span></li>
       </ul>
-    </div>
-  </section>
-
-  <section class="reveal">
-    <div class="kpi">
-      <span class="num" data-count="157">157</span>
-      <p class="txt"><span data-vi="bản thảo, xem được trên mạng tại Yale">manuscripts, online at Yale</span><br><a href="https://collections.library.yale.edu/catalog?q=%22Han+Nom+texts+with+Vietnamese%22" rel="noopener">Yale Digital Collections →</a></p>
-    </div>
-    <div class="strip">
-      <a href="https://collections.library.yale.edu/catalog/10732461" rel="noopener"><img src="https://collections.library.yale.edu/iiif/2/10731878/full/500,/0/default.jpg" alt="" loading="lazy">Ca trù thể cách</a>
-      <a href="https://collections.library.yale.edu/catalog/10732465" rel="noopener"><img src="https://collections.library.yale.edu/iiif/2/10732042/full/500,/0/default.jpg" alt="" loading="lazy">Đông Tác Nguyễn Đại Vương bản truyện</a>
-      <a href="https://collections.library.yale.edu/catalog/10732466" rel="noopener"><img src="https://collections.library.yale.edu/iiif/2/10732278/full/500,/0/default.jpg" alt="" loading="lazy">Hảo cầu tân truyện</a>
-      <a href="https://collections.library.yale.edu/catalog/10732462" rel="noopener"><img src="https://collections.library.yale.edu/iiif/2/10731918/full/500,/0/default.jpg" alt="" loading="lazy">Ca trù thể cách</a>
     </div>
   </section>
 
@@ -215,7 +212,7 @@
 <section class="px-3 gap reveal" id="contents">
   <div class="sheet contents">
     <h2><span data-vi="Đọc hôm nay">Read today</span></h2>
-    <p class="intro"><span data-vi="Một tác phẩm trong trình đọc, mười tác phẩm trong Tủ sách.">One in the reader, ten in the Bookshelf.</span></p>
+    <p class="intro"><span data-vi="Đến nay vẫn có người tiếp tục đưa văn bản của ông lên mạng: một tác phẩm trong trình đọc, mười tác phẩm trong Tủ sách.">People are still at work bringing his texts onto the screen: one in the reader, ten in the Bookshelf.</span></p>
     <a class="entry first" href="/chunom/reader/?work=chua-thao-co-truyen&amp;item=yale-10732464"><span class="no">1</span><span><span class="n" lang="vi-Hani">主滔古傳</span><span class="q">Chúa Thao cổ truyện</span></span><span class="where"><span data-vi="Trình đọc">Reader</span> →</span></a>
     <div class="cols">
       <a class="entry" href="/chunom/shelf/23/"><span class="no">2</span><span><span class="n" lang="vi-Hani">胡春香詩集</span><span class="q">Hồ Xuân Hương thi tập</span></span><span class="where"><span data-vi="Tủ sách">Bookshelf</span></span></a>
