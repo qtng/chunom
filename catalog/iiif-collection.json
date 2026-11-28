@@ -1,0 +1,951 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/iiif-collection.json",
+  "type": "Collection",
+  "label": {
+    "en": [
+      "Hán-Nôm Library – chunom.org"
+    ],
+    "vi": [
+      "Thư viện Hán Nôm – chunom.org"
+    ]
+  },
+  "items": [
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932437/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ấu học ngũ ngôn (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 55)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093244p/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bạch Viên Tôn các truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 114)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093246k/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bích Câu kỳ ngộ (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 88)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932471/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Bướm hoa tân truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 82)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093154q/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Cao Vương Quan Thế Âm kinh (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 23)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093248g/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Chàng chuối tân truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 79)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093228n/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Chiếu-quân cống hồ thư (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 121)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093620k/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Chinh phụ ngâm (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 62)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932024/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Cung oán ngâm khúc (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 92)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093375r/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Nam chính biên liệt truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 21)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b541004365/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Nam liệt truyện tiền biên (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 20 (1))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b54100437m/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Nam liệt truyện tiền biên (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 20 (2))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b541004382/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Nam liệt truyện tiền biên (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 20 (3))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100933101/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Nam nhất thống chí (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 65)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100933086/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Nam nhất thống chí (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 73)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093241b/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Nam Quốc sử Diễn ca (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 110)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b54100439h/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đai-nam thật-lục chính-biên (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 26)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100933749/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 102)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093242s/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Địa tạng bản hạnh (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 73)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093341q/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Dictionarium Anamitico-Latinum (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien C 1)"
+        ]
+      }
+    },
+    {
+      "id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb10521858/manifest",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Dictionarium Anamitico-Latinum (Bayerische Staatsbibliothek, 4 L.as. 26-1)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093160b/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Dương Ngọc cổ-tích (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 126)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093240w/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Dương tiết diễn nghĩa (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 20)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093381c/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Gia Định báo (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 43)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093307r/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Gia Định thành thông chí (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 74)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093251r/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hàn vương tôn phú (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 58)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093343m/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoa-Tiên nhuận chính (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 98)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b54100440w/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoà ước thư (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 27)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093382t/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoà ước thư (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 85)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932526/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng trừ truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 65)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b541002997/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng Việt luật lệ (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 1 (1))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b54100302r/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng Việt luật lệ (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 1 (10))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b54100296w/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng Việt luật lệ (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 1 (11))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b54100306j/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng Việt luật lệ (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 1 (2))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b54100298s/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng Việt luật lệ (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 1 (3))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b54100300v/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng Việt luật lệ (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 1 (4))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b54100304n/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng Việt luật lệ (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 1 (5))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b541003053/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng Việt luật lệ (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 1 (6))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b541003019/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng Việt luật lệ (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 1 (7))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b54100297b/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng Việt luật lệ (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 1 (8))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b541003036/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng Việt luật lệ (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 1 (9))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b105000092/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Kim Vân Kiêu án (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 99)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100933442/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Kim Vân Kiều lục (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 60)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932615/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Kim-Vân-Kiều phú (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 69)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932276/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Kim Vân Kiều tân truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 109)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093161s/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lâm sinh tân thư (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 125)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932454/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lâm tuyền kỳ ngộ (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 80)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093262m/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lão bạng sinh châu diễn truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 100)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093267v/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lưu-Bình phú (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 84)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932632/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lý-công tân-thư (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 112)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093264h/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Lý-công tân-truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 78)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093269r/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Minh-tâm báu-giám thích-nghiã (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 58)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093380x/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nam-kỳ lục-tỉnh báo (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 42)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093309n/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nam quốc giai sự (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 80)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932704/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nam-vô tân-truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 83)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093271k/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngọc Kiều Lê tân truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 64)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932721/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngũ canh phú (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 100)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10099847c/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngự chế Việt sử tổng vịnh tập (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 29)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10308862n/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngự chế Việt sử tổng vịnh tập (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 29 (1))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10308871m/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngự chế Việt sử tổng vịnh tập (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 29 (10))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b103088722/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngự chế Việt sử tổng vịnh tập (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 29 (11))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b103088633/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngự chế Việt sử tổng vịnh tập (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 29 (2))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10308864j/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngự chế Việt sử tổng vịnh tập (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 29 (3))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b103088650/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngự chế Việt sử tổng vịnh tập (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 29 (4))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10308866f/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngự chế Việt sử tổng vịnh tập (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 29 (5))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10308867w/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngự chế Việt sử tổng vịnh tập (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 29 (6))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10308868b/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngự chế Việt sử tổng vịnh tập (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 29 (7))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10308869s/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngự chế Việt sử tổng vịnh tập (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 29 (8))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b103088705/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngự chế Việt sử tổng vịnh tập (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 29 (9))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093280j/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nhị độ mai diễn ca (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 108)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932689/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nữ-Lưu tương truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 72)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932795/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ông ninh cổ-truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 95)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093156m/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Phạm-công Cúc-Hoa (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 124)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932810/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Phong-tinh tân-truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 101)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093424m/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Phủ Biên tạp lục (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 18)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932778/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Phù-dung tân-truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 77)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093665g/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Phương Sơn từ chí lược (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 64)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100933425/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Quan âm chú giải tân truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 66)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093282f/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Quan-âm-phú (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 24)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093278q/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Quan-âm tống-tử bản hạnh (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 71)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100930478/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Quốc Triều Hương Khoa Lục (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 72)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b54100441b/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Sách học đề cương (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 35)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b54100446k/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Sơ Học Vấn Tân (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 57)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093622g/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Sơ Học Vấn Tân (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 26)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100934252/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tam thiên tự giải âm (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 52)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b541004437/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tam thiên tự giải âm (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 54)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093253n/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tam-tự kinh thích nghiã (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 56)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932543/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tam-tự kinh thích nghiã (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 27)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093158h/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thạch-sanh Lý-Thông thư (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 116)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10099861h/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thiên tự văn giải âm (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 16)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100933408/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thông guỡc thổ sản (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 32)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932560/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thu dạ lữ hoài ngâm (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 63)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093255j/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thuý Kiều thi-tập (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 59)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093257f/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thuý-sơn thu mộng ký (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 74)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093159z/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Triệu Ngũ-nương thư (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 127)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093201p/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Trinh thử truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 89)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100931538/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Trung quân đối ca (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 87)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100931572/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Trương Ngáo truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 118)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100931555/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Trương Ngộ diễn-ca (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 113)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b54100295f/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Truyện chúa Giê thu (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 1)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10099911t/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tứ thế bụt thức (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 15)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093258w/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tuyển phu ngộ phối tân truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 102)"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093044x/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ức Trai tập (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 68 (1-4))"
+        ]
+      }
+    },
+    {
+      "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b85968754/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "御製詩五集總目二目錄二 (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 106)"
+        ]
+      }
+    }
+  ]
+}

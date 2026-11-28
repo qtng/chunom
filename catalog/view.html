@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hán-Nôm scan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <meta name="description" content="A public-domain scan of a Hán-Nôm book, with its source and licence.">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://qatt.org/css/site.css">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/chunom/css/shelf.css">
+  <link rel="stylesheet" href="/chunom/css/catalog.css">
+  <script src="https://qatt.org/js/navigation.js"></script>
+  <script defer src="/chunom/js/iiif-viewer.js"></script>
+  <script defer src="/chunom/js/catalog-view.js"></script>
+</head>
+<body>
+<header class="hero py-4"><div class="container text-center">
+  <p class="crumbs mb-2"><a class="back" href="./" data-vi="← Thư mục bản quét">← Catalogue of scans</a></p>
+  <h1 class="mb-1" id="work-title" data-vi="Đang tải …">Loading …</h1>
+  <p class="qn mb-1" id="work-qn"></p>
+  <p class="lead mx-auto mb-0" id="work-authors"></p>
+</div></header>
+<main class="container catalog-wide py-4">
+<div id="items" class="catalog-items mb-3" hidden>
+  <label class="form-label small mb-1" for="item-select" data-vi="Bản / tập">Copy / volume</label>
+  <select class="form-select" id="item-select"></select>
+</div>
+
+<section class="iiif-viewer card-box" id="viewer" aria-label="Viewer" data-vi-aria-label="Trình xem">
+  <div class="iiif-toolbar">
+    <button type="button" class="btn btn-sm btn-outline-secondary" data-act="prev" title="Previous page (←)" data-vi-title="Trang trước (←)"><i class="bi bi-chevron-left"></i></button>
+    <span class="iiif-pageno small">
+      <input class="form-control form-control-sm" type="number" min="1" value="1" aria-label="Page" data-vi-aria-label="Trang"> / <span data-role="total">–</span>
+    </span>
+    <button type="button" class="btn btn-sm btn-outline-secondary" data-act="next" title="Next page (→)" data-vi-title="Trang sau (→)"><i class="bi bi-chevron-right"></i></button>
+    <span class="iiif-label small text-secondary" data-role="label"></span>
+    <span class="ms-auto"></span>
+    <button type="button" class="btn btn-sm btn-outline-secondary" data-act="zoom-out" title="Zoom out (−)" data-vi-title="Thu nhỏ (−)"><i class="bi bi-zoom-out"></i></button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" data-act="fit" title="Fit the page (0)" data-vi-title="Vừa trang (0)"><i class="bi bi-arrows-angle-contract"></i></button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" data-act="zoom-in" title="Zoom in (+)" data-vi-title="Phóng to (+)"><i class="bi bi-zoom-in"></i></button>
+    <a class="btn btn-sm btn-outline-secondary" data-role="full" target="_blank" rel="noopener" title="Open the image in full resolution" data-vi-title="Mở ảnh độ phân giải đầy đủ"><i class="bi bi-box-arrow-up-right"></i></a>
+  </div>
+  <div class="iiif-stage" data-role="stage" tabindex="0">
+    <img data-role="image" alt="">
+    <p class="iiif-message" data-role="message" hidden></p>
+  </div>
+  <div class="iiif-thumbs" data-role="thumbs"></div>
+</section>
+
+<section class="card-box small" id="source"></section>
+</main>
+<footer class="container py-4 small text-body-secondary">
+  <span data-vi="Ảnh được tải trực tiếp từ thư viện lưu giữ qua IIIF.">The images are loaded directly from the holding library via IIIF.</span>
+</footer>
+</body>
+</html>

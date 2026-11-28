@@ -1,0 +1,22 @@
+/* The catalogue of Hán-Nôm scans (catalog/): filters, cards and the IIIF viewer; colours from the variables of shelf.css */
+.catalog-filters { margin-bottom: 1rem; }
+.badge-nc { display: inline-block; padding: 0 .35rem; border: 1px solid var(--line, #e4d9c0); border-radius: .3rem; font-size: .72rem; letter-spacing: .03em; }
+main.catalog-wide { max-width: 76rem; }
+.catalog-items { max-width: 36rem; }
+
+.iiif-viewer { padding: .6rem; }
+.iiif-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin-bottom: .5rem; }
+.iiif-pageno { display: inline-flex; align-items: center; gap: .3rem; }
+.iiif-pageno input { width: 4.5rem; }
+.iiif-label { max-width: 14rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.iiif-stage { position: relative; height: min(78vh, 60rem); overflow: auto; background: var(--paper, #f7efdc); border: 1px solid var(--line, #e4d9c0); border-radius: .5rem; text-align: center; outline: none; touch-action: pan-x pan-y pinch-zoom; }
+.iiif-stage:focus-visible { box-shadow: 0 0 0 .2rem rgba(168, 54, 42, .25); }
+.iiif-stage img { display: inline-block; max-width: none; background: #fffdf8; box-shadow: 0 .2rem .8rem rgba(60, 40, 20, .15); user-select: none; -webkit-user-drag: none; }
+.iiif-stage.zoomed { cursor: grab; text-align: left; }
+.iiif-stage.dragging { cursor: grabbing; }
+.iiif-message { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; margin: 0; padding: 2rem; color: var(--muted, #7b6c58); }
+.iiif-thumbs { display: flex; gap: .4rem; overflow-x: auto; padding: .5rem .1rem .2rem; }
+.iiif-thumbs button { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: .1rem; padding: .2rem; border: 2px solid transparent; border-radius: .35rem; background: none; font-size: .7rem; color: var(--muted, #7b6c58); }
+.iiif-thumbs button.active { border-color: var(--cinnabar, #a8362a); color: var(--cinnabar, #a8362a); }
+.iiif-thumbs img { width: 56px; height: 78px; object-fit: contain; background: var(--paper, #f7efdc); }
+#source .source-text, #source .credit { white-space: pre-line; }
