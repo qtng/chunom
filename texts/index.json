@@ -1,9 +1,10 @@
 {
-  "note": "The transcriptions read in texts/view.html, one per copy (item of the catalogue) they were made on. copies: the items of the catalogue that show this same scan (the own item included, also one not in the catalogue yet), each with its offset: canvas number (#p, from 1) = page of the transcription + offset. ink: how the viewer frees the writing from the paper (paper and ink: grey values; red: drop Durand's red Quốc Ngữ).",
+  "note": "The transcriptions read in texts/view.html, one per copy (item of the catalogue) they were made on. copies: the items of the catalogue that show this same scan (the own item included, also one not in the catalogue yet), each with its offset: canvas number (#p, from 1) = page of the transcription + offset. released: the catalogue shows the link to everybody (false: only to admins; the reader still opens for anyone with a direct link). ink: how the viewer frees the writing from the paper (paper and ink: grey values; red: drop Durand's red Quốc Ngữ).",
   "texts": [
     {
       "item": "yale-10732464",
       "work": "chua-thao-co-truyen",
+      "released": false,
       "manifest": "https://collections.library.yale.edu/manifests/10732464",
       "pages": 48,
       "copies": { "yale-10732464": 4, "commons-yale-an-82": 4 },

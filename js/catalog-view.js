@@ -65,7 +65,8 @@
           el("i", { class: "bi bi-book" }), " ", el("span", { "data-vi": "Đọc kèm quốc ngữ" }, "Read with Quốc ngữ"))
       : el("a", { class: "btn btn-sm btn-pill btn-quiet", href: `/chunom/texts/view.html?work=${encodeURIComponent(work.id)}&item=${encodeURIComponent(other.item)}` },
           el("i", { class: "bi bi-book" }), " ", el("span", { "data-vi": "Có bản phiên âm của một bản khác" }, "Transcription of another copy"));
-    p.replaceChildren(a);
+    const tx = own || other;
+    p.replaceChildren(a, tx.released ? "" : el("span", { class: "badge-withheld ms-2" }, t("Not released", "Chưa công bố")));
   }
 
   function titles(w) {
@@ -191,7 +192,8 @@
     work.items.sort((a, b) => (rank.indexOf(a.content || "original") - rank.indexOf(b.content || "original"))
       || ((a.physical.date_earliest || 9999) - (b.physical.date_earliest || 9999)) || a.id.localeCompare(b.id));
     renderWork();
-    try { texts = (await (await fetch("/chunom/texts/index.json")).json()).texts.filter(x => x.work === work.id); } catch { texts = []; }
+    // a transcription not released yet: its button only for admins (the reader itself opens with a direct link)
+    try { texts = (await (await fetch("/chunom/texts/index.json")).json()).texts.filter(x => x.work === work.id && (x.released || isAdmin())); } catch { texts = []; }
     const page = parseInt((location.hash.match(/p=(\d+)/) || [])[1] || "1", 10);
     $("item-select").addEventListener("change", e => showItem(e.target.value));
     document.addEventListener("langchange", () => { renderWork(); $("item-select").value = item.id; renderSource(); });
