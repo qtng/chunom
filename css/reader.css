@@ -46,3 +46,9 @@ main.texts-wide { max-width: 76rem; }
 .tx-form small { font-family: system-ui, sans-serif; font-size: .65rem; color: var(--muted, currentColor); }
 .tx-err { color: var(--accent, currentColor); }
 .show-unsure .tx-cell.unsure { outline: 2px dashed var(--accent, currentColor); outline-offset: -1px; }   /* on the cell: the mask of the sprite would clip it */
+.tx-ctx { cursor: grab; touch-action: none; user-select: none; overflow: hidden; }
+.tx-ctx.dragging { cursor: grabbing; }
+.tx-punct { color: var(--muted, currentColor); }
+.tx-in-punct { width: 3rem; flex: 0 0 auto; text-align: center; }
+.tx-quick { display: flex; flex-wrap: wrap; gap: .15rem; }
+.tx-quick .btn { padding: 0 .45rem; min-width: 1.8rem; }

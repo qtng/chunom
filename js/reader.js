@@ -129,6 +129,14 @@
     return { h, med };
   }
 
+  // a reading with the punctuation of the edition (punct_before / punct_after of the token; not on the scan)
+  function writeQn(r, cell) {
+    const [qn, , , pb, pa] = cell;
+    r.textContent = "";
+    if (window.Readings && qn) Readings.fill(r, qn); else r.textContent = qn || "·";
+    if (pb) r.prepend(Object.assign(document.createElement("span"), { className: "tx-punct", textContent: pb }));
+    if (pa) r.append(Object.assign(document.createElement("span"), { className: "tx-punct", textContent: pa }));
+  }
   function note(text) { const m = $("note"); m.textContent = text; m.hidden = !text; }
   function message(text) { const m = $("message"); m.textContent = text; m.hidden = !text; }
 
@@ -172,7 +180,8 @@
     const frag = [];
     lines.forEach((l, li) => {
       const row = document.createElement("div"); row.className = "tx-verse";
-      l.cells.forEach(([qn, b], ci) => {
+      l.cells.forEach((cellData, ci) => {
+        const b = cellData[1];
         const cell = document.createElement("button"); cell.type = "button"; cell.className = "tx-cell"; cell.dataset.k = `${li}.${ci}`;
         const oc = own && own[li] && own[li].cells[ci];
         if (oc && oc[2]) cell.classList.add("unsure");
@@ -187,7 +196,7 @@
           $("boxes").append(ov);
         }
         const r = document.createElement("span"); r.className = "tx-qn";
-        if (window.Readings && qn) Readings.fill(r, qn); else r.textContent = qn || "·";
+        writeQn(r, cellData);
         cell.append(sp, r); row.append(cell);
       });
       frag.push(row);
@@ -213,11 +222,26 @@
     let W = 150 * 10000 / ((y1 - y0) * ratio);
     const wide = (x1 - x0) / 10000 * W; if (wide > 300) W *= 300 / wide;
     const H = W * ratio, cw = (x1 - x0) / 10000 * W, chh = (y1 - y0) / 10000 * H;
-    const box = el("div", { class: "tx-ctx" });
-    Object.assign(box.style, { width: cw + "px", height: chh + "px", backgroundImage: `url("${imageUrl(cur.cv)}")`, backgroundSize: `${W}px ${H}px`, backgroundPosition: `${-x0 / 10000 * W}px ${-y0 / 10000 * H}px` });
+    const box = el("div", { class: "tx-ctx", title: t("Drag to move; double-click to reset", "Kéo để di chuyển; nhấp đúp để đặt lại") });
+    Object.assign(box.style, { width: cw + "px", height: chh + "px", backgroundImage: `url("${imageUrl(cur.cv)}")`, backgroundSize: `${W}px ${H}px` });
     const m = el("span", { class: "tx-ctx-mark" });
-    Object.assign(m.style, { left: (b[0] - x0) / 10000 * W - 2 + "px", top: (b[1] - y0) / 10000 * H - 2 + "px", width: w / 10000 * W + 4 + "px", height: h / 10000 * H + 4 + "px" });
+    Object.assign(m.style, { width: w / 10000 * W + 4 + "px", height: h / 10000 * H + 4 + "px" });
     box.append(m);
+    // the window can be dragged over the page (mouse or finger), within the page; a double click goes back
+    const ox0 = -x0 / 10000 * W, oy0 = -y0 / 10000 * H, bx = b[0] / 10000 * W, by = b[1] / 10000 * H;
+    let ox = ox0, oy = oy0;
+    const set = (x, y) => {
+      ox = Math.min(0, Math.max(cw - W, x)); oy = Math.min(0, Math.max(chh - H, y));
+      box.style.backgroundPosition = `${ox}px ${oy}px`;
+      m.style.left = ox + bx - 2 + "px"; m.style.top = oy + by - 2 + "px";
+    };
+    set(ox0, oy0);
+    let drag = null;
+    box.addEventListener("pointerdown", e => { drag = { x: e.clientX, y: e.clientY, ox, oy }; box.setPointerCapture(e.pointerId); box.classList.add("dragging"); e.preventDefault(); });
+    box.addEventListener("pointermove", e => { if (drag) set(drag.ox + e.clientX - drag.x, drag.oy + e.clientY - drag.y); });
+    const end = () => { drag = null; box.classList.remove("dragging"); };
+    box.addEventListener("pointerup", end); box.addEventListener("pointercancel", end);
+    box.addEventListener("dblclick", () => set(ox0, oy0));
     return box;
   }
   function place(cell) {
@@ -230,13 +254,14 @@
   function openPop(cell, edit = false) {
     closePop();
     const [li, ci] = cell.dataset.k.split(".").map(Number);
-    const [qn, b, qb] = cur.lines[li].cells[ci];
+    const [qn, b, qb, pb, pa] = cur.lines[li].cells[ci];
     const oc = cur.own && cur.own[li] && cur.own[li].cells[ci];
     document.querySelectorAll(`[data-k="${cell.dataset.k}"]`).forEach(x => x.classList.add("pinned"));
     pop = el("div", { class: "tx-pop card-box", role: "dialog", "aria-label": t("Character", "Chữ") });
     pop.dataset.k = cell.dataset.k;
     const head = el("div", { class: "tx-pop-head" }, b ? context(b, qb) : null);
-    const info = el("div", { class: "tx-pop-info" }, el("div", { class: "tx-pop-qn", lang: "vi" }, qn || "–"));
+    const qEl = el("div", { class: "tx-pop-qn", lang: "vi" }); writeQn(qEl, cur.lines[li].cells[ci]);
+    const info = el("div", { class: "tx-pop-info" }, qEl);
     head.append(info);
     pop.append(head);
     if (owner && oc) {
@@ -247,13 +272,13 @@
       if (oc[4]) info.append(el("div", { class: "tx-pop-checked small" }, t(`Checked: ${oc[4]}`, `Đã kiểm: ${oc[4]}`)));
       if (!edit) pop.append(el("div", { class: "tx-pop-actions" },
         el("button", { type: "button", class: "btn btn-sm btn-quiet", onclick: () => openPop(cell, true), title: t("Edit (E)", "Sửa (E)") }, el("i", { class: "bi bi-pencil" }), " ", t("Edit", "Sửa"))));
-      else pop.append(editor(cell, li, ci, qn, oc));
+      else pop.append(editor(cell, li, ci, qn, oc, pb, pa));
     }
     document.body.append(pop);
     place(cell);
     if (edit) pop.querySelector("input")?.focus();
   }
-  function editor(cell, li, ci, qn, oc) {
+  function editor(cell, li, ci, qn, oc, pb0, pa0) {
     const gIn = el("input", { class: "form-control form-control-sm tx-in-glyph", lang: "vi-Hani", autocomplete: "off", spellcheck: "false", placeholder: t("Character or IDS", "Chữ hoặc IDS") });
     gIn.value = oc[1] || "";
     const prev = el("span", { class: "tx-prev", lang: "vi-Hani" });
@@ -261,6 +286,12 @@
     qIn.value = qn || "";
     const uIn = el("input", { type: "checkbox", class: "form-check-input", id: "tx-unsure-in" }); uIn.checked = !!oc[2];
     const nIn = el("input", { class: "form-control form-control-sm", autocomplete: "off", placeholder: t("Note", "Ghi chú") }); nIn.value = oc[3] || "";
+    // the punctuation of the edition before and after the reading; quick buttons for the mark after it
+    const pbIn = el("input", { class: "form-control form-control-sm tx-in-punct", maxlength: 4, autocomplete: "off", "aria-label": t("Before", "Trước"), placeholder: "“" }); pbIn.value = pb0 || "";
+    const paIn = el("input", { class: "form-control form-control-sm tx-in-punct", maxlength: 4, autocomplete: "off", "aria-label": t("After", "Sau"), placeholder: "," }); paIn.value = pa0 || "";
+    const quick = el("div", { class: "tx-quick" }, ...[",", ".", "?", "!", ":", ";", "…", "”"].map(c =>
+      el("button", { type: "button", class: "btn btn-sm btn-quiet", onclick: () => { paIn.value = paIn.value === c ? "" : c; } }, c)),
+      el("button", { type: "button", class: "btn btn-sm btn-quiet", title: t("No punctuation", "Không dấu câu"), onclick: () => { pbIn.value = ""; paIn.value = ""; } }, "×"));
     const forms = el("div", { class: "tx-forms" });
     const err = el("div", { class: "tx-err small", hidden: true });
     let pt; const preview = () => { clearTimeout(pt); pt = setTimeout(() => (isIds(gIn.value.trim()) ? drawGlyph(prev, gIn.value.trim()) : (prev.textContent = "")), 200); };
@@ -278,13 +309,13 @@
     const save = async () => {
       err.hidden = true;
       try {
-        const r = await srpc("text_token_update", { p_id: oc[0], p_glyph: gIn.value, p_qn: qIn.value, p_unsure: uIn.checked, p_note: nIn.value });
-        const [id, g, uns, nt, chk, q] = r;
+        const r = await srpc("text_token_update", { p_id: oc[0], p_glyph: gIn.value, p_qn: qIn.value, p_unsure: uIn.checked, p_note: nIn.value, p_punct_before: pbIn.value, p_punct_after: paIn.value });
+        const [id, g, uns, nt, chk, q, pb, pa] = r;
         cur.own[li].cells[ci] = [id, g, uns, nt, chk];
-        cur.lines[li].cells[ci][0] = q;
+        const lc = cur.lines[li].cells[ci]; lc[0] = q; lc[3] = pb; lc[4] = pa;
         const c = document.querySelector(`.tx-cell[data-k="${cell.dataset.k}"]`);
         c.classList.toggle("unsure", !!uns);
-        const rq = c.querySelector(".tx-qn"); if (window.Readings && q) Readings.fill(rq, q); else rq.textContent = q || "·";
+        writeQn(c.querySelector(".tx-qn"), lc);
         updateCount();
         openPop(c);
       } catch (e) { err.textContent = t("Not saved: ", "Chưa lưu: ") + e.message; err.hidden = false; }
@@ -293,6 +324,7 @@
       el("label", { class: "small" }, t("Character", "Chữ")), el("div", { class: "tx-row" }, gIn, prev),
       forms,
       el("label", { class: "small" }, t("Reading", "Âm đọc")), qIn,
+      el("label", { class: "small" }, t("Punctuation (before / after)", "Dấu câu (trước / sau)")), el("div", { class: "tx-row" }, pbIn, paIn, quick),
       el("div", { class: "form-check mt-1" }, uIn, el("label", { class: "form-check-label small", for: "tx-unsure-in" }, t("Unsure", "Chưa chắc"))),
       nIn, err,
       el("div", { class: "tx-pop-actions" },
