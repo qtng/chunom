@@ -28,6 +28,7 @@
         if (!res) continue;
         const svc = first(res.service);
         out.push({ label: label(c.label), service: svc && (svc["@id"] || svc.id), image: res["@id"],
+          original: (first(c.rendering) || {})["@id"],
           width: res.width || c.width, height: res.height || c.height });
       }
     } else {                    // IIIF 3
@@ -37,19 +38,35 @@
         if (!body) continue;
         const svc = first(body.service);
         out.push({ label: label(c.label), service: svc && (svc.id || svc["@id"]), image: body.id,
+          original: (first(c.rendering) || {}).id,   // e.g. the original file on Wikimedia Commons
           width: body.width || c.width, height: body.height || c.height });
       }
     }
     return out;
   }
 
+  // Wikimedia Commons has no IIIF image server, but thumbnails in standard widths:
+  // …/thumb/a/ab/Name.jpg/960px-Name.jpg, for a page of a PDF …/thumb/a/ab/Name.pdf/page3-960px-Name.pdf.jpg
+  const COMMONS_THUMB = /^(https:\/\/upload\.wikimedia\.org\/wikipedia\/commons\/thumb\/.+\/)((?:page\d+-|lossy-page\d+-)?)(\d+)px-(.+)$/;
+  const COMMONS_WIDTHS = [120, 250, 330, 500, 960, 1280, 1920, 3840];
+  function commonsUrl(url, width, max) {
+    const m = url && url.match(COMMONS_THUMB);
+    if (!m) return null;
+    // a thumbnail wider than the original is refused: stay at or below the original width
+    const allowed = max ? COMMONS_WIDTHS.filter(x => x <= max) : COMMONS_WIDTHS;
+    const widths = allowed.length ? allowed : [COMMONS_WIDTHS[0]];
+    const w = widths.find(x => x >= width) || widths[widths.length - 1];
+    return `${m[1]}${m[2]}${w}px-${m[4]}`;
+  }
+
   function imageUrl(page, width) {
-    if (!page.service) return page.image;
+    if (!page.service) return commonsUrl(page.image, width, page.width) || page.image;
     const w = page.width ? Math.min(width, page.width) : width;
     return `${page.service.replace(/\/$/, "")}/full/${w},/0/default.jpg`;
   }
   function fullUrl(page) {
-    return page.service ? `${page.service.replace(/\/$/, "")}/full/full/0/default.jpg` : page.image;
+    if (page.service) return `${page.service.replace(/\/$/, "")}/full/full/0/default.jpg`;
+    return page.original || page.image;
   }
 
   class IIIFViewer {
