@@ -24,13 +24,13 @@
     }
     html body.grey h1, html body.grey h2, html body.grey h3 { color: var(--d-ink); border: 0; }
 
-    /* the head: two pages of his notebook, edge to edge, lying in front of the reader (tilted away, darker where they are further away) */
-    .ms { position: relative; height: min(66vh, 36rem); min-height: 20rem; overflow: hidden; background: var(--d-dark); perspective: 1000px; perspective-origin: 50% 0%; }
-    .ms .plane { display: flex; position: absolute; left: 50%; top: -48%; width: max(190vw, 110rem); transform: translateX(-50%) rotateX(34deg) rotateZ(-1.5deg); transform-origin: 50% 100%; }
-    .ms .plane img { display: block; width: 50%; height: auto; filter: brightness(1.06) contrast(1.06) saturate(1.05); }
-    .ms .plane::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, transparent 44%, rgba(0, 0, 0, .1) 48.5%, rgba(0, 0, 0, .38) 50%, rgba(0, 0, 0, .08) 51.5%, transparent 56%); }   /* the fold */
-    .ms::after { content: ""; position: absolute; inset: 0; pointer-events: none;
-      background: linear-gradient(180deg, rgba(20, 20, 22, .72), rgba(20, 20, 22, .25) 38%, rgba(20, 20, 22, 0) 58%, rgba(35, 36, 39, .85)),
+    /* the head: one page of his notebook, oversized, edge to edge, lying in front of the reader (tilted away, darker where they are further away) */
+    .ms { position: relative; height: min(66vh, 36rem); min-height: 20rem; overflow: hidden; background: var(--d-dark); }
+    .ms .persp { position: absolute; inset: 0; z-index: 0; overflow: hidden; perspective: 1000px; perspective-origin: 50% 0%; transform-style: preserve-3d; }
+    .ms .plane { display: flex; position: absolute; left: 50%; bottom: -95%; width: max(230vw, 125rem); transform: translateX(-50%) rotateX(32deg) rotateZ(-1.5deg); transform-origin: 50% 100%; }
+    .ms .plane img { display: block; width: 100%; height: auto; filter: brightness(1.06) contrast(1.06) saturate(1.05); }
+    .ms .shade { position: absolute; inset: 0; z-index: 1; transform: translateZ(2px); pointer-events: none;
+      background: linear-gradient(180deg, rgba(15, 15, 17, .92), rgba(15, 15, 17, .6) 22%, rgba(15, 15, 17, .2) 48%, rgba(15, 15, 17, 0) 66%, rgba(35, 36, 39, .85)),
         radial-gradient(120% 90% at 30% 85%, transparent 50%, rgba(20, 20, 22, .35)); }
     .ms figcaption { position: absolute; z-index: 2; left: 1rem; top: .8rem; font-family: var(--d-type); font-size: .75rem; color: rgba(255, 255, 255, .7); }
 
@@ -124,7 +124,7 @@
 <body class="grey">
 
 <figure class="ms m-0" aria-hidden="true">
-  <div class="plane"><img src="https://collections.library.yale.edu/iiif/2/10731978/full/1200,/0/default.jpg" srcset="https://collections.library.yale.edu/iiif/2/10731978/full/800,/0/default.jpg 800w, https://collections.library.yale.edu/iiif/2/10731978/full/1200,/0/default.jpg 1200w, https://collections.library.yale.edu/iiif/2/10731978/full/1800,/0/default.jpg 1800w" sizes="95vw" alt="" width="2400" height="3282"><img src="https://collections.library.yale.edu/iiif/2/10731979/full/1200,/0/default.jpg" srcset="https://collections.library.yale.edu/iiif/2/10731979/full/800,/0/default.jpg 800w, https://collections.library.yale.edu/iiif/2/10731979/full/1200,/0/default.jpg 1200w, https://collections.library.yale.edu/iiif/2/10731979/full/1800,/0/default.jpg 1800w" sizes="95vw" alt="" width="2400" height="3282"></div>
+  <div class="persp"><div class="plane"><img src="https://collections.library.yale.edu/iiif/2/10731978/full/1600,/0/default.jpg" srcset="https://collections.library.yale.edu/iiif/2/10731978/full/1000,/0/default.jpg 1000w, https://collections.library.yale.edu/iiif/2/10731978/full/1600,/0/default.jpg 1600w, https://collections.library.yale.edu/iiif/2/10731978/full/2400,/0/default.jpg 2400w" sizes="230vw" alt="" width="2400" height="3282"></div><span class="shade"></span></div>
   <figcaption>Chúa Thao cổ truyện</figcaption>
 </figure>
 
