@@ -144,6 +144,7 @@
     .books-note { max-width: 40rem; margin: 1.8rem auto 0; }
     .books-note li { margin-bottom: .3rem; }
     .books-note i { font-family: var(--serif); }
+    html body.desk .books-note a { color: var(--red); }
 
     /* today: the reader */
     .today { display: flex; gap: 1.6rem; align-items: center; flex-wrap: wrap; }
@@ -151,6 +152,19 @@
     .today .body { flex: 1 1 20rem; }
     @media (max-width: 575.98px) { .today .vert { writing-mode: horizontal-tb; font-size: 2.3rem; } }
 
+
+    /* already in the Bookshelf: labels of notebooks */
+    .also { margin-top: 2.6rem; text-align: center; }
+    .also h3 { color: #f3e6c8; border: 0; font-size: 1.5rem; margin-bottom: .6rem; }
+    html body.desk .also h3 { color: #f3e6c8; }
+    .also p { max-width: 40rem; margin: 0 auto 1.6rem; color: #e6d6b2; line-height: 1.6; }
+    .slips { display: grid; grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); gap: 1.1rem; text-align: center; }
+    .slip { display: flex; flex-direction: column; justify-content: center; gap: .35rem; min-height: 7.2rem; padding: .9rem .7rem; color: var(--ink); text-decoration: none;
+      background: linear-gradient(180deg, var(--paper-hi), var(--paper)); box-shadow: 0 .7rem 1.3rem rgba(0, 0, 0, .45); border-top: .35rem solid #7a2a22; transition: transform .2s ease; }
+    .slip:nth-child(3n+1) { transform: rotate(-1.5deg); } .slip:nth-child(3n+2) { transform: rotate(1deg); } .slip:nth-child(3n) { transform: rotate(-.4deg); }
+    .slip:hover, .slip:focus-visible { transform: translateY(-.3rem); color: var(--ink); }
+    .slip .n { font-family: var(--font-cjk), serif; font-size: 1.45rem; line-height: 1.2; letter-spacing: .05em; }
+    .slip .q { font-size: .88rem; font-style: italic; color: var(--red); line-height: 1.3; }
     .links { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; }
     .links .btn-quiet { --bs-btn-color: #f1e4c4; --bs-btn-border-color: rgba(241, 228, 196, .45); --bs-btn-hover-color: var(--ink); --bs-btn-hover-bg: #f1e4c4; --bs-btn-hover-border-color: #f1e4c4; --bs-btn-bg: transparent; }
     .credit { font-family: var(--type); font-size: .78rem; color: #c8b690; margin: 2rem auto 0; max-width: 46rem; text-align: center; line-height: 1.5; }
@@ -267,14 +281,14 @@
     <div class="shelfrow">
       <a class="spine" href="https://publications.efeo.fr/en/livres/527_connaissance-du-viet-nam" rel="noopener"><span class="t">Connaissance du Viêt-Nam</span><span class="y">1954</span></a>
       <span class="spine"><span class="t">Phan Trần</span><span class="y">1962</span></span>
-      <span class="spine"><span class="t">Hồ Xuân Hương</span><span class="y">1968</span></span>
+      <a class="spine" href="/chunom/shelf/23/"><span class="t">Hồ Xuân Hương</span><span class="y">1968</span></a>
       <span class="spine"><span class="t">Littérature vietnamienne</span><span class="y">1969</span></span>
     </div>
     <div class="sheet note books-note tilt-s">
       <ul class="mb-0 ps-3">
         <li><i>Connaissance du Viêt-Nam</i>, with Pierre Huard, 1954</li>
         <li><i>Phan Trần, roman en vers</i>: text, translation and notes, 1962</li>
-        <li><i>L’Œuvre de la poétesse vietnamienne Hồ Xuân Hương</i>, 1968: the book that brought her to Western readers</li>
+        <li><i>L’Œuvre de la poétesse vietnamienne Hồ Xuân Hương</i>, 1968: the book that brought her to Western readers; <a href="/chunom/shelf/23/">her poems from his papers</a> are in the Bookshelf</li>
         <li><i>Introduction à la littérature vietnamienne</i>, with Nguyễn Trần Huân, 1969</li>
       </ul>
     </div>
@@ -289,6 +303,23 @@
       <div class="body">
         <p>After his death in Paris in 1966 his library and notebooks, and those of his father, went to Yale University. We are bringing them onto the screen, one at a time. The first is <i>Chúa Thao cổ truyện</i>, the old tale of Lord Thao, a young prince of the Mạc taken prisoner at Cao Bằng, in some 480 verses of lục bát. Every character is cut from the scan of the library, Durand’s reading stands below it, and every couplet has a translation.</p>
         <a class="btn btn-cinnabar btn-pill" href="/chunom/reader/?work=chua-thao-co-truyen&amp;item=yale-10732464"><i class="bi bi-book"></i> <span data-vi="Mở trình đọc">Open the reader</span></a>
+      </div>
+    </div>
+
+    <div class="also">
+      <h3><span data-vi="Đã có trong Tủ sách">Already in the Bookshelf</span></h3>
+      <p>Ten more texts from his papers at Yale were transcribed by readers of chunom.org over the years, among them the poems of Hồ Xuân Hương, to whom he devoted his book of 1968. They can be read in the Bookshelf, the Nôm with its reading.</p>
+      <div class="slips">
+      <a class="slip" href="/chunom/shelf/23/"><span class="n" lang="vi-Hani">胡春香詩集</span><span class="q">Hồ Xuân Hương thi tập</span></a>
+      <a class="slip" href="/chunom/shelf/1/"><span class="n" lang="vi-Hani">𤿰軍新傳</span><span class="q">Trống quân tân truyện</span></a>
+      <a class="slip" href="/chunom/shelf/5/"><span class="n" lang="vi-Hani">董天王傳</span><span class="q">Đổng Thiên Vương truyện</span></a>
+      <a class="slip" href="/chunom/shelf/6/"><span class="n" lang="vi-Hani">訓女演歌</span><span class="q">Huấn nữ diễn ca</span></a>
+      <a class="slip" href="/chunom/shelf/7/"><span class="n" lang="vi-Hani">南無新傳</span><span class="q">Na mô tân chuyện</span></a>
+      <a class="slip" href="/chunom/shelf/8/"><span class="n" lang="vi-Hani">桂山三元詩集</span><span class="q">Quế Sơn tam nguyên thi tập</span></a>
+      <a class="slip" href="/chunom/shelf/9/"><span class="n" lang="vi-Hani">人問月答</span><span class="q">Nhân vấn nguyệt đáp</span></a>
+      <a class="slip" href="/chunom/shelf/10/"><span class="n" lang="vi-Hani">雙鳳奇縁</span><span class="q">Song phụng kỳ duyên</span></a>
+      <a class="slip" href="/chunom/shelf/11/"><span class="n" lang="vi-Hani">阮達阮生新傳</span><span class="q">Nguyễn Đạt Nguyễn Sinh tân truyện</span></a>
+      <a class="slip" href="/chunom/shelf/39/"><span class="n" lang="vi-Hani">佛說大聖末刼真經</span><span class="q">Phật thuyết đại thánh mạt kiếp chân kinh</span></a>
       </div>
     </div>
   </section>
