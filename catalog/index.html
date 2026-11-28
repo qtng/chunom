@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hán-Nôm scans in libraries</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A catalogue of public-domain scans of Hán-Nôm books held by libraries, with a page viewer.">
+  <link rel="canonical" href="https://chunom.org/chunom/catalog/">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://qatt.org/css/site.css">
+  <link rel="stylesheet" href="https://qatt.org/vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/chunom/css/shelf-cards.css">
+  <link rel="stylesheet" href="/chunom/css/shelf.css">
+  <link rel="stylesheet" href="/chunom/css/catalog.css">
+  <script src="https://qatt.org/js/navigation.js"></script>
+  <script defer src="/chunom/js/catalog.js"></script>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Chunom.org">
+  <meta property="og:title" content="Hán-Nôm scans in libraries">
+  <meta property="og:description" content="A catalogue of public-domain scans of Hán-Nôm books held by libraries, with a page viewer.">
+  <meta property="og:url" content="https://chunom.org/chunom/catalog/">
+</head>
+<body>
+<header class="hero py-4"><div class="container text-center">
+  <p class="han mb-1" lang="vi-Hani">書目漢喃</p>
+  <h1 class="mb-2" data-vi="Thư mục bản quét Hán Nôm">Hán-Nôm scans in libraries</h1>
+  <p class="lead mx-auto mb-3" data-vi="Sách Hán Nôm thuộc phạm vi công cộng, được các thư viện số hoá. Mở từng trang ngay tại đây.">Public-domain Hán-Nôm books digitized by libraries. Open every page right here.</p>
+  <p class="d-flex flex-wrap justify-content-center gap-2 mb-0">
+    <a class="btn btn-cinnabar btn-pill" href="/chunom/shelf/"><i class="bi bi-bookshelf"></i> <span data-vi="Tủ sách">Bookshelf</span></a>
+    <a class="btn btn-cinnabar btn-pill" href="/chunom/dict/"><i class="bi bi-journal-bookmark"></i> <span data-vi="Từ điển">Dictionaries</span></a>
+  </p>
+</div></header>
+<main class="container py-4">
+<form class="catalog-filters card-box" role="search" onsubmit="return false">
+  <div class="row g-2 align-items-end">
+    <div class="col-12 col-md-6">
+      <label class="form-label small mb-1" for="q" data-vi="Tìm kiếm">Search</label>
+      <input class="form-control" id="q" type="search" autocomplete="off" placeholder="Kim Vân Kiều, 金雲翹, Nguyễn Du, Vietnamien B 109 …" data-vi-placeholder="Kim Vân Kiều, 金雲翹, Nguyễn Du, Vietnamien B 109 …">
+    </div>
+    <div class="col-6 col-md-3">
+      <label class="form-label small mb-1" for="library" data-vi="Thư viện">Library</label>
+      <select class="form-select" id="library"><option value="" data-vi="Tất cả">All</option></select>
+    </div>
+    <div class="col-6 col-md-3">
+      <label class="form-label small mb-1" for="type" data-vi="Loại bản">Type of copy</label>
+      <select class="form-select" id="type">
+        <option value="" data-vi="Tất cả">All</option>
+        <option value="woodblock-print" data-vi="Bản in khắc gỗ">Woodblock print</option>
+        <option value="manuscript" data-vi="Bản viết tay">Manuscript</option>
+        <option value="other" data-vi="Chưa xác định">Not determined yet</option>
+      </select>
+    </div>
+  </div>
+</form>
+<p class="small text-secondary mb-3" id="count" aria-live="polite"></p>
+<div class="works" id="works"><p class="text-secondary" data-vi="Đang tải thư mục …">Loading the catalogue …</p></div>
+</main>
+<footer class="container py-4 small text-body-secondary">
+  <p class="mb-1">The scans belong to the holding libraries and are shown under their licences or terms of use; every page names its source.</p>
+  <p class="mb-0">The catalogue is still being built: titles, authors and script were generated automatically and are not all checked yet.</p>
+</footer>
+</body>
+</html>
