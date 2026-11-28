@@ -24,3 +24,33 @@ main.texts-wide { max-width: 76rem; }
 .tx-box.on, .tx-box.pinned { outline: 2px solid var(--accent, currentColor); background: color-mix(in srgb, var(--accent, currentColor) 15%, transparent); }
 .tx-message { margin: 1rem 0 .5rem; text-align: center; color: var(--muted, currentColor); }
 .tx-copies { max-width: 36rem; }
+/* the popover of a token (everybody), the Nôm and the editor (the owner) */
+.tx-pop { position: absolute; z-index: 1050; width: max-content; max-width: min(26rem, calc(100vw - 16px)); padding: .6rem; box-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .18); }
+.tx-pop-head { display: flex; gap: .75rem; align-items: flex-start; }
+.tx-ctx { position: relative; flex: 0 0 auto; background-repeat: no-repeat; border-radius: .3rem; border: 1px solid var(--line, currentColor); }
+.tx-ctx-mark { position: absolute; border: 2px solid var(--accent, currentColor); border-radius: 3px; }
+.tx-pop-info { min-width: 5rem; }
+.tx-pop-glyph { font-family: var(--font-cjk), serif; font-size: 2.6rem; line-height: 1.1; }
+.tx-pop-glyph svg, .tx-prev svg, .tx-form svg { width: 1em; height: 1em; vertical-align: -.12em; }
+.tx-pop-qn { font-size: 1.2rem; }
+.tx-pop-note, .tx-pop-checked { color: var(--muted, currentColor); max-width: 14rem; }
+.badge-unsure { display: inline-block; margin-top: .2rem; padding: 0 .35rem; border: 1px dashed var(--accent, currentColor); border-radius: .3rem; font-size: .72rem; color: var(--accent, currentColor); }
+.tx-pop-actions { display: flex; gap: .35rem; justify-content: flex-end; margin-top: .5rem; }
+.tx-edit { display: grid; gap: .25rem; margin-top: .5rem; min-width: 15rem; }
+.tx-edit label { margin: .2rem 0 0; color: var(--muted, currentColor); }
+.tx-row { display: flex; gap: .4rem; align-items: center; }
+.tx-in-glyph { font-family: var(--font-cjk), serif; font-size: 1.2rem; }
+.tx-prev { font-family: var(--font-cjk), serif; font-size: 1.6rem; min-width: 1.6rem; }
+.tx-forms { display: flex; flex-wrap: wrap; gap: .25rem; }
+.tx-form { font-family: var(--font-cjk), serif; font-size: 1.1rem; padding: .05rem .4rem; }
+.tx-form small { font-family: system-ui, sans-serif; font-size: .65rem; color: var(--muted, currentColor); }
+.tx-err { color: var(--accent, currentColor); }
+.show-unsure .tx-cell.unsure { outline: 2px dashed var(--accent, currentColor); outline-offset: -1px; }   /* on the cell: the mask of the sprite would clip it */
+.tx-ctx { cursor: grab; touch-action: none; user-select: none; overflow: hidden; }
+.tx-ctx.dragging { cursor: grabbing; }
+.tx-punct { color: var(--muted, currentColor); }
+.tx-in-punct { width: 5rem; flex: 0 0 auto; }
+.tx-pop-modern { color: var(--muted, currentColor); }
+.tx-fn { font-size: .62em; margin-left: .05em; color: var(--accent, currentColor); }
+.tx-notes { max-width: 34rem; margin: 1.2rem auto 0; padding-left: 1.6rem; color: var(--ink, currentColor); }
+.tx-notes li::marker { color: var(--accent, currentColor); }
