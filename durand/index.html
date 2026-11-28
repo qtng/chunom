@@ -46,7 +46,7 @@
     .open .label { display: inline-block; font-family: var(--d-type); font-size: .82rem; color: var(--d-dim); letter-spacing: .06em; }
     .verse { display: flex; justify-content: center; gap: clamp(.4rem, 2vw, 1.2rem); margin: 1.1rem 0 .8rem; }
     .verse .c { width: clamp(3.8rem, 15vw, 6.4rem); }
-    .verse .glyph { position: relative; aspect-ratio: 1; --so-ink: var(--d-ink); --so-done: var(--d-ink); --so-ghost: #c9cccf; --so-width: 9; }
+    .verse .glyph { position: relative; aspect-ratio: 1; --so-ink: var(--d-ink); --so-done: var(--d-ink); --so-ghost: #c9cccf; --so-width: 9; --so-font: "HaiMinh Medium", var(--font-cjk); }
     .verse .glyph > * { position: absolute; inset: 0; }
     .verse .glyph .dry { display: flex; align-items: center; justify-content: center; font-family: var(--d-cjk); font-size: clamp(3.2rem, 12.5vw, 5.4rem); line-height: 1; color: var(--d-ink); opacity: 0; transition: opacity .9s ease; }
     .verse .glyph.done .dry { opacity: 1; }
@@ -106,7 +106,7 @@
     .entry { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) auto; gap: .6rem; align-items: baseline; padding: .5rem 0; color: var(--d-ink); text-decoration: none; border-bottom: 1px dotted rgba(47, 95, 158, .45); }
     .entry:hover { color: var(--d-ink); background: rgba(184, 38, 46, .05); }
     .entry .no { font-family: var(--d-type); font-size: .8rem; color: var(--d-blue); }
-    .entry .n { display: block; font-family: var(--font-cjk), serif; font-size: 1.35rem; line-height: 1.25; letter-spacing: .06em; }
+    .entry .n { display: block; font-family: var(--d-cjk); font-size: 1.35rem; line-height: 1.25; letter-spacing: .06em; }
     .entry .q { display: block; font-style: italic; color: var(--d-red); font-size: .95rem; }
     .entry .where { font-family: var(--d-type); font-size: .75rem; color: var(--d-dim); white-space: nowrap; }
     .entry.first .n { font-size: 1.7rem; }
@@ -135,7 +135,7 @@
 <section class="band">
   <!-- the sheet laid on the notebook: 主滔古傳 is written onto it, the reading appears below every character, as in his notebooks -->
   <div class="sheet open">
-    <span class="stamp" aria-hidden="true"><b>1966 – <span id="now-year">2026</span></b><span id="years-later" data-vi="60 năm sau">60 years later</span></span>
+    <span class="stamp" aria-hidden="true"><b>1966 – 2026</b><span data-vi="60 năm sau">60 years later</span></span>
     <span class="label">MAURICE DURAND · 1914–1966</span>
     <div class="verse" id="verse" lang="vi-Hani" aria-label="主滔古傳 – Chúa Thao cổ truyện">
       <div class="c"><div class="glyph"><span class="dry">主</span></div><span class="rd" lang="vi">chúa</span></div>
@@ -264,10 +264,6 @@
       setTimeout(() => next(0), 700);
     });
   }
-  // the stamp counts the years since his death (spring 1966) and shows the year of today
-  const now = new Date(), since = now.getFullYear() - 1966 - (now.getMonth() < 4 ? 1 : 0), later = document.getElementById('years-later');
-  document.getElementById('now-year').textContent = now.getFullYear();
-  later.setAttribute('data-vi', since + ' năm sau'); later.textContent = since + ' years later';   // the translation (Lang of navigation.js) takes data-vi
   // the big number counts up once when it comes into view
   const num = document.querySelector('.kpi [data-count]');
   if (num && !quiet && 'IntersectionObserver' in window) {
