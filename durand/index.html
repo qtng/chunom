@@ -135,7 +135,7 @@
 <section class="band">
   <!-- the sheet laid on the notebook: 主滔古傳 is written onto it, the reading appears below every character, as in his notebooks -->
   <div class="sheet open">
-    <span class="stamp" aria-hidden="true"><b>1966 – 2026</b><span data-vi="60 năm sau">60 years later</span></span>
+    <span class="stamp" aria-hidden="true"><b>1966 – <span id="now-year">2026</span></b><span id="years-later" data-vi="60 năm sau">60 years later</span></span>
     <span class="label">MAURICE DURAND · 1914–1966</span>
     <div class="verse" id="verse" lang="vi-Hani" aria-label="主滔古傳 – Chúa Thao cổ truyện">
       <div class="c"><div class="glyph"><span class="dry">主</span></div><span class="rd" lang="vi">chúa</span></div>
@@ -167,7 +167,7 @@
   <section class="reveal">
     <h2><span data-vi="Di sản">His legacy</span></h2>
     <div class="kpi">
-      <span class="num" data-count="157">157</span>
+      <span class="num"><span data-count="157">157</span>+</span>
       <p class="txt"><span data-vi="bản thảo do chính tay ông viết, đã số hoá tại Yale">manuscripts in his hand, scanned at Yale</span><br><a href="https://collections.library.yale.edu/catalog?q=%22Han+Nom+texts+with+Vietnamese%22" rel="noopener">Yale Digital Collections →</a></p>
     </div>
     <p class="why">Probably the largest coherent body of Nôm texts with a parallel reading: tales in verse, songs and poems, every character with its reading in Quốc ngữ. Only a handful have been transcribed so far; the rest is waiting.</p>
@@ -264,8 +264,12 @@
       setTimeout(() => next(0), 700);
     });
   }
+  // the stamp counts the years since his death (spring 1966) and shows the year of today
+  const now = new Date(), since = now.getFullYear() - 1966 - (now.getMonth() < 4 ? 1 : 0), later = document.getElementById('years-later');
+  document.getElementById('now-year').textContent = now.getFullYear();
+  later.setAttribute('data-vi', since + ' năm sau'); later.textContent = since + ' years later';   // the translation (Lang of navigation.js) takes data-vi
   // the big number counts up once when it comes into view
-  const num = document.querySelector('.kpi .num');
+  const num = document.querySelector('.kpi [data-count]');
   if (num && !quiet && 'IntersectionObserver' in window) {
     const end = +num.dataset.count; num.textContent = '0';
     const ko = new IntersectionObserver(es => { if (!es[0].isIntersecting) return; ko.disconnect(); const t0 = performance.now();
