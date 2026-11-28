@@ -33,7 +33,7 @@
     "unknown": ["Not determined yet", "Chưa xác định"],
   };
   const BASIS = {
-    "source": ["stated by the library", "theo mô tả của thư viện"],
+    "source": ["stated by the source", "theo mô tả của nguồn"],
     "known-work": ["known work", "tác phẩm đã biết"],
     "scan": ["checked on the scan", "đã kiểm tra trên bản quét"],
   };

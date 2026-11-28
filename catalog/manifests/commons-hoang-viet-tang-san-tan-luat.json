@@ -1,0 +1,413 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "Hoàng Việt tăng san tân luật (Not stated on Wikimedia Commons, not stated)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, Category:Hoàng Việt tăng san tân luật"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/Category%3AHo%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 1200,
+      "height": 900,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_seal_01.jpg/960px-Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_seal_01.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1200,
+                "height": 900
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_seal_01.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AHo%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_seal_01.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/2",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "2"
+        ]
+      },
+      "width": 1018,
+      "height": 701,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/2/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/2/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/2",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_seal_02.jpg/960px-Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_seal_02.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1018,
+                "height": 701
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/e/eb/Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_seal_02.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AHo%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_seal_02.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/3",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "3"
+        ]
+      },
+      "width": 986,
+      "height": 1600,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/3/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/3/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/3",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_t%E1%BB%9D_67a.jpg/960px-Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_t%E1%BB%9D_67a.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 986,
+                "height": 1600
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_t%E1%BB%9D_67a.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AHo%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_t%E1%BB%9D_67a.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/4",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "4"
+        ]
+      },
+      "width": 961,
+      "height": 1600,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/4/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/4/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/4",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_t%E1%BB%9D_67b.jpg/960px-Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_t%E1%BB%9D_67b.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 961,
+                "height": 1600
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/9/9d/Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_t%E1%BB%9D_67b.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AHo%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_t%E1%BB%9D_67b.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/5",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "5"
+        ]
+      },
+      "width": 972,
+      "height": 1600,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/5/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/5/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/5",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_t%E1%BB%9D_68a.jpg/960px-Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_t%E1%BB%9D_68a.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 972,
+                "height": 1600
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/d/d9/Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_t%E1%BB%9D_68a.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AHo%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29_t%E1%BB%9D_68a.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/6",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "6"
+        ]
+      },
+      "width": 600,
+      "height": 1003,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/6/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/6/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/6",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29.jpg/500px-Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 600,
+                "height": 1003
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/8/81/Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AHo%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Nguyen_Tuan_Cuong_%28%E9%98%AE%E4%BF%8A%E5%BC%BA%29.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/7",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "7"
+        ]
+      },
+      "width": 713,
+      "height": 1062,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/7/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/7/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json/canvas/7",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Lu%E1%BA%ADt_h%C3%ACnh_s%E1%BB%B1_t%E1%BB%91_t%E1%BB%A5ng_thi_h%C3%A0nh_trong_c%C3%A1c_t%C3%B2a_nam_%C3%A1n_B%E1%BA%AFc_k%C3%AC_-_Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Kh%E1%BA%A3i_%C4%90%E1%BB%8Bnh_8_%281923%29_extract.jpg/500px-Lu%E1%BA%ADt_h%C3%ACnh_s%E1%BB%B1_t%E1%BB%91_t%E1%BB%A5ng_thi_h%C3%A0nh_trong_c%C3%A1c_t%C3%B2a_nam_%C3%A1n_B%E1%BA%AFc_k%C3%AC_-_Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Kh%E1%BA%A3i_%C4%90%E1%BB%8Bnh_8_%281923%29_extract.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 713,
+                "height": 1062
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Lu%E1%BA%ADt_h%C3%ACnh_s%E1%BB%B1_t%E1%BB%91_t%E1%BB%A5ng_thi_h%C3%A0nh_trong_c%C3%A1c_t%C3%B2a_nam_%C3%A1n_B%E1%BA%AFc_k%C3%AC_-_Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Kh%E1%BA%A3i_%C4%90%E1%BB%8Bnh_8_%281923%29_extract.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ALu%E1%BA%ADt_h%C3%ACnh_s%E1%BB%B1_t%E1%BB%91_t%E1%BB%A5ng_thi_h%C3%A0nh_trong_c%C3%A1c_t%C3%B2a_nam_%C3%A1n_B%E1%BA%AFc_k%C3%AC_-_Ho%C3%A0ng_Vi%E1%BB%87t_t%C4%83ng_san_t%C3%A2n_lu%E1%BA%ADt_%28%E7%9A%87%E8%B6%8A%E5%A2%9E%E5%88%8A%E6%96%B0%E5%BE%8B%29_Kh%E1%BA%A3i_%C4%90%E1%BB%8Bnh_8_%281923%29_extract.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

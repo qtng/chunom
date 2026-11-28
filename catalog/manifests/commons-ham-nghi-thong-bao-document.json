@@ -1,0 +1,89 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-ham-nghi-thong-bao-document.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "Tờ trình về tiền Hàm Nghi thông bảo (Not stated on Wikimedia Commons, not stated)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, Hàm Nghi Thông Bảo (咸宜通寳) document written by Nguyễn Xuân Phiếu (Thành Thái 10) - Bùi Quang Tuấn (19 April 2024).jpg"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/File%3AH%C3%A0m_Nghi_Th%C3%B4ng_B%E1%BA%A3o_%28%E5%92%B8%E5%AE%9C%E9%80%9A%E5%AF%B3%29_document_written_by_Nguy%E1%BB%85n_Xu%C3%A2n_Phi%E1%BA%BFu_%28Th%C3%A0nh_Th%C3%A1i_10%29_-_B%C3%B9i_Quang_Tu%E1%BA%A5n_%2819_April_2024%29.jpg",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-ham-nghi-thong-bao-document.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 960,
+      "height": 946,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-ham-nghi-thong-bao-document.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-ham-nghi-thong-bao-document.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-ham-nghi-thong-bao-document.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/H%C3%A0m_Nghi_Th%C3%B4ng_B%E1%BA%A3o_%28%E5%92%B8%E5%AE%9C%E9%80%9A%E5%AF%B3%29_document_written_by_Nguy%E1%BB%85n_Xu%C3%A2n_Phi%E1%BA%BFu_%28Th%C3%A0nh_Th%C3%A1i_10%29_-_B%C3%B9i_Quang_Tu%E1%BA%A5n_%2819_April_2024%29.jpg/960px-H%C3%A0m_Nghi_Th%C3%B4ng_B%E1%BA%A3o_%28%E5%92%B8%E5%AE%9C%E9%80%9A%E5%AF%B3%29_document_written_by_Nguy%E1%BB%85n_Xu%C3%A2n_Phi%E1%BA%BFu_%28Th%C3%A0nh_Th%C3%A1i_10%29_-_B%C3%B9i_Quang_Tu%E1%BA%A5n_%2819_April_2024%29.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 960,
+                "height": 946
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/5/55/H%C3%A0m_Nghi_Th%C3%B4ng_B%E1%BA%A3o_%28%E5%92%B8%E5%AE%9C%E9%80%9A%E5%AF%B3%29_document_written_by_Nguy%E1%BB%85n_Xu%C3%A2n_Phi%E1%BA%BFu_%28Th%C3%A0nh_Th%C3%A1i_10%29_-_B%C3%B9i_Quang_Tu%E1%BA%A5n_%2819_April_2024%29.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AH%C3%A0m_Nghi_Th%C3%B4ng_B%E1%BA%A3o_%28%E5%92%B8%E5%AE%9C%E9%80%9A%E5%AF%B3%29_document_written_by_Nguy%E1%BB%85n_Xu%C3%A2n_Phi%E1%BA%BFu_%28Th%C3%A0nh_Th%C3%A1i_10%29_-_B%C3%B9i_Quang_Tu%E1%BA%A5n_%2819_April_2024%29.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

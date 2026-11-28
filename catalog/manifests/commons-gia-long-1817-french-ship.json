@@ -1,0 +1,143 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-gia-long-1817-french-ship.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "Imperial record on the statement of the captain of a French ship (1817) (National Archives Centre I (Trung tâm Lưu trữ quốc gia I), not stated)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, Imperial record written in Chữ Nôm on the statement of the captain of a French ship asking for coming to Han Seagate in Đà Nẵng for trade (Gia Long 16 - 1817) 01.png"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/File%3AImperial_record_written_in_Ch%E1%BB%AF_N%C3%B4m_on_the_statement_of_the_captain_of_a_French_ship_asking_for_coming_to_Han_Seagate_in_%C4%90%C3%A0_N%E1%BA%B5ng_for_trade_%28Gia_Long_16_-_1817%29_01.png",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-gia-long-1817-french-ship.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 438,
+      "height": 631,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-gia-long-1817-french-ship.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-gia-long-1817-french-ship.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-gia-long-1817-french-ship.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Imperial_record_written_in_Ch%E1%BB%AF_N%C3%B4m_on_the_statement_of_the_captain_of_a_French_ship_asking_for_coming_to_Han_Seagate_in_%C4%90%C3%A0_N%E1%BA%B5ng_for_trade_%28Gia_Long_16_-_1817%29_01.png/330px-Imperial_record_written_in_Ch%E1%BB%AF_N%C3%B4m_on_the_statement_of_the_captain_of_a_French_ship_asking_for_coming_to_Han_Seagate_in_%C4%90%C3%A0_N%E1%BA%B5ng_for_trade_%28Gia_Long_16_-_1817%29_01.png",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 438,
+                "height": 631
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Imperial_record_written_in_Ch%E1%BB%AF_N%C3%B4m_on_the_statement_of_the_captain_of_a_French_ship_asking_for_coming_to_Han_Seagate_in_%C4%90%C3%A0_N%E1%BA%B5ng_for_trade_%28Gia_Long_16_-_1817%29_01.png",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AImperial_record_written_in_Ch%E1%BB%AF_N%C3%B4m_on_the_statement_of_the_captain_of_a_French_ship_asking_for_coming_to_Han_Seagate_in_%C4%90%C3%A0_N%E1%BA%B5ng_for_trade_%28Gia_Long_16_-_1817%29_01.png",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-gia-long-1817-french-ship.json/canvas/2",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "2"
+        ]
+      },
+      "width": 398,
+      "height": 416,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-gia-long-1817-french-ship.json/canvas/2/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-gia-long-1817-french-ship.json/canvas/2/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-gia-long-1817-french-ship.json/canvas/2",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Imperial_record_written_in_Ch%E1%BB%AF_N%C3%B4m_on_the_statement_of_the_captain_of_a_French_ship_asking_for_coming_to_Han_Seagate_in_%C4%90%C3%A0_N%E1%BA%B5ng_for_trade_%28Gia_Long_16_-_1817%29_02.png/330px-Imperial_record_written_in_Ch%E1%BB%AF_N%C3%B4m_on_the_statement_of_the_captain_of_a_French_ship_asking_for_coming_to_Han_Seagate_in_%C4%90%C3%A0_N%E1%BA%B5ng_for_trade_%28Gia_Long_16_-_1817%29_02.png",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 398,
+                "height": 416
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/0/08/Imperial_record_written_in_Ch%E1%BB%AF_N%C3%B4m_on_the_statement_of_the_captain_of_a_French_ship_asking_for_coming_to_Han_Seagate_in_%C4%90%C3%A0_N%E1%BA%B5ng_for_trade_%28Gia_Long_16_-_1817%29_02.png",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AImperial_record_written_in_Ch%E1%BB%AF_N%C3%B4m_on_the_statement_of_the_captain_of_a_French_ship_asking_for_coming_to_Han_Seagate_in_%C4%90%C3%A0_N%E1%BA%B5ng_for_trade_%28Gia_Long_16_-_1817%29_02.png",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

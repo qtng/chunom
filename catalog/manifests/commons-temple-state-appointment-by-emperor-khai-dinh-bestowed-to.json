@@ -1,0 +1,89 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-temple-state-appointment-by-emperor-khai-dinh-bestowed-to.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "State appointment by Emperor Khải Định bestowed to Prince Consort Nguyễn Hữu Tiễn (Temple University Libraries, Digital Collections (Vietnam Nôm Manuscripts Field Digitization Project), not stated)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, State appointment by Emperor Khải Định bestowed to Prince Consort Nguyễn Hữu Tiễn.jpg"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/File%3AState_appointment_by_Emperor_Kh%E1%BA%A3i_%C4%90%E1%BB%8Bnh_bestowed_to_Prince_Consort_Nguy%E1%BB%85n_H%E1%BB%AFu_Ti%E1%BB%85n.jpg",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-temple-state-appointment-by-emperor-khai-dinh-bestowed-to.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 4096,
+      "height": 2731,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-temple-state-appointment-by-emperor-khai-dinh-bestowed-to.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-temple-state-appointment-by-emperor-khai-dinh-bestowed-to.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-temple-state-appointment-by-emperor-khai-dinh-bestowed-to.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/State_appointment_by_Emperor_Kh%E1%BA%A3i_%C4%90%E1%BB%8Bnh_bestowed_to_Prince_Consort_Nguy%E1%BB%85n_H%E1%BB%AFu_Ti%E1%BB%85n.jpg/1920px-State_appointment_by_Emperor_Kh%E1%BA%A3i_%C4%90%E1%BB%8Bnh_bestowed_to_Prince_Consort_Nguy%E1%BB%85n_H%E1%BB%AFu_Ti%E1%BB%85n.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4096,
+                "height": 2731
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/e/ea/State_appointment_by_Emperor_Kh%E1%BA%A3i_%C4%90%E1%BB%8Bnh_bestowed_to_Prince_Consort_Nguy%E1%BB%85n_H%E1%BB%AFu_Ti%E1%BB%85n.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AState_appointment_by_Emperor_Kh%E1%BA%A3i_%C4%90%E1%BB%8Bnh_bestowed_to_Prince_Consort_Nguy%E1%BB%85n_H%E1%BB%AFu_Ti%E1%BB%85n.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

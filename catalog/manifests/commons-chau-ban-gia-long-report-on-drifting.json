@@ -1,0 +1,791 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "Gia Long \"Report on Drifting\" (1817) (National Archives Centre I (Trung tâm Lưu trữ quốc gia I), Imperial Records of the Nguyễn Dynasty, vol. 3)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, Category:The Imperial Records of the Nguyễn Dynasty Vol. 3 - Gia Long \"Report on Drifting\" – original: National Archives Centre I (Trung tâm Lưu trữ quốc gia I), Imperial Records of the Nguyễn Dynasty, vol. 3"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/Category%3AThe_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 745,
+      "height": 1080,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_01.jpg/500px-The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_01.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 745,
+                "height": 1080
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/e/e0/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_01.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AThe_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_01.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/2",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "2"
+        ]
+      },
+      "width": 745,
+      "height": 1080,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/2/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/2/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/2",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_02.jpg/500px-The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_02.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 745,
+                "height": 1080
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/ff/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_02.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AThe_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_02.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/3",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "3"
+        ]
+      },
+      "width": 745,
+      "height": 1080,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/3/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/3/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/3",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_03.jpg/500px-The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_03.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 745,
+                "height": 1080
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/7/7e/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_03.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AThe_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_03.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/4",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "4"
+        ]
+      },
+      "width": 745,
+      "height": 1080,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/4/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/4/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/4",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_04.jpg/500px-The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_04.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 745,
+                "height": 1080
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/d/da/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_04.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AThe_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_04.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/5",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "5"
+        ]
+      },
+      "width": 745,
+      "height": 1080,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/5/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/5/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/5",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_05.jpg/500px-The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_05.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 745,
+                "height": 1080
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/a/af/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_05.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AThe_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_05.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/6",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "6"
+        ]
+      },
+      "width": 745,
+      "height": 1080,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/6/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/6/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/6",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_06.jpg/500px-The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_06.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 745,
+                "height": 1080
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/2/26/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_06.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AThe_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_06.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/7",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "7"
+        ]
+      },
+      "width": 745,
+      "height": 1080,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/7/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/7/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/7",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_07.jpg/500px-The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_07.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 745,
+                "height": 1080
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/d/d7/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_07.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AThe_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_07.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/8",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "8"
+        ]
+      },
+      "width": 536,
+      "height": 933,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/8/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/8/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/8",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_08.jpg/500px-The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_08.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 536,
+                "height": 933
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/6/61/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_08.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AThe_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_08.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/9",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "9"
+        ]
+      },
+      "width": 552,
+      "height": 933,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/9/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/9/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/9",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_09.jpg/500px-The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_09.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 552,
+                "height": 933
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/8/80/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_09.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AThe_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_09.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/10",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "10"
+        ]
+      },
+      "width": 535,
+      "height": 934,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/10/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/10/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/10",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_10.jpg/500px-The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_10.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 535,
+                "height": 934
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/9/91/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_10.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AThe_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_10.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/11",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "11"
+        ]
+      },
+      "width": 525,
+      "height": 936,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/11/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/11/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/11",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_11.jpg/500px-The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_11.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 525,
+                "height": 936
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/6/6c/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_11.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AThe_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_11.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/12",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "12"
+        ]
+      },
+      "width": 528,
+      "height": 938,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/12/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/12/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/12",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_12.jpg/500px-The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_12.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 528,
+                "height": 938
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/1/17/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_12.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AThe_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_12.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/13",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "13"
+        ]
+      },
+      "width": 543,
+      "height": 942,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/13/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/13/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/13",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_13.jpg/500px-The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_13.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 543,
+                "height": 942
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f6/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_13.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AThe_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_13.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/14",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "14"
+        ]
+      },
+      "width": 525,
+      "height": 936,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/14/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/14/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json/canvas/14",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_14.jpg/500px-The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_14.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 525,
+                "height": 936
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/6/69/The_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_14.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AThe_Imperial_Records_of_the_Nguy%E1%BB%85n_Dynasty_Vol._3_-_Gia_Long_%22Report_on_Drifting%22_%281817%29_14.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

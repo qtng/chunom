@@ -1,0 +1,1169 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "Thượng dụ huấn điều (National Library of Vietnam (Thư viện Quốc gia Việt Nam), R.580)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, NLVNPF-1216 Thượng dụ huấn điều 上諭訓條.pdf – original: National Library of Vietnam (Thư viện Quốc gia Việt Nam), R.580"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page1-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/2",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "2"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/2/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/2/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/2",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page2-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/3",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "3"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/3/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/3/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/3",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page3-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/4",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "4"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/4/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/4/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/4",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page4-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/5",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "5"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/5/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/5/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/5",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page5-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/6",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "6"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/6/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/6/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/6",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page6-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/7",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "7"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/7/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/7/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/7",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page7-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/8",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "8"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/8/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/8/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/8",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page8-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/9",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "9"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/9/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/9/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/9",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page9-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/10",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "10"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/10/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/10/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/10",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page10-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/11",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "11"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/11/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/11/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/11",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page11-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/12",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "12"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/12/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/12/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/12",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page12-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/13",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "13"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/13/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/13/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/13",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page13-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/14",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "14"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/14/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/14/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/14",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page14-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/15",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "15"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/15/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/15/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/15",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page15-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/16",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "16"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/16/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/16/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/16",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page16-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/17",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "17"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/17/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/17/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/17",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page17-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/18",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "18"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/18/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/18/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/18",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page18-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/19",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "19"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/19/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/19/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/19",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page19-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/20",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "20"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/20/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/20/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/20",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page20-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/21",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "21"
+        ]
+      },
+      "width": 4166,
+      "height": 3602,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/21/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/21/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json/canvas/21",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf/page21-1920px-NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4166,
+                "height": 3602
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f7/NLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANLVNPF-1216_Th%C6%B0%E1%BB%A3ng_d%E1%BB%A5_hu%E1%BA%A5n_%C4%91i%E1%BB%81u_%E4%B8%8A%E8%AB%AD%E8%A8%93%E6%A2%9D.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

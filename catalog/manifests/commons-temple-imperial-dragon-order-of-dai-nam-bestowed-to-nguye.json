@@ -1,0 +1,89 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-temple-imperial-dragon-order-of-dai-nam-bestowed-to-nguye.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "Imperial Dragon Order of Đại Nam bestowed to Nguyễn Hữu Tiễn (Temple University Libraries, Digital Collections (Vietnam Nôm Manuscripts Field Digitization Project), not stated)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, Imperial Dragon Order of Đại Nam bestowed to Nguyễn Hữu Tiễn.jpg"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/File%3AImperial_Dragon_Order_of_%C4%90%E1%BA%A1i_Nam_bestowed_to_Nguy%E1%BB%85n_H%E1%BB%AFu_Ti%E1%BB%85n.jpg",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-temple-imperial-dragon-order-of-dai-nam-bestowed-to-nguye.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 2048,
+      "height": 1670,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-temple-imperial-dragon-order-of-dai-nam-bestowed-to-nguye.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-temple-imperial-dragon-order-of-dai-nam-bestowed-to-nguye.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-temple-imperial-dragon-order-of-dai-nam-bestowed-to-nguye.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Imperial_Dragon_Order_of_%C4%90%E1%BA%A1i_Nam_bestowed_to_Nguy%E1%BB%85n_H%E1%BB%AFu_Ti%E1%BB%85n.jpg/1920px-Imperial_Dragon_Order_of_%C4%90%E1%BA%A1i_Nam_bestowed_to_Nguy%E1%BB%85n_H%E1%BB%AFu_Ti%E1%BB%85n.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 2048,
+                "height": 1670
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f6/Imperial_Dragon_Order_of_%C4%90%E1%BA%A1i_Nam_bestowed_to_Nguy%E1%BB%85n_H%E1%BB%AFu_Ti%E1%BB%85n.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AImperial_Dragon_Order_of_%C4%90%E1%BA%A1i_Nam_bestowed_to_Nguy%E1%BB%85n_H%E1%BB%AFu_Ti%E1%BB%85n.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
