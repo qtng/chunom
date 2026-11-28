@@ -16,6 +16,43 @@
   let entry, urlItem, urlOffset, ownOffset, canvases = [], catalogItems = [], workTexts = [], p = 1;
   let ink = store.get().ink || "clean", showPage = !!store.get().page;
   const pages = new Map();   // text page -> lines
+  // the owner (app_metadata.is_owner, checked by the database): the Nôm of every token (text_page_owner), editing (text_token_update)
+  const QATT = "https://qatt.org/";
+  let owner = false, unsureOn = !!store.get().unsure, cur = null, pop = null;
+  const ownPages = new Map(); // text page -> [{line, cells: [[id, glyph, unsure, note, checked]]}]
+  const maybeOwner = () => { try { return JSON.parse(localStorage.getItem("sb-kfgqhhmdzboszpwsqkxt-auth-token"))?.user?.app_metadata?.is_owner === true; } catch { return false; } };
+  const loadScript = src => new Promise((ok, no) => {
+    if ([...document.scripts].some(x => x.src === src)) return ok();
+    const e = document.createElement("script"); e.src = src; e.onload = ok; e.onerror = () => no(new Error("could not load " + src)); document.head.append(e);
+  });
+  let sp = null, spReady = null;
+  function connect() {
+    spReady ||= (async () => {
+      if (typeof supabase === "undefined") await loadScript(QATT + "vendor/supabase/supabase.min.js");
+      if (typeof SupabaseService === "undefined") await loadScript(QATT + "js/supabase.js");
+      sp = new SupabaseService(); await sp.initQuiet(); return sp;
+    })();
+    return spReady;
+  }
+  async function srpc(name, args) {
+    await connect();
+    const { data, error } = await sp.client.rpc(name, args);
+    if (error) throw Object.assign(new Error(error.message || String(error)), { code: error.code });
+    return data;
+  }
+  function ownOf(n) {
+    if (!ownPages.has(n)) ownPages.set(n, srpc("text_page_owner", { p_item: entry.item, p_page: n }).catch(e => { ownPages.delete(n); throw e; }));
+    return ownPages.get(n);
+  }
+  const isIds = g => !!g && (/[\u2FF0-\u2FFF\u{16FF1}]/u.test(g) || [...g].length > 1);
+  async function drawGlyph(elm, g) {
+    elm.textContent = "";
+    if (!g) { elm.textContent = "?"; return; }
+    if (!isIds(g)) { elm.textContent = g; return; }
+    elm.title = g;
+    try { if (typeof IdsRender === "undefined") await loadScript(QATT + "js/ids-render.js"); const r = await IdsRender.draw(g); elm.innerHTML = r.svg; }
+    catch { elm.textContent = g; }
+  }
   const cleaned = new Map(); // canvas -> blob URL of the writing alone
 
   function first(x) { return Array.isArray(x) ? x[0] : x; }
@@ -114,6 +151,13 @@
     let lines;
     try { lines = await linesOf(n); } catch { message(t("The text could not be loaded.", "Không tải được văn bản.")); return; }
     if (mine !== p) return;
+    let own = null;
+    if (owner || maybeOwner()) {
+      try { own = await ownOf(n); if (!owner) { owner = true; ownerUi(); } } catch (e) { if (e.code === "42501") { owner = false; ownerUi(); } }
+      if (mine !== p) return;
+    }
+    closePop();
+    cur = { n, lines, own, cv };
     let mask = null;
     if (ink === "clean") { try { mask = await cleanUrl(cv); } catch { mask = null; } if (mine !== p) return; }
     const ratio = cv.h / cv.w, { h, med } = sizes(lines);
@@ -130,6 +174,8 @@
       const row = document.createElement("div"); row.className = "tx-verse";
       l.cells.forEach(([qn, b], ci) => {
         const cell = document.createElement("button"); cell.type = "button"; cell.className = "tx-cell"; cell.dataset.k = `${li}.${ci}`;
+        const oc = own && own[li] && own[li].cells[ci];
+        if (oc && oc[2]) cell.classList.add("unsure");
         const sp = document.createElement("span"); sp.className = "tx-sp" + (mask ? " ink" : "");
         if (b) {
           const cx = px((b[0] + b[2]) / 2, W), cy = px((b[1] + b[3]) / 2, H);
@@ -147,15 +193,152 @@
       frag.push(row);
     });
     box.replaceChildren(...frag);
+    updateCount();
     // the next page in advance
     if (n < entry.pages) { linesOf(n + 1).catch(() => {}); if (ink === "clean" && canvases[p]) cleanUrl(canvases[p]).catch(() => {}); }
+  }
+
+  // ---------- the popover of a token: the place with its context (everybody); for the owner the Nôm, the notes and the editor ----------
+  function closePop() { if (pop) { pop.remove(); pop = null; document.querySelectorAll(".tx-cell.pinned, .tx-box.pinned").forEach(x => x.classList.remove("pinned")); } }
+  function el(tag, attrs, ...kids) {
+    const e = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs || {})) { if (v == null || v === false) continue; if (k === "class") e.className = v; else if (k.startsWith("on")) e.addEventListener(k.slice(2), v); else e.setAttribute(k, v); }
+    for (const c of kids) if (c != null && c !== "") e.append(c);
+    return e;
+  }
+  function context(b, qb) {   // the character, its neighbours and the reading written under it, as on the scan
+    const w = b[2] - b[0], h = b[3] - b[1], ratio = cur.cv.h / cur.cv.w;
+    const x0 = Math.max(0, b[0] - 1.15 * w), x1 = Math.min(10000, b[2] + 1.15 * w);
+    const y0 = Math.max(0, b[1] - 0.3 * h), y1 = Math.min(10000, Math.max(b[3], qb ? qb[3] : b[3]) + 0.25 * h);
+    let W = 150 * 10000 / ((y1 - y0) * ratio);
+    const wide = (x1 - x0) / 10000 * W; if (wide > 300) W *= 300 / wide;
+    const H = W * ratio, cw = (x1 - x0) / 10000 * W, chh = (y1 - y0) / 10000 * H;
+    const box = el("div", { class: "tx-ctx" });
+    Object.assign(box.style, { width: cw + "px", height: chh + "px", backgroundImage: `url("${imageUrl(cur.cv)}")`, backgroundSize: `${W}px ${H}px`, backgroundPosition: `${-x0 / 10000 * W}px ${-y0 / 10000 * H}px` });
+    const m = el("span", { class: "tx-ctx-mark" });
+    Object.assign(m.style, { left: (b[0] - x0) / 10000 * W - 2 + "px", top: (b[1] - y0) / 10000 * H - 2 + "px", width: w / 10000 * W + 4 + "px", height: h / 10000 * H + 4 + "px" });
+    box.append(m);
+    return box;
+  }
+  function place(cell) {
+    const r = cell.getBoundingClientRect(), pw = pop.offsetWidth, ph = pop.offsetHeight;
+    let top = r.bottom + 6;
+    if (top + ph > innerHeight - 8 && r.top - ph - 6 > 8) top = r.top - ph - 6;
+    const left = Math.max(8, Math.min(document.documentElement.clientWidth - pw - 8, r.left + r.width / 2 - pw / 2));
+    Object.assign(pop.style, { top: top + scrollY + "px", left: left + scrollX + "px" });
+  }
+  function openPop(cell, edit = false) {
+    closePop();
+    const [li, ci] = cell.dataset.k.split(".").map(Number);
+    const [qn, b, qb] = cur.lines[li].cells[ci];
+    const oc = cur.own && cur.own[li] && cur.own[li].cells[ci];
+    document.querySelectorAll(`[data-k="${cell.dataset.k}"]`).forEach(x => x.classList.add("pinned"));
+    pop = el("div", { class: "tx-pop card-box", role: "dialog", "aria-label": t("Character", "Chữ") });
+    pop.dataset.k = cell.dataset.k;
+    const head = el("div", { class: "tx-pop-head" }, b ? context(b, qb) : null);
+    const info = el("div", { class: "tx-pop-info" }, el("div", { class: "tx-pop-qn", lang: "vi" }, qn || "–"));
+    head.append(info);
+    pop.append(head);
+    if (owner && oc) {
+      const g = el("div", { class: "tx-pop-glyph", lang: "vi-Hani" }); drawGlyph(g, oc[1]);
+      info.prepend(g);
+      if (oc[2]) info.append(el("div", { class: "badge-unsure" }, t("Unsure", "Chưa chắc")));
+      if (oc[3]) info.append(el("div", { class: "tx-pop-note small" }, oc[3]));
+      if (oc[4]) info.append(el("div", { class: "tx-pop-checked small" }, t(`Checked: ${oc[4]}`, `Đã kiểm: ${oc[4]}`)));
+      if (!edit) pop.append(el("div", { class: "tx-pop-actions" },
+        el("button", { type: "button", class: "btn btn-sm btn-quiet", onclick: () => openPop(cell, true), title: t("Edit (E)", "Sửa (E)") }, el("i", { class: "bi bi-pencil" }), " ", t("Edit", "Sửa"))));
+      else pop.append(editor(cell, li, ci, qn, oc));
+    }
+    document.body.append(pop);
+    place(cell);
+    if (edit) pop.querySelector("input")?.focus();
+  }
+  function editor(cell, li, ci, qn, oc) {
+    const gIn = el("input", { class: "form-control form-control-sm tx-in-glyph", lang: "vi-Hani", autocomplete: "off", spellcheck: "false", placeholder: t("Character or IDS", "Chữ hoặc IDS") });
+    gIn.value = oc[1] || "";
+    const prev = el("span", { class: "tx-prev", lang: "vi-Hani" });
+    const qIn = el("input", { class: "form-control form-control-sm", lang: "vi", autocomplete: "off", spellcheck: "false", placeholder: t("Reading", "Âm đọc") });
+    qIn.value = qn || "";
+    const uIn = el("input", { type: "checkbox", class: "form-check-input", id: "tx-unsure-in" }); uIn.checked = !!oc[2];
+    const nIn = el("input", { class: "form-control form-control-sm", autocomplete: "off", placeholder: t("Note", "Ghi chú") }); nIn.value = oc[3] || "";
+    const forms = el("div", { class: "tx-forms" });
+    const err = el("div", { class: "tx-err small", hidden: true });
+    let pt; const preview = () => { clearTimeout(pt); pt = setTimeout(() => (isIds(gIn.value.trim()) ? drawGlyph(prev, gIn.value.trim()) : (prev.textContent = "")), 200); };
+    gIn.addEventListener("input", preview); preview();
+    // the forms this reading has elsewhere in the work: one click takes one
+    let ft; const loadForms = () => { clearTimeout(ft); ft = setTimeout(async () => {
+      forms.replaceChildren(); const q = qIn.value.trim(); if (!q) return;
+      try {
+        const rows = await srpc("text_forms", { p_item: entry.item, p_qn: q });
+        for (const r of rows) { const bt = el("button", { type: "button", class: "btn btn-sm btn-quiet tx-form", lang: "vi-Hani", title: `${r.glyph} ×${r.n}` }); const gg = el("span"); drawGlyph(gg, r.glyph); bt.append(gg, el("small", {}, ` ${r.n}`)); bt.addEventListener("click", () => { gIn.value = r.glyph; preview(); gIn.focus(); }); forms.append(bt); }
+      } catch {}
+    }, 250); };
+    qIn.addEventListener("input", loadForms); loadForms();
+    loadScript("/chunom/js/ime.js").then(() => { if (typeof VietIme !== "undefined") new VietIme(gIn, { defer: true }); }).catch(() => {});
+    const save = async () => {
+      err.hidden = true;
+      try {
+        const r = await srpc("text_token_update", { p_id: oc[0], p_glyph: gIn.value, p_qn: qIn.value, p_unsure: uIn.checked, p_note: nIn.value });
+        const [id, g, uns, nt, chk, q] = r;
+        cur.own[li].cells[ci] = [id, g, uns, nt, chk];
+        cur.lines[li].cells[ci][0] = q;
+        const c = document.querySelector(`.tx-cell[data-k="${cell.dataset.k}"]`);
+        c.classList.toggle("unsure", !!uns);
+        const rq = c.querySelector(".tx-qn"); if (window.Readings && q) Readings.fill(rq, q); else rq.textContent = q || "·";
+        updateCount();
+        openPop(c);
+      } catch (e) { err.textContent = t("Not saved: ", "Chưa lưu: ") + e.message; err.hidden = false; }
+    };
+    const form = el("form", { class: "tx-edit" },
+      el("label", { class: "small" }, t("Character", "Chữ")), el("div", { class: "tx-row" }, gIn, prev),
+      forms,
+      el("label", { class: "small" }, t("Reading", "Âm đọc")), qIn,
+      el("div", { class: "form-check mt-1" }, uIn, el("label", { class: "form-check-label small", for: "tx-unsure-in" }, t("Unsure", "Chưa chắc"))),
+      nIn, err,
+      el("div", { class: "tx-pop-actions" },
+        el("button", { type: "submit", class: "btn btn-sm btn-accent" }, t("Save", "Lưu")),
+        el("button", { type: "button", class: "btn btn-sm btn-quiet", onclick: () => openPop(cell) }, t("Cancel", "Hủy"))));
+    form.addEventListener("submit", e => { e.preventDefault(); save(); });
+    form.addEventListener("keydown", e => {
+      if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); save(); }
+      else if (e.key === "Enter" && e.target !== gIn && e.target.type !== "checkbox") { e.preventDefault(); save(); }
+      else if (e.key === "Enter" && e.target === gIn) { /* left to ime.js (choose a candidate) */ }
+    });
+    return form;
+  }
+  function step(d) {   // the popover on the previous / next token, across pages
+    if (!pop) return;
+    const cells = [...document.querySelectorAll("#text .tx-cell")], i = cells.findIndex(c => c.dataset.k === pop.dataset.k);
+    const nx = cells[i + d];
+    if (nx) { openPop(nx); nx.scrollIntoView({ block: "nearest" }); }
+  }
+  // the owner: the unsure tokens framed, their number, and a jump to the next one (on later pages too)
+  function updateCount() {
+    const b = $("reader").querySelector('[data-act="unsure"]'); if (!b) return;
+    b.querySelector(".n").textContent = document.querySelectorAll("#text .tx-cell.unsure").length;
+  }
+  async function nextUnsure() {
+    const cells = [...document.querySelectorAll("#text .tx-cell")];
+    const from = pop ? cells.findIndex(c => c.dataset.k === pop.dataset.k) : -1;
+    const here = cells.slice(from + 1).find(c => c.classList.contains("unsure"));
+    if (here) { openPop(here); here.scrollIntoView({ block: "center" }); return; }
+    for (let n = cur.n + 1; n <= entry.pages; n++) {
+      let own; try { own = await ownOf(n); } catch { return; }
+      if (own.some(l => l.cells.some(c => c[2]))) { await go(n + ownOffset); const c = document.querySelector("#text .tx-cell.unsure"); if (c) { openPop(c); c.scrollIntoView({ block: "center" }); } return; }
+    }
+  }
+  function ownerUi() {
+    const r = $("reader");
+    r.querySelectorAll(".owner-only").forEach(x => { x.hidden = !owner; });
+    $("text").classList.toggle("show-unsure", owner && unsureOn);
+    const b = r.querySelector('[data-act="unsure"]'); if (b) { b.classList.toggle("active", unsureOn); b.setAttribute("aria-pressed", unsureOn); }
   }
 
   function mark(k, on) {
     document.querySelectorAll(`[data-k="${k}"]`).forEach(e => e.classList.toggle("on", on));
   }
 
-  function go(np) { np = Math.max(1, Math.min(canvases.length, np)); if (np !== p) { p = np; render(); } }
+  function go(np) { np = Math.max(1, Math.min(canvases.length, np)); if (np !== p) { p = np; return render(); } }
 
   async function init() {
     const q = new URLSearchParams(location.search);
@@ -217,17 +400,27 @@
     text.addEventListener("mouseover", e => { const c = e.target.closest(".tx-cell"); if (c) mark(c.dataset.k, true); });
     text.addEventListener("mouseout", e => { const c = e.target.closest(".tx-cell"); if (c) mark(c.dataset.k, false); });
     text.addEventListener("click", e => {
-      const c = e.target.closest(".tx-cell"); if (!c) return;
-      const was = c.classList.contains("pinned");
-      document.querySelectorAll(".pinned").forEach(x => x.classList.remove("pinned"));
-      if (!was) document.querySelectorAll(`[data-k="${c.dataset.k}"]`).forEach(x => x.classList.add("pinned"));
+      const c = e.target.closest(".tx-cell"); if (!c || !cur) return;
+      if (pop && pop.dataset.k === c.dataset.k) closePop(); else openPop(c);
     });
+    document.addEventListener("click", e => { if (pop && !pop.contains(e.target) && !e.target.closest(".tx-cell") && document.contains(e.target)) closePop(); });
+    reader.querySelector('[data-act="unsure"]').addEventListener("click", () => { unsureOn = !unsureOn; store.set({ unsure: unsureOn }); ownerUi(); });
+    reader.querySelector('[data-act="next-unsure"]').addEventListener("click", e => { e.stopPropagation(); nextUnsure(); });
     document.addEventListener("keydown", e => {
+      if (e.key === "Escape" && pop) { const k = pop.dataset.k; closePop(); document.querySelector(`.tx-cell[data-k="${k}"]`)?.focus(); return; }
       if (e.target.closest("input, textarea, select")) return;
+      if (pop) {
+        if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
+        else if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
+        else if ((e.key === "e" || e.key === "E") && owner) { e.preventDefault(); const c = document.querySelector(`.tx-cell[data-k="${pop.dataset.k}"]`); if (c) openPop(c, true); }
+        return;
+      }
       if (e.key === "ArrowLeft") go(p - 1); else if (e.key === "ArrowRight") go(p + 1);
     });
+    addEventListener("resize", () => { if (pop) closePop(); });
     window.addEventListener("hashchange", () => { const m = location.hash.match(/p=(\d+)/); if (m) go(parseInt(m[1], 10) - urlOffset + ownOffset); });
     let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(render, 150); });
+    ownerUi();
     document.addEventListener("readingschange", render);
     document.addEventListener("langchange", render);
     render();
