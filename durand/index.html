@@ -93,6 +93,15 @@
     .strip a:hover { color: var(--d-ink); }
     .strip img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: 50% 0; margin-bottom: .5rem; box-shadow: 0 .6rem 1.2rem rgba(0, 0, 0, .25); background: #eceeef; }
 
+
+    /* one big number between the chapters */
+    .kpi { margin: 0 0 4.5rem; display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1.6rem; align-items: center; }
+    .kpi .num { flex: 0 0 auto; width: max-content; font-family: Georgia, "Times New Roman", serif; font-size: clamp(5.5rem, 17vw, 10rem); line-height: .9; color: var(--d-ink); letter-spacing: -.02em; font-variant-numeric: lining-nums; }
+    .kpi .num::after { content: ""; display: block; width: 3.2rem; height: .3rem; margin-top: .7rem; background: var(--d-red); }
+    .kpi .txt { flex: 1 1 16rem; font-size: 1.15rem; line-height: 1.55; max-width: 26rem; color: #2e3033; }
+    .kpi .txt a { font-family: var(--d-type); font-size: .8rem; color: var(--d-dim); }
+    .kpi .row { display: flex; gap: 2rem; align-items: flex-end; flex-wrap: wrap; grid-column: 2; }
+    @media (max-width: 767.98px) { .kpi { grid-template-columns: 1fr; } .kpi .row { grid-column: 1; } }
     .books { list-style: none; margin: 1rem 0 0; padding: 0; font-family: var(--d-type); font-size: .92rem; line-height: 1.5; color: var(--d-dim); }
     .books li { padding: .45rem 0; border-top: 1px dashed rgba(0, 0, 0, .25); }
     .books i { font-family: Georgia, "Times New Roman", serif; font-size: 1.02rem; color: var(--d-ink); }
@@ -199,6 +208,13 @@
     </div>
   </section>
 
+
+  <div class="kpi reveal">
+    <div class="row">
+      <span class="num" data-count="157">157</span>
+      <p class="txt mb-2">texts in Nôm and Hán with their reading in Quốc ngữ are kept in his papers at Yale, every one of them scanned page by page.<br><a href="https://collections.library.yale.edu/catalog?q=%22Han+Nom+texts+with+Vietnamese%22" rel="noopener">Yale Digital Collections →</a></p>
+    </div>
+  </div>
   <section class="step reveal">
     <div class="when">PARIS<br>1966</div>
     <div>
@@ -269,6 +285,15 @@
       };
       setTimeout(() => next(0), 700);
     });
+  }
+  // the big number counts up once when it comes into view
+  const num = document.querySelector('.kpi .num');
+  if (num && !quiet && 'IntersectionObserver' in window) {
+    const end = +num.dataset.count; num.textContent = '0';
+    const ko = new IntersectionObserver(es => { if (!es[0].isIntersecting) return; ko.disconnect(); const t0 = performance.now();
+      const step = t => { const k = Math.min(1, (t - t0) / 1400); num.textContent = Math.round(end * (1 - (1 - k) ** 3)); if (k < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step); }, { rootMargin: '0px 0px -20% 0px' });
+    ko.observe(num);
   }
   const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('seen'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px' }) : null;
   document.querySelectorAll('.reveal').forEach(s => (io ? io.observe(s) : s.classList.add('seen')));
