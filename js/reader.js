@@ -14,7 +14,7 @@
                   set(o) { try { localStorage.setItem("texts1", JSON.stringify({ ...store.get(), ...o })); } catch {} } };
 
   let entry, urlItem, urlOffset, ownOffset, canvases = [], catalogItems = [], workTexts = [], p = 1;
-  let ink = store.get().ink || "clean", showPage = !!store.get().page, modern = !!store.get().modern;
+  let ink = store.get().ink || "clean", showPage = !!store.get().page;
   const pages = new Map();   // text page -> lines
   // the owner (app_metadata.is_owner, checked by the database): the Nôm of every token (text_page_owner), editing (text_token_update)
   const QATT = "https://qatt.org/";
@@ -130,12 +130,14 @@
   }
 
   // a reading with the punctuation of the edition (punct_before / punct_after of the token; not on the scan)
-  // modern: the modern spelling where the token has one (qn_modern, e.g. giời → trời), else the reading as written
-  function writeQn(r, cell) {
+  // the text gives the modern spelling where the token has one (qn_modern, e.g. giời → trời); the reading as written is then a footnote
+  // (fn: its number on the page, the notes are listed under the text)
+  function writeQn(r, cell, fn) {
     const [qn0, , , pb, pa, qm] = cell;
-    const qn = modern && qm ? qm : qn0;
-    r.textContent = ""; r.classList.toggle("modernised", !!(modern && qm)); r.title = modern && qm ? qn0 : "";
+    const qn = qm || qn0;
+    r.textContent = "";
     if (window.Readings && qn) Readings.fill(r, qn); else r.textContent = qn || "·";
+    if (qm && fn) r.append(Object.assign(document.createElement("sup"), { className: "tx-fn", textContent: fn }));
     if (pb) r.prepend(Object.assign(document.createElement("span"), { className: "tx-punct", textContent: pb }));
     if (pa) r.append(Object.assign(document.createElement("span"), { className: "tx-punct", textContent: pa }));
   }
@@ -179,7 +181,7 @@
     const ch = Math.ceil(h * 1.12);
     box.style.setProperty("--cw", cw + "px"); box.style.setProperty("--ch", ch + "px");
     const src = mask || imageUrl(cv);
-    const frag = [];
+    const frag = [], notes = [];
     lines.forEach((l, li) => {
       const row = document.createElement("div"); row.className = "tx-verse";
       l.cells.forEach((cellData, ci) => {
@@ -198,11 +200,14 @@
           $("boxes").append(ov);
         }
         const r = document.createElement("span"); r.className = "tx-qn";
-        writeQn(r, cellData);
+        if (cellData[5]) notes.push({ k: `${li}.${ci}`, qn: cellData[0], qm: cellData[5] });
+        writeQn(r, cellData, cellData[5] ? notes.length : 0);
         cell.append(sp, r); row.append(cell);
       });
       frag.push(row);
     });
+    if (notes.length) frag.push(el("ol", { class: "tx-notes small", "aria-label": t("Readings as written", "Âm đọc nguyên văn") },
+      ...notes.map(x => el("li", { "data-k": x.k }, el("span", { lang: "vi" }, x.qn), " ", el("span", { class: "text-body-secondary" }, t(`(as written; today ${x.qm})`, `(nguyên văn; ngày nay ${x.qm})`))))));
     box.replaceChildren(...frag);
     updateCount();
     // the next page in advance
@@ -265,7 +270,7 @@
     const qEl = el("div", { class: "tx-pop-qn", lang: "vi" }); writeQn(qEl, cur.lines[li].cells[ci]);
     const info = el("div", { class: "tx-pop-info" }, qEl);
     const qm0 = cur.lines[li].cells[ci][5];
-    if (qm0) info.append(el("div", { class: "tx-pop-modern small" }, modern ? t(`As written: ${qn}`, `Nguyên văn: ${qn}`) : t(`Today: ${qm0}`, `Ngày nay: ${qm0}`)));
+    if (qm0) info.append(el("div", { class: "tx-pop-modern small" }, t(`As written: ${qn}`, `Nguyên văn: ${qn}`)));
     head.append(info);
     pop.append(head);
     if (owner && oc) {
@@ -321,11 +326,9 @@
         const [id, g, uns, nt, chk, q, pb, pa, qm] = r;
         cur.own[li].cells[ci] = [id, g, uns, nt, chk];
         const lc = cur.lines[li].cells[ci]; lc[0] = q; lc[3] = pb; lc[4] = pa; lc[5] = qm;
-        const c = document.querySelector(`.tx-cell[data-k="${cell.dataset.k}"]`);
-        c.classList.toggle("unsure", !!uns);
-        writeQn(c.querySelector(".tx-qn"), lc);
-        updateCount();
-        openPop(c);
+        const k = cell.dataset.k;
+        await render();   // the footnotes are numbered on the page
+        const c = document.querySelector(`.tx-cell[data-k="${k}"]`); if (c) openPop(c);
       } catch (e) { err.textContent = t("Not saved: ", "Chưa lưu: ") + e.message; err.hidden = false; }
     };
     const form = el("form", { class: "tx-edit" },
@@ -433,10 +436,6 @@
     const setInk = () => inkBtns.forEach(b => b.classList.toggle("active", b.dataset.ink === ink));
     inkBtns.forEach(b => b.addEventListener("click", () => { ink = b.dataset.ink; store.set({ ink }); setInk(); render(); }));
     setInk();
-    const spellBtns = reader.querySelectorAll("[data-spell]");
-    const setSpell = () => spellBtns.forEach(b => b.classList.toggle("active", (b.dataset.spell === "modern") === modern));
-    spellBtns.forEach(b => b.addEventListener("click", () => { modern = b.dataset.spell === "modern"; store.set({ modern }); setSpell(); closePop(); document.querySelectorAll("#text .tx-cell").forEach(c => { const [li, ci] = c.dataset.k.split(".").map(Number); writeQn(c.querySelector(".tx-qn"), cur.lines[li].cells[ci]); }); }));
-    setSpell();
     const pb = reader.querySelector('[data-act="page"]');
     const setPage = () => { pb.setAttribute("aria-pressed", showPage); pb.classList.toggle("active", showPage); reader.classList.toggle("with-page", showPage); };
     pb.addEventListener("click", () => { showPage = !showPage; store.set({ page: showPage }); setPage(); render(); });

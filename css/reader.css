@@ -50,5 +50,7 @@ main.texts-wide { max-width: 76rem; }
 .tx-ctx.dragging { cursor: grabbing; }
 .tx-punct { color: var(--muted, currentColor); }
 .tx-in-punct { width: 5rem; flex: 0 0 auto; }
-.tx-qn.modernised { text-decoration: underline dotted; text-decoration-color: var(--muted, currentColor); text-underline-offset: 2px; }
 .tx-pop-modern { color: var(--muted, currentColor); }
+.tx-fn { font-size: .62em; margin-left: .05em; color: var(--accent, currentColor); }
+.tx-notes { max-width: 34rem; margin: 1.2rem auto 0; padding-left: 1.6rem; color: var(--ink, currentColor); }
+.tx-notes li::marker { color: var(--accent, currentColor); }
