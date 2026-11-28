@@ -88,11 +88,14 @@
   };
   const contentText = i => { const c = CONTENT[i.content || "original"] || CONTENT.original; return t(c[0], c[1]); };
 
+  const hasText = i => texts.some(x => x.copies[i.id] != null);
+
   function itemLabel(i) {
     const parts = [i.holding.shelfmark !== "not stated" ? i.holding.shelfmark : "", i.physical.date].filter(Boolean);
     // without shelfmark and date, the title as the library states it tells the copies apart
     const tail = parts.length ? parts.join(", ") : String(i.title_on_item || "").slice(0, 70);
-    return `${i.withheld ? `[${t("Withheld", "Chưa công bố")}] ` : ""}${contentText(i)}: ${String(i.holding.institution).split(",")[0]}${tail ? " – " + tail : ""}`;
+    return `${i.withheld ? `[${t("Withheld", "Chưa công bố")}] ` : ""}${contentText(i)}: ${String(i.holding.institution).split(",")[0]}${tail ? " – " + tail : ""}`
+      + (hasText(i) ? ` · ${t("with Quốc ngữ", "kèm quốc ngữ")}` : "");
   }
 
   function row(dt, ...dd) {
@@ -187,13 +190,14 @@
       $("viewer").hidden = true;
       return;
     }
-    // originals first, then editions, translations …; within each, by date
-    const rank = Object.keys(CONTENT);
-    work.items.sort((a, b) => (rank.indexOf(a.content || "original") - rank.indexOf(b.content || "original"))
-      || ((a.physical.date_earliest || 9999) - (b.physical.date_earliest || 9999)) || a.id.localeCompare(b.id));
-    renderWork();
     // a transcription not released yet: its button only for admins (the reader itself opens with a direct link)
     try { texts = (await (await fetch("/chunom/reader/texts.json")).json()).texts.filter(x => x.work === work.id && (x.released || isAdmin())); } catch { texts = []; }
+    // copies with a transcription (readable in the reader) first, so that the first one is shown when no copy is asked for;
+    // then originals, editions, translations …; within each, by date
+    const rank = Object.keys(CONTENT);
+    work.items.sort((a, b) => (hasText(b) - hasText(a)) || (rank.indexOf(a.content || "original") - rank.indexOf(b.content || "original"))
+      || ((a.physical.date_earliest || 9999) - (b.physical.date_earliest || 9999)) || a.id.localeCompare(b.id));
+    renderWork();
     const page = parseInt((location.hash.match(/p=(\d+)/) || [])[1] || "1", 10);
     $("item-select").addEventListener("change", e => showItem(e.target.value));
     document.addEventListener("langchange", () => { renderWork(); $("item-select").value = item.id; renderSource(); });
