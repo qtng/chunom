@@ -1,4 +1,4 @@
-// One work of the catalogue (catalog/view.html?work=…&item=…#p=…): title, the copies or volumes, the viewer,
+// One work of the catalogue (the scan viewer) (catalog/view.html?work=…&item=…#p=…): title, the copies or volumes, the viewer,
 // and the source with its licence. Data: /chunom/catalog/catalog.json (built in qtng/chunom-library).
 (function () {
   "use strict";
@@ -47,7 +47,27 @@
     "other": ["Rights not clear", "Quyền chưa rõ"],
   };
 
-  let work, viewer, item;
+  let work, viewer, item, texts = [];   // texts: the transcriptions of the work (/chunom/reader/texts.json), read in reader/
+
+  // the link to the reader of the transcription: for a copy with the same scan on the same page (the same query, only the path differs),
+  // else, when another copy of the work has one, to that transcription
+  function textLink(page) {
+    const own = texts.find(x => x.copies[item.id] != null), other = own ? null : texts[0];
+    let p = $("to-text");
+    if (!own && !other) { if (p) p.hidden = true; return; }
+    if (!p) {
+      p = el("p", { id: "to-text", class: "mt-3 mb-0" });
+      $("work-authors").after(p);
+    }
+    p.hidden = false;
+    const a = own
+      ? el("a", { class: "btn btn-sm btn-pill btn-accent", href: `/chunom/reader/?work=${encodeURIComponent(work.id)}&item=${encodeURIComponent(item.id)}#p=${page}` },
+          el("i", { class: "bi bi-book" }), " ", el("span", { "data-vi": "Đọc kèm quốc ngữ" }, "Read with Quốc ngữ"))
+      : el("a", { class: "btn btn-sm btn-pill btn-quiet", href: `/chunom/reader/?work=${encodeURIComponent(work.id)}&item=${encodeURIComponent(other.item)}` },
+          el("i", { class: "bi bi-book" }), " ", el("span", { "data-vi": "Có bản phiên âm của một bản khác" }, "Transcription of another copy"));
+    const tx = own || other;
+    p.replaceChildren(a, tx.released ? "" : el("span", { class: "badge-withheld ms-2" }, t("Not released", "Chưa công bố")));
+  }
 
   function titles(w) {
     const main = (w.titles || []).filter(x => (x.type || "main") === "main");
@@ -68,11 +88,14 @@
   };
   const contentText = i => { const c = CONTENT[i.content || "original"] || CONTENT.original; return t(c[0], c[1]); };
 
+  const hasText = i => texts.some(x => x.copies[i.id] != null);
+
   function itemLabel(i) {
     const parts = [i.holding.shelfmark !== "not stated" ? i.holding.shelfmark : "", i.physical.date].filter(Boolean);
     // without shelfmark and date, the title as the library states it tells the copies apart
     const tail = parts.length ? parts.join(", ") : String(i.title_on_item || "").slice(0, 70);
-    return `${i.withheld ? `[${t("Withheld", "Chưa công bố")}] ` : ""}${contentText(i)}: ${String(i.holding.institution).split(",")[0]}${tail ? " – " + tail : ""}`;
+    return `${i.withheld ? `[${t("Withheld", "Chưa công bố")}] ` : ""}${contentText(i)}: ${String(i.holding.institution).split(",")[0]}${tail ? " – " + tail : ""}`
+      + (hasText(i) ? ` · ${t("with Quốc ngữ", "kèm quốc ngữ")}` : "");
   }
 
   function row(dt, ...dd) {
@@ -121,6 +144,7 @@
     p.set("work", work.id);
     if (work.items.length > 1) p.set("item", item.id); else p.delete("item");
     history.replaceState(null, "", `?${p}${page > 1 ? `#p=${page}` : ""}`);
+    textLink(page);
   }
 
   async function showItem(id, page = 1) {
@@ -166,9 +190,12 @@
       $("viewer").hidden = true;
       return;
     }
-    // originals first, then editions, translations …; within each, by date
+    // a transcription not released yet: its button only for admins (the reader itself opens with a direct link)
+    try { texts = (await (await fetch("/chunom/reader/texts.json")).json()).texts.filter(x => x.work === work.id && (x.released || isAdmin())); } catch { texts = []; }
+    // copies with a transcription (readable in the reader) first, so that the first one is shown when no copy is asked for;
+    // then originals, editions, translations …; within each, by date
     const rank = Object.keys(CONTENT);
-    work.items.sort((a, b) => (rank.indexOf(a.content || "original") - rank.indexOf(b.content || "original"))
+    work.items.sort((a, b) => (hasText(b) - hasText(a)) || (rank.indexOf(a.content || "original") - rank.indexOf(b.content || "original"))
       || ((a.physical.date_earliest || 9999) - (b.physical.date_earliest || 9999)) || a.id.localeCompare(b.id));
     renderWork();
     const page = parseInt((location.hash.match(/p=(\d+)/) || [])[1] || "1", 10);
