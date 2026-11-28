@@ -54,3 +54,30 @@ main.texts-wide { max-width: 76rem; }
 .tx-fn { font-size: .62em; margin-left: .05em; color: var(--accent, currentColor); }
 .tx-notes { max-width: 34rem; margin: 1.2rem auto 0; padding-left: 1.6rem; color: var(--ink, currentColor); }
 .tx-notes li::marker { color: var(--accent, currentColor); }
+/* the waiting picture (loading()): ink blots written one after the other, verse by verse, then a pause; the step and, after a while, a hint */
+.tx-loading { padding: .6rem 0 .4rem; }
+.tx-loading-verse { display: flex; justify-content: center; gap: 2px; margin: 0 0 .8rem; }
+.tx-loading-cell { display: flex; flex-direction: column; align-items: center; width: var(--cw, 2.6rem); }
+.tx-loading-cell i { display: block; width: 72%; aspect-ratio: 1; margin: 14% 0 6%; background: var(--ink, currentColor); opacity: .07;
+  border-radius: 42% 58% 47% 53% / 55% 41% 59% 45%; transform: scale(.8) rotate(-4deg);
+  animation: tx-ink 4.2s cubic-bezier(.3, .7, .4, 1) infinite; animation-delay: calc(var(--i) * 95ms); }
+.tx-loading-cell:nth-child(3n) i { border-radius: 55% 45% 38% 62% / 47% 60% 40% 53%; }
+.tx-loading-cell:nth-child(3n+1) i { border-radius: 48% 52% 60% 40% / 40% 52% 48% 60%; }
+.tx-loading-cell b { display: block; width: 58%; height: .32rem; border-radius: 1rem; background: var(--muted, currentColor); opacity: .1;
+  animation: tx-read 4.2s ease-out infinite; animation-delay: calc(var(--i) * 95ms + 180ms); }
+@keyframes tx-ink {
+  0% { opacity: .07; transform: scale(.8) rotate(-4deg); }
+  9% { opacity: .5; transform: scale(1.03) rotate(0); }
+  18%, 72% { opacity: .3; transform: scale(1) rotate(0); }
+  100% { opacity: .07; transform: scale(.8) rotate(-4deg); }
+}
+@keyframes tx-read { 0% { opacity: .08; } 12%, 72% { opacity: .3; } 100% { opacity: .08; } }
+.tx-loading-cap { margin: .4rem 0 0; text-align: center; color: var(--muted, currentColor); }
+.tx-loading-cap .bi { display: inline-block; color: var(--accent, currentColor); animation: tx-brush 1.4s ease-in-out infinite alternate; }
+@keyframes tx-brush { from { transform: rotate(-12deg) translateX(-2px); } to { transform: rotate(10deg) translateX(2px); } }
+.tx-loading-hint { display: block; font-size: .82rem; margin-top: .25rem; opacity: 0; animation: tx-fade .8s ease 5s forwards; }
+@keyframes tx-fade { to { opacity: .85; } }
+@media (prefers-reduced-motion: reduce) {
+  .tx-loading-cell i, .tx-loading-cell b, .tx-loading-cap .bi { animation: none; opacity: .2; transform: none; }
+  .tx-loading-hint { animation: none; opacity: .85; }
+}
