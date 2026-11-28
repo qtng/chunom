@@ -15,7 +15,7 @@
        White paper, greys, and the black, red and blue of his manuscripts. Few words: points, pictures, one number. */
     :root {
       --d-ink: #161616; --d-dim: #4c4f52; --d-paper: #fdfdfc; --d-grid: rgba(60, 105, 170, .2); --d-red: #b8262e; --d-blue: #2f5f9e;
-      --d-dark: #232427; --d-light: #e9eaea; --d-cjk: "HaiMinh Medium", var(--font-cjk), serif; --d-type: "Courier New", Courier, monospace;
+      --d-dark: #232427; --d-light: #e9eaea; --d-cjk: "HaiMinh Bold", var(--font-cjk), serif; --d-type: "Courier New", Courier, monospace;
     }
     html body.grey {
       margin: 0; color: var(--d-ink); background-color: var(--d-light);
@@ -46,7 +46,7 @@
     .open .label { display: inline-block; font-family: var(--d-type); font-size: .82rem; color: var(--d-dim); letter-spacing: .06em; }
     .verse { display: flex; justify-content: center; gap: clamp(.4rem, 2vw, 1.2rem); margin: 1.1rem 0 .8rem; }
     .verse .c { width: clamp(3.8rem, 15vw, 6.4rem); }
-    .verse .glyph { position: relative; aspect-ratio: 1; --so-ink: var(--d-ink); --so-done: var(--d-ink); --so-ghost: #c9cccf; --so-width: 9; --so-font: "HaiMinh Medium", var(--font-cjk); }
+    .verse .glyph { position: relative; aspect-ratio: 1; --so-ink: var(--d-ink); --so-done: var(--d-ink); --so-ghost: #c9cccf; --so-width: 9; --so-font: "HaiMinh Bold", var(--font-cjk); }
     .verse .glyph > * { position: absolute; inset: 0; }
     .verse .glyph .dry { display: flex; align-items: center; justify-content: center; font-family: var(--d-cjk); font-size: clamp(3.2rem, 12.5vw, 5.4rem); line-height: 1; color: var(--d-ink); opacity: 0; transition: opacity .9s ease; }
     .verse .glyph.done .dry { opacity: 1; }
