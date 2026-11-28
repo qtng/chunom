@@ -475,6 +475,9 @@
     $("total").textContent = canvases.length;
     const hp = parseInt((location.hash.match(/p=(\d+)/) || [])[1] || "", 10);
     p = Math.max(1, Math.min(canvases.length, Number.isFinite(hp) ? hp - urlOffset + ownOffset : ownOffset + 1));
+    // on entering: a page without transcription (the cover, the pages after the text) opens the next page with text (else the last one)
+    if (p - ownOffset < 1) p = ownOffset + 1; else if (p - ownOffset > entry.pages) p = ownOffset + entry.pages;
+    p = Math.max(1, Math.min(canvases.length, p));
 
     const reader = $("reader");
     reader.querySelector('[data-act="prev"]').addEventListener("click", () => go(p - 1));
