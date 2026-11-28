@@ -1,7 +1,7 @@
-// The reader of a transcribed manuscript (texts/view.html?work=…&item=…#p=…): every character is cut from the scan of the library
+// The reader of a transcribed manuscript (texts/view.html?work=…&item=…#p=…, the same query as catalog/view.html: a link between the two only swaps the path): every character is cut from the scan of the library
 // (one page image, a CSS sprite per character), its reading below it. The Nôm text itself is never sent to the page, only the
-// reading and the boxes (Supabase function text_page). #p is the canvas number of the copy as in the catalogue (catalog/view.html),
-// so that both pages link to each other with the same page; texts/index.json says which copies match and how the writing is freed
+// reading and the boxes (Supabase function text_page). A transcription belongs to a copy (item); #p is the canvas number of the copy as in
+// the catalogue, so that both pages link to each other on the same page; texts/index.json says which copies show the same scan and how the writing is freed
 // from the paper ("Writing": the ink alone, as a mask in the colour of the theme; "Scan": as on the scan).
 (function () {
   "use strict";
@@ -13,7 +13,7 @@
   const store = { get() { try { return JSON.parse(localStorage.getItem("texts1")) || {}; } catch { return {}; } },
                   set(o) { try { localStorage.setItem("texts1", JSON.stringify({ ...store.get(), ...o })); } catch {} } };
 
-  let entry, urlItem, urlOffset, ownOffset, canvases = [], catalogItems = [], p = 1;
+  let entry, urlItem, urlOffset, ownOffset, canvases = [], catalogItems = [], workTexts = [], p = 1;
   let ink = store.get().ink || "clean", showPage = !!store.get().page;
   const pages = new Map();   // text page -> lines
   const cleaned = new Map(); // canvas -> blob URL of the writing alone
@@ -73,12 +73,11 @@
 
   function state() {
     const q = new URLSearchParams(location.search);
-    q.set("work", entry.work);
-    if (urlItem !== entry.item) q.set("item", urlItem); else q.delete("item");
+    q.set("work", entry.work); q.set("item", urlItem);
     history.replaceState(null, "", `?${q}#p=${urlPage()}`);
     // the same page in the catalogue: the copy asked for, else the first matching copy the catalogue has
-    const cat = catalogItems.includes(urlItem) ? urlItem : (Object.keys(entry.items).find(i => catalogItems.includes(i)) || "");
-    const cp = p - ownOffset + (entry.items[cat] ?? ownOffset);
+    const cat = catalogItems.includes(urlItem) ? urlItem : (Object.keys(entry.copies).find(i => catalogItems.includes(i)) || "");
+    const cp = p - ownOffset + (entry.copies[cat] ?? ownOffset);
     $("to-catalog").href = `/chunom/catalog/view.html?work=${encodeURIComponent(entry.work)}${cat ? `&item=${encodeURIComponent(cat)}` : ""}#p=${cp}`;
   }
 
@@ -93,6 +92,7 @@
     return { h, med };
   }
 
+  function note(text) { const m = $("note"); m.textContent = text; m.hidden = !text; }
   function message(text) { const m = $("message"); m.textContent = text; m.hidden = !text; }
 
   async function render() {
@@ -159,21 +159,41 @@
 
   async function init() {
     const q = new URLSearchParams(location.search);
-    let index, catalog;
+    let index, catalog;   // texts/index.json, catalog/catalog.json
     try { [index, catalog] = await Promise.all([fetch("/chunom/texts/index.json").then(r => r.json()), fetch("/chunom/catalog/catalog.json").then(r => r.json()).catch(() => null)]); }
     catch { $("work-title").textContent = t("The list of texts could not be loaded.", "Không tải được danh sách văn bản."); return; }
-    entry = index.works.find(w => w.work === q.get("work"));
-    if (!entry) { $("work-title").removeAttribute("data-vi"); $("work-title").textContent = t("This work has no transcription yet.", "Tác phẩm này chưa có bản phiên âm."); $("reader").hidden = true; return; }
-    const work = catalog && catalog.works.find(w => w.id === entry.work);
+    // the transcription: of the copy asked for (or a copy with the same scan), else of the work (the first, a choice when there are several)
+    const asked = q.get("item");
+    entry = index.texts.find(x => asked && x.copies[asked] != null);
+    const wk = entry ? entry.work : q.get("work");
+    workTexts = index.texts.filter(x => x.work === wk);
+    if (!entry) entry = workTexts[0];
+    const work = catalog && catalog.works.find(w => w.id === wk);
     catalogItems = work ? work.items.filter(i => !i.withheld).map(i => i.id) : [];   // withheld copies (admins only in the catalogue) are not linked
+    if (!entry) {
+      const h = $("work-title"); h.removeAttribute("data-vi");
+      h.textContent = t("This copy has no transcription yet.", "Bản này chưa có bản phiên âm."); $("reader").hidden = true;
+      if (wk) $("to-catalog").href = `/chunom/catalog/view.html?work=${encodeURIComponent(wk)}${asked ? `&item=${encodeURIComponent(asked)}` : ""}${location.hash}`;
+      return;
+    }
+    if (asked && entry.copies[asked] == null) note(t("The copy asked for has no transcription; this is the transcription of another copy.", "Bản được chọn chưa có bản phiên âm; đây là bản phiên âm của một bản khác."));
+    if (workTexts.length > 1) {   // several copies of the work have a transcription: choose one (as the copies in the catalogue)
+      const sel = $("copy-select");
+      const label = x => { const it = work && work.items.find(i => x.copies[i.id] != null && !i.withheld);
+        return it ? `${String(it.holding.institution).split(",")[0]}${it.holding.shelfmark && it.holding.shelfmark !== "not stated" ? " – " + it.holding.shelfmark : ""}` : x.item; };
+      sel.replaceChildren(...workTexts.map(x => { const o = document.createElement("option"); o.value = x.item; o.textContent = label(x); return o; }));
+      sel.value = entry.item; $("copies").hidden = false;
+      sel.addEventListener("change", () => { location.search = `?work=${encodeURIComponent(wk)}&item=${encodeURIComponent(sel.value)}`; });
+    }
     const main = work ? (work.titles || []).filter(x => (x.type || "main") === "main") : [];
     const qn = (main.find(x => x.script === "quoc-ngu") || {}).text || entry.work, han = (main.find(x => x.script === "han-nom") || {}).text;
     const h1 = $("work-title"); h1.removeAttribute("data-vi");
     if (han) { h1.textContent = han; h1.setAttribute("lang", "vi-Hani"); $("work-qn").textContent = qn; } else h1.textContent = qn;
     $("work-writer").textContent = entry.writer ? t(`Copied by ${entry.writer}`, `${entry.writer} chép`) : "";
     document.title = `${qn} – ${t("Read", "Đọc")}`;
-    urlItem = entry.items[q.get("item")] != null ? q.get("item") : entry.item;
-    urlOffset = entry.items[urlItem]; ownOffset = entry.items[entry.item];
+    // the copy in the address: the one asked for, else the first with the same scan that the catalogue shows, else the own one
+    urlItem = entry.copies[asked] != null ? asked : (Object.keys(entry.copies).find(i => catalogItems.includes(i)) || entry.item);
+    urlOffset = entry.copies[urlItem]; ownOffset = entry.copies[entry.item];
     try { canvases = readCanvases(await fetch(entry.manifest).then(r => r.json())); }
     catch { message(t("The scan could not be loaded.", "Không tải được bản quét.")); return; }
     $("total").textContent = canvases.length;

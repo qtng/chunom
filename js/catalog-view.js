@@ -47,18 +47,25 @@
     "other": ["Rights not clear", "Quyền chưa rõ"],
   };
 
-  let work, viewer, item, text;   // text: the transcription of the work (/chunom/texts/index.json), read in texts/view.html
+  let work, viewer, item, texts = [];   // texts: the transcriptions of the work (/chunom/texts/index.json), read in texts/view.html
 
-  // the link to the reader of the transcription, on the same page when the copy shown matches the transcribed one
+  // the link to the reader of the transcription: for a copy with the same scan on the same page (the same query, only the path differs),
+  // else, when another copy of the work has one, to that transcription
   function textLink(page) {
-    if (!text) return;
-    let a = $("to-text");
-    if (!a) {
-      a = el("a", { id: "to-text", class: "btn btn-sm btn-pill btn-accent" }, el("i", { class: "bi bi-book" }), " ", el("span", { "data-vi": "Đọc kèm quốc ngữ" }, "Read with Quốc ngữ"));
-      $("work-authors").after(el("p", { class: "mt-3 mb-0" }, a));
+    const own = texts.find(x => x.copies[item.id] != null), other = own ? null : texts[0];
+    let p = $("to-text");
+    if (!own && !other) { if (p) p.hidden = true; return; }
+    if (!p) {
+      p = el("p", { id: "to-text", class: "mt-3 mb-0" });
+      $("work-authors").after(p);
     }
-    const match = text.items[item.id] != null;
-    a.href = `/chunom/texts/view.html?work=${encodeURIComponent(work.id)}${match ? `&item=${encodeURIComponent(item.id)}#p=${page}` : ""}`;
+    p.hidden = false;
+    const a = own
+      ? el("a", { class: "btn btn-sm btn-pill btn-accent", href: `/chunom/texts/view.html?work=${encodeURIComponent(work.id)}&item=${encodeURIComponent(item.id)}#p=${page}` },
+          el("i", { class: "bi bi-book" }), " ", el("span", { "data-vi": "Đọc kèm quốc ngữ" }, "Read with Quốc ngữ"))
+      : el("a", { class: "btn btn-sm btn-pill btn-quiet", href: `/chunom/texts/view.html?work=${encodeURIComponent(work.id)}&item=${encodeURIComponent(other.item)}` },
+          el("i", { class: "bi bi-book" }), " ", el("span", { "data-vi": "Có bản phiên âm của một bản khác" }, "Transcription of another copy"));
+    p.replaceChildren(a);
   }
 
   function titles(w) {
@@ -184,7 +191,7 @@
     work.items.sort((a, b) => (rank.indexOf(a.content || "original") - rank.indexOf(b.content || "original"))
       || ((a.physical.date_earliest || 9999) - (b.physical.date_earliest || 9999)) || a.id.localeCompare(b.id));
     renderWork();
-    try { text = (await (await fetch("/chunom/texts/index.json")).json()).works.find(x => x.work === work.id) || null; } catch { text = null; }
+    try { texts = (await (await fetch("/chunom/texts/index.json")).json()).texts.filter(x => x.work === work.id); } catch { texts = []; }
     const page = parseInt((location.hash.match(/p=(\d+)/) || [])[1] || "1", 10);
     $("item-select").addEventListener("change", e => showItem(e.target.value));
     document.addEventListener("langchange", () => { renderWork(); $("item-select").value = item.id; renderSource(); });
