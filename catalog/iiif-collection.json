@@ -12,6 +12,15 @@
   },
   "items": [
     {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-ab-483.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "An Nam phong thổ thoại (Yale University Library (Maurice Durand collection), AB.483)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932437/manifest.json",
       "type": "Manifest",
       "label": {
@@ -48,6 +57,15 @@
       }
     },
     {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-cao-bang-thuc-luc-a-1129.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Cao Bằng thực lục (Institute of Sino-Nom Studies (Viện Nghiên cứu Hán Nôm), A.1129)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093154q/manifest.json",
       "type": "Manifest",
       "label": {
@@ -80,6 +98,15 @@
       "label": {
         "none": [
           "Chinh phụ ngâm (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 62)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Chúa Thao cổ truyện (Yale University Library (Maurice Durand collection), AN.82)"
         ]
       }
     },
@@ -237,11 +264,56 @@
       }
     },
     {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-gia-long-1817-french-ship.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Imperial record on the statement of the captain of a French ship (1817) (National Archives Centre I (Trung tâm Lưu trữ quốc gia I), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-chau-ban-gia-long-report-on-drifting.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Gia Long \"Report on Drifting\" (1817) (National Archives Centre I (Trung tâm Lưu trữ quốc gia I), Imperial Records of the Nguyễn Dynasty, vol. 3)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-1727.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hà Nội học chính thám hoa Vũ Phạm Hàm tập văn (National Library of Vietnam (Thư viện Quốc gia Việt Nam), R.1727)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-ham-nghi-thong-bao-document.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tờ trình về tiền Hàm Nghi thông bảo (Not stated on Wikimedia Commons, not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093251r/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Hàn vương tôn phú (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 58)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-hanoi-notice-dong-xuan-1923.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Notice by the City of Hanoi on land requisition for the Đồng Xuân Market (1923) (National Archives Centre I (Trung tâm Lưu trữ quốc gia I) (exhibition « Ký ức chợ xưa »), not stated)"
         ]
       }
     },
@@ -381,6 +453,42 @@
       }
     },
     {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-hoang-viet-tang-san-tan-luat.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hoàng Việt tăng san tân luật (Not stated on Wikimedia Commons, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-phosphates-du-tonkin-advertisement.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hỡi các nhà nông (advertisement of Phosphates du Tonkin) (Not stated on Wikimedia Commons, not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-272.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Hội thí văn tuyển (National Library of Vietnam (Thư viện Quốc gia Việt Nam), R.272)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-temple-imperial-dragon-order-of-dai-nam-bestowed-to-nguye.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Imperial Dragon Order of Đại Nam bestowed to Nguyễn Hữu Tiễn (Temple University Libraries, Digital Collections (Vietnam Nôm Manuscripts Field Digitization Project), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b105000092/manifest.json",
       "type": "Manifest",
       "label": {
@@ -440,6 +548,15 @@
       "label": {
         "none": [
           "Lão bạng sinh châu diễn truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 100)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-le-chan-tong-document.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Document in chữ Nôm written by a Westerner (reign of Lê Chân Tông) (Not stated on Wikimedia Commons, not stated)"
         ]
       }
     },
@@ -633,6 +750,15 @@
       }
     },
     {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nguyen-thi-tay-son-ky.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Nguyễn thị Tây Sơn ký (École française d'Extrême-Orient (as credited on Commons), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093280j/manifest.json",
       "type": "Manifest",
       "label": {
@@ -768,6 +894,33 @@
       }
     },
     {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-1018.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Sơ Học Vấn Tân (National Library of Vietnam (Thư viện Quốc gia Việt Nam), R.1018)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-temple-state-appointment-by-emperor-khai-dinh-bestowed-to.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "State appointment by Emperor Khải Định bestowed to Prince Consort Nguyễn Hữu Tiễn (Temple University Libraries, Digital Collections (Vietnam Nôm Manuscripts Field Digitization Project), not stated)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-temple-state-appointment-by-emperor-thanh-thai-bestowed-t.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "State appointment by Emperor Thành Thái bestowed to Nguyễn Hữu Tiễn (Temple University Libraries, Digital Collections (Vietnam Nôm Manuscripts Field Digitization Project), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100934252/manifest.json",
       "type": "Manifest",
       "label": {
@@ -804,6 +957,15 @@
       }
     },
     {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-tan-vien-son-thanh-chan-kinh.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tản Viên sơn thánh chân kinh (National Library of Vietnam (Thư viện Quốc gia Việt Nam), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10093158h/manifest.json",
       "type": "Manifest",
       "label": {
@@ -831,11 +993,38 @@
       }
     },
     {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-pham-hong-thai-letter.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thư viết bằng chữ Nôm, được cho là của Phạm Hồng Thái (Not stated on Wikimedia Commons (file « Attentat de Shameem 19 Juin 1924 »), not stated)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b100932560/manifest.json",
       "type": "Manifest",
       "label": {
         "none": [
           "Thu dạ lữ hoài ngâm (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 63)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-580.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thượng dụ huấn điều (National Library of Vietnam (Thư viện Quốc gia Việt Nam), R.580)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-nlv-r-2033.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Thượng dụ huấn điều sao bản giải âm (National Library of Vietnam (Thư viện Quốc gia Việt Nam), R.2033)"
         ]
       }
     },
@@ -926,6 +1115,15 @@
       "label": {
         "none": [
           "Tuyển phu ngộ phối tân truyện (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien B 102)"
+        ]
+      }
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-tuyet-thu.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Tuyết thư (Not stated on Wikimedia Commons, not stated)"
         ]
       }
     },

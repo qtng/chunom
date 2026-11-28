@@ -1,0 +1,3491 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "Chúa Thao cổ truyện (Yale University Library (Maurice Durand collection), AN.82)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, 主滔古傳.pdf – original: Yale University Library (Maurice Durand collection), AN.82"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page1-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/2",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "2"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/2/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/2/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/2",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page2-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/3",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "3"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/3/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/3/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/3",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page3-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/4",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "4"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/4/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/4/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/4",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page4-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/5",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "5"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/5/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/5/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/5",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page5-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/6",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "6"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/6/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/6/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/6",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page6-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/7",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "7"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/7/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/7/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/7",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page7-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/8",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "8"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/8/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/8/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/8",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page8-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/9",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "9"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/9/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/9/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/9",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page9-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/10",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "10"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/10/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/10/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/10",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page10-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/11",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "11"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/11/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/11/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/11",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page11-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/12",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "12"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/12/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/12/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/12",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page12-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/13",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "13"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/13/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/13/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/13",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page13-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/14",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "14"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/14/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/14/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/14",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page14-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/15",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "15"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/15/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/15/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/15",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page15-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/16",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "16"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/16/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/16/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/16",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page16-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/17",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "17"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/17/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/17/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/17",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page17-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/18",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "18"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/18/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/18/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/18",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page18-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/19",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "19"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/19/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/19/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/19",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page19-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/20",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "20"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/20/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/20/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/20",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page20-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/21",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "21"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/21/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/21/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/21",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page21-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/22",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "22"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/22/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/22/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/22",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page22-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/23",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "23"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/23/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/23/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/23",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page23-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/24",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "24"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/24/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/24/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/24",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page24-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/25",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "25"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/25/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/25/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/25",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page25-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/26",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "26"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/26/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/26/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/26",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page26-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/27",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "27"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/27/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/27/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/27",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page27-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/28",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "28"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/28/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/28/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/28",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page28-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/29",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "29"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/29/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/29/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/29",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page29-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/30",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "30"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/30/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/30/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/30",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page30-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/31",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "31"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/31/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/31/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/31",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page31-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/32",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "32"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/32/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/32/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/32",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page32-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/33",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "33"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/33/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/33/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/33",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page33-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/34",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "34"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/34/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/34/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/34",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page34-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/35",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "35"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/35/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/35/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/35",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page35-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/36",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "36"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/36/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/36/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/36",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page36-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/37",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "37"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/37/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/37/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/37",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page37-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/38",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "38"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/38/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/38/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/38",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page38-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/39",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "39"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/39/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/39/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/39",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page39-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/40",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "40"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/40/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/40/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/40",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page40-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/41",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "41"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/41/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/41/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/41",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page41-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/42",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "42"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/42/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/42/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/42",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page42-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/43",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "43"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/43/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/43/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/43",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page43-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/44",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "44"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/44/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/44/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/44",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page44-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/45",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "45"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/45/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/45/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/45",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page45-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/46",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "46"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/46/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/46/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/46",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page46-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/47",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "47"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/47/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/47/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/47",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page47-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/48",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "48"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/48/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/48/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/48",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page48-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/49",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "49"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/49/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/49/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/49",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page49-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/50",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "50"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/50/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/50/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/50",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page50-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/51",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "51"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/51/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/51/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/51",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page51-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/52",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "52"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/52/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/52/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/52",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page52-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/53",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "53"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/53/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/53/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/53",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page53-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/54",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "54"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/54/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/54/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/54",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page54-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/55",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "55"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/55/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/55/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/55",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page55-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/56",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "56"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/56/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/56/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/56",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page56-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/57",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "57"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/57/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/57/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/57",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page57-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/58",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "58"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/58/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/58/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/58",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page58-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/59",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "59"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/59/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/59/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/59",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page59-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/60",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "60"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/60/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/60/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/60",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page60-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/61",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "61"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/61/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/61/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/61",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page61-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/62",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "62"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/62/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/62/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/62",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page62-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/63",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "63"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/63/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/63/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/63",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page63-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/64",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "64"
+        ]
+      },
+      "width": 900,
+      "height": 1229,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/64/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/64/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-yale-an-82.json/canvas/64",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf/page64-1920px-%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 900,
+                "height": 1229
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3A%E4%B8%BB%E6%BB%94%E5%8F%A4%E5%82%B3.pdf",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

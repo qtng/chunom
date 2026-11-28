@@ -1,0 +1,143 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-hanoi-notice-dong-xuan-1923.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "Notice by the City of Hanoi on land requisition for the Đồng Xuân Market (1923) (National Archives Centre I (Trung tâm Lưu trữ quốc gia I) (exhibition « Ký ức chợ xưa »), not stated)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, Notice by the City of Hanoi regarding land requisition to widen the street for the Đồng Xuân Market (27 October 1923) 01.png"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/File%3ANotice_by_the_City_of_Hanoi_regarding_land_requisition_to_widen_the_street_for_the_%C4%90%E1%BB%93ng_Xu%C3%A2n_Market_%2827_October_1923%29_01.png",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-hanoi-notice-dong-xuan-1923.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 2313,
+      "height": 2185,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-hanoi-notice-dong-xuan-1923.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-hanoi-notice-dong-xuan-1923.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-hanoi-notice-dong-xuan-1923.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Notice_by_the_City_of_Hanoi_regarding_land_requisition_to_widen_the_street_for_the_%C4%90%E1%BB%93ng_Xu%C3%A2n_Market_%2827_October_1923%29_01.png/1920px-Notice_by_the_City_of_Hanoi_regarding_land_requisition_to_widen_the_street_for_the_%C4%90%E1%BB%93ng_Xu%C3%A2n_Market_%2827_October_1923%29_01.png",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 2313,
+                "height": 2185
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Notice_by_the_City_of_Hanoi_regarding_land_requisition_to_widen_the_street_for_the_%C4%90%E1%BB%93ng_Xu%C3%A2n_Market_%2827_October_1923%29_01.png",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANotice_by_the_City_of_Hanoi_regarding_land_requisition_to_widen_the_street_for_the_%C4%90%E1%BB%93ng_Xu%C3%A2n_Market_%2827_October_1923%29_01.png",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-hanoi-notice-dong-xuan-1923.json/canvas/2",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "2"
+        ]
+      },
+      "width": 1960,
+      "height": 1510,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-hanoi-notice-dong-xuan-1923.json/canvas/2/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-hanoi-notice-dong-xuan-1923.json/canvas/2/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-hanoi-notice-dong-xuan-1923.json/canvas/2",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Notice_by_the_City_of_Hanoi_regarding_land_requisition_to_widen_the_street_for_the_%C4%90%E1%BB%93ng_Xu%C3%A2n_Market_%2827_October_1923%29_02.png/1920px-Notice_by_the_City_of_Hanoi_regarding_land_requisition_to_widen_the_street_for_the_%C4%90%E1%BB%93ng_Xu%C3%A2n_Market_%2827_October_1923%29_02.png",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 1960,
+                "height": 1510
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/5/5f/Notice_by_the_City_of_Hanoi_regarding_land_requisition_to_widen_the_street_for_the_%C4%90%E1%BB%93ng_Xu%C3%A2n_Market_%2827_October_1923%29_02.png",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ANotice_by_the_City_of_Hanoi_regarding_land_requisition_to_widen_the_street_for_the_%C4%90%E1%BB%93ng_Xu%C3%A2n_Market_%2827_October_1923%29_02.png",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

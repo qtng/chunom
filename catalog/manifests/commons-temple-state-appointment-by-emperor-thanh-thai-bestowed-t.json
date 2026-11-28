@@ -1,0 +1,89 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-temple-state-appointment-by-emperor-thanh-thai-bestowed-t.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "State appointment by Emperor Thành Thái bestowed to Nguyễn Hữu Tiễn (Temple University Libraries, Digital Collections (Vietnam Nôm Manuscripts Field Digitization Project), not stated)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, State appointment by Emperor Thành Thái bestowed to Nguyễn Hữu Tiễn.jpg"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/File%3AState_appointment_by_Emperor_Th%C3%A0nh_Th%C3%A1i_bestowed_to_Nguy%E1%BB%85n_H%E1%BB%AFu_Ti%E1%BB%85n.jpg",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-temple-state-appointment-by-emperor-thanh-thai-bestowed-t.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 4096,
+      "height": 2731,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-temple-state-appointment-by-emperor-thanh-thai-bestowed-t.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-temple-state-appointment-by-emperor-thanh-thai-bestowed-t.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-temple-state-appointment-by-emperor-thanh-thai-bestowed-t.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/State_appointment_by_Emperor_Th%C3%A0nh_Th%C3%A1i_bestowed_to_Nguy%E1%BB%85n_H%E1%BB%AFu_Ti%E1%BB%85n.jpg/1920px-State_appointment_by_Emperor_Th%C3%A0nh_Th%C3%A1i_bestowed_to_Nguy%E1%BB%85n_H%E1%BB%AFu_Ti%E1%BB%85n.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 4096,
+                "height": 2731
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/8/80/State_appointment_by_Emperor_Th%C3%A0nh_Th%C3%A1i_bestowed_to_Nguy%E1%BB%85n_H%E1%BB%AFu_Ti%E1%BB%85n.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3AState_appointment_by_Emperor_Th%C3%A0nh_Th%C3%A1i_bestowed_to_Nguy%E1%BB%85n_H%E1%BB%AFu_Ti%E1%BB%85n.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

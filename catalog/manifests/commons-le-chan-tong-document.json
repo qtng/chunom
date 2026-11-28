@@ -1,0 +1,89 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-le-chan-tong-document.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "Document in chữ Nôm written by a Westerner (reign of Lê Chân Tông) (Not stated on Wikimedia Commons, not stated)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, Chữ Nôm thời Lê (Lê Chân Tông) nhưng do Tây viết ! - Bùi Quang Tuấn.jpg"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/File%3ACh%E1%BB%AF_N%C3%B4m_th%E1%BB%9Di_L%C3%AA_%28L%C3%AA_Ch%C3%A2n_T%C3%B4ng%29_nh%C6%B0ng_do_T%C3%A2y_vi%E1%BA%BFt_%21_-_B%C3%B9i_Quang_Tu%E1%BA%A5n.jpg",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-le-chan-tong-document.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 884,
+      "height": 1452,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-le-chan-tong-document.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-le-chan-tong-document.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-le-chan-tong-document.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Ch%E1%BB%AF_N%C3%B4m_th%E1%BB%9Di_L%C3%AA_%28L%C3%AA_Ch%C3%A2n_T%C3%B4ng%29_nh%C6%B0ng_do_T%C3%A2y_vi%E1%BA%BFt_%21_-_B%C3%B9i_Quang_Tu%E1%BA%A5n.jpg/500px-Ch%E1%BB%AF_N%C3%B4m_th%E1%BB%9Di_L%C3%AA_%28L%C3%AA_Ch%C3%A2n_T%C3%B4ng%29_nh%C6%B0ng_do_T%C3%A2y_vi%E1%BA%BFt_%21_-_B%C3%B9i_Quang_Tu%E1%BA%A5n.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 884,
+                "height": 1452
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Ch%E1%BB%AF_N%C3%B4m_th%E1%BB%9Di_L%C3%AA_%28L%C3%AA_Ch%C3%A2n_T%C3%B4ng%29_nh%C6%B0ng_do_T%C3%A2y_vi%E1%BA%BFt_%21_-_B%C3%B9i_Quang_Tu%E1%BA%A5n.jpg",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ACh%E1%BB%AF_N%C3%B4m_th%E1%BB%9Di_L%C3%AA_%28L%C3%AA_Ch%C3%A2n_T%C3%B4ng%29_nh%C6%B0ng_do_T%C3%A2y_vi%E1%BA%BFt_%21_-_B%C3%B9i_Quang_Tu%E1%BA%A5n.jpg",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

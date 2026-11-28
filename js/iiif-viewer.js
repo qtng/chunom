@@ -52,8 +52,9 @@
   function commonsUrl(url, width, max) {
     const m = url && url.match(COMMONS_THUMB);
     if (!m) return null;
-    // a thumbnail wider than the original is refused: stay at or below the original width
-    const allowed = max ? COMMONS_WIDTHS.filter(x => x <= max) : COMMONS_WIDTHS;
+    // a thumbnail wider than the original image is refused: stay at or below its width
+    // (pages of a PDF/DjVu are rendered at any standard width, so no limit there)
+    const allowed = max && !m[2] ? COMMONS_WIDTHS.filter(x => x <= max) : COMMONS_WIDTHS;
     const widths = allowed.length ? allowed : [COMMONS_WIDTHS[0]];
     const w = widths.find(x => x >= width) || widths[widths.length - 1];
     return `${m[1]}${m[2]}${w}px-${m[4]}`;

@@ -1,0 +1,89 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://chunom.org/chunom/catalog/manifests/commons-pham-hong-thai-letter.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "Thư viết bằng chữ Nôm, được cho là của Phạm Hồng Thái (Not stated on Wikimedia Commons (file « Attentat de Shameem 19 Juin 1924 »), not stated)"
+    ]
+  },
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "none": [
+        "Wikimedia Commons, Thư viết bằng chữ Nôm, được cho là của Phạm Hồng Thái.webp"
+      ]
+    }
+  },
+  "homepage": [
+    {
+      "id": "https://commons.wikimedia.org/wiki/File%3ATh%C6%B0_vi%E1%BA%BFt_b%E1%BA%B1ng_ch%E1%BB%AF_N%C3%B4m%2C_%C4%91%C6%B0%E1%BB%A3c_cho_l%C3%A0_c%E1%BB%A7a_Ph%E1%BA%A1m_H%E1%BB%93ng_Th%C3%A1i.webp",
+      "type": "Text",
+      "label": {
+        "en": [
+          "Wikimedia Commons"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "https://chunom.org/chunom/catalog/manifests/commons-pham-hong-thai-letter.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "1"
+        ]
+      },
+      "width": 2000,
+      "height": 1500,
+      "items": [
+        {
+          "id": "https://chunom.org/chunom/catalog/manifests/commons-pham-hong-thai-letter.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://chunom.org/chunom/catalog/manifests/commons-pham-hong-thai-letter.json/canvas/1/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://chunom.org/chunom/catalog/manifests/commons-pham-hong-thai-letter.json/canvas/1",
+              "body": {
+                "id": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Th%C6%B0_vi%E1%BA%BFt_b%E1%BA%B1ng_ch%E1%BB%AF_N%C3%B4m%2C_%C4%91%C6%B0%E1%BB%A3c_cho_l%C3%A0_c%E1%BB%A7a_Ph%E1%BA%A1m_H%E1%BB%93ng_Th%C3%A1i.webp/1920px-Th%C6%B0_vi%E1%BA%BFt_b%E1%BA%B1ng_ch%E1%BB%AF_N%C3%B4m%2C_%C4%91%C6%B0%E1%BB%A3c_cho_l%C3%A0_c%E1%BB%A7a_Ph%E1%BA%A1m_H%E1%BB%93ng_Th%C3%A1i.webp",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 2000,
+                "height": 1500
+              }
+            }
+          ]
+        }
+      ],
+      "rendering": [
+        {
+          "id": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Th%C6%B0_vi%E1%BA%BFt_b%E1%BA%B1ng_ch%E1%BB%AF_N%C3%B4m%2C_%C4%91%C6%B0%E1%BB%A3c_cho_l%C3%A0_c%E1%BB%A7a_Ph%E1%BA%A1m_H%E1%BB%93ng_Th%C3%A1i.webp",
+          "type": "Image",
+          "label": {
+            "en": [
+              "Original file"
+            ]
+          }
+        }
+      ],
+      "homepage": [
+        {
+          "id": "https://commons.wikimedia.org/wiki/File%3ATh%C6%B0_vi%E1%BA%BFt_b%E1%BA%B1ng_ch%E1%BB%AF_N%C3%B4m%2C_%C4%91%C6%B0%E1%BB%A3c_cho_l%C3%A0_c%E1%BB%A7a_Ph%E1%BA%A1m_H%E1%BB%93ng_Th%C3%A1i.webp",
+          "type": "Text",
+          "label": {
+            "en": [
+              "File page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
