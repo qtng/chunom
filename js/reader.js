@@ -450,7 +450,7 @@
       if (wk) $("to-catalog").href = `/chunom/catalog/view.html?work=${encodeURIComponent(wk)}${asked ? `&item=${encodeURIComponent(asked)}` : ""}${location.hash}`;
       return;
     }
-    if (!entry.released) note(t("Not released yet: this transcription is still being checked and is not shown in the catalogue.", "Chưa công bố: bản phiên âm này đang được kiểm tra và chưa hiện trong thư mục."));
+    if (!entry.released) note(t("Not released yet: this transcription is still being checked and is not shown in the catalogue or the Bookshelf.", "Chưa công bố: bản phiên âm này đang được kiểm tra và chưa hiện trong thư mục và tủ sách."));
     if (asked && entry.copies[asked] == null) note(t("The copy asked for has no transcription; this is the transcription of another copy.", "Bản được chọn chưa có bản phiên âm; đây là bản phiên âm của một bản khác."));
     if (workTexts.length > 1) {   // several copies of the work have a transcription: choose one (as the copies in the catalogue)
       const sel = $("copy-select");

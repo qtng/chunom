@@ -280,6 +280,43 @@ Loaded only by the pages of shelf/ (a work: the switches and IDS; the table of c
     follow();
   }
 
+  // the table of contents: the transcriptions of the reader (/chunom/reader/texts.json, the scan with its reading) as cards among the works, in the order of the titles;
+  // released ones for everybody, the others for admins only (with a badge); a copy of Maurice Durand with the ribbon of his collection
+  var works = !read && document.querySelector('main .works');
+  if (works) readerCards(works);
+  function sortKey(t) { return (t || '').toLowerCase().replace(/đ/g, 'd').normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+  function readerCards(box) {
+    var admin = false;
+    try { admin = ((JSON.parse(localStorage.getItem('sb-kfgqhhmdzboszpwsqkxt-auth-token')) || {}).user || {}).app_metadata.is_admin === true; } catch (e) { /* not signed in */ }
+    Promise.all([fetch('/chunom/reader/texts.json').then(function (r) { return r.json(); }), fetch('/chunom/catalog/catalog.json').then(function (r) { return r.json(); }).catch(function () { return null; })])
+      .then(function (res) {
+        res[0].texts.filter(function (x) { return x.released || admin; }).forEach(function (x) {
+          var w = res[1] && res[1].works.filter(function (v) { return v.id === x.work; })[0];
+          var main = w ? (w.titles || []).filter(function (t) { return (t.type || 'main') === 'main'; }) : [];
+          var pick = function (sc) { return (main.filter(function (t) { return t.script === sc; })[0] || {}).text; };
+          var qn = pick('quoc-ngu') || x.work, han = pick('han-nom');
+          var a = document.createElement('a');
+          a.className = 'card-box work d-block text-decoration-none reader-card' + (x.cover ? ' card-cover' : '') + (x.writer === 'Maurice Durand' ? ' durand' : '');
+          a.href = '/chunom/reader/?work=' + encodeURIComponent(x.work) + '&item=' + encodeURIComponent(x.item);
+          var esc = function (t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; };
+          var head = (han ? '<span class="nom" lang="vi-Hani">' + esc(han) + '</span>\n' : '') + '<span class="qn">' + esc(qn) + '</span>';
+          var sum = x.summary ? '<span class="card-sum text-secondary"><span data-vi="' + esc(x.summary.vi) + '">' + esc(x.summary.en) + '</span></span>' : '';
+          var line = '<small class="d-block text-secondary"><span class="cd"><i class="bi bi-image"></i> <span data-vi="Bản quét kèm phiên âm,">Scan with its reading,</span> ' +
+            '<span data-vi="' + x.pages + ' trang">' + x.pages + ' pages</span></span>' +
+            (x.writer ? '<span class="cd"><span data-vi="' + esc(x.writer) + ' chép">copied by ' + esc(x.writer) + '</span></span>' : '') + '</small>';
+          var badge = x.released ? '' : ' <span class="badge-withheld" data-vi="Chưa công bố">Not released</span>';
+          var ribbon = x.writer === 'Maurice Durand' ? '<span class="ribbon"><span data-vi="Sưu tập Maurice Durand">Maurice Durand Collection</span></span>' : '';
+          a.innerHTML = x.cover
+            ? ribbon + '<img class="bg" src="' + esc(x.cover) + '" alt="" loading="lazy"><div class="head">' + head + badge + '</div><div class="body">' + sum + line + '</div>'
+            : ribbon + head + badge + sum + line;
+          // among the works, in the order of the titles (as build_shelf.py sorts them)
+          var k = sortKey(qn), before = null;
+          box.querySelectorAll(':scope > .work').forEach(function (c) { var q = c.querySelector('.qn'); if (!before && q && sortKey(q.textContent) > k) before = c; });
+          box.insertBefore(a, before);
+        });
+      }).catch(function () { /* the works of the Bookshelf only */ });
+  }
+
   var legend = document.querySelector('.legend');
   if (document.querySelector('span.ids')) {
     if (legend) {
