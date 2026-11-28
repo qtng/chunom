@@ -26,6 +26,18 @@
     "other": ["Not determined yet", "Chưa xác định"],
   };
 
+  const SCRIPTS = {
+    "nom": ["Chữ Nôm", "Chữ Nôm"],
+    "han-nom": ["Chữ Hán with Nôm parts", "Chữ Hán kèm chữ Nôm"],
+    "han": ["Chữ Hán only", "Chỉ chữ Hán"],
+    "unknown": ["Not determined yet", "Chưa xác định"],
+  };
+  const BASIS = {
+    "source": ["stated by the library", "theo mô tả của thư viện"],
+    "known-work": ["known work", "tác phẩm đã biết"],
+    "scan": ["checked on the scan", "đã kiểm tra trên bản quét"],
+  };
+
   let work, viewer, item;
 
   function titles(w) {
@@ -47,7 +59,13 @@
   function renderSource() {
     const i = item, lic = i.license || {};
     const typ = TYPES[i.physical.type] || [i.physical.type, i.physical.type];
+    const sc = SCRIPTS[work.script || "unknown"] || SCRIPTS.unknown;
+    const basis = BASIS[work.script_basis];
     const dl = el("dl", { class: "row meta mb-0" },
+      ...row(t("Script of the text", "Loại chữ của văn bản"),
+        el("span", { class: `badge-script script-${work.script || "unknown"}` }, t(sc[0], sc[1])),
+        basis ? el("span", { class: "text-secondary" }, ` (${t(basis[0], basis[1])})`) : null,
+        work.script_evidence ? el("span", { class: "d-block text-secondary source-text" }, work.script_evidence) : null),
       ...row(t("Library", "Thư viện"), i.holding.institution + (i.holding.city ? `, ${i.holding.city}` : "")),
       ...row(t("Shelfmark", "Ký hiệu"), i.holding.shelfmark),
       ...(i.physical.date ? row(t("Date of the copy", "Niên đại của bản"), i.physical.date) : []),
