@@ -7,6 +7,15 @@
   const $ = id => document.getElementById(id);
   const t = (en, vi) => (window.Lang ? Lang.t(en, vi) : en);
 
+  // the script of the text (catalog/script.yaml of qtng/chunom-library); "unknown" until decided
+  const SCRIPTS = {
+    "nom": ["Chữ Nôm", "Chữ Nôm"],
+    "han-nom": ["Hán with Nôm", "Chữ Hán kèm chữ Nôm"],
+    "han": ["Chữ Hán", "Chữ Hán"],
+  };
+  const scriptOf = w => w.script || "unknown";
+  const matchesScript = (w, s) => !s || (s === "with-nom" ? ["nom", "han-nom"].includes(scriptOf(w)) : scriptOf(w) === s);
+
   // short name of a library for the cards and the filter
   const libraryName = inst => String(inst || "").split(",")[0].trim();
 
@@ -62,7 +71,9 @@
       libs, years(work), typeText,
     ].filter(Boolean).join(" · ");
     const nc = work.items.some(i => i.license && i.license.commercial_use === false);
+    const sc = SCRIPTS[scriptOf(work)];
     return el("a", { class: "card-box work d-block text-decoration-none", href: `view.html?work=${encodeURIComponent(work.id)}` },
+      sc ? el("span", { class: `badge-script script-${scriptOf(work)}` }, t(sc[0], sc[1])) : null,
       han ? el("span", { class: "nom", lang: "vi-Hani" }, han) : null,
       el("span", { class: "qn" }, qn),
       authorLine(work) ? el("span", { class: "card-sum text-secondary" }, authorLine(work)) : null,
@@ -75,16 +86,17 @@
 
   function render() {
     const q = fold($("q").value.trim());
-    const lib = $("library").value, type = $("type").value;
+    const lib = $("library").value, type = $("type").value, script = $("script").value;
     const shown = works.filter(w =>
       (!q || q.split(/\s+/).every(word => w._hay.includes(word))) &&
+      matchesScript(w, script) &&
       (!lib || w.items.some(i => libraryName(i.holding.institution) === lib)) &&
       (!type || w.items.some(i => i.physical.type === type)));
     $("works").replaceChildren(...shown.map(card));
     $("count").textContent = t(`${shown.length} of ${works.length} works`, `${shown.length} trên ${works.length} tác phẩm`);
     // keep the search in the address, so it can be shared and survives going back
     const params = new URLSearchParams(location.search);
-    for (const [k, v] of [["q", $("q").value.trim()], ["library", lib], ["type", type]]) v ? params.set(k, v) : params.delete(k);
+    for (const [k, v] of [["q", $("q").value.trim()], ["script", script], ["library", lib], ["type", type]]) v ? params.set(k, v) : params.delete(k);
     const qs = params.toString();
     history.replaceState(null, "", qs ? `?${qs}` : location.pathname);
   }
@@ -110,10 +122,12 @@
     $("q").value = params.get("q") || "";
     if (libs.includes(params.get("library"))) $("library").value = params.get("library");
     $("type").value = params.get("type") || "";
+    $("script").value = params.get("script") || "";
 
     $("q").addEventListener("input", render);
     $("library").addEventListener("change", render);
     $("type").addEventListener("change", render);
+    $("script").addEventListener("change", render);
     document.addEventListener("langchange", render);
     render();
   }

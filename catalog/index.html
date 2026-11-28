@@ -33,15 +33,26 @@
 <main class="container py-4">
 <form class="catalog-filters card-box" role="search" onsubmit="return false">
   <div class="row g-2 align-items-end">
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-lg-5">
       <label class="form-label small mb-1" for="q" data-vi="Tìm kiếm">Search</label>
       <input class="form-control" id="q" type="search" autocomplete="off" placeholder="Kim Vân Kiều, 金雲翹, Nguyễn Du, Vietnamien B 109 …" data-vi-placeholder="Kim Vân Kiều, 金雲翹, Nguyễn Du, Vietnamien B 109 …">
     </div>
-    <div class="col-6 col-md-3">
+    <div class="col-12 col-sm-4 col-lg-3">
+      <label class="form-label small mb-1" for="script" data-vi="Loại chữ">Script</label>
+      <select class="form-select" id="script">
+        <option value="" data-vi="Tất cả">All</option>
+        <option value="with-nom" data-vi="Có chữ Nôm">Contains chữ Nôm</option>
+        <option value="nom" data-vi="Chữ Nôm">Chữ Nôm</option>
+        <option value="han-nom" data-vi="Chữ Hán kèm chữ Nôm">Hán with Nôm</option>
+        <option value="han" data-vi="Chữ Hán">Chữ Hán</option>
+        <option value="unknown" data-vi="Chưa xác định">Not determined yet</option>
+      </select>
+    </div>
+    <div class="col-6 col-sm-4 col-lg-2">
       <label class="form-label small mb-1" for="library" data-vi="Thư viện">Library</label>
       <select class="form-select" id="library"><option value="" data-vi="Tất cả">All</option></select>
     </div>
-    <div class="col-6 col-md-3">
+    <div class="col-6 col-sm-4 col-lg-2">
       <label class="form-label small mb-1" for="type" data-vi="Loại bản">Type of copy</label>
       <select class="form-select" id="type">
         <option value="" data-vi="Tất cả">All</option>

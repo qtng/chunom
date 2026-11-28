@@ -1,9 +1,15 @@
 {
-  "generated": "2026-11-28T04:18:58+00:00",
+  "generated": "2026-11-28T04:53:26+00:00",
   "counts": {
     "works": 75,
     "items": 104,
-    "crowd_ok": 0
+    "crowd_ok": 0,
+    "script": {
+      "nom": 23,
+      "han-nom": 8,
+      "han": 13,
+      "unknown": 31
+    }
   },
   "works": [
     {
@@ -21,8 +27,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Ấu học ngũ ngôn. 幼 学 五 言 詩”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han-nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien A 55: « Phrases de 5 caractères avec traduction littérale en vietnamien »",
       "items": [
         {
           "id": "bnf-vietnamien-a-55",
@@ -82,8 +90,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “白猿孫各傳. Bạch Viên Tôn các truyện”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-114",
@@ -140,8 +148,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “碧溝奇遇. Bích Câu kỳ ngộ”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "known-work",
+      "script_evidence": "Bích Câu kỳ ngộ, a Nôm verse tale in lục bát.",
       "items": [
         {
           "id": "bnf-vietnamien-b-88",
@@ -201,8 +211,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Bướm hoa tân truyện. 花新傳”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-82",
@@ -262,8 +272,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Cao Vương Quan Thế Âm kinh. 高王觀世音經”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-23",
@@ -320,8 +330,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Chàng chuối tân truyện. 新傳”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien B 79: « Roman en vers 6-8 »",
       "items": [
         {
           "id": "bnf-vietnamien-b-79",
@@ -378,8 +390,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “昭君貢胡書. Chiếu-quân cống hồ thư”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-121",
@@ -447,8 +459,10 @@
           "role": "author"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Đặng Trần Côn (1705-1745). Chinh phụ ngâm. 征婦吟. Traduit du chinois par Đoàn Thị Điểm (段氏點).”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien B 62: « Traduit du chinois par la poétesse Đoàn Thị Điểm » – the Nôm translation of Đặng Trần Côn's poem",
       "items": [
         {
           "id": "bnf-vietnamien-b-62",
@@ -514,8 +528,10 @@
           "role": "author"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Nguyễn Gia Thiều (阮嘉韶, 1741-1798)宮怨吟曲. Cung oán ngâm khúc”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "known-work",
+      "script_evidence": "Nguyễn Gia Thiều's Cung oán ngâm khúc, a Nôm poem in song thất lục bát.",
       "items": [
         {
           "id": "bnf-vietnamien-b-92",
@@ -575,8 +591,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Nguyễn Trọng Hiệp. Đại Nam chính biên liệt truyện. 大南正编列傳”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien A 21: language stated as chi/zho (Chinese)",
       "items": [
         {
           "id": "bnf-vietnamien-a-21",
@@ -636,8 +654,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Trương Đăng Quế. Đại Nam liệt truyện tiền biên 張登桂. 大南列傳前编. Vietnamien A 20 (1)”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien A 20: language stated as chi/zho (Chinese)",
       "items": [
         {
           "id": "bnf-vietnamien-a-20-1",
@@ -778,8 +798,10 @@
           "role": "author"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Bureau officiel de rédaction (1847-1884)Đại Nam nhất thống chí. 大南ー統志”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han",
+      "script_basis": "known-work",
+      "script_evidence": "The official geography of the Nguyễn dynasty (Quốc sử quán), written in literary Chinese.",
       "items": [
         {
           "id": "bnf-vietnamien-a-65",
@@ -881,8 +903,10 @@
           "role": "author"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Lê Ngô Cát (黎吳吉). Đại Nam Quốc sử Diễn ca. 大南國史演歌 revu et adapté par Phạm Đình Toái (范 庭 碎)”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "known-work",
+      "script_evidence": "Đại Nam quốc sử diễn ca, the history of Vietnam in Nôm verse (lục bát).",
       "items": [
         {
           "id": "bnf-vietnamien-b-110",
@@ -942,8 +966,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Đai-nam thật-lục chính-biên. 大南寔錄正編. Préface de”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien A 26: « Ouvrages en caractères chinois constituant les annales »",
       "items": [
         {
           "id": "bnf-vietnamien-a-26",
@@ -1003,8 +1029,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “大越史記全書. Đại Việt sử ký toàn thư”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han",
+      "script_basis": "known-work",
+      "script_evidence": "The official chronicle of Đại Việt, written in literary Chinese.",
       "items": [
         {
           "id": "bnf-vietnamien-a-102",
@@ -1064,8 +1092,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Địa tạng bản hạnh. 地臟本行”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien B 73: « Biographie romancée en vers (6-8) du bodhisattva Địa tạng »",
       "items": [
         {
           "id": "bnf-vietnamien-b-73",
@@ -1148,13 +1178,15 @@
       "date": "1838",
       "date_earliest": 1838,
       "date_latest": 1838,
-      "script": "han-nom",
       "genre": [
         "dictionary",
         "từ điển"
       ],
       "description": "Vietnamese–Latin dictionary. Every entry gives the Hán/Nôm spelling, the Quốc ngữ form and the Latin meaning; the second part is Latin–Vietnamese. Begun by Pigneau de Béhaine, completed and edited by Taberd, printed in Serampore in 1838. An important source for early 19th-century Nôm spellings.",
       "notes": "Chinese title as on the title page of the 1838 edition – verify against the scan when cataloguing.",
+      "script": "han-nom",
+      "script_basis": "scan",
+      "script_evidence": "BSB 4 L.as. 26-1, image 280 (p. 222): every entry has its Hán/Nôm character, the Quốc ngữ form and the Latin meaning.",
       "items": [
         {
           "id": "bnf-vietnamien-c-1",
@@ -1255,8 +1287,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Minh Chương. 揚玉古跡. Dương Ngọc cổ-tích”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-126",
@@ -1320,8 +1352,8 @@
           "role": "author"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Phan Vinh (潘榮). Dương tiết diễn nghĩa. 陽節演義”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-20",
@@ -1381,8 +1413,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Gia Định báo. 嘉定報.”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien A 43: « Journal officiel de Cochinchine en caractèrse chinois, 1862-1865 »",
       "items": [
         {
           "id": "bnf-vietnamien-a-43",
@@ -1448,8 +1482,10 @@
           "role": "author"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Trịnh Hoài Đức (chữ Hán: 鄭懷德; 1765 - 1825). Gia Định thành thông chí . 嘉定城通志”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han",
+      "script_basis": "known-work",
+      "script_evidence": "Trịnh Hoài Đức's gazetteer of Gia Định, written in literary Chinese.",
       "items": [
         {
           "id": "bnf-vietnamien-a-74",
@@ -1506,8 +1542,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Đặng Trần Thường. Hàn vương tôn phú. 韓王孫賦”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-58",
@@ -1573,8 +1609,10 @@
           "role": "author"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Nguyễn Huy Tự (阮輝嗣, 1743-1790). 花笺潤正. Hoa-Tiên nhuận chính, remanié par Nguyễn Thiện.”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "known-work",
+      "script_evidence": "Nguyễn Huy Tự's Hoa tiên truyện (revised by Nguyễn Thiện), a Nôm verse tale in lục bát.",
       "items": [
         {
           "id": "bnf-vietnamien-b-98",
@@ -1634,8 +1672,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Hoà ước thư. 和約書. Traité de paix entre la France et le Vietnam (1862)”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien A 27: « Traité franco-hispano-vietnamien du 5 décembre 1862. En caractères chinois. »",
       "items": [
         {
           "id": "bnf-vietnamien-a-27",
@@ -1736,8 +1776,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Hoàng trừ truyện. 皇儲傳”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien B 65: « Roman versifié (6-8) »",
       "items": [
         {
           "id": "bnf-vietnamien-b-65",
@@ -1805,8 +1847,10 @@
           "role": "author"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Nguyêñ, Văn Thành (1757-1817). 皇越律例. Hoàng Việt luật lệ. Nguyêñ, Văn Thành (1757-1817). 皇越律例. Hoàng Việt luật lệ. Binh luật 兵律”. Author name normalized from the source form “Nguyêñ, Văn Thành”. Quốc ngữ title normalized from the source form “Hoàng Việt luật lệ”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han",
+      "script_basis": "known-work",
+      "script_evidence": "The legal code of the Nguyễn dynasty (Gia Long code), written in literary Chinese.",
       "items": [
         {
           "id": "bnf-vietnamien-a-1-1",
@@ -2283,8 +2327,10 @@
           "role": "author"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Nguyễn Văn Thắng (阮文勝). 金雲翹案. Kim Vân Kiêu án”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien B 99: « 依據越南阮朝法律來評論金雲翹故事人物的喃文著作 »",
       "items": [
         {
           "id": "bnf-vietnamien-b-99",
@@ -2344,8 +2390,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Kim Vân Kiều lục. 金雲翹錄”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-a-60",
@@ -2405,8 +2451,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “金雲翹賦. Kim-Vân-Kiều phú.”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien B 69: « 關於王翠翹身世的六八體喃文賦 »",
       "items": [
         {
           "id": "bnf-vietnamien-b-69",
@@ -2473,8 +2521,10 @@
           "role": "author"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Nguyêñ Du (阮攸). 金雲翹新傳. Kim Vân Kiều tân truyện”. Author name normalized from the source form “Nguyêñ Du”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "known-work",
+      "script_evidence": "Nguyễn Du's Truyện Kiều, a verse tale in lục bát written in chữ Nôm.",
       "items": [
         {
           "id": "bnf-vietnamien-b-109",
@@ -2534,8 +2584,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “林生新書. Lâm sinh tân thư”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien B 125: « Nouveau livre sur Lâm sinh, en vers lục bát »",
       "items": [
         {
           "id": "bnf-vietnamien-b-125",
@@ -2595,8 +2647,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Lâm tuyền kỳ ngộ. 林泉奇遇”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-80",
@@ -2656,8 +2708,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “老 蚌 生 珠 演 傳. Lão bạng sinh châu diễn truyện.”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-a-100",
@@ -2717,8 +2769,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Lưu-Bình phú. 劉平賦”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-84",
@@ -2775,8 +2827,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “李公新書. Lý-công tân-thư”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-112",
@@ -2836,8 +2888,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Lý-công tân-truyện. 李公新傳”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien B 78: « Roman en vers 6-8 »",
       "items": [
         {
           "id": "bnf-vietnamien-b-78",
@@ -2897,8 +2951,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Minh-tâm báu-giám thích-nghiã. 明心寶監釋義”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-a-58",
@@ -2958,8 +3012,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Nam-kỳ lục-tỉnh báo.南 圻 六 省 報”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien A 42: « Journal officiel de la Cochinchine, 5 numéros en langue chinoise »",
       "items": [
         {
           "id": "bnf-vietnamien-a-42",
@@ -3019,8 +3075,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Anonyme. Nam quốc giai sự. 南國佳事”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-a-80",
@@ -3077,8 +3133,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Nam-vô tân-truyện. 南無新傳”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-83",
@@ -3147,8 +3203,10 @@
           "role": "author"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Lý Văn Phức (李文馥, 1785–1849), Ngọc Kiều Lê tân truyện. 玉喬黎新傳”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "known-work",
+      "script_evidence": "Lý Văn Phức's Ngọc Kiều Lê tân truyện, a Nôm verse tale (BnF B 64 « Roman en vers adapté d'un roman chinois »).",
       "items": [
         {
           "id": "bnf-vietnamien-b-64",
@@ -3208,8 +3266,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “五更賦. Ngũ canh phú”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-100",
@@ -3266,7 +3324,6 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Title/author corrected by hand (WORK_OVERRIDES in scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Tự Ðưć. 御劇越南”. Verify against the scan.",
       "authors": [
         {
@@ -3277,6 +3334,9 @@
           "died": 1883
         }
       ],
+      "script": "han",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien A 29: « En caractères chinois. Préface de l'empereur (1874) »",
       "items": [
         {
           "id": "bnf-vietnamien-a-29",
@@ -3787,8 +3847,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “二度梅演歌. Nhị độ mai diễn ca”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien B 108: « Adaptation d'un roman chinois. Versifié en luc-bat »",
       "items": [
         {
           "id": "bnf-vietnamien-b-108",
@@ -3848,8 +3910,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Nữ-Lưu tương truyện. 女劉將傳”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-72",
@@ -3909,8 +3971,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “翁寧古情. Ông ninh cổ-truyện”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-95",
@@ -3967,8 +4029,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Dương Minh Đức. (范公菊花. Phạm-công Cúc-Hoa”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien B 124: « Poème épique en vers lục bát »",
       "items": [
         {
           "id": "bnf-vietnamien-b-124",
@@ -4028,8 +4092,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “風情新傳 . Phong-tinh tân-truyện”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-101",
@@ -4093,8 +4157,10 @@
           "role": "author"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Lê Quý Đôn (黎貴惇). Phủ Biên tạp lục撫邊雜錄”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien A 18: language stated as chi/zho (Chinese)",
       "items": [
         {
           "id": "bnf-vietnamien-a-18",
@@ -4154,8 +4220,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Cư sĩ Trúc Lâm. Phù-dung tân-truyện. 芙 蓉 新 傳.”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-77",
@@ -4215,8 +4281,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Nguyễn Bảo. Phương Sơn từ chí lược鳳山祠志畧”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-a-64",
@@ -4273,8 +4339,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Quan âm chú giải tân truyện. 觀音註觧新傳”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-66",
@@ -4334,8 +4400,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Quan-âm-phú. 觀音賦”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-24",
@@ -4392,8 +4458,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Quan-âm tống-tử bản hạnh. 觀音送子本行”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-71",
@@ -4462,8 +4528,10 @@
           "role": "author"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Cao Xuân Dục (高春育; 1843–1923). Quốc Triều Hương Khoa Lục. 國朝鄉科錄”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han",
+      "script_basis": "known-work",
+      "script_evidence": "Cao Xuân Dục's list of the laureates of the regional examinations, written in literary Chinese.",
       "items": [
         {
           "id": "bnf-vietnamien-a-72",
@@ -4523,7 +4591,6 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Title/author corrected by hand (WORK_OVERRIDES in scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Zhu YaoSách-học đề-cương. 策學隄綱”. Verify against the scan.",
       "authors": [
         {
@@ -4531,6 +4598,7 @@
           "role": "attributed"
         }
       ],
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-a-35",
@@ -4590,8 +4658,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Sơ Học Vấn Tân. 初學問津”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han-nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien B 26: « sau mỗi câu chữ Hán làm theo thể văn vần 4 chữ là giải thích bằng chữ Nôm »; A 57: « imprimé en caractèrs chinois avec traduction en vietnamien en Chữ Nôm »",
       "items": [
         {
           "id": "bnf-vietnamien-a-57",
@@ -4692,8 +4762,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Tam thiên tự giải âm . 三千字解音”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han-nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien A 52: « Recueil de 3000 caractères chinois avec le sens en vietnamien »",
       "items": [
         {
           "id": "bnf-vietnamien-a-52",
@@ -4794,8 +4866,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Tam-tự kinh thích nghiã. 三字經釋義”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han-nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien A 56: « Livre des trois caractères avec traduction mot à mot en chữ nôm »",
       "items": [
         {
           "id": "bnf-vietnamien-a-56",
@@ -4896,8 +4970,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “石生李通書. Thạch-sanh Lý-Thông thư”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "known-work",
+      "script_evidence": "Thạch Sanh, a Nôm verse tale in lục bát.",
       "items": [
         {
           "id": "bnf-vietnamien-b-116",
@@ -4954,8 +5030,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Thiên tự văn giải âm. 千字文解音”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han-nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien A 16: « Recueil de mille caractères chinois avec leur sens en vietnamien »",
       "items": [
         {
           "id": "bnf-vietnamien-a-16",
@@ -5015,8 +5093,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “通國土産. Thông guỡc thổ sản.”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han-nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien A 32: « Liste des noms en chinois, suivis parfois de noms vietnamiens »",
       "items": [
         {
           "id": "bnf-vietnamien-a-32",
@@ -5082,8 +5162,10 @@
           "role": "author"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Đinh Nhật Thận (丁日慎, 1815-1866). Thu dạ lữ hoài ngâm. 秋夜旅懷吟”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "known-work",
+      "script_evidence": "Đinh Nhật Thận's Thu dạ lữ hoài ngâm, a Nôm poem in song thất lục bát.",
       "items": [
         {
           "id": "bnf-vietnamien-b-63",
@@ -5140,8 +5222,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “翠翹詩集. Thuý Kiều thi-tập. .”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien B 59: « 共錄35首喃文七言八句體詩 »",
       "items": [
         {
           "id": "bnf-vietnamien-b-59",
@@ -5198,8 +5282,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Thuý-sơn thu mộng ký. 翠山秋夢記”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-74",
@@ -5256,8 +5340,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Duy Minh. 趙五娘書. Triệu Ngũ-nương thư”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien B 127: « roman en vers lục bát »",
       "items": [
         {
           "id": "bnf-vietnamien-b-127",
@@ -5323,8 +5409,10 @@
           "role": "author"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Hò̂ Huyè̂n Qui (14..-14..). 貞鼠傳. Trinh thử truyện.”. Author name normalized from the source form “Hò̂ Huyè̂n Qui”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien B 89: « Roman fable en vers lục bát »",
       "items": [
         {
           "id": "bnf-vietnamien-b-89",
@@ -5384,8 +5472,10 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Đỗ Hạ Xuyên. 中軍對歌. Trung quân đối ca”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien B 87: « roman en vers 6-8 »",
       "items": [
         {
           "id": "bnf-vietnamien-b-87",
@@ -5445,8 +5535,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Duy-minh. 張僥傳. Trương Ngáo truyện”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-118",
@@ -5503,8 +5593,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “張悟演歌. Trương Ngộ diễn-ca”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-113",
@@ -5570,7 +5660,6 @@
           "lang": "la"
         }
       ],
-      "script": "han-nom",
       "notes": "Title/author corrected by hand (WORK_OVERRIDES in scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Girolamo Maiorica. 傳主支秋 Truyện chúa Giê thu, De vita Christi”. Verify against the scan.",
       "authors": [
         {
@@ -5580,6 +5669,9 @@
           "died": 1656
         }
       ],
+      "script": "nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien B 1: « Manuscrit en langue vietnamienne et chu nom relatant la vie de Jésus Christ »",
       "items": [
         {
           "id": "bnf-vietnamien-b-1",
@@ -5636,8 +5728,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “四體筆式. Tứ thế bụt thức”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-a-15",
@@ -5700,8 +5792,8 @@
           "role": "author"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Phúc Bình Lê (福平黎)選夫誤配新傳Tuyển phu ngộ phối tân truyện”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-b-102",
@@ -5770,8 +5862,10 @@
           "role": "author"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “Nguyễn Trãi (阮廌,1380–19/9/1442). Ức Trai tập. 抑齋集”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "han-nom",
+      "script_basis": "source",
+      "script_evidence": "BnF Vietnamien A 68: « comprenant 5 chapitres : Poésie, Prose, Lettres adressées aux généraux du pays, Poésie en langue vietnamienne »",
       "items": [
         {
           "id": "bnf-vietnamien-a-68-1-4",
@@ -5831,8 +5925,8 @@
           "type": "main"
         }
       ],
-      "script": "han-nom",
       "notes": "Generated automatically (scripts/catalog_from_candidates.py) from the source title as stated by BnF/Europeana: “御製詩五集總目二 目錄二”. Verify title, author and script (Hán/Nôm) against the scan.",
+      "script": "unknown",
       "items": [
         {
           "id": "bnf-vietnamien-a-106",
