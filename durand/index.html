@@ -66,6 +66,9 @@
     /* the light part */
     .wrap { max-width: 62rem; margin: 0 auto; padding: 4.5rem 1rem 1rem; }
     html body.grey .wrap h2 { font-size: clamp(1.7rem, 4.6vw, 2.3rem); margin: 0 0 1rem; }
+    .bio { max-width: 40rem; margin: 0 auto 5rem; }
+    .bio p { font-size: 1.1rem; line-height: 1.75; margin-bottom: 1.1rem; }
+    .bio p:first-of-type::first-letter { float: left; font-family: Georgia, "Times New Roman", serif; font-size: 3.4rem; line-height: .9; margin: .35rem .5rem 0 0; color: var(--d-red); }
     .work { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 2.6rem; align-items: center; }
     @media (max-width: 767.98px) { .work { grid-template-columns: 1fr; } }
     .page { margin: 0; transform: rotate(-2deg); }
@@ -159,6 +162,14 @@
 </section>
 
 <div class="wrap">
+  <section class="bio reveal">
+    <h2><span data-vi="Cuộc đời">His life</span></h2>
+    <p>Maurice Durand was born in Hanoi on 2 August 1914. His father, Gustave Durand, was chief translator at the court of justice in Hanoi; his mother, Nguyễn Thị Bình, came from Kiến An. He grew up with both languages.</p>
+    <p>In the Second World War he served as an officer in Cameroon and Chad. In 1946 he returned to Hanoi and joined the École française d’Extrême-Orient, where he taught and which he later directed. In Paris he taught Vietnamese at the École pratique des hautes études.</p>
+    <p>His subject was Vietnamese literature as it had lived for centuries in Chữ Nôm: tales in verse, the songs of ca trù, the poems of Hồ Xuân Hương. He edited and translated them, wrote <i>Connaissance du Viêt-Nam</i> with Pierre Huard, and gathered the texts themselves in notebooks, the characters in black brush and the reading in red below.</p>
+    <p class="mb-0">He died in Paris in 1966, at fifty-one. His book on Hồ Xuân Hương and his introduction to Vietnamese literature appeared after his death. His library and papers, with those of his father, went to Yale University in 1967.</p>
+  </section>
+
   <section class="work reveal">
     <figure class="page">
       <a href="/chunom/reader/?work=chua-thao-co-truyen&amp;item=yale-10732464#p=5" aria-label="Chúa Thao cổ truyện in the reader">
