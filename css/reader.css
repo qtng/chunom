@@ -49,6 +49,4 @@ main.texts-wide { max-width: 76rem; }
 .tx-ctx { cursor: grab; touch-action: none; user-select: none; overflow: hidden; }
 .tx-ctx.dragging { cursor: grabbing; }
 .tx-punct { color: var(--muted, currentColor); }
-.tx-in-punct { width: 3rem; flex: 0 0 auto; text-align: center; }
-.tx-quick { display: flex; flex-wrap: wrap; gap: .15rem; }
-.tx-quick .btn { padding: 0 .45rem; min-width: 1.8rem; }
+.tx-in-punct { width: 5rem; flex: 0 0 auto; }

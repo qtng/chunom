@@ -286,12 +286,14 @@
     qIn.value = qn || "";
     const uIn = el("input", { type: "checkbox", class: "form-check-input", id: "tx-unsure-in" }); uIn.checked = !!oc[2];
     const nIn = el("input", { class: "form-control form-control-sm", autocomplete: "off", placeholder: t("Note", "Ghi chú") }); nIn.value = oc[3] || "";
-    // the punctuation of the edition before and after the reading; quick buttons for the mark after it
-    const pbIn = el("input", { class: "form-control form-control-sm tx-in-punct", maxlength: 4, autocomplete: "off", "aria-label": t("Before", "Trước"), placeholder: "“" }); pbIn.value = pb0 || "";
-    const paIn = el("input", { class: "form-control form-control-sm tx-in-punct", maxlength: 4, autocomplete: "off", "aria-label": t("After", "Sau"), placeholder: "," }); paIn.value = pa0 || "";
-    const quick = el("div", { class: "tx-quick" }, ...[",", ".", "?", "!", ":", ";", "…", "”"].map(c =>
-      el("button", { type: "button", class: "btn btn-sm btn-quiet", onclick: () => { paIn.value = paIn.value === c ? "" : c; } }, c)),
-      el("button", { type: "button", class: "btn btn-sm btn-quiet", title: t("No punctuation", "Không dấu câu"), onclick: () => { pbIn.value = ""; paIn.value = ""; } }, "×"));
+    // the punctuation of the edition before and after the reading: two lists (a value not in them is kept as an extra option)
+    const PB = ["", "“", "(", "‘", "[", "«"], PA = ["", ",", ".", "?", "!", ":", ";", "…", "”", ")", "’", "]", "»", ",”", ".”", "?”", "!”", ".)", ",)"];
+    const sel = (list, v, label) => {
+      const e = el("select", { class: "form-select form-select-sm tx-in-punct", "aria-label": label });
+      for (const c of (v && !list.includes(v) ? [...list, v] : list)) e.append(el("option", { value: c }, c || "–"));
+      e.value = v || ""; return e;
+    };
+    const pbIn = sel(PB, pb0, t("Before", "Trước")), paIn = sel(PA, pa0, t("After", "Sau"));
     const forms = el("div", { class: "tx-forms" });
     const err = el("div", { class: "tx-err small", hidden: true });
     let pt; const preview = () => { clearTimeout(pt); pt = setTimeout(() => (isIds(gIn.value.trim()) ? drawGlyph(prev, gIn.value.trim()) : (prev.textContent = "")), 200); };
@@ -324,7 +326,7 @@
       el("label", { class: "small" }, t("Character", "Chữ")), el("div", { class: "tx-row" }, gIn, prev),
       forms,
       el("label", { class: "small" }, t("Reading", "Âm đọc")), qIn,
-      el("label", { class: "small" }, t("Punctuation (before / after)", "Dấu câu (trước / sau)")), el("div", { class: "tx-row" }, pbIn, paIn, quick),
+      el("label", { class: "small" }, t("Punctuation (before / after)", "Dấu câu (trước / sau)")), el("div", { class: "tx-row" }, pbIn, el("span", { class: "small text-body-secondary" }, t("reading", "âm đọc")), paIn),
       el("div", { class: "form-check mt-1" }, uIn, el("label", { class: "form-check-label small", for: "tx-unsure-in" }, t("Unsure", "Chưa chắc"))),
       nIn, err,
       el("div", { class: "tx-pop-actions" },
