@@ -177,8 +177,10 @@
     const px = (v, s) => v / 10000 * s;
     let cw = 0;
     for (const l of lines) for (const [, b] of l.cells) if (b) cw = Math.max(cw, px(b[2] - b[0], W));
-    cw = Math.ceil(Math.min(Math.max(cw, h * 0.9), h * 1.08));
-    const ch = Math.ceil(h * 1.12);
+    cw = Math.ceil(Math.min(Math.max(cw, h * 0.9), h * 1.08));   // the usual width; a wider character gets a wider cell (below)
+    let bh = 0;
+    for (const l of lines) for (const [, b] of l.cells) if (b) bh = Math.max(bh, px(b[3] - b[1], H));
+    const ch = Math.ceil(Math.max(h * 1.12, bh * 1.04));   // the whole box of the tallest character fits
     box.style.setProperty("--cw", cw + "px"); box.style.setProperty("--ch", ch + "px");
     const src = mask || imageUrl(cv);
     const frag = [], notes = [];
@@ -192,7 +194,9 @@
         const sp = document.createElement("span"); sp.className = "tx-sp" + (mask ? " ink" : "");
         if (b) {
           const cx = px((b[0] + b[2]) / 2, W), cy = px((b[1] + b[3]) / 2, H);
-          const size = `${W}px ${H}px`, pos = `${-(cx - cw / 2)}px ${-(cy - ch / 2)}px`;
+          const w = Math.max(cw, Math.ceil(px(b[2] - b[0], W) * 1.04));   // never narrower than the box (the red frame of the popover)
+          if (w > cw) { cell.style.width = w + "px"; sp.style.width = w + "px"; }
+          const size = `${W}px ${H}px`, pos = `${-(cx - w / 2)}px ${-(cy - ch / 2)}px`;
           if (mask) Object.assign(sp.style, { webkitMaskImage: `url("${src}")`, maskImage: `url("${src}")`, webkitMaskSize: size, maskSize: size, webkitMaskPosition: pos, maskPosition: pos });
           else Object.assign(sp.style, { backgroundImage: `url("${src}")`, backgroundSize: size, backgroundPosition: pos });
           const ov = document.createElement("span"); ov.className = "tx-box"; ov.dataset.k = cell.dataset.k;
