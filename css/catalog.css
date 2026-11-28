@@ -1,4 +1,4 @@
-/* The catalogue of Hán-Nôm scans (catalog/): layout only. Colours come from the variables of the theme
+/* The catalogue of Hán-Nôm scans (catalog/index.html and the badges shared with the scan viewer): layout only. Colours come from the variables of the theme
    (--ink, --muted, --line, --accent) and from currentColor, so the dark theme (future) works too. */
 .catalog-filters { margin-bottom: 1rem; }
 .badge-script { display: inline-block; padding: 0 .45rem; border: 1px solid var(--line, currentColor); border-radius: 1rem; font-size: .75rem; line-height: 1.5; color: var(--muted, currentColor); }
@@ -6,22 +6,4 @@
 .works .badge-script { float: right; margin: .2rem 0 0 .4rem; }
 .badge-withheld { display: inline-block; padding: 0 .35rem; border: 1px dashed var(--accent, currentColor); border-radius: .3rem; font-size: .72rem; color: var(--accent, currentColor); }
 .badge-nc { display: inline-block; padding: 0 .35rem; border: 1px solid var(--line, currentColor); border-radius: .3rem; font-size: .72rem; letter-spacing: .03em; }
-main.catalog-wide { max-width: 76rem; }
-.catalog-items { max-width: 36rem; }
 
-.iiif-viewer { padding: .6rem; }
-.iiif-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin-bottom: .5rem; }
-.iiif-pageno { display: inline-flex; align-items: center; gap: .3rem; }
-.iiif-pageno input { width: 4.5rem; }
-.iiif-label { max-width: 14rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.iiif-stage { position: relative; height: min(78vh, 60rem); overflow: auto; background: color-mix(in srgb, currentColor 5%, transparent); border: 1px solid var(--line, currentColor); border-radius: .5rem; text-align: center; outline: none; touch-action: pan-x pan-y pinch-zoom; }
-.iiif-stage:focus-visible { outline: 2px solid var(--accent, currentColor); outline-offset: 2px; }
-.iiif-stage img { display: inline-block; max-width: none; user-select: none; -webkit-user-drag: none; }
-.iiif-stage.zoomed { cursor: grab; text-align: left; }
-.iiif-stage.dragging { cursor: grabbing; }
-.iiif-message { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; margin: 0; padding: 2rem; color: var(--muted, currentColor); }
-.iiif-thumbs { display: flex; gap: .4rem; overflow-x: auto; padding: .5rem .1rem .2rem; }
-.iiif-thumbs button { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: .1rem; padding: .2rem; border: 2px solid transparent; border-radius: .35rem; background: none; font-size: .7rem; color: var(--muted, currentColor); }
-.iiif-thumbs button.active { border-color: var(--accent, currentColor); color: var(--accent, currentColor); }
-.iiif-thumbs img { width: 56px; height: 78px; object-fit: contain; background: color-mix(in srgb, currentColor 5%, transparent); }
-#source .source-text, #source .credit { white-space: pre-line; }

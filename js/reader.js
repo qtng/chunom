@@ -1,7 +1,7 @@
-// The reader of a transcribed manuscript (texts/view.html?work=…&item=…#p=…, the same query as catalog/view.html: a link between the two only swaps the path): every character is cut from the scan of the library
+// The reader: a transcribed manuscript (reader/?work=…&item=…#p=…, the same query as catalog/scan.html: a link between the two only swaps the path): every character is cut from the scan of the library
 // (one page image, a CSS sprite per character), its reading below it. The Nôm text itself is never sent to the page, only the
 // reading and the boxes (Supabase function text_page). A transcription belongs to a copy (item); #p is the canvas number of the copy as in
-// the catalogue, so that both pages link to each other on the same page; texts/index.json says which copies show the same scan and how the writing is freed
+// the catalogue, so that both pages link to each other on the same page; reader/texts.json says which copies show the same scan and how the writing is freed
 // from the paper ("Writing": the ink alone, as a mask in the colour of the theme; "Scan": as on the scan).
 (function () {
   "use strict";
@@ -78,7 +78,7 @@
     // the same page in the catalogue: the copy asked for, else the first matching copy the catalogue has
     const cat = catalogItems.includes(urlItem) ? urlItem : (Object.keys(entry.copies).find(i => catalogItems.includes(i)) || "");
     const cp = p - ownOffset + (entry.copies[cat] ?? ownOffset);
-    $("to-catalog").href = `/chunom/catalog/view.html?work=${encodeURIComponent(entry.work)}${cat ? `&item=${encodeURIComponent(cat)}` : ""}#p=${cp}`;
+    $("to-catalog").href = `/chunom/catalog/scan.html?work=${encodeURIComponent(entry.work)}${cat ? `&item=${encodeURIComponent(cat)}` : ""}#p=${cp}`;
   }
 
   function sizes(lines) {
@@ -159,8 +159,8 @@
 
   async function init() {
     const q = new URLSearchParams(location.search);
-    let index, catalog;   // texts/index.json, catalog/catalog.json
-    try { [index, catalog] = await Promise.all([fetch("/chunom/texts/index.json").then(r => r.json()), fetch("/chunom/catalog/catalog.json").then(r => r.json()).catch(() => null)]); }
+    let index, catalog;   // reader/texts.json, catalog/catalog.json
+    try { [index, catalog] = await Promise.all([fetch("/chunom/reader/texts.json").then(r => r.json()), fetch("/chunom/catalog/catalog.json").then(r => r.json()).catch(() => null)]); }
     catch { $("work-title").textContent = t("The list of texts could not be loaded.", "Không tải được danh sách văn bản."); return; }
     // the transcription: of the copy asked for (or a copy with the same scan), else of the work (the first, a choice when there are several)
     const asked = q.get("item");
@@ -173,7 +173,7 @@
     if (!entry) {
       const h = $("work-title"); h.removeAttribute("data-vi");
       h.textContent = t("This copy has no transcription yet.", "Bản này chưa có bản phiên âm."); $("reader").hidden = true;
-      if (wk) $("to-catalog").href = `/chunom/catalog/view.html?work=${encodeURIComponent(wk)}${asked ? `&item=${encodeURIComponent(asked)}` : ""}${location.hash}`;
+      if (wk) $("to-catalog").href = `/chunom/catalog/scan.html?work=${encodeURIComponent(wk)}${asked ? `&item=${encodeURIComponent(asked)}` : ""}${location.hash}`;
       return;
     }
     if (!entry.released) note(t("Not released yet: this transcription is still being checked and is not shown in the catalogue.", "Chưa công bố: bản phiên âm này đang được kiểm tra và chưa hiện trong thư mục."));

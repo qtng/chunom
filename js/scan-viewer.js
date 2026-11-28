@@ -1,4 +1,4 @@
-// One work of the catalogue (catalog/view.html?work=…&item=…#p=…): title, the copies or volumes, the viewer,
+// The scan viewer: one work of the catalogue (catalog/scan.html?work=…&item=…#p=…): title, the copies or volumes, the viewer,
 // and the source with its licence. Data: /chunom/catalog/catalog.json (built in qtng/chunom-library).
 (function () {
   "use strict";
@@ -47,7 +47,7 @@
     "other": ["Rights not clear", "Quyền chưa rõ"],
   };
 
-  let work, viewer, item, texts = [];   // texts: the transcriptions of the work (/chunom/texts/index.json), read in texts/view.html
+  let work, viewer, item, texts = [];   // texts: the transcriptions of the work (/chunom/reader/texts.json), read in reader/
 
   // the link to the reader of the transcription: for a copy with the same scan on the same page (the same query, only the path differs),
   // else, when another copy of the work has one, to that transcription
@@ -61,9 +61,9 @@
     }
     p.hidden = false;
     const a = own
-      ? el("a", { class: "btn btn-sm btn-pill btn-accent", href: `/chunom/texts/view.html?work=${encodeURIComponent(work.id)}&item=${encodeURIComponent(item.id)}#p=${page}` },
+      ? el("a", { class: "btn btn-sm btn-pill btn-accent", href: `/chunom/reader/?work=${encodeURIComponent(work.id)}&item=${encodeURIComponent(item.id)}#p=${page}` },
           el("i", { class: "bi bi-book" }), " ", el("span", { "data-vi": "Đọc kèm quốc ngữ" }, "Read with Quốc ngữ"))
-      : el("a", { class: "btn btn-sm btn-pill btn-quiet", href: `/chunom/texts/view.html?work=${encodeURIComponent(work.id)}&item=${encodeURIComponent(other.item)}` },
+      : el("a", { class: "btn btn-sm btn-pill btn-quiet", href: `/chunom/reader/?work=${encodeURIComponent(work.id)}&item=${encodeURIComponent(other.item)}` },
           el("i", { class: "bi bi-book" }), " ", el("span", { "data-vi": "Có bản phiên âm của một bản khác" }, "Transcription of another copy"));
     const tx = own || other;
     p.replaceChildren(a, tx.released ? "" : el("span", { class: "badge-withheld ms-2" }, t("Not released", "Chưa công bố")));
@@ -193,7 +193,7 @@
       || ((a.physical.date_earliest || 9999) - (b.physical.date_earliest || 9999)) || a.id.localeCompare(b.id));
     renderWork();
     // a transcription not released yet: its button only for admins (the reader itself opens with a direct link)
-    try { texts = (await (await fetch("/chunom/texts/index.json")).json()).texts.filter(x => x.work === work.id && (x.released || isAdmin())); } catch { texts = []; }
+    try { texts = (await (await fetch("/chunom/reader/texts.json")).json()).texts.filter(x => x.work === work.id && (x.released || isAdmin())); } catch { texts = []; }
     const page = parseInt((location.hash.match(/p=(\d+)/) || [])[1] || "1", 10);
     $("item-select").addEventListener("change", e => showItem(e.target.value));
     document.addEventListener("langchange", () => { renderWork(); $("item-select").value = item.id; renderSource(); });

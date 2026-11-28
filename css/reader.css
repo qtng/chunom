@@ -1,4 +1,4 @@
-/* The reader of transcribed manuscripts (texts/view.html): layout only; colours from the theme (--ink, --muted, --line, --accent, currentColor). */
+/* The reader of transcribed manuscripts (reader/): layout only; colours from the theme (--ink, --muted, --line, --accent, currentColor). */
 main.texts-wide { max-width: 76rem; }
 .tx-reader { padding: .6rem; }
 .tx-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin-bottom: .75rem; }
