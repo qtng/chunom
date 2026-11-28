@@ -309,6 +309,13 @@ Loaded only by the pages of shelf/ (a work: the switches and IDS; the table of c
           a.innerHTML = x.cover
             ? ribbon + '<img class="bg" src="' + esc(x.cover) + '" alt="" loading="lazy"><div class="head">' + head + badge + '</div><div class="body">' + sum + line + '</div>'
             : ribbon + head + badge + sum + line;
+          // the ribbon leads to the page of his collection (a link of its own inside the card: a click, Enter)
+          var rb = a.querySelector('.ribbon');
+          if (rb) {
+            rb.setAttribute('role', 'link'); rb.tabIndex = 0; rb.title = 'Maurice Durand Collection';
+            var go = function (e) { if (e.type === 'keydown' && e.key !== 'Enter') return; e.preventDefault(); e.stopPropagation(); location.href = '/chunom/durand/'; };
+            rb.addEventListener('click', go); rb.addEventListener('keydown', go);
+          }
           // among the works, in the order of the titles (as build_shelf.py sorts them)
           var k = sortKey(qn), before = null;
           box.querySelectorAll(':scope > .work').forEach(function (c) { var q = c.querySelector('.qn'); if (!before && q && sortKey(q.textContent) > k) before = c; });

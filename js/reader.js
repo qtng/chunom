@@ -526,7 +526,9 @@
     const qn = (main.find(x => x.script === "quoc-ngu") || {}).text || entry.work, han = (main.find(x => x.script === "han-nom") || {}).text;
     const h1 = $("work-title"); h1.removeAttribute("data-vi");
     if (han) { h1.textContent = han; h1.setAttribute("lang", "vi-Hani"); $("work-qn").textContent = qn; } else h1.textContent = qn;
-    $("work-writer").textContent = entry.writer ? t(`Copied by ${entry.writer}`, `${entry.writer} chép`) : "";
+    // the writer; Maurice Durand links to the page of his collection
+    const by = el("span", { "data-vi": "Bản chép tay của" }, "Copied by");
+    $("work-writer").replaceChildren(...(entry.writer ? [by, " ", entry.writer === "Maurice Durand" ? el("a", { href: "/chunom/durand/" }, entry.writer) : entry.writer] : []));
     document.title = `${qn} – ${t("Read", "Đọc")}`;
     // the copy in the address: the one asked for, else the first with the same scan that the catalogue shows, else the own one
     urlItem = entry.copies[asked] != null ? asked : (Object.keys(entry.copies).find(i => catalogItems.includes(i)) || entry.item);
