@@ -16,6 +16,13 @@
   let entry, urlItem, urlOffset, ownOffset, canvases = [], catalogItems = [], workTexts = [], p = 1;
   let ink = store.get().ink || "clean", showPage = !!store.get().page;
   const pages = new Map();   // text page -> lines
+  // the translations (text_passages_page): a passage is a range of lines (by seq, across pages), shown below its last line; en always, vi where it helps
+  let showTrans = store.get().trans !== false;
+  const passPages = new Map(); // text page -> {lines: [[line, seq]], passages: [[id, seq_from, seq_to, en, vi, checked]]}
+  function passagesOf(n) {
+    if (!passPages.has(n)) passPages.set(n, rpc("text_passages_page", { p_item: entry.item, p_page: n }).catch(() => { passPages.delete(n); return { lines: [], passages: [] }; }));
+    return passPages.get(n);
+  }
   // the owner (app_metadata.is_owner, checked by the database): the Nôm of every token (text_page_owner), editing (text_token_update)
   const QATT = "https://qatt.org/";
   let owner = false, unsureOn = !!store.get().unsure, cur = null, pop = null;
@@ -193,6 +200,7 @@
     message("");
     loading(t("Loading the text …", "Đang tải văn bản …"));
     let lines;
+    const passP = passagesOf(n);
     try { lines = await linesOf(n); } catch { loading(null); message(t("The text could not be loaded.", "Không tải được văn bản.")); return; }
     if (mine !== p) return;
     let own = null;
@@ -200,8 +208,11 @@
       try { own = await ownOf(n); if (!owner) { owner = true; ownerUi(); } } catch (e) { if (e.code === "42501") { owner = false; ownerUi(); } }
       if (mine !== p) return;
     }
+    const pass = await passP;
+    if (mine !== p) return;
     closePop();
-    cur = { n, lines, own, cv };
+    cur = { n, lines, own, cv, pass };
+    const seqOf = new Map(pass.lines), ends = new Map(pass.passages.map(x => [x[2], x]));
     let mask = null;
     loading(t("Loading the scan …", "Đang tải bản quét …"));
     if (ink === "clean") { try { mask = await cleanUrl(cv); } catch { mask = null; } if (mine !== p) return; }
@@ -228,6 +239,7 @@
     const frag = [], notes = [];
     lines.forEach((l, li) => {
       const row = document.createElement("div"); row.className = "tx-verse";
+      const seq = seqOf.get(l.line); if (seq) row.dataset.seq = seq;
       l.cells.forEach((cellData, ci) => {
         const b = cellData[1];
         const cell = document.createElement("button"); cell.type = "button"; cell.className = "tx-cell"; cell.dataset.k = `${li}.${ci}`;
@@ -251,7 +263,10 @@
         cell.append(sp, r); row.append(cell);
       });
       frag.push(row);
+      if (seq && ends.has(seq)) frag.push(trEl(ends.get(seq)));
     });
+    if (pass.passages.some(x => x[3] && !x[5])) frag.push(el("p", { class: "tx-tr-note small" }, el("i", { class: "bi bi-translate" }), " ",
+      el("span", { "data-vi": "Bản dịch là bản nháp do AI viết; ✓ = đã được người kiểm tra." }, "The translations are AI drafts; ✓ = checked by a person.")));
     if (notes.length) frag.push(el("ol", { class: "tx-notes small", "aria-label": t("Readings as written", "Âm đọc nguyên văn") },
       ...notes.map(x => el("li", { "data-k": x.k }, el("span", { lang: "vi" }, x.qn), " ", el("span", { class: "text-body-secondary" }, t(`(as written; today ${x.qm})`, `(nguyên văn; ngày nay ${x.qm})`))))));
     loading(null);
@@ -259,6 +274,53 @@
     updateCount();
     // the next page in advance
     if (n < entry.pages) { linesOf(n + 1).catch(() => {}); if (ink === "clean" && canvases[p]) cleanUrl(canvases[p]).catch(() => {}); }
+  }
+
+  // ---------- the translations: one passage below its last line; the owner edits it in place (texts, checked, split, join) ----------
+  function trEl(ps) {
+    const [id, a, b, en, vi, ok] = ps;
+    // in Vietnamese the explanation (where there is one) above the English, else the English alone
+    const useVi = window.Lang && Lang.current === "vi" && vi;
+    const d = el("div", { class: "tx-tr" + (owner ? " editable" : ""), "data-id": id, "data-from": a, "data-to": b, tabindex: owner ? "0" : null });
+    if (useVi) d.append(el("p", { lang: "vi", class: "tx-tr-vi" }, vi));
+    const txt = el("p", { lang: "en" }, en || "…");
+    if (ok) txt.append(el("span", { class: "tx-tr-ok", title: t("Checked by a person", "Đã được người kiểm tra") }, " ✓"));
+    d.append(txt);
+    return d;
+  }
+  function markPassage(d, on) {
+    const a = +d.dataset.from, b = +d.dataset.to;
+    $("text").querySelectorAll(".tx-verse[data-seq]").forEach(r => { const s = +r.dataset.seq; if (s >= a && s <= b) r.classList.toggle("tx-pass-on", on); });
+  }
+  function editPassage(d) {
+    if (!owner || !cur || d.querySelector("form")) return;
+    const ps = cur.pass.passages.find(x => x[0] === +d.dataset.id); if (!ps) return;
+    const [id, a, b, en, vi, ok] = ps, n = cur.n;
+    const ten = el("textarea", { class: "form-control form-control-sm", rows: "2", lang: "en" }); ten.value = en || "";
+    const tvi = el("textarea", { class: "form-control form-control-sm", rows: "2", lang: "vi", placeholder: t("Only where it helps (old words, allusions)", "Chỉ khi cần (từ cổ, điển tích)") }); tvi.value = vi || "";
+    const chk = el("input", { type: "checkbox", class: "form-check-input", id: "tr-ok" }); chk.checked = ok;
+    const err = el("p", { class: "small text-danger mb-0", hidden: "" });
+    const lineOf = new Map(cur.pass.lines.map(([l, s]) => [s, l]));
+    const sel = el("select", { class: "form-select form-select-sm tx-tr-split", "aria-label": t("Split before the verse", "Tách trước câu") },
+      el("option", { value: "" }, t("Split before …", "Tách trước …")));
+    for (let s = a + 1; s <= b; s++) sel.append(el("option", { value: s }, lineOf.has(s) ? t(`verse ${lineOf.get(s)} of this page`, `câu ${lineOf.get(s)} của trang này`) : t(`verse no. ${s}`, `câu số ${s}`)));
+    const run = async f => { err.hidden = true; try { await f(); passPages.delete(n); if (n > 1) passPages.delete(n - 1); passPages.delete(n + 1); render(); } catch (e) { err.textContent = t("Not saved: ", "Chưa lưu: ") + e.message; err.hidden = false; } };
+    const f = el("form", { class: "tx-tr-edit" },
+      el("label", { class: "form-label small mb-1" }, "English"), ten,
+      el("label", { class: "form-label small mb-1 mt-2" }, "Tiếng Việt"), tvi,
+      el("div", { class: "d-flex flex-wrap align-items-center gap-2 mt-2" },
+        el("div", { class: "form-check mb-0" }, chk, el("label", { class: "form-check-label small", for: "tr-ok" }, t("Checked", "Đã kiểm tra"))),
+        b > a ? sel : null,
+        el("button", { type: "button", class: "btn btn-sm btn-quiet", onclick: () => run(() => srpc("text_passage_join", { p_id: id })) },
+          el("i", { class: "bi bi-arrows-collapse" }), " ", t("Join with the next", "Gộp với đoạn sau")),
+        el("span", { class: "ms-auto" }),
+        el("button", { type: "button", class: "btn btn-sm btn-quiet", onclick: () => render() }, t("Cancel", "Hủy")),
+        el("button", { type: "submit", class: "btn btn-sm btn-pill btn-accent" }, t("Save", "Lưu"))),
+      err);
+    sel.addEventListener("change", () => { if (sel.value) run(() => srpc("text_passage_split", { p_id: id, p_seq: +sel.value })); });
+    f.addEventListener("submit", e => { e.preventDefault(); run(() => srpc("text_passage_save", { p_id: id, p_en: ten.value, p_vi: tvi.value, p_checked: chk.checked })); });
+    f.addEventListener("keydown", e => { if (e.key === "Escape") { e.stopPropagation(); render(); } });
+    d.replaceChildren(f); ten.focus();
   }
 
   // ---------- the popover of a token: the place with its context (everybody); for the owner the Nôm, the notes and the editor ----------
@@ -492,6 +554,14 @@
     pb.addEventListener("click", () => { showPage = !showPage; store.set({ page: showPage }); setPage(); render(); });
     setPage();
     const text = $("text");
+    const tb = reader.querySelector('[data-act="trans"]');
+    const setTrans = () => { tb.setAttribute("aria-pressed", showTrans); tb.classList.toggle("active", showTrans); text.classList.toggle("no-trans", !showTrans); };
+    tb.addEventListener("click", () => { showTrans = !showTrans; store.set({ trans: showTrans }); setTrans(); });
+    setTrans();
+    text.addEventListener("mouseover", e => { const d = e.target.closest(".tx-tr"); if (d && !d.contains(e.relatedTarget)) markPassage(d, true); });
+    text.addEventListener("mouseout", e => { const d = e.target.closest(".tx-tr"); if (d && !d.contains(e.relatedTarget)) markPassage(d, false); });
+    text.addEventListener("click", e => { const d = e.target.closest(".tx-tr.editable"); if (d && !e.target.closest("form")) editPassage(d); });
+    text.addEventListener("keydown", e => { const d = e.target.closest?.(".tx-tr.editable"); if (d && e.target === d && e.key === "Enter") { e.preventDefault(); editPassage(d); } });
     text.addEventListener("mouseover", e => { const c = e.target.closest(".tx-cell"); if (c) mark(c.dataset.k, true); });
     text.addEventListener("mouseout", e => { const c = e.target.closest(".tx-cell"); if (c) mark(c.dataset.k, false); });
     text.addEventListener("click", e => {
