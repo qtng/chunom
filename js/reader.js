@@ -14,7 +14,7 @@
                   set(o) { try { localStorage.setItem("texts1", JSON.stringify({ ...store.get(), ...o })); } catch {} } };
 
   let entry, urlItem, urlOffset, ownOffset, canvases = [], catalogItems = [], workTexts = [], p = 1;
-  let ink = store.get().ink || "clean", showPage = !!store.get().page;
+  let ink = store.get().ink || "clean", showPage = !!store.get().page, modern = !!store.get().modern;
   const pages = new Map();   // text page -> lines
   // the owner (app_metadata.is_owner, checked by the database): the Nôm of every token (text_page_owner), editing (text_token_update)
   const QATT = "https://qatt.org/";
@@ -130,9 +130,11 @@
   }
 
   // a reading with the punctuation of the edition (punct_before / punct_after of the token; not on the scan)
+  // modern: the modern spelling where the token has one (qn_modern, e.g. giời → trời), else the reading as written
   function writeQn(r, cell) {
-    const [qn, , , pb, pa] = cell;
-    r.textContent = "";
+    const [qn0, , , pb, pa, qm] = cell;
+    const qn = modern && qm ? qm : qn0;
+    r.textContent = ""; r.classList.toggle("modernised", !!(modern && qm)); r.title = modern && qm ? qn0 : "";
     if (window.Readings && qn) Readings.fill(r, qn); else r.textContent = qn || "·";
     if (pb) r.prepend(Object.assign(document.createElement("span"), { className: "tx-punct", textContent: pb }));
     if (pa) r.append(Object.assign(document.createElement("span"), { className: "tx-punct", textContent: pa }));
@@ -262,6 +264,8 @@
     const head = el("div", { class: "tx-pop-head" }, b ? context(b, qb) : null);
     const qEl = el("div", { class: "tx-pop-qn", lang: "vi" }); writeQn(qEl, cur.lines[li].cells[ci]);
     const info = el("div", { class: "tx-pop-info" }, qEl);
+    const qm0 = cur.lines[li].cells[ci][5];
+    if (qm0) info.append(el("div", { class: "tx-pop-modern small" }, modern ? t(`As written: ${qn}`, `Nguyên văn: ${qn}`) : t(`Today: ${qm0}`, `Ngày nay: ${qm0}`)));
     head.append(info);
     pop.append(head);
     if (owner && oc) {
@@ -284,6 +288,8 @@
     const prev = el("span", { class: "tx-prev", lang: "vi-Hani" });
     const qIn = el("input", { class: "form-control form-control-sm", lang: "vi", autocomplete: "off", spellcheck: "false", placeholder: t("Reading", "Âm đọc") });
     qIn.value = qn || "";
+    const mIn = el("input", { class: "form-control form-control-sm", lang: "vi", autocomplete: "off", spellcheck: "false", placeholder: t("Same as the reading", "Giống âm đọc") });
+    mIn.value = cur.lines[li].cells[ci][5] || "";
     const uIn = el("input", { type: "checkbox", class: "form-check-input", id: "tx-unsure-in" }); uIn.checked = !!oc[2];
     const nIn = el("input", { class: "form-control form-control-sm", autocomplete: "off", placeholder: t("Note", "Ghi chú") }); nIn.value = oc[3] || "";
     // the punctuation of the edition before and after the reading: two lists (a value not in them is kept as an extra option)
@@ -311,10 +317,10 @@
     const save = async () => {
       err.hidden = true;
       try {
-        const r = await srpc("text_token_update", { p_id: oc[0], p_glyph: gIn.value, p_qn: qIn.value, p_unsure: uIn.checked, p_note: nIn.value, p_punct_before: pbIn.value, p_punct_after: paIn.value });
-        const [id, g, uns, nt, chk, q, pb, pa] = r;
+        const r = await srpc("text_token_update", { p_id: oc[0], p_glyph: gIn.value, p_qn: qIn.value, p_unsure: uIn.checked, p_note: nIn.value, p_punct_before: pbIn.value, p_punct_after: paIn.value, p_qn_modern: mIn.value });
+        const [id, g, uns, nt, chk, q, pb, pa, qm] = r;
         cur.own[li].cells[ci] = [id, g, uns, nt, chk];
-        const lc = cur.lines[li].cells[ci]; lc[0] = q; lc[3] = pb; lc[4] = pa;
+        const lc = cur.lines[li].cells[ci]; lc[0] = q; lc[3] = pb; lc[4] = pa; lc[5] = qm;
         const c = document.querySelector(`.tx-cell[data-k="${cell.dataset.k}"]`);
         c.classList.toggle("unsure", !!uns);
         writeQn(c.querySelector(".tx-qn"), lc);
@@ -325,7 +331,8 @@
     const form = el("form", { class: "tx-edit" },
       el("label", { class: "small" }, t("Character", "Chữ")), el("div", { class: "tx-row" }, gIn, prev),
       forms,
-      el("label", { class: "small" }, t("Reading", "Âm đọc")), qIn,
+      el("label", { class: "small" }, t("Reading (as written)", "Âm đọc (nguyên văn)")), qIn,
+      el("label", { class: "small" }, t("Modern spelling (if different)", "Chính tả ngày nay (nếu khác)")), mIn,
       el("label", { class: "small" }, t("Punctuation (before / after)", "Dấu câu (trước / sau)")), el("div", { class: "tx-row" }, pbIn, el("span", { class: "small text-body-secondary" }, t("reading", "âm đọc")), paIn),
       el("div", { class: "form-check mt-1" }, uIn, el("label", { class: "form-check-label small", for: "tx-unsure-in" }, t("Unsure", "Chưa chắc"))),
       nIn, err,
@@ -426,6 +433,10 @@
     const setInk = () => inkBtns.forEach(b => b.classList.toggle("active", b.dataset.ink === ink));
     inkBtns.forEach(b => b.addEventListener("click", () => { ink = b.dataset.ink; store.set({ ink }); setInk(); render(); }));
     setInk();
+    const spellBtns = reader.querySelectorAll("[data-spell]");
+    const setSpell = () => spellBtns.forEach(b => b.classList.toggle("active", (b.dataset.spell === "modern") === modern));
+    spellBtns.forEach(b => b.addEventListener("click", () => { modern = b.dataset.spell === "modern"; store.set({ modern }); setSpell(); closePop(); document.querySelectorAll("#text .tx-cell").forEach(c => { const [li, ci] = c.dataset.k.split(".").map(Number); writeQn(c.querySelector(".tx-qn"), cur.lines[li].cells[ci]); }); }));
+    setSpell();
     const pb = reader.querySelector('[data-act="page"]');
     const setPage = () => { pb.setAttribute("aria-pressed", showPage); pb.classList.toggle("active", showPage); reader.classList.toggle("with-page", showPage); };
     pb.addEventListener("click", () => { showPage = !showPage; store.set({ page: showPage }); setPage(); render(); });
