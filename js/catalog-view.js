@@ -1,4 +1,4 @@
-// The scan viewer: one work of the catalogue (catalog/scan.html?work=…&item=…#p=…): title, the copies or volumes, the viewer,
+// One work of the catalogue (the scan viewer) (catalog/view.html?work=…&item=…#p=…): title, the copies or volumes, the viewer,
 // and the source with its licence. Data: /chunom/catalog/catalog.json (built in qtng/chunom-library).
 (function () {
   "use strict";

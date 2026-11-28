@@ -1,9 +1,9 @@
-// The IIIF part of the scan viewer (catalog/scan.html): a small IIIF viewer without libraries: reads a IIIF Presentation manifest (version 2 or 3) and shows
+// A small IIIF viewer without libraries: reads a IIIF Presentation manifest (version 2 or 3) and shows
 // one page at a time, with thumbnails, page number, zoom and panning. The images come from the IIIF Image API
 // of the library in the size that is needed (sharper when zooming in).
 //   const v = new IIIFViewer(sectionElement, { onPage: n => … });
 //   await v.load(manifestUrl, startPage);   // pages count from 1
-// The markup is in catalog/scan.html (data-act buttons, data-role parts).
+// The markup is in catalog/view.html (data-act buttons, data-role parts).
 (function () {
   "use strict";
   const t = (en, vi) => (window.Lang ? Lang.t(en, vi) : en);
