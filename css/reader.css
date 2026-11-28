@@ -81,3 +81,15 @@ main.texts-wide { max-width: 76rem; }
   .tx-loading-cell i, .tx-loading-cell b, .tx-loading-cap .bi { animation: none; opacity: .2; transform: none; }
   .tx-loading-hint { animation: none; opacity: .85; }
 }
+/* the translations (a passage below its last verse) */
+.tx-tr { max-width: 36rem; margin: -.3rem auto 1.2rem; padding: .3rem .85rem; border-left: 3px solid color-mix(in srgb, var(--accent, currentColor) 45%, transparent); border-radius: 0 .4rem .4rem 0; }
+.tx-tr p { margin: 0; font-style: italic; color: var(--muted, currentColor); font-size: .95rem; line-height: 1.45; }
+.tx-tr-ok { font-style: normal; color: var(--accent, currentColor); }
+.tx-tr.editable { cursor: pointer; }
+.tx-tr.editable:hover, .tx-tr.editable:focus-visible { background: color-mix(in srgb, var(--accent, currentColor) 8%, transparent); outline: none; }
+.tx-tr .tx-tr-edit { cursor: auto; padding: .2rem 0; }
+.tx-tr-split { width: auto; max-width: 13rem; }
+.no-trans .tx-tr, .no-trans .tx-tr-note { display: none; }
+.tx-verse.tx-pass-on { background: color-mix(in srgb, var(--accent, currentColor) 7%, transparent); border-radius: .4rem; }
+.tx-tr-note { margin: 1rem auto 0; text-align: center; color: var(--muted, currentColor); }
+.tx-tr p.tx-tr-vi { font-style: normal; color: var(--ink, currentColor); font-size: .92rem; margin-bottom: .15rem; }
