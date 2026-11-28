@@ -21,6 +21,42 @@
       }
     },
     {
+      "id": "https://dl.ndl.go.jp/api/iiif/2570895/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "An Nam chí lược (国立国会図書館 (National Diet Library), WA37-3)"
+        ]
+      }
+    },
+    {
+      "id": "https://dl.ndl.go.jp/api/iiif/2570896/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "An Nam chí lược (国立国会図書館 (National Diet Library), WA37-3)"
+        ]
+      }
+    },
+    {
+      "id": "https://dl.ndl.go.jp/api/iiif/767209/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "An Nam chí lược (国立国会図書館 (National Diet Library), 158-31)"
+        ]
+      }
+    },
+    {
+      "id": "https://dl.ndl.go.jp/api/iiif/767210/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "An Nam chí lược (国立国会図書館 (National Diet Library), 158-31)"
+        ]
+      }
+    },
+    {
       "id": "https://gallica.bnf.fr/iiif/ark:/12148/btv1b53093605j/manifest.json",
       "type": "Manifest",
       "label": {
@@ -471,6 +507,15 @@
       }
     },
     {
+      "id": "https://collections.library.yale.edu/manifests/10732464",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Chúa Thao cổ truyện (Yale University Library, Manuscripts and Archives (Maurice Durand papers), MS 1728, Box 10, folder 91)"
+        ]
+      }
+    },
+    {
       "id": "https://iiif.archive.org/iiif/3/ARC.HOANG.102/manifest.json",
       "type": "Manifest",
       "label": {
@@ -633,6 +678,24 @@
       }
     },
     {
+      "id": "https://dl.ndl.go.jp/api/iiif/1879604/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Nam nhất thống chí (国立国会図書館 (National Diet Library), 292.31-D17)"
+        ]
+      }
+    },
+    {
+      "id": "https://dl.ndl.go.jp/api/iiif/1879648/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Nam nhất thống chí (国立国会図書館 (National Diet Library), 292.31-D17)"
+        ]
+      }
+    },
+    {
       "id": "https://iiif.archive.org/iiif/3/dai-nam-quoc-ngu/manifest.json",
       "type": "Manifest",
       "label": {
@@ -683,6 +746,231 @@
       "label": {
         "none": [
           "Đại Việt sử ký toàn thư (Bibliothèque nationale de France, Département des Manuscrits, Vietnamien A 102)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903589/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１８９-0001)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903590/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１８９-0002)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903591/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１８９-0003)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903592/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１８９-0004)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903593/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１８９-0005)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903594/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１８９-0006)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903595/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１８９-0007)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903596/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１８９-0008)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903597/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１８９-0009)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903598/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１８９-0010)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903599/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１９０-0001)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903600/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１９０-0002)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903601/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１９０-0003)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903602/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１９０-0004)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903603/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１９０-0005)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903604/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１９０-0006)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903605/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１９０-0007)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903606/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１９０-0008)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903607/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１９０-0009)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/4903608/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立公文書館 (National Archives of Japan), 内閣文庫, ２８６－０１９０-0010)"
+        ]
+      }
+    },
+    {
+      "id": "https://dl.ndl.go.jp/api/iiif/776354/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立国会図書館 (National Diet Library), 152-34)"
+        ]
+      }
+    },
+    {
+      "id": "https://dl.ndl.go.jp/api/iiif/776355/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立国会図書館 (National Diet Library), 152-34)"
+        ]
+      }
+    },
+    {
+      "id": "https://dl.ndl.go.jp/api/iiif/776356/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立国会図書館 (National Diet Library), 152-34)"
+        ]
+      }
+    },
+    {
+      "id": "https://dl.ndl.go.jp/api/iiif/776357/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立国会図書館 (National Diet Library), 152-34)"
+        ]
+      }
+    },
+    {
+      "id": "https://dl.ndl.go.jp/api/iiif/776358/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Đại Việt sử ký toàn thư (国立国会図書館 (National Diet Library), 152-34)"
         ]
       }
     },
@@ -1952,6 +2240,114 @@
       "label": {
         "none": [
           "Ngô gia văn phái (Bibliothèque universitaire des langues et civilisations (BULAC), fonds Hoàng Xuân Hãn, ARC.HOANG.84)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/3680414/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngoại phiên thư hàn: thư của An Nam (国立公文書館 (National Archives of Japan), 内閣文庫, １８４－０３７６-0021)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/3680430/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngoại phiên thư hàn: thư của An Nam (国立公文書館 (National Archives of Japan), 内閣文庫, １８４－０３７６-0022)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/3680447/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngoại phiên thư hàn: thư của An Nam (国立公文書館 (National Archives of Japan), 内閣文庫, １８４－０３７６-0023)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/3680293/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngoại phiên thư hàn: thư của An Nam (国立公文書館 (National Archives of Japan), 内閣文庫, １８４－０３７６-0026)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/3680363/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngoại phiên thư hàn: thư của An Nam (国立公文書館 (National Archives of Japan), 内閣文庫, １８４－０３７６-0027)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/3680364/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngoại phiên thư hàn: thư của An Nam (国立公文書館 (National Archives of Japan), 内閣文庫, １８４－０３７６-0028)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/3680367/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngoại phiên thư hàn: thư của An Nam (国立公文書館 (National Archives of Japan), 内閣文庫, １８４－０３７６-0029)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/3680369/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngoại phiên thư hàn: thư của An Nam (国立公文書館 (National Archives of Japan), 内閣文庫, １８４－０３７６-0030)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/3680371/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngoại phiên thư hàn: thư của An Nam (国立公文書館 (National Archives of Japan), 内閣文庫, １８４－０３７６-0031)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/3680382/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngoại phiên thư hàn: thư của An Nam (国立公文書館 (National Archives of Japan), 内閣文庫, １８４－０３７６-0032)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/3680399/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngoại phiên thư hàn: thư của An Nam (国立公文書館 (National Archives of Japan), 内閣文庫, １８４－０３７６-0033)"
+        ]
+      }
+    },
+    {
+      "id": "https://www.digital.archives.go.jp/api/iiif/3680415/manifest.json",
+      "type": "Manifest",
+      "label": {
+        "none": [
+          "Ngoại phiên thư hàn: thư của An Nam (国立公文書館 (National Archives of Japan), 内閣文庫, １８４－０３７６-0034)"
         ]
       }
     },
